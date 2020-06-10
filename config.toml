@@ -5,12 +5,12 @@ enableGitInfo = true
 
 theme = "docsy"
 
-languageCode = "de-ch"
+languageCode = "en-us"
 
-contentDir = "content/de"
+contentDir = "content/en"
 
 # default content language
-defaultContentLanguage = "de"
+defaultContentLanguage = "en"
 defaultContentLanguageInSubdir = false
 
 
@@ -44,16 +44,16 @@ anchor = "smart"
 
 
 [Languages]
-[Languages.de]
+[Languages.en]
 title = "Application Migration and Modernization Techlab"
 languageName = "German"
 weight = 1
 
 
 # navigation
-[Languages.de.menu]
+[Languages.en.menu]
 
-[[Languages.de.menu.main]]
+[[Languages.en.menu.main]]
 weight = 3
 name = "Puzzle ITC GmbH"
 url = "https://www.puzzle.ch"
