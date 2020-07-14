@@ -1,8 +1,8 @@
 ---
-title: "2.5 OpenShift Do (odo)"
+title: "2.4 OpenShift Do (odo)"
 linkTitle: "OpenShift Do odo"
-weight: 205
-sectionnumber: 2.5
+weight: 204
+sectionnumber: 2.4
 description: >
   Developing applications on OpenShift with odo.
 ---

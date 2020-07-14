@@ -1,8 +1,8 @@
 ---
-title: "2.2 Build a container image"
+title: "2.1 Build a container image"
 linkTitle: "Build container image"
-weight: 202
-sectionnumber: 2.2
+weight: 201
+sectionnumber: 2.1
 description: >
   This setion covers building a container image using a `Dockerfile`.
 ---
