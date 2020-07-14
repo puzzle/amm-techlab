@@ -41,6 +41,8 @@ func HelloServer(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/main.go)
+
 Calling this app will return "Hello," followed by the given path.
 
 Examples:
@@ -69,6 +71,8 @@ COPY --from=0 /opt/app-root/src/go-hello-world-app .
 EXPOSE 8080
 CMD ./go-hello-world-app
 ```
+
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/Dockerfile)
 
 It is a [multi-stage build](https://docs.docker.com/develop/develop-images/multistage-build/). The build is done in several stages using different container. The advantage is that the resulting runtime image must not contain all the build tools.
 
