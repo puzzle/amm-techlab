@@ -7,4 +7,4 @@ description: >
 ---
 
 
-## Task {{% param sectionnumber %}}.1: Login to ...
+## Task {{% param sectionnumber %}}.1: Login
