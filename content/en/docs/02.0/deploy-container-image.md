@@ -11,7 +11,7 @@ description: >
 
 As you know from other techlabs, an easy way to create applications in OpenShift is using [oc new-app](https://docs.openshift.com/container-platform/latest/cli_reference/openshift_cli/developer-cli-commands.html#new-app)
 
-Lets create an application for the go-hello-world image that we built before.
+Let's create an application for the go-hello-world image that we built before.
 
 ```bash
 $ oc new-app appuio/go-hello-world

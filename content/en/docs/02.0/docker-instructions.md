@@ -7,7 +7,6 @@ description: >
   Docker instructions for building and publishing the Go application as container image.
 ---
 
-
 ## {{% param sectionnumber %}}.1 Docker instructions
 
 Building, testing and publishing of the container image using [Docker](https://www.docker.com/). This includes the commands for [Lab: 2.1 Build a container image](build-container-image/).
