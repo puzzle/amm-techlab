@@ -65,19 +65,24 @@ RUN env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o go-hello-world-app 
 
 FROM registry.access.redhat.com/ubi8/ubi:8.2
 RUN useradd -ms /bin/bash golang
+RUN chgrp -R 0 /home/golang && \
+    chmod -R g+rwX /home/golang
 USER golang
-WORKDIR /home/golang
-COPY --from=0 /opt/app-root/src/go-hello-world-app .
+COPY --from=0 /opt/app-root/src/go-hello-world-app /home/golang/
 EXPOSE 8080
-CMD ./go-hello-world-app
+CMD /home/golang/go-hello-world-app
 ```
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/Dockerfile)
 
-It is a [multi-stage build](https://docs.docker.com/develop/develop-images/multistage-build/). The build is done in several stages using different container. The advantage is that the resulting runtime image must not contain all the build tools.
+It is a [multi-stage build](https://docs.docker.com/develop/develop-images/multistage-build/). The build is done in several stages using different container.
 
 1. use a go container to build the go application
 1. copy the go binary from the build to a minimal ubi image [Universal Base Image](https://developers.redhat.com/products/rhel/ubi)
+
+{{% alert title="Note" color="primary" %}}
+Multi-stage builds have two major advantages; smaller image size and higher security. The resulting image does only contain the minimal set of needed packages. This reduces the image size and increases the security (smaller attac surface).
+{{% /alert %}}
 
 
 ### Image build
@@ -126,5 +131,5 @@ To make the image accessible to OpenShift, it must be pushed to a image registry
 
 ```bash
 podman login
-podman push localhost/go-hello-world:latest docker://docker.io/chrira/go-hello-world:latest
+podman push localhost/go-hello-world:latest docker://docker.io/appuio/go-hello-world:latest
 ```
