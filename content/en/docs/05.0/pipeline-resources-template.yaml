@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: pipeline-resources-template
+  annotations:
+    description: 'Template to create project specific Pipeline resources.'
+objects:
+- apiVersion: tekton.dev/v1alpha1
+  kind: PipelineResource
+  metadata:
+    name: ui-repo
+  spec:
+    type: git
+    params:
+    - name: url
+      value: http://github.com/openshift-pipelines/vote-ui.git
+- apiVersion: tekton.dev/v1alpha1
+  kind: PipelineResource
+  metadata:
+    name: ui-image
+  spec:
+    type: image
+    params:
+    - name: url
+      value: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAME}/vote-ui:latest
+- apiVersion: tekton.dev/v1alpha1
+  kind: PipelineResource
+  metadata:
+    name: api-repo
+  spec:
+    type: git
+    params:
+    - name: url
+      value: http://github.com/openshift-pipelines/vote-api.git
+- apiVersion: tekton.dev/v1alpha1
+  kind: PipelineResource
+  metadata:
+    name: api-image
+  spec:
+    type: image
+    params:
+    - name: url
+      value: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAME}/vote-api:latest
+parameters:
+- description: OpenShift Project Name
+  name: PROJECT_NAME
+  mandatory: true
