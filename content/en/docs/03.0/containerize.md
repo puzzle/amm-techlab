@@ -12,7 +12,7 @@ description: >
 
 ### Setup Project
 
-Prepare anew OpenShift project
+Prepare a new OpenShift project
 ```bash
 oc new-project amm-spring-boot
 ``` 
@@ -58,7 +58,7 @@ RUN cp -a  /tmp/src/build/libs/springboots2idemo*.jar /deployments/springboots2i
 ### BuildConfig
 
 
-```YAML {linenos=true}
+```YAML
 apiVersion: build.openshift.io/v1
 kind: BuildConfig
 metadata:
@@ -105,6 +105,8 @@ spec:
 ```
 ### ImageStreams
 
+Next we need to configure an [ImageStream](https://docs.openshift.com/container-platform/4.5/openshift_images/image-streams-manage.html) for the Java base image and our application.
+
 ```YAML
 apiVersion: image.openshift.io/v1
 kind: ImageStream
@@ -139,6 +141,8 @@ spec:
 ```
 
 ### Deployment
+
+After the ImageStream definition we can setup our Deployment. Please note the Deployment annotation `image.openshift.io/triggers`, this annotation connects the Deployment with the ImageStreamTag (which is automatically created by the ImageSource object)
 
 ```YAML
 apiVersion: apps/v1
@@ -267,7 +271,9 @@ Open the OpenShift Web GUI, choose Builds from the left Menu. Next to the listed
 
 ### Configure application
 
-`deployment.yaml` 
+In this stage we show you how to configure your application. There are several options how to configure an application, we will show how to do it with environment variables. You can overwrite every property in you `application.properties` file with the corresponding environment variable. (eg. server.port=8081 in the application.properties is the same like SERVER_PORT=8081 as an environment variable)
+
+First open your `deployment.yaml` 
 
 {{< highlight YAML "hl_lines=25 29-31" >}}
 apiVersion: apps/v1
