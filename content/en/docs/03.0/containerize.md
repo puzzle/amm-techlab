@@ -7,6 +7,10 @@ description: >
   Containerize an existing application.
 ---
 
+## TODO
+
+* [ ] Trigger im Abschnitt BuildConfig und Definition ganz entfernen?
+
 
 ## {{% param sectionnumber %}}.1 Containerize an existing application
 
@@ -68,7 +72,6 @@ Create a new file called `buildConfig.yaml` for the BuildConfig.
 The [BuildConfig](https://docs.openshift.com/container-platform/4.5/builds/understanding-buildconfigs.html) describes how a single build task is performed. The BuildConfig is primary characterized by the Build strategy and its resources. For our build we use the Docker strategy. (Other strategies will be discussed in Chapter 4) The Docker strategy invokes the Docker build command. Furthermore it expects a `Dockerfile` in the source repository.
 Beside we configure the source and the triggers as well. For the source we can specify any Git repository. This is where the application sources resides. The triggers describe how to trigger the build. In this example we provide four different triggers. (Generic webhook, GitHub webhook, ConfigMap change, Image change)
 
-- [ ] Trigger in der Doku und Definition ganz entfernen?
 
 ```YAML
 apiVersion: build.openshift.io/v1
@@ -215,18 +218,20 @@ spec:
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/deployment.yaml)
 
+Let's create the deployment with following command
+
 ```BASH
 oc create -f deployment.yaml
 ```
 
 ```
-//TODO: add output
+deployment/appuio-spring-boot-ex created
 ```
 
 
 ### Service
 
-Expose the Service to the cluster with a Service. First create a new file named `svc.yaml`. For the Service we configure two different ports. `8080` for the Web API, `9000` for the metrics. We set the Service type to ClusterIP to expose the Service cluster internal only.
+Expose the Service to the cluster with a Service. First create a new file named `svc.yaml`. For the Service we configure two different ports. `8080` for the Web API, `9000` for the metrics and health check. We set the Service type to ClusterIP to expose the Service cluster internal only.
 
 ```YAML
 apiVersion: v1
@@ -335,11 +340,11 @@ NAME                                               TYPE     FROM          STATUS
 build.build.openshift.io/appuio-spring-boot-ex-1   Docker   Git@5f65829   Complete   23 hours ago   7m12s
 
 NAME                                                       IMAGE REPOSITORY                                                                            TAGS     UPDATED
-imagestream.image.openshift.io/appuio-spring-boot-ex       image-registry.openshift-image-registry.svc:5000/spring-boot-cschlatter/appuio-spring-boot-ex       latest   22 hours ago
-imagestream.image.openshift.io/java-centos-openjdk11-jdk   image-registry.openshift-image-registry.svc:5000/spring-boot-cschlatter/java-centos-openjdk11-jdk   latest   23 hours ago
+imagestream.image.openshift.io/appuio-spring-boot-ex       image-registry.openshift-image-registry.svc:5000/spring-boot-userXY/appuio-spring-boot-ex       latest   22 hours ago
+imagestream.image.openshift.io/java-centos-openjdk11-jdk   image-registry.openshift-image-registry.svc:5000/spring-boot-userXY/java-centos-openjdk11-jdk   latest   23 hours ago
 
 NAME                                             HOST/PORT                                                PATH   SERVICES                PORT       TERMINATION   WILDCARD
-route.route.openshift.io/appuio-spring-boot-ex   appuio-spring-boot-ex-spring-boot-cschlatter.ocp.aws.puzzle.ch          appuio-spring-boot-ex   8080-tcp   edge          None
+route.route.openshift.io/appuio-spring-boot-ex   appuio-spring-boot-ex-spring-boot-userXY.ocp.aws.puzzle.ch          appuio-spring-boot-ex   8080-tcp   edge          None
 
 {{< / highlight >}}
 
@@ -357,9 +362,6 @@ oc start-build appuio-spring-boot-ex
 build.build.openshift.io/appuio-spring-boot-ex-2 started
 ```
 
-
-### Verify updated application
-
 To verify if your changes triggers a new build, you can enter following command to list and watch all builds in your project.
 
 ```BASH
@@ -371,13 +373,18 @@ As you can see in the output, there was recently started a new Build. If the sta
 ```
 NAME                      TYPE     FROM          STATUS     STARTED              DURATION
 appuio-spring-boot-ex-1   Docker   Git@396de3a   Complete   2 hours ago          7m22s
-appuio-spring-boot-ex-2   Docker   Git@396de3a   Running    About a minute ago   
+appuio-spring-boot-ex-2   Docker   Git@396de3a   Running    About a minute ago
 
 ```
+
+Under the column FROM you see the Git commit SHA which was used to build the image.
 
 You can exit the watch function with `ctrl + c`
 
 As soon the Build is complete, the deployment is going to be updated with the new builded image.
 
+
+### Verify updated application
+
 Finally you can visit and verify your application with the URL provided from the Route.
-[https://appuio-spring-boot-ex-spring-boot-cschlatter.ocp.aws.puzzle.ch/](https://appuio-spring-boot-ex-spring-boot-cschlatter.ocp.aws.puzzle.ch/)
+[https://appuio-spring-boot-ex-spring-boot-userXY.ocp.aws.puzzle.ch/](https://appuio-spring-boot-ex-spring-boot-userXY.ocp.aws.puzzle.ch/)
