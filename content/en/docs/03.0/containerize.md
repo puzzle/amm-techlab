@@ -18,6 +18,7 @@ The main goal of this lab is to show you how to containerize an existing Java ap
 Replace `userXY` with your username.
 {{% /alert %}}
 
+
 ### Setup Project
 
 Prepare a new OpenShift project
@@ -175,6 +176,7 @@ imagestream.image.openshift.io/appuio-spring-boot-ex created
 imagestream.image.openshift.io/java-centos-openjdk11-jdk created
 ```
 
+
 ### Deployment
 
 After the ImageStream definition we can setup our Deployment. Please note the Deployment annotation `image.openshift.io/triggers`, this annotation connects the Deployment with the ImageStreamTag (which is automatically created by the ImageSource object)
@@ -298,6 +300,7 @@ oc create -f route.yaml
 route.route.openshift.io/appuio-spring-boot-ex created
 ```
 
+
 ### Verify deployed resources
 
 Now we can list all resources in our project to double check if everything is up und running.
@@ -332,11 +335,11 @@ NAME                                               TYPE     FROM          STATUS
 build.build.openshift.io/appuio-spring-boot-ex-1   Docker   Git@5f65829   Complete   23 hours ago   7m12s
 
 NAME                                                       IMAGE REPOSITORY                                                                            TAGS     UPDATED
-imagestream.image.openshift.io/appuio-spring-boot-ex       image-registry.openshift-image-registry.svc:5000/amm-cschlatter/appuio-spring-boot-ex       latest   22 hours ago
-imagestream.image.openshift.io/java-centos-openjdk11-jdk   image-registry.openshift-image-registry.svc:5000/amm-cschlatter/java-centos-openjdk11-jdk   latest   23 hours ago
+imagestream.image.openshift.io/appuio-spring-boot-ex       image-registry.openshift-image-registry.svc:5000/spring-boot-cschlatter/appuio-spring-boot-ex       latest   22 hours ago
+imagestream.image.openshift.io/java-centos-openjdk11-jdk   image-registry.openshift-image-registry.svc:5000/spring-boot-cschlatter/java-centos-openjdk11-jdk   latest   23 hours ago
 
 NAME                                             HOST/PORT                                                PATH   SERVICES                PORT       TERMINATION   WILDCARD
-route.route.openshift.io/appuio-spring-boot-ex   appuio-spring-boot-ex-amm-cschlatter.ocp.aws.puzzle.ch          appuio-spring-boot-ex   8080-tcp   edge          None
+route.route.openshift.io/appuio-spring-boot-ex   appuio-spring-boot-ex-spring-boot-cschlatter.ocp.aws.puzzle.ch          appuio-spring-boot-ex   8080-tcp   edge          None
 
 {{< / highlight >}}
 
@@ -377,4 +380,4 @@ You can exit the watch function with `ctrl + c`
 As soon the Build is complete, the deployment is going to be updated with the new builded image.
 
 Finally you can visit and verify your application with the URL provided from the Route.
-[https://appuio-spring-boot-ex-amm-cschlatter.ocp.aws.puzzle.ch/](https://appuio-spring-boot-ex-amm-cschlatter.ocp.aws.puzzle.ch/)
+[https://appuio-spring-boot-ex-spring-boot-cschlatter.ocp.aws.puzzle.ch/](https://appuio-spring-boot-ex-spring-boot-cschlatter.ocp.aws.puzzle.ch/)
