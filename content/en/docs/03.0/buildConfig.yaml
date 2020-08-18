@@ -1,0 +1,41 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  labels:
+    app: appuio-spring-boot-ex
+  name: appuio-spring-boot-ex
+spec:
+  completionDeadlineSeconds: 1800
+  failedBuildsHistoryLimit: 5
+  output:
+    to:
+      kind: ImageStreamTag
+      name: appuio-spring-boot-ex:latest
+  runPolicy: Serial
+  source:
+    git:
+      uri: https://github.com/userXY/example-spring-boot-helloworld
+    type: Git
+  strategy:
+    dockerStrategy:
+      from:
+        kind: ImageStreamTag
+        name: java-centos-openjdk11-jdk:latest
+    type: Docker
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "2Gb"
+    requests:
+      cpu: "250m"
+      memory: "1Gb"
+  triggers:
+  - github:
+      secret: soV621heA_1fUIh4tXvK
+    type: GitHub
+  - generic:
+      secret: nQT4ROYzckEUOmLnqHTX
+    type: Generic
+  - type: ConfigChange
+  - imageChange: {}
+    type: ImageChange

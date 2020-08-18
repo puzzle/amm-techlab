@@ -8,7 +8,7 @@ description: >
 ---
 
 
-## Containerize an existing application
+## {{% param sectionnumber %}}.1 Containerize an existing application
 
 
 The main goal of this lab is to show you how to containerize an existing Java application. Including deployment on OpenShift and exposing the service with a route.
@@ -54,19 +54,20 @@ RUN cd /tmp/src && sh gradlew build -Dorg.gradle.daemon=false
 RUN cp -a  /tmp/src/build/libs/springboots2idemo*.jar /deployments/springboots2idemo.jar
 ```
 
-This Dockerfile is responsible for building the Java application. For this we use the fabric8 Docker image. This image is pre configured to build and run Java applications.
-To build the Java Spring Boot application, the `Dockerfile` make us of the [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html).
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/Dockerfile)
 
-- [ ] Erklärung was genau passiert
-- [ ] Ressourcen Schritt für Schritt anwenden, anschliessend Zeigen wie.
-- [ ] Optional: Webhook (oder verlinkung)
+
+This Dockerfile is responsible for building the Java application. For this we use the fabric8 Docker image. This image is pre configured to build and run Java applications.
+To build the Java Spring Boot application, the `Dockerfile` make use of the [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html).
 
 
 ### BuildConfig
 
 Create a new file called `buildConfig.yaml` for the BuildConfig.
-The [BuildConfig](https://docs.openshift.com/container-platform/4.5/builds/understanding-buildconfigs.html) describes how a single build task is performed. The BuildConfig is primary characterized by the Build Strategy and its resources. For out build we use the Docker Strategy. The Docker Strategy invokes the docker build command. Furthermore it expects a `Dockerfile` in the source repository.
-Beside we configure the source and the triggers as well. For the source we can specify any Git repository. This is where the application sources reside. The triggers describe how to trigger the build. In this example we provide four different triggers. (Generic webhook, GitHub webhook, ConfigMap change, Image change)
+The [BuildConfig](https://docs.openshift.com/container-platform/4.5/builds/understanding-buildconfigs.html) describes how a single build task is performed. The BuildConfig is primary characterized by the Build strategy and its resources. For our build we use the Docker strategy. (Other strategies will be discussed in Chapter 4) The Docker strategy invokes the Docker build command. Furthermore it expects a `Dockerfile` in the source repository.
+Beside we configure the source and the triggers as well. For the source we can specify any Git repository. This is where the application sources resides. The triggers describe how to trigger the build. In this example we provide four different triggers. (Generic webhook, GitHub webhook, ConfigMap change, Image change)
+
+- [ ] Trigger in der Doku und Definition ganz entfernen?
 
 ```YAML
 apiVersion: build.openshift.io/v1
@@ -110,11 +111,12 @@ spec:
   - type: ConfigChange
   - imageChange: {}
     type: ImageChange
-
-
 ```
 
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/buildConfig.yaml)
+
 Create the build config.
+
 ```BASH
 oc create -f buildConfig.yaml
 ```
@@ -160,7 +162,9 @@ spec:
       type: Source
 ```
 
-Create the ImageStreams
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/imageStreams.yaml)
+
+Let's create the ImageStreams
 
 ```BASH
 oc create -f imageStreams.yaml
@@ -169,7 +173,6 @@ oc create -f imageStreams.yaml
 ```
 imagestream.image.openshift.io/appuio-spring-boot-ex created
 imagestream.image.openshift.io/java-centos-openjdk11-jdk created
-
 ```
 
 ### Deployment
@@ -208,10 +211,20 @@ spec:
         resources: {}
 ```
 
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/deployment.yaml)
+
+```BASH
+oc create -f deployment.yaml
+```
+
+```
+//TODO: add output
+```
+
 
 ### Service
 
-Expose the Service to the cluster with a Service. First create a new file named `svc.yaml`. For the Service we configure two different ports. 8000 for the Web API, 9000 for the metrics. We set the Service type to ClusterIP to expose the Service cluster internal only.
+Expose the Service to the cluster with a Service. First create a new file named `svc.yaml`. For the Service we configure two different ports. `8080` for the Web API, `9000` for the metrics. We set the Service type to ClusterIP to expose the Service cluster internal only.
 
 ```YAML
 apiVersion: v1
@@ -233,8 +246,9 @@ spec:
     deployment: appuio-spring-boot-ex
   sessionAffinity: None
   type: ClusterIP
-
 ```
+
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/svc.yaml)
 
 Create the Service in OpenShift
 
@@ -269,7 +283,10 @@ spec:
   tls:
     termination: edge
   wildcardPolicy: None
-``` 
+```
+
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/route.yaml)
+
 
 Create the Route in OpenShift
 
@@ -281,15 +298,16 @@ oc create -f route.yaml
 route.route.openshift.io/appuio-spring-boot-ex created
 ```
 
-### Verify
+### Verify deployed resources
 
-No we can list all resources in our project to double check if everything is up und running.
+Now we can list all resources in our project to double check if everything is up und running.
+Use the following command to display all resources within our project.
 
 ```BASH
 oc get all
 ```
 
-```
+{{< highlight text "hl_lines=9 22" >}}
 NAME                                         READY   STATUS      RESTARTS   AGE
 pod/appuio-spring-boot-ex-1-build            0/1     Completed   0          22h
 pod/appuio-spring-boot-ex-589c4f8855-cm9n6   1/1     Running     0          21h
@@ -320,75 +338,43 @@ imagestream.image.openshift.io/java-centos-openjdk11-jdk   image-registry.opensh
 NAME                                             HOST/PORT                                                PATH   SERVICES                PORT       TERMINATION   WILDCARD
 route.route.openshift.io/appuio-spring-boot-ex   appuio-spring-boot-ex-amm-cschlatter.ocp.aws.puzzle.ch          appuio-spring-boot-ex   8080-tcp   edge          None
 
-```
+{{< / highlight >}}
 
 
 ### Update source code
 
-Go to your GitHub repo and modify anything in the index.html file. Commit and push your changes back to your repository. Then switch back to the OpenShift Web GUI and trigger a new build including the modified source code. Click on `Builds` in the left Menu. Select your `appuio-spring-boot-ex` and open the `Actions` menu in the top right corner, then select `Start Build`. As soon the build starts, you can see the Build details. After the Build is finished, the ImageSource detects changes in the Image repository and updates the corresponding ImageStreamTag.
+Go to your GitHub repo and modify anything in the `index.html` file. Commit and push your changes back to your repository.
+Thereafter you can trigger a new build with following command.
+
+```BASH
+oc start-build appuio-spring-boot-ex
+```
+
+```
+build.build.openshift.io/appuio-spring-boot-ex-2 started
+```
 
 
-### Configure application
+### Verify updated application
 
-In this stage we show you how to configure your application. There are several options how to configure an application, we will show how to do it with environment variables. You can overwrite every property in you `application.properties` file with the corresponding environment variable. (eg. server.port=8081 in the application.properties is the same like SERVER_PORT=8081 as an environment variable)
+To verify if your changes triggers a new build, you can enter following command to list and watch all builds in your project.
 
-First open your `deployment.yaml` file and change the highlighted lines. Set the HTTP Port from 8080 to 8081 and add a new environment variable named SERVER_PORT.
+```BASH
+oc get build -w
+```
 
-{{< highlight YAML "hl_lines=25 29-31" >}}
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  annotations:
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"appuio-spring-boot-ex:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"appuio-spring-boot-ex\")].image"}]'
-  labels:
-    app: appuio-spring-boot-ex
-  name: appuio-spring-boot-ex
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      deployment: appuio-spring-boot-ex
-  template:
-    metadata:
-      creationTimestamp: null
-      labels:
-        deployment: appuio-spring-boot-ex
-    spec:
-      containers:
-      - image: 'appuio-spring-boot-ex:latest'
-        imagePullPolicy: IfNotPresent
-        name: appuio-spring-boot-ex
-        ports:
-        - containerPort: 8081
-          protocol: TCP
-        - containerPort: 9000
-          protocol: TCP
-        env:
-        - name: SERVER_PORT
-          value: "8081"
-        resources: {}
-{{< / highlight >}}
+As you can see in the output, there was recently started a new Build. If the status is changing, the output will be updated.
 
-Change the target port in `svc.yaml` to match the new configured port in the deployment
-{{< highlight YAML "hl_lines=11" >}}
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: appuio-spring-boot-ex
-spec:
-  ports:
-  - name: 8080-tcp
-    port: 8080
-    protocol: TCP
-    targetPort: 8081
-  - name: 9000-tcp
-    port: 9000
-    protocol: TCP
-    targetPort: 9000
-  selector:
-    deployment: appuio-spring-boot-ex
-  sessionAffinity: None
-  type: ClusterIP
+```
+NAME                      TYPE     FROM          STATUS     STARTED              DURATION
+appuio-spring-boot-ex-1   Docker   Git@396de3a   Complete   2 hours ago          7m22s
+appuio-spring-boot-ex-2   Docker   Git@396de3a   Running    About a minute ago   
 
-{{< / highlight >}}
+```
+
+You can exit the watch function with `ctrl + c`
+
+As soon the Build is complete, the deployment is going to be updated with the new builded image.
+
+Finally you can visit and verify your application with the URL provided from the Route.
+[https://appuio-spring-boot-ex-amm-cschlatter.ocp.aws.puzzle.ch/](https://appuio-spring-boot-ex-amm-cschlatter.ocp.aws.puzzle.ch/)
