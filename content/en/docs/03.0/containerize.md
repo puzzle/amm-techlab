@@ -126,7 +126,7 @@ buildconfig.build.openshift.io/appuio-spring-boot-ex created
 
 ### ImageStreams
 
-Next we need to configure an [ImageStream](https://docs.openshift.com/container-platform/4.5/openshift_images/image-streams-manage.html) for the Java base image and our application image. Create a new file called `imageStreams.yaml`. The ImageStream is an abstraction for referencing images from within OpenShift Container Platform. Simplified the ImageStream tracks changes for the defined images and react by performing a new Build.
+Next we need to configure an [ImageStream](https://docs.openshift.com/container-platform/4.5/openshift_images/image-streams-manage.html) for the Java base image (java-centos-openjdk11-jdk) and our application image (appuio-spring-boot-ex). Create a new file called `imageStreams.yaml`. The ImageStream is an abstraction for referencing images from within OpenShift Container Platform. Simplified the ImageStream tracks changes for the defined images and reacts by performing a new Build.
 
 ```YAML
 apiVersion: image.openshift.io/v1
@@ -325,25 +325,14 @@ route.route.openshift.io/appuio-spring-boot-ex   appuio-spring-boot-ex-amm-cschl
 
 ### Update source code
 
- Go to your Project and modify the index.html. Finally commit and push your changes back to your repository.
-
-```BASH
-git add .
-git commit -m "updated version"
-git push origin/master
-``` 
-
-
-### Trigger build
-
-Open the OpenShift Web GUI, choose builds from the left Menu. Next to the listed Builds, press ┇ and Select "Start Build".
+Go to your GitHub repo and modify anything in the index.html file. Commit and push your changes back to your repository. Then switch back to the OpenShift Web GUI and trigger a new build including the modified source code. Click on `Builds` in the left Menu. Select your `appuio-spring-boot-ex` and open the `Actions` menu in the top right corner, then select `Start Build`. As soon the build starts, you can see the Build details. After the Build is finished, the ImageSource detects changes in the Image repository and updates the corresponding ImageStreamTag.
 
 
 ### Configure application
 
 In this stage we show you how to configure your application. There are several options how to configure an application, we will show how to do it with environment variables. You can overwrite every property in you `application.properties` file with the corresponding environment variable. (eg. server.port=8081 in the application.properties is the same like SERVER_PORT=8081 as an environment variable)
 
-First open your `deployment.yaml` 
+First open your `deployment.yaml` file and change the highlighted lines. Set the HTTP Port from 8080 to 8081 and add a new environment variable named SERVER_PORT.
 
 {{< highlight YAML "hl_lines=25 29-31" >}}
 apiVersion: apps/v1
