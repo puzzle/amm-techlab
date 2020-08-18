@@ -10,28 +10,28 @@ description: >
 
 ## Containerize an existing application
 
+
+The main goal of this lab is to show you how to containerize an existing Java application. Including deployment on OpenShift and exposing the service with a route.
+
+
+{{% alert title="Note" color="primary" %}}
+Replace `userXY` with your username.
+{{% /alert %}}
+
 ### Setup Project
 
 Prepare a new OpenShift project
-```bash
-oc new-project amm-spring-boot
-``` 
 
-Use an new folder for the Java project
 ```bash
-mkdir amm-spring-boot
-mkdir amm-spring-boot/config
-mkdir amm-spring-boot/code
-cd amm-spring-boot/config
-``` 
+oc new-project spring-boot-userXY
+```
 
-Fork the sample project from appuio 
- https://github.com/appuio/example-spring-boot-helloworld .
- 
 
 ### Dockerfile
 
-First we need a Dockerfile. You can find the Dockerfile in the root directory of the example application
+First we need a Dockerfile. You can find the `Dockerfile` in the root directory of the example Java application.
+As base image we use the `fabric8/java-centos-openjdk11-jdk` which is pre configured for Java builds.
+
 
 ```Dockerfile
 FROM fabric8/java-centos-openjdk11-jdk
@@ -54,9 +54,19 @@ RUN cd /tmp/src && sh gradlew build -Dorg.gradle.daemon=false
 RUN cp -a  /tmp/src/build/libs/springboots2idemo*.jar /deployments/springboots2idemo.jar
 ```
 
+This Dockerfile is responsible for building the Java application. For this we use the fabric8 Docker image. This image is pre configured to build and run Java applications.
+To build the Java Spring Boot application, the `Dockerfile` make us of the [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html).
+
+- [ ] Erklärung was genau passiert
+- [ ] Ressourcen Schritt für Schritt anwenden, anschliessend Zeigen wie.
+- [ ] Optional: Webhook (oder verlinkung)
+
 
 ### BuildConfig
 
+Create a new file called `buildConfig.yaml` for the BuildConfig.
+The [BuildConfig](https://docs.openshift.com/container-platform/4.5/builds/understanding-buildconfigs.html) describes how a single build task is performed. The BuildConfig is primary characterized by the Build Strategy and its resources. For out build we use the Docker Strategy. The Docker Strategy invokes the docker build command. Furthermore it expects a `Dockerfile` in the source repository.
+Beside we configure the source and the triggers as well. For the source we can specify any Git repository. This is where the application sources reside. The triggers describe how to trigger the build. In this example we provide four different triggers. (Generic webhook, GitHub webhook, ConfigMap change, Image change)
 
 ```YAML
 apiVersion: build.openshift.io/v1
@@ -75,7 +85,7 @@ spec:
   runPolicy: Serial
   source:
     git:
-      uri: https://github.com/schlapzz/example-spring-boot-helloworld
+      uri: https://github.com/userXY/example-spring-boot-helloworld
     type: Git
   strategy:
     dockerStrategy:
@@ -103,9 +113,20 @@ spec:
 
 
 ```
+
+Create the build config.
+```BASH
+oc create -f buildConfig.yaml
+```
+
+```
+buildconfig.build.openshift.io/appuio-spring-boot-ex created
+```
+
+
 ### ImageStreams
 
-Next we need to configure an [ImageStream](https://docs.openshift.com/container-platform/4.5/openshift_images/image-streams-manage.html) for the Java base image and our application.
+Next we need to configure an [ImageStream](https://docs.openshift.com/container-platform/4.5/openshift_images/image-streams-manage.html) for the Java base image and our application image. Create a new file called `imageStreams.yaml`. The ImageStream is an abstraction for referencing images from within OpenShift Container Platform. Simplified the ImageStream tracks changes for the defined images and react by performing a new Build.
 
 ```YAML
 apiVersion: image.openshift.io/v1
@@ -133,11 +154,22 @@ spec:
     from:
       kind: DockerImage
       name: fabric8/java-centos-openjdk11-jdk
-    generation: 2
     importPolicy: {}
     name: latest
     referencePolicy:
       type: Source
+```
+
+Create the ImageStreams
+
+```BASH
+oc create -f imageStreams.yaml
+```
+
+```
+imagestream.image.openshift.io/appuio-spring-boot-ex created
+imagestream.image.openshift.io/java-centos-openjdk11-jdk created
+
 ```
 
 ### Deployment
@@ -179,6 +211,7 @@ spec:
 
 ### Service
 
+Expose the Service to the cluster with a Service. First create a new file named `svc.yaml`. For the Service we configure two different ports. 8000 for the Web API, 9000 for the metrics. We set the Service type to ClusterIP to expose the Service cluster internal only.
 
 ```YAML
 apiVersion: v1
@@ -203,9 +236,20 @@ spec:
 
 ```
 
+Create the Service in OpenShift
+
+```bash
+oc create -f svc.yaml
+```
+
+```
+service/appuio-spring-boot-ex created
+```
+
+
 ### Route
 
-Create a Route to expose the service at a host name
+Create a Route to expose the service at a host name. The TLS type is set to Edge
 
 ```YAML
 apiVersion: route.openshift.io/v1
@@ -227,46 +271,72 @@ spec:
   wildcardPolicy: None
 ``` 
 
-
-
-### Deploy resources
+Create the Route in OpenShift
 
 ```bash
-oc create -f .
+oc create -f route.yaml
 ```
 
 ```
-buildconfig.build.openshift.io/appuio-spring-boot-ex created
-deployment.apps/appuio-spring-boot-ex created
-imagestream.image.openshift.io/appuio-spring-boot-ex created
-imagestream.image.openshift.io/java-centos-openjdk11-jdk created
 route.route.openshift.io/appuio-spring-boot-ex created
-service/appuio-spring-boot-ex created
+```
+
+### Verify
+
+No we can list all resources in our project to double check if everything is up und running.
+
+```BASH
+oc get all
+```
+
+```
+NAME                                         READY   STATUS      RESTARTS   AGE
+pod/appuio-spring-boot-ex-1-build            0/1     Completed   0          22h
+pod/appuio-spring-boot-ex-589c4f8855-cm9n6   1/1     Running     0          21h
+
+NAME                            TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
+service/appuio-spring-boot-ex   ClusterIP   172.30.236.178   <none>        8080/TCP,9000/TCP   22h
+
+NAME                                    READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/appuio-spring-boot-ex   1/1     1            1           22h
+
+NAME                                               DESIRED   CURRENT   READY   AGE
+replicaset.apps/appuio-spring-boot-ex-589c4f8855   1         1         1       21h
+replicaset.apps/appuio-spring-boot-ex-598c8bb597   0         0         0       21h
+replicaset.apps/appuio-spring-boot-ex-59b5447f8f   0         0         0       21h
+replicaset.apps/appuio-spring-boot-ex-74c797b9d    0         0         0       22h
+replicaset.apps/appuio-spring-boot-ex-84bc88878c   0         0         0       22h
+
+NAME                                                   TYPE     FROM   LATEST
+buildconfig.build.openshift.io/appuio-spring-boot-ex   Docker   Git    2
+
+NAME                                               TYPE     FROM          STATUS     STARTED        DURATION
+build.build.openshift.io/appuio-spring-boot-ex-1   Docker   Git@5f65829   Complete   23 hours ago   7m12s
+
+NAME                                                       IMAGE REPOSITORY                                                                            TAGS     UPDATED
+imagestream.image.openshift.io/appuio-spring-boot-ex       image-registry.openshift-image-registry.svc:5000/amm-cschlatter/appuio-spring-boot-ex       latest   22 hours ago
+imagestream.image.openshift.io/java-centos-openjdk11-jdk   image-registry.openshift-image-registry.svc:5000/amm-cschlatter/java-centos-openjdk11-jdk   latest   23 hours ago
+
+NAME                                             HOST/PORT                                                PATH   SERVICES                PORT       TERMINATION   WILDCARD
+route.route.openshift.io/appuio-spring-boot-ex   appuio-spring-boot-ex-amm-cschlatter.ocp.aws.puzzle.ch          appuio-spring-boot-ex   8080-tcp   edge          None
+
 ```
 
 
 ### Update source code
- Go to your forked GitHub Project and clone it.
- ```BASH
- cd ../source
- git clone https://github.com/<USERNAME>/example-spring-boot-helloworld .
- ```
 
-After that you can open and modify the index.html. Finally commit and push your changes back to your forked repository.
+ Go to your Project and modify the index.html. Finally commit and push your changes back to your repository.
+
 ```BASH
 git add .
 git commit -m "updated version"
 git push origin/master
 ``` 
 
+
 ### Trigger build
-- [ ] Manually or configure GitHub webhook?
 
-#### Manually
-Open the OpenShift Web GUI, choose Builds from the left Menu. Next to the listed Builds, press ┇ and Select "Start Build".
-#### Webhook
-- [ ] TODO?
-
+Open the OpenShift Web GUI, choose builds from the left Menu. Next to the listed Builds, press ┇ and Select "Start Build".
 
 
 ### Configure application
