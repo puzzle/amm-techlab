@@ -53,6 +53,7 @@ spec:
 {{< / highlight >}}
 
 Apply your changes with following command:
+
 ```BASH
 oc apply -f deployment.yaml
 ```
@@ -61,11 +62,12 @@ oc apply -f deployment.yaml
 //TODO: Add Output
 ```
 
-### Service
 
+### Service
 
 Change the target port in `svc.yaml` to match the new configured port in the deployment. Note that we only have to change the target port in the service definition. For this case other existing services can still connect to the 8080 service port without any further changes.
 
+```
 {{< highlight YAML "hl_lines=11" >}}
 apiVersion: v1
 kind: Service
@@ -88,7 +90,7 @@ spec:
   type: ClusterIP
 
 {{< / highlight >}}
-
+```
 
 Apply your changes with following command:
 
@@ -104,7 +106,7 @@ oc apply -f svc.yaml
 ### Verify
 
 Check if the changes were applied correct. Open your browser and navigate to your application.
-https://appuio-spring-boot-ex-**amm-userXY**.ocp.aws.puzzle.ch/
+[https://appuio-spring-boot-ex-amm-userXY.ocp.aws.puzzle.ch/](https://appuio-spring-boot-ex-amm-userXY.ocp.aws.puzzle.ch/)
 
 ```
 ```

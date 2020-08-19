@@ -59,6 +59,7 @@ Display configuration:
 ```bash
 odo config view
 ```
+
 ```
 COMPONENT SETTINGS
 ------------------------------------------------
@@ -93,6 +94,7 @@ This all happened locally. Use `odo push` to create the component in OpenShift.
 ```bash
 odo push
 ```
+
 ```
 Validation
  ✓  Checking component [152ms]
@@ -126,8 +128,9 @@ odo url create go-app --secure
 That changed the configuration locally, use `odo push` to create the route:
 
 ```bash
-$ odo push
+odo push
 ```
+
 ```
 Validation
  ✓  Checking component [153ms]
@@ -158,6 +161,7 @@ Browse to the URL from the previous chapter and add the path `/world`. This can 
 ```bash
 curl URL/world
 ```
+
 ```
 Hello, world!
 ```
@@ -202,6 +206,7 @@ Call the URL of the application again to test the changes.
 ```bash
 curl URL/world
 ```
+
 ```
 Howdy, world!
 ```

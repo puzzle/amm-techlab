@@ -16,6 +16,7 @@ Let's create an application for the go-hello-world image that we built before.
 ```bash
 oc new-app appuio/go-hello-world
 ```
+
 ```
 --> Found container image 5779c56 (11 days old) from  for "appuio/go-hello-world:latest"
 
@@ -37,10 +38,13 @@ To access the application from outside OpenShift a route is needed:
 ```bash
 oc create route edge --service=go-hello-world --insecure-policy=Redirect
 ```
+
 Run following command to determine the host of the new created route.
+
 ```bash
 oc get routes.route.openshift.io go-hello-world -o template --template '{{.spec.host}}{{"\n"}}'
 ```
+
 ```
 go-hello-world-cschlatter-amm2.ocp.aws.puzzle.ch
 ```
