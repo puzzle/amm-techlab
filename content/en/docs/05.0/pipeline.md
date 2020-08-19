@@ -414,8 +414,7 @@ Get the route of your project and open the URL in the browser.
 
 This was only an example pipeline building a container image and deploying it to OpenShift. There are lots of security features missing.
 
-TODO: https://github.com/puzzle/delivery-pipeline-concept
-
+TODO: <https://github.com/puzzle/delivery-pipeline-concept>
 
 
 ## Links and Sources
