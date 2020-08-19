@@ -41,7 +41,7 @@ As base image we use the `registry.access.redhat.com/ubi8/openjdk-11` which is p
 ```Dockerfile
 FROM registry.access.redhat.com/ubi8/openjdk-11
 
-MAINTAINER Thomas Philipona <philipona@puzzle.ch>
+LABEL maintainer="philipona@puzzle.ch"
 
 EXPOSE 8080 9000
 
