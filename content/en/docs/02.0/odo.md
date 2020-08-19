@@ -57,7 +57,10 @@ odo create golang --port 8080
 Display configuration:
 
 ```bash
-$ odo config view
+odo config view
+```
+
+```
 COMPONENT SETTINGS
 ------------------------------------------------
 PARAMETER         CURRENT_VALUE
@@ -89,7 +92,10 @@ cp content/en/docs/02.0/main.go main.go
 This all happened locally. Use `odo push` to create the component in OpenShift.
 
 ```bash
-$ odo push
+odo push
+```
+
+```
 Validation
  ✓  Checking component [152ms]
 
@@ -122,7 +128,10 @@ odo url create go-app --secure
 That changed the configuration locally, use `odo push` to create the route:
 
 ```bash
-$ odo push
+odo push
+```
+
+```
 Validation
  ✓  Checking component [153ms]
 
@@ -150,7 +159,10 @@ odo url list
 Browse to the URL from the previous chapter and add the path `/world`. This can also be done with curl:
 
 ```bash
-$ curl URL/world
+curl URL/world
+```
+
+```
 Hello, world!
 ```
 
@@ -170,7 +182,7 @@ odo watch &
 ```
 
 {{% alert title="Note" color="primary" %}}
-The $ at the end runs the watch in the background.
+The & at the end runs the watch in the background.
 {{% /alert %}}
 
 Now we change the Go application to return `Howdy` instead of `Hello`. It must be done inside the copied `main.go` file. Sed will do the replacement for us:
@@ -192,7 +204,10 @@ Pushing files...
 Call the URL of the application again to test the changes.
 
 ```bash
-$ curl URL/world
+curl URL/world
+```
+
+```
 Howdy, world!
 ```
 
