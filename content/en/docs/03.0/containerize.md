@@ -315,6 +315,7 @@ Use the following command to display all resources within our project.
 oc get all
 ```
 
+```
 {{< highlight text "hl_lines=9 22" >}}
 NAME                                         READY   STATUS      RESTARTS   AGE
 pod/appuio-spring-boot-ex-1-build            0/1     Completed   0          22h
@@ -347,6 +348,7 @@ NAME                                             HOST/PORT                      
 route.route.openshift.io/appuio-spring-boot-ex   appuio-spring-boot-ex-spring-boot-userXY.ocp.aws.puzzle.ch          appuio-spring-boot-ex   8080-tcp   edge          None
 
 {{< / highlight >}}
+```
 
 
 ### Update source code
