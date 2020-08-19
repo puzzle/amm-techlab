@@ -59,7 +59,7 @@ oc apply -f deployment.yaml
 ```
 
 ```
-//TODO: Add Output
+deployment/appuio-spring-boot-ex created
 ```
 
 
@@ -99,7 +99,7 @@ oc apply -f svc.yaml
 ```
 
 ```
-//TODO: Add Output
+service/appuio-spring-boot-ex created
 ```
 
 

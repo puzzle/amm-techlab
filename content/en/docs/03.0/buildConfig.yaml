@@ -20,7 +20,7 @@ spec:
     dockerStrategy:
       from:
         kind: ImageStreamTag
-        name: java-centos-openjdk11-jdk:latest
+        name: java-centos-openjdk11-jdk:latest <----- UBI image für builds / lokal kann fabric8 jdk oder was auch immer verwendet werden
     type: Docker
   resources:
     limits:
