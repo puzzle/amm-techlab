@@ -74,7 +74,7 @@ docker run \
 Markdown files are linted with <https://github.com/DavidAnson/markdownlint>.
 Custom rules are in `.markdownlint.json`.
 There's a GitHub Action `.github/workflows/markdownlint.yaml` for CI.
-For local checks, you can either use Visual Studio Code with the corresponding extension, or the command line like this:
+For local checks, you can either use Visual Studio Code with the corresponding extension (markdownlint), or the command line like this:
 
 ```shell script
 npm install

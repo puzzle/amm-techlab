@@ -6,5 +6,3 @@ description: >
   Migrate a Java Spring Boot application to OpenShift.
 ---
 
-
-## Task {{% param sectionnumber %}}.1: Define Container Image Build
