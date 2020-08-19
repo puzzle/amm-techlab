@@ -1,4 +1,4 @@
-FROM fabric8/java-centos-openjdk11-jdk
+FROM registry.access.redhat.com/ubi8/openjdk-11
 
 MAINTAINER Thomas Philipona <philipona@puzzle.ch>
 

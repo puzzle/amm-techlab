@@ -35,11 +35,11 @@ oc new-project spring-boot-userXY
 ### Dockerfile
 
 First we need a Dockerfile. You can find the `Dockerfile` in the root directory of the example Java application.
-As base image we use the `fabric8/java-centos-openjdk11-jdk` which is pre configured for Java builds.
+As base image we use the `registry.access.redhat.com/ubi8/openjdk-11` which is pre configured for Java builds.
 
 
 ```Dockerfile
-FROM fabric8/java-centos-openjdk11-jdk
+FROM registry.access.redhat.com/ubi8/openjdk-11
 
 MAINTAINER Thomas Philipona <philipona@puzzle.ch>
 
@@ -62,7 +62,7 @@ RUN cp -a  /tmp/src/build/libs/springboots2idemo*.jar /deployments/springboots2i
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/Dockerfile)
 
 
-This Dockerfile is responsible for building the Java application. For this we use the fabric8 Docker image. This image is pre configured to build and run Java applications.
+This Dockerfile is responsible for building the Java application. For this we use the UBI Docker image. This image is pre configured to build and run Java applications.
 To build the Java Spring Boot application, the `Dockerfile` make use of the [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html).
 
 
@@ -90,21 +90,21 @@ spec:
   runPolicy: Serial
   source:
     git:
-      uri: https://github.com/userXY/example-spring-boot-helloworld
+      uri: https://github.com/schlapzz/example-spring-boot-helloworld
     type: Git
   strategy:
     dockerStrategy:
       from:
         kind: ImageStreamTag
-        name: java-centos-openjdk11-jdk:latest
+        name: openjdk-11:latest
     type: Docker
   resources:
     limits:
       cpu: "500m"
-      memory: "2Gb"
+      memory: "2G"
     requests:
       cpu: "250m"
-      memory: "1Gb"
+      memory: "1G"
   triggers:
   - github:
       secret: soV621heA_1fUIh4tXvK
@@ -132,7 +132,7 @@ buildconfig.build.openshift.io/appuio-spring-boot-ex created
 
 ### ImageStreams
 
-Next we need to configure an [ImageStream](https://docs.openshift.com/container-platform/4.5/openshift_images/image-streams-manage.html) for the Java base image (java-centos-openjdk11-jdk) and our application image (appuio-spring-boot-ex). Create a new file called `imageStreams.yaml`. The ImageStream is an abstraction for referencing images from within OpenShift Container Platform. Simplified the ImageStream tracks changes for the defined images and reacts by performing a new Build.
+Next we need to configure an [ImageStream](https://docs.openshift.com/container-platform/4.5/openshift_images/image-streams-manage.html) for the Java base image (ubi8/openjdk-11) and our application image (appuio-spring-boot-ex). Create a new file called `imageStreams.yaml`. The ImageStream is an abstraction for referencing images from within OpenShift Container Platform. Simplified the ImageStream tracks changes for the defined images and reacts by performing a new Build.
 
 ```YAML
 apiVersion: image.openshift.io/v1
@@ -150,16 +150,16 @@ kind: ImageStream
 metadata:
   labels:
     app: appuio-spring-boot-ex
-  name: java-centos-openjdk11-jdk
+  name: openjdk-11
 spec:
   lookupPolicy:
     local: false
   tags:
   - annotations:
-      openshift.io/imported-from: fabric8/java-centos-openjdk11-jdk
+      openshift.io/imported-from: registry.access.redhat.com/ubi8/openjdk-11
     from:
       kind: DockerImage
-      name: fabric8/java-centos-openjdk11-jdk
+      name: registry.access.redhat.com/ubi8/openjdk-11
     importPolicy: {}
     name: latest
     referencePolicy:
@@ -176,7 +176,7 @@ oc create -f imageStreams.yaml
 
 ```
 imagestream.image.openshift.io/appuio-spring-boot-ex created
-imagestream.image.openshift.io/java-centos-openjdk11-jdk created
+imagestream.image.openshift.io/openjdk-11 created
 ```
 
 
@@ -342,7 +342,7 @@ build.build.openshift.io/appuio-spring-boot-ex-1   Docker   Git@5f65829   Comple
 
 NAME                                                       IMAGE REPOSITORY                                                                            TAGS     UPDATED
 imagestream.image.openshift.io/appuio-spring-boot-ex       image-registry.openshift-image-registry.svc:5000/spring-boot-userXY/appuio-spring-boot-ex       latest   22 hours ago
-imagestream.image.openshift.io/java-centos-openjdk11-jdk   image-registry.openshift-image-registry.svc:5000/spring-boot-userXY/java-centos-openjdk11-jdk   latest   23 hours ago
+imagestream.image.openshift.io/openjdk-11   image-registry.openshift-image-registry.svc:5000/spring-boot-userXY/openjdk-11   latest   23 hours ago
 
 NAME                                             HOST/PORT                                                PATH   SERVICES                PORT       TERMINATION   WILDCARD
 route.route.openshift.io/appuio-spring-boot-ex   appuio-spring-boot-ex-spring-boot-userXY.ocp.aws.puzzle.ch          appuio-spring-boot-ex   8080-tcp   edge          None

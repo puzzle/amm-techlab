@@ -14,21 +14,21 @@ spec:
   runPolicy: Serial
   source:
     git:
-      uri: https://github.com/userXY/example-spring-boot-helloworld
+      uri: https://github.com/schlapzz/example-spring-boot-helloworld
     type: Git
   strategy:
     dockerStrategy:
       from:
         kind: ImageStreamTag
-        name: java-centos-openjdk11-jdk:latest <----- UBI image für builds / lokal kann fabric8 jdk oder was auch immer verwendet werden
+        name: openjdk-11:latest
     type: Docker
   resources:
     limits:
       cpu: "500m"
-      memory: "2Gb"
+      memory: "2G"
     requests:
       cpu: "250m"
-      memory: "1Gb"
+      memory: "1G"
   triggers:
   - github:
       secret: soV621heA_1fUIh4tXvK
