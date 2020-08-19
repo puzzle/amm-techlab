@@ -237,6 +237,7 @@ Expose the Service to the cluster with a Service. First create a new file named 
 apiVersion: v1
 kind: Service
 metadata:
+  name: appuio-spring-boot-ex
   labels:
     app: appuio-spring-boot-ex
 spec:
@@ -280,7 +281,7 @@ metadata:
     app: appuio-spring-boot-ex
   name: appuio-spring-boot-ex
 spec:
-  host: appuio-spring-boot-ex-<PROJECT_NAME>.ocp.aws.puzzle.ch
+  host: appuio-spring-boot-ex-spring-boot-userXY.ocp.aws.puzzle.ch
   port:
     targetPort: 8080-tcp
   to:
