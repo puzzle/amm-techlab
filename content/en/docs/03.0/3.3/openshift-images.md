@@ -267,6 +267,11 @@ buildah bud -f Dockerfile -t go-hello-world-os .
 podman push localhost/go-hello-world-os docker://docker.io/appuio/go-hello-world.os:latest
 ```
 
+```BASH
+oc get pods
+```
+
+
 
 ## Create route
 
