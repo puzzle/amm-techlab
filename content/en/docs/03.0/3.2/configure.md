@@ -4,7 +4,7 @@ linkTitle: "Configure the application"
 weight: 32
 sectionnumber: 3.2
 description: >
-  Containerize an existing application.
+  Configure a Spring Boot application based on environment variables.
 ---
 
 ## {{% param sectionnumber %}}.1 Configure application
