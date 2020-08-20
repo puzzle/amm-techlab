@@ -12,7 +12,14 @@ description: >
 [Best practices for writing Dockerfiles](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
 
 
-### Avoid multiple processes
+### One process per container
+
+It is recommended to start only one process per container .This simplifies several things.
+
+* Docker can recognize if your container failed
+* Reduce Image size and startup time
+* Signal handling flows are clearer
+* Reusable Images and looser coupling
 
 
 ### Instructions order
@@ -98,6 +105,3 @@ Find more information about this topic in the [OpenShift Guidelines](https://doc
 ### Logging
 
 Always log to standard out. This makes it easier to collect the logs from the container and send it to an centralized logging service.
-
-
-### Health checks (Readiness and liveness probe)
