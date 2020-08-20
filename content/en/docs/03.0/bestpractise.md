@@ -6,12 +6,6 @@ sectionnumber: 3.4
 description: >
   Best practices for creating OpenShift containers.
 ---
-## TODO
- - Techlab
- - Root user hinzufpgen
- - FS Permission
-- MultuiStage builds möglich? 
-
 
 ## Best practices for container in general
 

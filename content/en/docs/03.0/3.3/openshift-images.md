@@ -272,7 +272,6 @@ oc get pods
 ```
 
 
-
 ## Create route
 
 ```BASH
