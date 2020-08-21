@@ -1,0 +1,108 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  creationTimestamp: "2020-08-21T14:24:52Z"
+  labels:
+    app: s2i-custom
+    app.kubernetes.io/component: s2i-custom
+    app.kubernetes.io/instance: s2i-custom
+  managedFields:
+  - apiVersion: build.openshift.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:openshift.io/generated-by: {}
+        f:labels:
+          .: {}
+          f:app: {}
+          f:app.kubernetes.io/component: {}
+          f:app.kubernetes.io/instance: {}
+      f:spec:
+        f:output:
+          f:to:
+            .: {}
+            f:kind: {}
+            f:name: {}
+        f:runPolicy: {}
+        f:source:
+          f:git:
+            .: {}
+            f:uri: {}
+          f:type: {}
+        f:strategy:
+          f:sourceStrategy:
+            .: {}
+            f:from:
+              .: {}
+              f:kind: {}
+              f:name: {}
+          f:type: {}
+    manager: oc
+    operation: Update
+    time: "2020-08-21T14:24:52Z"
+  - apiVersion: build.openshift.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:spec:
+        f:strategy:
+          f:sourceStrategy:
+            f:env: {}
+    manager: Mozilla
+    operation: Update
+    time: "2020-08-21T14:34:19Z"
+  - apiVersion: build.openshift.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:spec:
+        f:triggers: {}
+      f:status:
+        f:lastVersion: {}
+    manager: openshift-apiserver
+    operation: Update
+    time: "2020-08-21T14:34:24Z"
+  name: s2i-custom
+  namespace: amm-cschlatter
+  resourceVersion: "775346"
+  selfLink: /apis/build.openshift.io/v1/namespaces/amm-cschlatter/buildconfigs/s2i-custom
+  uid: aae7dfef-1eff-4f66-bb53-ceea01de5e0c
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: s2i-custom:latest
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    git:
+      uri: https://github.com/schlapzz/spring-boot-private
+    type: Git
+  strategy:
+    sourceStrategy:
+      env:
+      - name: JAVA_APP_JAR
+        value: /tmp/src/build/libs/springboots2idemo-0.1.1-SNAPSHOT.jar
+      from:
+        kind: ImageStreamTag
+        name: openjdk-11:latest
+    type: Source
+  successfulBuildsHistoryLimit: 5
+  triggers:
+  - github:
+      secret: 122hfrCzIb9Ls4q-PLEC
+    type: GitHub
+  - generic:
+      secret: ALAzMOOHHdneC_2cdvV6
+    type: Generic
+  - type: ConfigChange
+  - imageChange:
+      lastTriggeredImageID: registry.redhat.io/ubi8/openjdk-11@sha256:84915c452a97f8a45630944a03a2c2f362ddad712b5ebb470e22e8aa0b734552
+    type: ImageChange
+status:
+  lastVersion: 2
