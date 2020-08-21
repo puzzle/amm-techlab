@@ -7,20 +7,13 @@ description: >
   Containerize an existing application.
 ---
 
-## TODO
-
-* [ ] Trigger im Abschnitt BuildConfig und Definition ganz entfernen?
-
 
 ## {{% param sectionnumber %}}.1 Containerize an existing application
 
 
 The main goal of this lab is to show you how to containerize an existing Java application. Including deployment on OpenShift and exposing the service with a route.
 
-
-{{% alert title="Note" color="primary" %}}
-Replace `userXY` with your username.
-{{% /alert %}}
+> Replace `userXY` with your username.
 
 
 ### Setup Project
