@@ -82,7 +82,6 @@ CMD /home/golang/go-hello-world-app
 {{< / highlight >}}
 
 
-
 Let's check the difference. Enter the following command to list all local images.
 
 ```BASH
