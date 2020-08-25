@@ -51,24 +51,28 @@ First let's create a BuildConfig.
 apiVersion: build.openshift.io/v1
 kind: BuildConfig
 metadata:
-  annotations:
-    openshift.io/generated-by: OpenShiftNewApp
   labels:
     app: spring-boot-s2i
   name: spring-boot-s2i
 spec:
   failedBuildsHistoryLimit: 5
+  nodeSelector: null
   output:
     to:
       kind: ImageStreamTag
       name: spring-boot-s2i:latest
+  postCommit: {}
+  resources: {}
   runPolicy: Serial
   source:
     git:
-      uri: https://github.com/schlapzz/spring-boot-private
+      uri: https://github.com/userXY/spring-boot-private
     type: Git
   strategy:
     sourceStrategy:
+      env:
+      - name: JAVA_APP_JAR
+        value: /tmp/src/build/libs/springboots2idemo-0.1.1-SNAPSHOT.jar
       from:
         kind: ImageStreamTag
         name: openjdk18-openshift:latest
@@ -76,14 +80,13 @@ spec:
   successfulBuildsHistoryLimit: 5
   triggers:
   - github:
-      secret: 5ixnYii7WPsF1WY1HE_J
+      secret: 122hfrCzIb9Ls4q-PLEC
     type: GitHub
   - generic:
-      secret: yDGx9GtfIUkBQOyi2usf
+      secret: ALAzMOOHHdneC_2cdvV6
     type: Generic
   - type: ConfigChange
   - imageChange:
-      lastTriggeredImageID: registry.redhat.io/redhat-openjdk-18/openjdk18-openshift@sha256:648f77558d4656107be73379219d6d2ab27a092e92a956d96737b6b0fae5000a
     type: ImageChange
 ```
 
@@ -94,7 +97,6 @@ metadata:
   labels:
     app: spring-boot-s2i
   name: spring-boot-s2i
-  namespace: amm-cschlatter
 spec:
   lookupPolicy:
     local: false
@@ -173,16 +175,16 @@ In this step we're going to create a secret for our Git credentials. There are a
 
 
 ```BASH
-echo 'password' | base64
-echo 'token' | base64
+echo '<username>' | base64
+echo '<token>' | base64
 ```
 
 
 ```YAML
 apiVersion: v1
 data:
-  password: <Base64 decoded password>
-  username: <Base64 decoded token>
+  username: "<Base64 decoded username>"
+  password: "<Base64 decoded token>"
 kind: Secret
 metadata:
   name: git-credentials
@@ -197,30 +199,36 @@ oc create -f git-credentials.yaml
 
 Next we reference the freshly create secret in out BuildConfig
 
+
+
 ```YAML
 apiVersion: build.openshift.io/v1
 kind: BuildConfig
 metadata:
-  annotations:
-    openshift.io/generated-by: OpenShiftNewApp
   labels:
     app: spring-boot-s2i
   name: spring-boot-s2i
 spec:
   failedBuildsHistoryLimit: 5
+  nodeSelector: null
   output:
     to:
       kind: ImageStreamTag
       name: spring-boot-s2i:latest
+  postCommit: {}
+  resources: {}
   runPolicy: Serial
   source:
     git:
-      uri: https://github.com/schlapzz/spring-boot-private
+      uri: https://github.com/userXY/spring-boot-private
     type: Git
     sourceSecret:
       name: git-credentials
   strategy:
     sourceStrategy:
+      env:
+      - name: JAVA_APP_JAR
+        value: /tmp/src/build/libs/springboots2idemo-0.1.1-SNAPSHOT.jar
       from:
         kind: ImageStreamTag
         name: openjdk18-openshift:latest
@@ -228,14 +236,13 @@ spec:
   successfulBuildsHistoryLimit: 5
   triggers:
   - github:
-      secret: 5ixnYii7WPsF1WY1HE_J
+      secret: 122hfrCzIb9Ls4q-PLEC
     type: GitHub
   - generic:
-      secret: yDGx9GtfIUkBQOyi2usf
+      secret: ALAzMOOHHdneC_2cdvV6
     type: Generic
   - type: ConfigChange
   - imageChange:
-      lastTriggeredImageID: registry.redhat.io/redhat-openjdk-18/openjdk18-openshift@sha256:648f77558d4656107be73379219d6d2ab27a092e92a956d96737b6b0fae5000a
     type: ImageChange
 ```
 
