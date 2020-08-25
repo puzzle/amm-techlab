@@ -170,7 +170,7 @@ You can see that your Deployment isn't ready and the corresponding Pod has the s
 
 ## Troubleshoot
 
-Let' figure out what happen.
+Let' figure out what happened.
 First let's examine the Pods log
 
 ```BASH
@@ -232,7 +232,7 @@ main.main()
 
 ```
 
-So what is the reason for this? We already specified the `golang` user in the `Dockerfile`. So technically the user should have access to its own home directory. We need to fix the permissions for this particular user. Add following lines to your `Dockerfile`
+So what is the reason for this? We already specified the `golang` user in the `Dockerfile`. So technically the user should have access to its own home directory. Even if we specify a user with the USER directive in a Dockerfile, OpenShift is going to ignore it. We need to fix the permissions for this particular user. Add following lines to your `Dockerfile`
 
 
 ```

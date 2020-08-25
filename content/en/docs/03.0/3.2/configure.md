@@ -10,7 +10,13 @@ description: >
 ## {{% param sectionnumber %}}.1 Configure application
 
 
+## TODO
+
+* [ ] Im AMM Dokument ist noch die Idee mit einer Datenbank festgehalten. Sollte eine DB vorbereitet sein könnte man auch diese über Env. konfigurieren
+
 In this stage we show you how to configure your application. There are several options how to configure an application, we will show how to do it with environment variables. You can overwrite every property in you `application.properties` file with the corresponding environment variable. (eg. server.port=8081 in the application.properties is the same like SERVER_PORT=8081 as an environment variable)
+
+> Replace `userXY with your username.
 
 
 ### Deployment

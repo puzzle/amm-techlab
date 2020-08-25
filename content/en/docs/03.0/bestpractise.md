@@ -7,6 +7,11 @@ description: >
   Best practices for creating OpenShift containers.
 ---
 
+## TODO
+
+* [ ] Docker Befehle durch podman / buildah ersetzen
+
+
 ## Best practices for container in general
 
 [Best practices for writing Dockerfiles](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
@@ -14,9 +19,9 @@ description: >
 
 ### One process per container
 
-It is recommended to start only one process per container .This simplifies several things.
+It is recommended to start only one process per container. This simplifies following things.
 
-* Docker can recognize if your container failed
+* Docker can recognize if your container failed and restart it if needed
 * Reduce Image size and startup time
 * Signal handling flows are clearer
 * Reusable Images and looser coupling
@@ -24,8 +29,9 @@ It is recommended to start only one process per container .This simplifies sever
 
 ### Instructions order
 
+The order of the Docker instruction matters. When a single Layer become invalid, because of changing files or modifying lines in the Dockerfile, the subsequent layers become invalid too. As a rule of thumb: Order your steps from least to most frequently changing steps to optimize caching.
 
-Bad:
+**Bad:**
 
 ```Dockerfile
 FROM ubuntu
@@ -36,14 +42,13 @@ RUN apt get update && apt get install git openssh-client curl build-essential
 
 In this case every time your source code changed and you build the Image, all the linux packages are installed again.
 
-Good:
+**Good:**
 
 ```Dockerfile
 FROM ubuntu
 WORKDIR /home/me
 RUN apt get update && apt get install git openssh-client curl build-essential
 COPY . src/
-
 ```
 
 If you switch the RUN and COPY instructions, you only download the packages once. The layer is cached and will be reused for every further build.
@@ -51,25 +56,48 @@ If you switch the RUN and COPY instructions, you only download the packages once
 
 ### Use multistage build
 
-To reduce the size of your Image, you can use [Multi-Stage Builds](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#use-multi-stage-builds). For example a multi stage build for a Go application look like follow:
+To reduce the size of your Image, you can use [Multi-Stage Builds](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#use-multi-stage-builds). As an example ew took the Go Application from Chapter 2. Here is what a single stage Go build looks like:
 
-
-```
-{{< highlight dockerfile "hl_lines=1 5 6" >}}
+```Dockerfile
 FROM golang:1.14-alpine as builder
-COPY main.go /opt/app-root/src
+WORKDIR /opt/app-root/src
+COPY main.go .
+RUN env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o go-hello-world-app .
+```
+
+
+In this example you can see a two layer build. The first layer (called builder) uses a alpine base Image with the Golang tools / libs. It is responsible for building the golang application. The second layer is based on the Docker Scratch Image. Scratch image is used for super minimal Images that contain only a single binary.
+At line 6 the compiled binary from the build stage is copied into the second stage. This ensures that we only copy the artifacts we need into the final Image.
+
+{{< highlight dockerfile "hl_lines=1 6 7" >}}
+FROM golang:1.14-alpine as builder
+WORKDIR /opt/app-root/src
+COPY main.go .
 RUN env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o go-hello-world-app .
 
 FROM scratch
 COPY --from=builder /opt/app-root/src/go-hello-world-app /home/golang/
 EXPOSE 8080
 CMD /home/golang/go-hello-world-app
-
 {{< / highlight >}}
+
+
+
+Let's check the difference. Enter the following command to list all local images.
+
+```BASH
+docker image ls
 ```
 
-In this example you can see a two layer build. The first layer (called builder) uses a alpine base Image with the Golang tools / libs. It is responsible for building the golang application. The second layer is based on the Docker Scratch Image. Scratch image is used for super minimal Images that contain only a single binary.
-At line 6 the compiled binary from the build stage is copied into the second stage. This ensures that we only copy the artifacts we need into the final Image.
+
+```
+REPOSITORY              TAG                 IMAGE ID            CREATED             SIZE
+appuio/multi-stage      latest              3ac9ffdc7bcc        3 minutes ago       7.41MB
+appuio/one-stage        latest              eaf0e3ea3a2a        4 minutes ago       404MB
+```
+
+Both images containing our sample go application. But the difference in size is about 395MB!
+
 
 It is also possible to make use of multi-stage builds in OpenShift.
 
@@ -86,7 +114,7 @@ There are two options, how to deploy and run Docker images on OpenShift
 
 ### Root Users
 
-By default Docker containers run as `root` user. But container Images which running under root user, are not permitted in OpenShift clusters. (Except the Security Context Configuration is allowing it explicit)
+By default Docker containers run as `root` user. But container Images which running under root user, are not permitted in OpenShift clusters. (Except the Security Context Configuration allows it explicit)
 
 
 ### Random User IDs

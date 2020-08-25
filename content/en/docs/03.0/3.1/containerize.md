@@ -11,9 +11,14 @@ description: >
 ## {{% param sectionnumber %}}.1 Containerize an existing application
 
 
+## TODO
+
+* [ ] Source files überprüfen und updaten
+
+
 The main goal of this lab is to show you how to containerize an existing Java application. Including deployment on OpenShift and exposing the service with a route.
 
-> Replace `userXY` with your username.
+> Replace `userXY with your username.
 
 
 ### Setup Project
