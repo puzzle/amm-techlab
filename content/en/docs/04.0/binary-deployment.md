@@ -19,10 +19,72 @@ description: >
 * [ ] Hinweis eigenes Build Image verwenden, falls in ext. privater Registry -> Proxy Einstellungen
 
 
+> Binary builds require content from the local file system. Therefore automatic triggering a build is not possible.
+
+
+### Uses cases of binary builds
+
+* Build and test code local
+* Bypass the SCM
+* Build images with artifacts from different sources
+
+
 ### BuildConfig
 
 Let's create a BuildConfig for our binary deployment
 
 
 ```YAML
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  labels:
+    build: spring-boot-bb
+  name: spring-boot-bb
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector: null
+
+  output:
+    to:
+      kind: ImageStreamTag
+      name: spring-boot-bb:latest
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    binary: {}
+    type: Binary
+  strategy:
+    dockerStrategy: {}
+    type: Docker
+  successfulBuildsHistoryLimit: 5
+  triggers:
+  - github:
+      secret: yRLxbxn-mMOUJxxUOf00
+    type: GitHub
+  - generic:
+      secret: 8H7gL3nIr5C7QyKuqrQO
+    type: Generic
 ```
+
+
+Next we trigger our build from the CLI. Navigate into the spring-boot directory
+
+```BASH
+cd spring-boot.......
+```
+
+```BASH
+oc start-build spring-boot-bb --from-dir="."
+```
+
+You see following output
+
+```
+Uploading directory "." as binary input for the build ...
+
+Uploading finished
+build.build.openshift.io/spring-boot-bb-1 started
+```
+

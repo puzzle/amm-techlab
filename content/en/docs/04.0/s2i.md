@@ -26,7 +26,8 @@ S2I: Die Teilnehmer werden an den Source 2 Image Workflow geführt in dem sie:
 
 
 * init command `oc new-app --name s2i registry.redhat.io/redhat-openjdk-18/openjdk18-openshift~https://github.com/appuio/example-spring-boot-helloworld --as-deployment-config=true`
-
+* `oc new-app --name s2i s2i-gradle~https://github.com/appuio/example-spring-boot-helloworld --as-deployment-config=true`
+* Artefakt name: `/build/libs/springboots2idemo-0.1.1-SNAPSHOT.jar`
 
 ## TODO Vorbereitung
 

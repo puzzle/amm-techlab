@@ -31,20 +31,20 @@ Let's start with the deployment configuration
 apiVersion: apps.openshift.io/v1
 kind: DeploymentConfig
 metadata:
-  name: appuio-spring-boot
+  name: spring-boot-id
 spec:
   replicas: 1
   selector:
-    name: appuio-spring-boot
+    name: spring-boot-id
   template:
     metadata:
       labels:
-        name: appuio-spring-boot
+        name: spring-boot-id
     spec:
       containers:
       - image: 'appuio-spring-boot:latest'
         imagePullPolicy: IfNotPresent
-        name: appuio-spring-boot
+        name: spring-boot-id
         ports:
         - containerPort: 8080
           protocol: TCP
@@ -55,7 +55,7 @@ spec:
   - imageChangeParams:
       automatic: true
       containerNames:
-      - appuio-spring-boot
+      - spring-boot-id
       from:
         kind: ImageStreamTag
         name: appuio-spring-boot:latest
@@ -71,8 +71,8 @@ apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
   labels:
-    app: appuio-spring-boot
-  name: appuio-spring-boot
+    app: spring-boot-id
+  name: spring-boot-id
 spec:
   lookupPolicy:
     local: false
