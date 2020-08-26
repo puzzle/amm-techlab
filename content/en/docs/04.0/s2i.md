@@ -107,7 +107,7 @@ spec:
 ```
 
 
-In the second file we define S2I builder image. As builder Image we take the `redhat-openjdk-18/openjdk18-openshift` image. This is already prepared for S2I builds. 
+In the second file we define S2I builder image. As builder Image we take the `redhat-openjdk-18/openjdk18-openshift` image. This is already prepared for S2I builds.
 
 ```YAML
 apiVersion: image.openshift.io/v1
@@ -266,10 +266,10 @@ oc get builds spring-boot-s2i-2 -w
 ```
 
 
-
 ## Create additional resources
 
 Until now we just created the build resources. Up next is the creation of the DeploymentConfig, Serve and the Route.
+
 
 ### DeplyomentConfig
 

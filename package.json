@@ -1,10 +1,11 @@
 {
   "husky": {
     "hooks": {
-      "pre-commit": "mdlint"
+      "pre-commit": "npm run mdlint"
     }
   },
   "dependencies": {
+    "husky": "^4.2.5",
     "markdownlint": "^0.20.4"
   },
   "scripts": {

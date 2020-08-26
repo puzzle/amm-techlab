@@ -63,7 +63,7 @@ spec:
     type: Rolling  
 ```
 
-Next we create the ImageStream definition. The important part is under the `tags` section. There we define a reference to an external Docker registry and define which image to track. Another important field is the import policy. If you query an image from an external registry, you can set scheduled import to true. 
+Next we create the ImageStream definition. The important part is under the `tags` section. There we define a reference to an external Docker registry and define which image to track. Another important field is the import policy. If you query an image from an external registry, you can set scheduled import to true.
 
 ```YAML
 apiVersion: image.openshift.io/v1
