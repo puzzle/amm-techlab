@@ -159,8 +159,8 @@ oc describe build spring-boot-s2i-1
 We can see the following output (example is truncated)
 ......
 
-Log Tail:  Cloning "https://github.com/schlapzz/spring-boot-private" ...
-    error: failed to fetch requested repository "https://github.com/schlapzz/spring-boot-private" with provided credentials
+Log Tail:  Cloning "https://github.com/userXY/spring-boot-private" ...
+    error: failed to fetch requested repository "https://github.com/userXY/spring-boot-private" with provided credentials
 Events:
   Type    Reason    Age      From                Message
   ----    ------    ----      ----                -------
