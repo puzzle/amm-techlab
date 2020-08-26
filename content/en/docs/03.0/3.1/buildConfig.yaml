@@ -20,15 +20,15 @@ spec:
     dockerStrategy:
       from:
         kind: ImageStreamTag
-        name: java-centos-openjdk11-jdk:latest
+        name: openjdk-11:latest
     type: Docker
   resources:
     limits:
       cpu: "500m"
-      memory: "2Gb"
+      memory: "2G"
     requests:
       cpu: "250m"
-      memory: "1Gb"
+      memory: "1G"
   triggers:
   - github:
       secret: soV621heA_1fUIh4tXvK

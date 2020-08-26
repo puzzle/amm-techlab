@@ -12,3 +12,4 @@ public
 .env
 resources
 .idea/
+tmp/*
