@@ -13,7 +13,6 @@ description: >
 
 ## TODO Lab
 
-* [ ] keine Buildconfig sondern direkt DeploymentConfig und ImageStream
 * Beschreiben: Imagestream und polling / scheduling von neuen Images, damit image stream trigger funktioniert.
 * Hinweis: per Default polling nur für latest Tag
 * Beschreiben: Private Registry wie und wo muss man das pull secret angeben.
@@ -58,13 +57,13 @@ spec:
       - spring-boot-id
       from:
         kind: ImageStreamTag
-        name: appuio-spring-boot:latest
+        name: spring-boot-id:latest
     type: ImageChange  
   strategy:
     type: Rolling  
 ```
 
-Next we create the ImageStream definition. The important part is under the `tag` section. There we define a reference to an external Docker registry and define the image.
+Next we create the ImageStream definition. The important part is under the `tags` section. There we define a reference to an external Docker registry and define which image to track. Another important field is the import policy. If you query an image from an external registry, you can set scheduled import to true. 
 
 ```YAML
 apiVersion: image.openshift.io/v1

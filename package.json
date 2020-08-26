@@ -1,0 +1,13 @@
+{
+  "husky": {
+    "hooks": {
+      "pre-commit": "mdlint"
+    }
+  },
+  "dependencies": {
+    "markdownlint": "^0.20.4"
+  },
+  "scripts": {
+    "mdlint": "markdownlint --config .markdownlint.json content *.md"
+  }
+}
