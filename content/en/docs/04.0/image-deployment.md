@@ -13,16 +13,15 @@ description: >
 
 ## TODO Lab
 
-* Beschreiben: Imagestream und polling / scheduling von neuen Images, damit image stream trigger funktioniert.
-* Hinweis: per Default polling nur für latest Tag
-* Beschreiben: Private Registry wie und wo muss man das pull secret angeben.
+* Beschreiben: Private Registry wie und wo muss man das pull secret angeben?
+* Auf die Estellung von Services und Routen wurde verzichtet da diese schon in den vorhergehenden Labs ausführlich gezeigt wurde.
 
+
+{{% alert title="Note" color="primary" %}}
+For the Image deployment strategy we don't need to specify a BuildConfig. Thus because we use prebuilt images.
+{{% /alert %}}
 
 In this section we cover how to deploy an existing Docker Image from an image registry. Besides we show you create a ImageStream to track changes on the deployed image and trigger an update on the deployment.
-
-
-There are three options for updating the ImageStreams
-
 
 Let's start with the deployment configuration
 
