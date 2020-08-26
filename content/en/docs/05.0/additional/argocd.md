@@ -7,6 +7,13 @@ description: >
   GitOps with Argo CD.
 ---
 
+
+## TODO
+
+* [ ] Testen und durchspielen
+* [ ] ev. auf example spring boot app Umbauen
+
+
 ## Introduction to GitOps
 
 > GitOps is a way to do Kubernetes cluster management and application delivery.  It works by using Git as a single source of truth for declarative infrastructure and applications. With GitOps, the use of software agents can alert on any divergence between Git with what's running in a cluster, and if there's a difference, Kubernetes reconcilers automatically update or rollback the cluster depending on the case. With Git at the center of your delivery pipelines, developers use familiar tools to make pull requests to accelerate and simplify both application deployments and operations tasks to Kubernetes. [https://www.weave.works/technologies/gitops/](https://www.weave.works/technologies/gitops/)
@@ -31,7 +38,7 @@ For a quick 10 minute overview of Argo CD, check out the demo presented to the S
 
 ## Task {{% param sectionnumber %}}.1: Getting started
 
-Let's start by downloading the latest Argo CD version from [Argo GitHub repository](https://github.com/argoproj/argo-cd/releases/latest). More detailed installation instructions can be found via the [CLI installation documentation](https://argoproj.github.io/argo-cd/cli_installation/).
+Let's start by downloading the latest Argo CD version from <https://github.com/argoproj/argo-cd/releases/latest>. More detailed installation instructions can be found via the [CLI installation documentation](https://argoproj.github.io/argo-cd/cli_installation/).
 
 You can access Argo CD via UI or using the CLI. For CLI usage use the following command to login (credentials are given by your teacher):
 

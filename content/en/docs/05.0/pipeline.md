@@ -18,6 +18,7 @@ description: >
   * [x] Basis Red Hat nehmen
     * [ ] und vielleicht wenn die Zeit noch da ist auf unsere App umstellen
 * [ ] ev. noch mit [WebHook](https://docs.openshift.com/container-platform/4.4/pipelines/creating-applications-with-cicd-pipelines.html#creating-webhooks_creating-applications-with-cicd-pipelines) erweitern
+* [ ] ev. mit Task aus Catalog erweitern: <https://github.com/tektoncd/catalog> oder <https://github.com/openshift/pipelines-catalog>
 * [ ] Security Aspekte einfliessen lassen. im Lab Text schreiben, Waf vorschalten, Owasp checks machen, Zap Proxy
 
 
@@ -30,11 +31,11 @@ Tekton makes use of several Kubernetes [custom resources (CRD)](https://kubernet
 
 These CRDs are:
 
-* *Task*: collection of steps that perform a specific task.
-* *Pipeline*: is a series of tasks, combined to work together in a defined (structured) way
-* *PipelineResource*: inputs (e.g. git repository) and outputs (e.g. image registry) to and out of a pipeline or task
-* *TaskRun*: the execution and result of running an instance of task
-* *PipelineRun*: is the actual execution of a whole Pipeline, containing the results of the pipeline (success, failed...)
+* *[Task](https://github.com/tektoncd/pipeline/blob/master/docs/tasks.md)*: collection of steps that perform a specific task.
+* *[Pipeline](https://github.com/tektoncd/pipeline/blob/master/docs/pipelines.md)*: is a series of tasks, combined to work together in a defined (structured) way
+* *[PipelineResource](https://github.com/tektoncd/pipeline/blob/master/docs/resources.md)*: inputs (e.g. git repository) and outputs (e.g. image registry) to and out of a pipeline or task
+* *[TaskRun](https://github.com/tektoncd/pipeline/blob/master/docs/taskruns.md)*: the execution and result of running an instance of task
+* *[PipelineRun](https://github.com/tektoncd/pipeline/blob/master/docs/pipelineruns.md)*: is the actual execution of a whole Pipeline, containing the results of the pipeline (success, failed...)
 
 Pipelines and Tasks should be generic and never define possible variables, like input git repository, directly in their definition. For this, the concept of PipelineResources has been created, which defines these parameters and which are used during a PipelineRun.
 
@@ -55,7 +56,10 @@ oc new-project pipelines-userXY
 The OpenShift Pipeline operator will automatically create a pipeline serviceaccount with all required permissions to build and push an image. This serviceaccount is used by PipelineRuns:
 
 ```bash
-$ oc get sa
+oc get sa
+```
+
+```
 NAME       SECRETS   AGE
 builder    2         11s
 default    2         11s
@@ -71,7 +75,10 @@ For additional features, we are going to add another CLI that eases access to th
 Verify tkn version by running:
 
 ```bash
-$ tkn version
+tkn version
+```
+
+```
 Client version: 0.10.0
 Pipeline version: unknown
 Triggers version: unknown
@@ -81,6 +88,10 @@ Triggers version: unknown
 ## Task {{% param sectionnumber %}}.3: Create Pipeline tasks
 
 A Task is the smallest block of a Pipeline which by itself can contain one or more steps which are executed in order to process a specific element. For each Task a pod is allocated and each step is running in a container inside this pod. Tasks are reusable by other Pipelines. _Input_ and _Output_ specifications can be used to interact with other Tasks.
+
+{{% alert title="Note" color="primary" %}}
+You can find more examples of reusable tasks in the [Tekton Catalog](https://github.com/tektoncd/catalog) and [OpenShift Catalog](https://github.com/openshift/pipelines-catalog) repositories.
+{{% /alert %}}
 
 Let's examine two tasks that do a deployment.
 
@@ -147,7 +158,10 @@ oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content
 Verify that the two tasks have been created using the Tekton CLI:
 
 ```bash
-$ tkn task ls
+tkn task ls
+```
+
+```
 NAME                AGE
 apply-manifests     7 minutes ago
 update-deployment   7 minutes ago
@@ -234,7 +248,10 @@ oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content
 Verify that the Pipeline has been created using the Tekton CLI:
 
 ```bash
-$ tkn pipeline ls
+tkn pipeline ls
+```
+
+```
 NAME               AGE              LAST RUN   STARTED   DURATION   STATUS
 build-and-deploy   34 seconds ago   ---        ---       ---        ---
 ```
@@ -326,7 +343,10 @@ oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/conten
 The resources can be listed with:
 
 ```bash
-$ tkn resource ls
+tkn resource ls
+```
+
+```
 NAME        TYPE    DETAILS
 api-repo    git     url: http://github.com/openshift-pipelines/vote-api.git
 ui-repo     git     url: http://github.com/openshift-pipelines/vote-ui.git
@@ -362,7 +382,10 @@ tkn pipeline start build-and-deploy \
 The PipelineRuns can be listed with:
 
 ```bash
-$ tkn pipelinerun ls
+tkn pipelinerun ls
+```
+
+```
 NAME                         STARTED          DURATION    STATUS
 build-and-deploy-run-5r2ln   8 minutes ago    1 minute    Succeeded
 build-and-deploy-run-9w67k   10 minutes ago   1 minute    Succeeded
@@ -385,6 +408,13 @@ With the OpenShift Pipeline operator a new menu item is introduced on the WebUI 
 Now our Pipeline built and deployed the voting application, where you can vote if you prefer cats or dogs (Cats or course :) )
 
 Get the route of your project and open the URL in the browser.
+
+
+## High quality and secure Pipeline
+
+This was only an example pipeline building a container image and deploying it to OpenShift. There are lots of security features missing.
+
+TODO: <https://github.com/puzzle/delivery-pipeline-concept>
 
 
 ## Links and Sources
