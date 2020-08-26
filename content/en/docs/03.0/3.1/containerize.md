@@ -88,7 +88,7 @@ spec:
   runPolicy: Serial
   source:
     git:
-      uri: https://github.com/schlapzz/example-spring-boot-helloworld
+      uri: https://github.com/userXY/example-spring-boot-helloworld
     type: Git
   strategy:
     dockerStrategy:
