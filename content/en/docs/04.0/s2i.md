@@ -22,12 +22,8 @@ S2I: Die Teilnehmer werden an den Source 2 Image Workflow geführt in dem sie:
 * [ ] Additional teil: Repo Forken und in der BC anpassen, danach ein S2I script überschreiben und einen echo Befehl integrieren um zu zeigen wie das funktionieren kann.
 * [ ] Proxy Setzen beschreiben
 * [ ] Builder image von   `registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift` vorgängig importieren? (oc import-image )
-* [ ] Welches repository als Source für Si2 verwenden? 
+* [ ] Welches repository als Source für Si2 verwenden?
 
-
-* init command `oc new-app --name s2i registry.redhat.io/redhat-openjdk-18/openjdk18-openshift~https://github.com/appuio/example-spring-boot-helloworld --as-deployment-config=true`
-* `oc new-app --name s2i s2i-gradle~https://github.com/appuio/example-spring-boot-helloworld --as-deployment-config=true`
-* Artefakt name: `/build/libs/springboots2idemo-0.1.1-SNAPSHOT.jar`
 
 ## TODO Vorbereitung
 
@@ -45,7 +41,11 @@ The main reasons to use this build strategy are.
 
 ## Create BuildConfig
 
-First let's create a BuildConfig.
+First let's create a BuildConfig. The important part in this specification are the source, output and strategy section.
+
+* The source is pointing towards a private Git repository where the source code resides.
+* We already discussed the strategy section in the beginning of this chapter. For this example we set the strategy to sourceStrategy (know as Source-to-Image / S2I)
+* The last part is the output section. In our example we reference a ImageStreamTag as an output.
 
 ```YAML
 apiVersion: build.openshift.io/v1
@@ -90,6 +90,10 @@ spec:
     type: ImageChange
 ```
 
+Next we need the definitions for our two ImageStreamTag references.
+
+The first file contains the definitions for the output image.
+
 ```YAML
 apiVersion: image.openshift.io/v1
 kind: ImageStream
@@ -102,6 +106,8 @@ spec:
     local: false
 ```
 
+
+In the second file we define S2I builder image. As builder Image we take the `redhat-openjdk-18/openjdk18-openshift` image. This is already prepared for S2I builds. 
 
 ```YAML
 apiVersion: image.openshift.io/v1
@@ -135,13 +141,15 @@ oc get builds
 
 ```
 NAME                TYPE     FROM          STATUS                        STARTED          DURATION
-spring-boot-s2i-1   Source   Git           Failed (FetchSourceFailed)    42 minutes ago
+spring-boot-s2i-1   Source   Git           Failed (FetchSourceFailed)    2 minutes ago
 ```
 
 Now you can see the build failed. Let's figure out why.
 
+
 ## Troubleshooting
 
+First we describe our failed build with following command.
 
 ```BASH
 oc describe build spring-boot-s2i-1
@@ -164,14 +172,13 @@ Events:
 ....
 ```
 
-Under the section Log Tail we can see that fetching our private repository failed. This is beacuse we try to fetch the source from a private repository without providing the credentials.
+Under the section Log Tail we can see that fetching our private repository failed. This is because we try to fetch the source from a private repository without providing the credentials.
 
 
 ## Fix config
 
 In this step we're going to create a secret for our Git credentials. There are a few different authentication methods [8.3.4.2. Source Clone Secrets](https://access.redhat.com/documentation/en-us/openshift_container_platform/3.11/html/developer_guide/builds#source-code). For this example we use the Basic Authentication. But instead of a user and password combination we use a username and token credentials.
-
-//TODO: Add how to generate access tokens / or how to get deploy key
+**//TODO: Add how to generate access tokens / or how to get deploy key**
 
 
 ```BASH
@@ -197,11 +204,10 @@ Then we can create the secret
 oc create -f git-credentials.yaml
 ```
 
-Next we reference the freshly create secret in out BuildConfig
+Next we reference the freshly created secret in our BuildConfig
 
-
-
-```YAML
+```
+{{< highlight yaml "hl_lines=21 22" >}}
 apiVersion: build.openshift.io/v1
 kind: BuildConfig
 metadata:
@@ -244,6 +250,7 @@ spec:
   - type: ConfigChange
   - imageChange:
     type: ImageChange
+{{< / highlight >}}
 ```
 
 Now we can trigger the build again.
@@ -265,6 +272,49 @@ oc get builds spring-boot-s2i-2 -w
 Until now we just created the build resources. Up next is the creation of the DeploymentConfig, Serve and the Route.
 
 ### DeplyomentConfig
+
+```YAML
+
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: spring-boot-s2i
+  name: spring-boot-s2i
+spec:
+  replicas: 1
+  selector:
+    deploymentconfig: spring-boot-s2i
+  strategy:
+    resources: {}
+  template:
+    metadata:
+      labels:
+        deploymentconfig: spring-boot-s2i
+    spec:
+      containers:
+      - image: image-registry.openshift-image-registry.svc:5000/amm-cschlatter/spring-boot-s2i:latest
+        name: spring-boot-s2i
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 8443
+          protocol: TCP
+        - containerPort: 8778
+          protocol: TCP
+        resources: {}
+  test: false
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - spring-boot-s2i
+      from:
+        kind: ImageStreamTag
+        name: spring-boot-s2i:latest
+    type: ImageChange
+```
 
 
 ### Service
