@@ -126,7 +126,7 @@ RUN chgrp -R 0 /some/directory && \
     chmod -R g=u /some/directory
 ```
 
-Find more information about this topic in the [OpenShift Guidelines](https://docs.openshift.com/container-platform/3.11/creating_images/guidelines.html#openshift-specific-guidelines).
+Find more information about this topic in the [OpenShift Guidelines](https://docs.openshift.com/container-platform/4.5/openshift_images/create-images.html#images-create-guide-openshift_create-images).
 
 
 ### Logging
