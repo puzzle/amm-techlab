@@ -2,15 +2,23 @@
   "name": "amm-techlab",
   "version": "1.0.0",
   "description": "Application Migration and Modernization Techlab",
-  "dependencies": {},
-  "scripts": {
-    "lint": "./node_modules/.bin/markdownlint content *.md"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/puzzle/amm-techlab.git"
   },
   "author": "Puzzle ITC",
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run mdlint"
+    }
+  },
+  "dependencies": {
+    "husky": "^4.2.5",
+    "markdownlint": "^0.20.4"
+  },
+  "scripts": {
+    "mdlint": "markdownlint --config .markdownlint.json content *.md"
+  },
   "bugs": {
     "url": "https://github.com/puzzle/amm-techlab/issues"
   },
