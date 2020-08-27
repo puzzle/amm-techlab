@@ -44,7 +44,6 @@ metadata:
 spec:
   failedBuildsHistoryLimit: 5
   nodeSelector: null
-
   output:
     to:
       kind: ImageStreamTag

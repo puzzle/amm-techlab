@@ -16,7 +16,7 @@ description: >
 
 ## Introduction to GitOps
 
-> GitOps is a way to do Kubernetes cluster management and application delivery.  It works by using Git as a single source of truth for declarative infrastructure and applications. With GitOps, the use of software agents can alert on any divergence between Git with what's running in a cluster, and if there's a difference, Kubernetes reconcilers automatically update or rollback the cluster depending on the case. With Git at the center of your delivery pipelines, developers use familiar tools to make pull requests to accelerate and simplify both application deployments and operations tasks to Kubernetes. [https://www.weave.works/technologies/gitops/](https://www.weave.works/technologies/gitops/)
+> [GitOps](https://www.weave.works/technologies/gitops/) is a way to do Kubernetes cluster management and application delivery.  It works by using Git as a single source of truth for declarative infrastructure and applications. With GitOps, the use of software agents can alert on any divergence between Git with what's running in a cluster, and if there's a difference, Kubernetes reconcilers automatically update or rollback the cluster depending on the case. With Git at the center of your delivery pipelines, developers use familiar tools to make pull requests to accelerate and simplify both application deployments and operations tasks to Kubernetes.
 
 Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes.
 
@@ -49,7 +49,7 @@ argocd login <ARGOCD_SERVER>
 
 ## Task {{% param sectionnumber %}}.2: Create an Application
 
-An example repository containing a guestbook application is available at [](https://github.com/argoproj/argocd-example-apps.git) to demonstrate how Argo CD works.
+An example repository containing a guestbook application is available at <https://github.com/argoproj/argocd-example-apps.git> to demonstrate how Argo CD works.
 
 To deploy this application using the Argo CD CLI use the following command:
 

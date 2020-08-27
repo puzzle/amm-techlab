@@ -179,24 +179,19 @@ Under the section Log Tail we can see that fetching our private repository faile
 In this step we're going to create a secret for our Git credentials. There are a few different authentication methods [3.4.2. Source Clone Secrets](https://access.redhat.com/documentation/en-us/openshift_container_platform/4.5/html/builds/creating-build-inputs#source-code_creating-build-inputs). For this example we use the Basic Authentication. But instead of a user and password combination we use a username and token credentials.  
 **//TODO: Add how to generate access tokens / or how to get deploy key in GitHub**
 
+Next we create a secret containing our Git credentials. Your username and password will be Base64 encoded and moved from the `stringData` to the `data` section.
 
-First we need our credentials Base64 decoded to use it as a Secret. Let's generate the encoded credentials with following command. Be sure that you replace your username and use your personal access token.
-
-```BASH
-echo '<username>' | base64
-echo '<token>' | base64
-```
-
-Next we create a secret containing our Git credentials.
+{{% alert title="Note" color="primary" %}} Be sure that you replace your username and use your personal access token. {{% /alert %}}
 
 ```YAML
 apiVersion: v1
-data:
-  username: "<Base64 decoded username>"
-  password: "<Base64 decoded token>"
 kind: Secret
 metadata:
   name: git-credentials
+data:
+stringData:
+  username: "<username>"
+  password: "<token>"
 type: kubernetes.io/basic-auth
 ```
 

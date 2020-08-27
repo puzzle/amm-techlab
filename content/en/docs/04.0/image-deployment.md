@@ -19,10 +19,10 @@ description: >
 * Beschreiben: Private Registry wie und wo muss man das pull secret angeben.
 
 
-In this section we cover how to deploy an existing Docker Image from an image registry. Besides we show you create a ImageStream to track changes on the deployed image and trigger an update on the deployment.
+In this section we cover how to deploy an existing Docker Image from an image registry. Besides we show how to create a ImageStream to track changes on the deployed image and trigger an update on the deployment.
 
 
-There are three options for updating the ImageStreams
+There are three options for updating the ImageStreams.
 
 
 Let's start with the deployment configuration
