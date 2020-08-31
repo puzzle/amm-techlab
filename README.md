@@ -78,7 +78,7 @@ For local checks, you can either use Visual Studio Code with the corresponding e
 
 ```shell script
 npm install
-npm run lint
+npm run mdlint
 ```
 
 
