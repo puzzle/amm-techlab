@@ -11,9 +11,9 @@ description: >
 
 The build can be done using any container building tool that supports `Dockerfile` builds.
 
-The sample application is a http server written in the [Go programming language](https://golang.org/).
+The sample application is an HTTP server written in the [Go programming language](https://golang.org/).
 
-Following files are needed inside your application repository:
+The following files are needed inside your application repository:
 
 * [Dockerfile](#application-build-instruction)
 * [main.go](#sample-go-application)
@@ -21,7 +21,7 @@ Following files are needed inside your application repository:
 
 ### Sample go application
 
-This Go code defines an http server listening on port 8080. It has to be placed in the `main.go` file.
+This Go code defines an HTTP server listening on port 8080. It has to be placed in the `main.go` file.
 
 ```go
 package main
@@ -75,13 +75,13 @@ CMD /home/golang/go-hello-world-app
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/Dockerfile)
 
-It is a [multi-stage build](https://docs.docker.com/develop/develop-images/multistage-build/). The build is done in several stages using different container.
+It is a [multi-stage build](https://docs.docker.com/develop/develop-images/multistage-build/). The build is done in several stages using different containers.
 
-1. use a go container to build the go application
-1. copy the go binary from the build to a minimal ubi image [Universal Base Image](https://developers.redhat.com/products/rhel/ubi)
+1. use a Go container to build the Go application
+2. copy the go binary from the build to a minimal ubi image [Universal Base Image](https://developers.redhat.com/products/rhel/ubi)
 
 {{% alert title="Note" color="primary" %}}
-Multi-stage builds have two major advantages; smaller image size and higher security. The resulting image does only contain the minimal set of needed packages. This reduces the image size and increases the security (smaller attac surface).
+Multi-stage builds have two major advantages; smaller image size and higher security. The resulting image does only contain the minimal set of required packages. This reduces the image size and increases security (smaller attac surface).
 {{% /alert %}}
 
 
@@ -97,7 +97,7 @@ Buildah build command:
 buildah bud -f Dockerfile -t go-hello-world .
 ```
 
-the image is available locally:
+The image is available locally:
 
 ```bash
 $ buildah images
@@ -127,7 +127,7 @@ curl localhost:8080/world
 
 ### Publish image to Docker Hub
 
-To make the image accessible to OpenShift, it must be pushed to a image registry. We use Docker Hub as the registry.
+To make the image accessible to OpenShift, it must be pushed to an image registry. We use Docker Hub as the registry.
 
 ```bash
 podman login
