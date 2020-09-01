@@ -68,7 +68,7 @@ spec:
 ```
 
 
-Next we trigger our build from the CLI. Navigate into the spring-boot directory
+Next, we trigger our build from the CLI. Navigate into the spring-boot directory
 
 ```BASH
 cd spring-boot.......
@@ -78,7 +78,7 @@ cd spring-boot.......
 oc start-build spring-boot-bb --from-dir="."
 ```
 
-You see following output
+You see the following output
 
 ```
 Uploading directory "." as binary input for the build ...
