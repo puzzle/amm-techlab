@@ -33,13 +33,13 @@ oc new-app appuio/go-hello-world
     Run 'oc status' to view your app.
 ```
 
-To access the application from outside OpenShift a route is needed:
+To access the application from outside OpenShift, a route is needed:
 
 ```bash
 oc create route edge --service=go-hello-world --insecure-policy=Redirect
 ```
 
-Run following command to determine the host of the new created route.
+Run the following command to determine the host of the newly created route.
 
 ```bash
 oc get routes.route.openshift.io go-hello-world -o template --template '{{.spec.host}}{{"\n"}}'
