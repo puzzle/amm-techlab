@@ -14,46 +14,45 @@ description: >
 * [ ] Synchen mit [APPUiO Lab](https://github.com/appuio/techlab/blob/lab-4.3/labs/07_operators.md)
 
 
-Operators sind eine Art und Weise wie man Kubernetes-native Applikationen paketieren, deployen und verwalten kann. Kubernetes-native Applikationen sind Applikationen, die einerseits in Kubernetes/OpenShift deployed sind und andererseits auch über das Kubernetes/OpenShift-API (kubectl/oc) verwaltet werden. Seit OpenShift 4 verwendet auch OpenShift selber eine Reihe von Operators um den OpenShift-Cluster, also sich selber, zu verwalten.
+Operators are a way to package, deploy and manage Kubernetes-native applications. Kubernetes-native applications are applications that are deployed in Kubernetes/OpenShift and managed via the Kubernetes/OpenShift API (kubectl/oc). Since the introduction of OpenShift 4, OpenShift itself uses several operators to manage the OpenShift cluster.
 
 
-## Einführung / Begriffe
+## Introduction / Terms
 
-Um zu verstehen, was ein Operator ist und wie er funktioniert, schauen wir zunächst den sogenannten Controller an, da Operators auf dessen Konzept basieren.
+To understand, what an operator is and how it works, we first look at the so-called controller, because operators are based on its concept.
 
 
 ### Controller
 
-Ein Controller besteht aus einem Loop, in welchem immer wieder der gewünschte Zustand (_desired state_) und der aktuelle Zustand (_actual state/obseved state_) des Clusters gelesen werden. Wenn der aktuelle Zustand nicht dem gewünschten Zustand entspricht, versucht der Controller den gewünschten Zustand herzustellen. Der gewünschte Zustand wird mit Ressourcen (Deployments, ReplicaSets, Pods, Services, etc.) beschrieben.
+A controller consists of a loop, in which the desired state and the actual / obseved state of the cluster are read again and again. If the actual / obseved state isn't matching the desired state, the controller tries to establish the desired state. The desired state is described with resources (Deployments, ReplicaSets, Pods, Services, etc.).
 
-Die ganze Funktionsweise von OpenShift/Kubernetes basiert auf diesem Muster. Auf dem Master (controller-manager) laufen eine Vielzahl von Controllern, welche aufgrund von Ressourcen (ReplicaSets, Pods, Services, etc.) den gewünschten Zustand herstellen. Erstellt man z.B. ein ReplicaSet, sieht dies der ReplicaSet-Controller und erstellt als Folge die entsprechende Anzahl von Pods.
+The whole functionality of OpenShift/Kubernetes is based on this pattern. On the master (controller-manager) several controllers run, which create the desired state based on resources (ReplicaSets, Pods, Services, etc.). For example, if a ReplicaSet is created, the ReplicaSet controller sees this and thus creates the corresponding number of Pods.
 
-__Optional__: Der Artikel [The Mechanics of Kubernetes](https://medium.com/@dominik.tornow/the-mechanics-of-kubernetes-ac8112eaa302) gibt einen tiefen Einblick in die Funktionsweise von Kubernetes. In der Grafik im Abschnitt _Cascading Commands_ wird schön aufgezeigt, dass vom Erstellen eines Deployments bis zum effektiven Starten der Pods vier verschiedene Controller involviert sind.
+__Optional__: The article [The Mechanics of Kubernetes](https://medium.com/@dominik.tornow/the-mechanics-of-kubernetes-ac8112eaa302) provides a deeper insight into how Kubernetes works. The graphic in the Cascading Commands section illustrates, that four different controllers are involved from the time a deployment is created until the pods are effectively started.
 
 
 ### Operator
 
-Ein Operator ist ein Controller, welcher dafür zuständig ist, eine Applikation zu installieren und zu verwalten. Ein Operator hat also applikations-spezifisches Wissen. Dies ist insbesondere bei komplexeren Applikationen nützlich, welche aus verschiedenen Komponenten bestehen oder zusätzlichen Administrationsaufwand erfordern (z.B. neu gestartete Pods müssen zu einem Applikations-Cluster hinzugefügt werden, etc.).
+An operator is a controller that is responsible for installing and managing an application. An operator, therefore, has application-specific knowledge. This is especially useful for more complex applications that consists of different components or require additional administration effort (e.g. newly started Pods must be added to an application cluster, etc.).
 
-Auch für den Operator muss der gewünschte Zustand durch eine Ressource abgebildet werden. Dazu gibt es sogenannte Custom Resource Definitions (CRD). Mit CRDs kann man in OpenShitf/Kubernetes beliebige neue Ressourcen definieren. Der Operator schaut dann konstant (_watch_), ob Custom Resources verändert werden, für welche der Operator zuständig ist und führt entsprechend der Zielvorgabge in der Custom Resource Aktionen aus.
+Also for the operator, the desired state has to be represented by a resource. For this purpose, there are so-called Custom Resource Definitions (CRD). With CRDs you can define any new resources in OpenShift/Kubernetes. The operator then constantly watches, whether its Custom Resources are changed, and executes actions according to the target in the Custom Resource.
 
-Operators erleichtern es also komplexere Applikationen zu betreiben, da das Management vom Operator übernommen wird. Allfällige komplexe Konfigurationen werden durch Custom Resources abstrahiert und Betriebsaufgaben wie Backups oder das Rotieren von Zertifikaten etc. können auch vom Operator ausgeführt werden.
+Operators make it easier to run more complex applications because the operator takes over the management. Any complex configurations are abstracted by Custom Resources and operational tasks such as backups or rotating certificates etc. can also be performed by the operator.
 
 
-## Installation eines Operators
+## Installation of an operator
 
-Ein Operator läuft wie eine normale Applikation als Pod im Cluster. Zur Installation eines Operators gehören in der Regel die folgenden Ressourcen:
+An operator runs like a normal application as a pod in a cluster. The following resources are usually required to install an operator:
 
-* ***Custom Resource Definition***: Damit die neuen Custom Resources angelegt werden können, welche der Operator behandelt, müssen die entsprechenden CRDs installiert werden.
-* ***Service Account***: Ein Service Account mit welchem der Operator läuft.
-* ***Role und RoleBinding***: Mit einer Role definiert man alle Rechte, welche der Operator braucht. Dazu gehören mindestens Rechte auf die eigene Custom Resource. Mit einem RoleBinding wird die neue Role dem Service Account des Operators zugewiesen.
-* ***Deployment***: Ein Deployment um den eigentlichen Operator laufen zu lassen. Der Operator läuft meistens nur einmal (Replicas auf 1 eingestellt), da sich sonst die verschiedenen Operator-Instanzen gegenseitig in die Quere kommen würden.
+* ***Custom Resource Definition***: To create the new Custom Resources that are being handled by the Operator, the appropriate CRDs must be installed.
+* ***Service Account***: A service account with which the operator runs.
+* ***Role und RoleBinding***: With a Role, you define all rights the operator needs. This includes at least rights to its custom resource. With a RoleBinding the new Role is assigned to the Service Account of the Operator.
+* ***Deployment***: A deployment to run the actual operator. The operator usually runs only once (replicas set to 1), otherwise, the different operator instances would get in each other's way.
 
-Auf OpenShift 4 ist standardmässig der Operator Lifecycle Manager (OLM) installiert. OLM vereinfacht die Installation von Operators. Der OLM erlaubt es uns, aus einem Katalog einen Operator auszuwählen (_subscriben_), welcher dann automatisch installiert und je nach Einstellung auch automatisch upgedated wird.
+On OpenShift 4 the Operator Lifecycle Manager (OLM) is installed by default. OLM simplifies the installation of operators. OLM allows us to select an operator from a catalog (subscribe), which is then automatically installed and updated depending on the settings.
 
-Als Beispiel installieren wir in den nächsten Schritten den ETCD-Operator. Normalerweise ist das Aufsetzen eines ETCD-Clusters ein Prozess mit einigen Schritten und man muss viele Optionen zum Starten der einzelnen Cluster-Member kennen. Der ETCD-Operator erlaubt es uns mit der EtcdCluster-Custom-Resource ganz einfach einen ETCD-Cluster aufzusetzen. Dabei brauchen wir kein detailliertes Wissen über ETCD, welches normalerweise für das Setup notwendig wäre, da dies alles vom Operator übernommen wird.
-Wie für ETCD gibt es auch für viele andere Applikationen vorgefertigte Operators, welche einem den Betrieb von diesen massiv vereinfachen.
-
+As an example, we will install the ETCD operator in the next steps. Normally, setting up an ETCD cluster is a process with many steps and you have to be familiar with several options to start the individual cluster members. The ETCD operator allows us to easily set up an ETCD cluster with the Etcd-Cluster-Custom-Resource. We don't need a huge know-how about ETCD, which would normally be required for the setup, because this is all done by the operator.
+As for ETCD, there are pre-built operators for many other applications, which massively simplify their operation.
 
 ## {{% param sectionnumber %}}.1 Lab: Create a etcd Cluster
 
