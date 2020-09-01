@@ -54,6 +54,7 @@ On OpenShift 4 the Operator Lifecycle Manager (OLM) is installed by default. OLM
 As an example, we will install the ETCD operator in the next steps. Normally, setting up an ETCD cluster is a process with many steps and you have to be familiar with several options to start the individual cluster members. The ETCD operator allows us to easily set up an ETCD cluster with the Etcd-Cluster-Custom-Resource. We don't need a huge know-how about ETCD, which would normally be required for the setup, because this is all done by the operator.
 As for ETCD, there are pre-built operators for many other applications, which massively simplify their operation.
 
+
 ## {{% param sectionnumber %}}.1 Lab: Create a etcd Cluster
 
 Centrally we have the Operator Lifecycle Manager installed. It provides us various operators ready to be consumed within our project.
