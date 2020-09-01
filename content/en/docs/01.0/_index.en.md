@@ -8,7 +8,6 @@ description: >
 
 ## TODO
 
-* [ ]: Do we want to use the sa provided by the pod to work against the cluster, or the oc login command? I would say the oc login command with a different user.
 * [ ]: Set Projectnames in the X.1.3 lab
 
 
