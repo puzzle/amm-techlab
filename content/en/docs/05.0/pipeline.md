@@ -31,18 +31,18 @@ Tekton makes use of several Kubernetes [custom resources (CRD)](https://kubernet
 
 These CRDs are:
 
-* *[Task](https://github.com/tektoncd/pipeline/blob/master/docs/tasks.md)*: collection of steps that perform a specific task.
+* *[Task](https://github.com/tektoncd/pipeline/blob/master/docs/tasks.md)*: a collection of steps that perform a specific task.
 * *[Pipeline](https://github.com/tektoncd/pipeline/blob/master/docs/pipelines.md)*: is a series of tasks, combined to work together in a defined (structured) way
 * *[PipelineResource](https://github.com/tektoncd/pipeline/blob/master/docs/resources.md)*: inputs (e.g. git repository) and outputs (e.g. image registry) to and out of a pipeline or task
-* *[TaskRun](https://github.com/tektoncd/pipeline/blob/master/docs/taskruns.md)*: the execution and result of running an instance of task
+* *[TaskRun](https://github.com/tektoncd/pipeline/blob/master/docs/taskruns.md)*: the execution and result of running an instance of a task
 * *[PipelineRun](https://github.com/tektoncd/pipeline/blob/master/docs/pipelineruns.md)*: is the actual execution of a whole Pipeline, containing the results of the pipeline (success, failed...)
 
-Pipelines and Tasks should be generic and never define possible variables, like input git repository, directly in their definition. For this, the concept of PipelineResources has been created, which defines these parameters and which are used during a PipelineRun.
+Pipelines and tasks should be generic and must never define possible variables - such as 'input git repository' - directly in their definition. Therefore, the concept of PipelineResources has been created. It defines and selects the parameters, that are being used during a PipelineRun.
 
 ![Static Pipeline Definition](../pipeline-static-definition.png)
 *Static definition of a Pipeline*
 
-For each Task a pod will be allocated and for each step inside this Task a container will be used.
+For each task, a pod will be allocated and for each step inside this task, a container will be used.
 
 ![Pipeline Runtime View](../pipeline-runtime-view.png)
 *Runtime view of a Pipeline showing mapping to pods and containers*
@@ -70,7 +70,7 @@ pipeline   2         11s
 
 ## Task {{% param sectionnumber %}}.2: Tekton CLI tkn
 
-For additional features, we are going to add another CLI that eases access to the Tekton resources and gives you a more direct access to the OpenShift Pipeline semantics:
+For additional features, we are going to add another CLI that eases access to the Tekton resources and gives you more direct access to the OpenShift Pipeline semantics:
 
 Verify tkn version by running:
 
@@ -87,7 +87,7 @@ Triggers version: unknown
 
 ## Task {{% param sectionnumber %}}.3: Create Pipeline tasks
 
-A Task is the smallest block of a Pipeline which by itself can contain one or more steps which are executed in order to process a specific element. For each Task a pod is allocated and each step is running in a container inside this pod. Tasks are reusable by other Pipelines. _Input_ and _Output_ specifications can be used to interact with other Tasks.
+A Task is the smallest block of a Pipeline which by itself can contain one or more steps. These steps are executed to process a specific element. For each task, a pod is allocated and each step is running in a container inside this pod. Tasks are reusable by other Pipelines. _Input_ and _Output_ specifications can be used to interact with other Tasks.
 
 {{% alert title="Note" color="primary" %}}
 You can find more examples of reusable tasks in the [Tekton Catalog](https://github.com/tektoncd/catalog) and [OpenShift Catalog](https://github.com/openshift/pipelines-catalog) repositories.
@@ -170,17 +170,17 @@ update-deployment   7 minutes ago
 
 ## Task {{% param sectionnumber %}}.4: Create a Pipeline
 
-A pipeline is a set of Tasks, which should be executed in a defined way to achieve a specific goal.
+A pipeline is a set of tasks, which should be executed in a defined way to achieve a specific goal.
 
 The example Pipeline below uses two resources:
 
 * git-repo: defines the Git-Source
 * image: Defines the target at a repository
 
-It first uses the Task *buildah*, which is a standard Task the OpenShift operator created automatically. This task will build the image. The resulted image is pushed to an image registry, defined in the *output* parameter. After that our created tasks *apply-manifest* and *update-deployment* are executed. The execution order of these tasks is defined with the *runAfter* Parameter in the yaml definition.
+It first uses the Task *buildah*, which is a default task the OpenShift operator created automatically. This task will build the image. The resulted image is pushed to an image registry, defined in the *output* parameter. After that, our created tasks *apply-manifest* and *update-deployment* are executed. The execution order of these tasks is defined with the *runAfter* Parameter in the yaml definition.
 
 {{% alert title="Note" color="primary" %}}
-The Pipeline should be re-usable across multiple projects or environments, thats why the resources (git-repo and image) are not defined here. When a Pipeline is executed, these resources will get defined.
+The Pipeline should be re-usable across multiple projects or environments, that's why the resources (git-repo and image) are not defined here. When a Pipeline is executed, these resources will get defined.
 {{% /alert %}}
 
 ```yaml
@@ -264,7 +264,7 @@ After the Pipeline has been created, it can be triggered to execute the Tasks.
 
 ### Create PipelineResources
 
-Since the Pipeline is generic, we need to define 2 *PipelineResources* first, to execute a Pipeline.
+Since the Pipeline is generic, we first need to define 2 *PipelineResources*, to execute a Pipeline.
 Our example application contains a frontend (vote-ui) AND a backend (vote-api), therefore 4 PipelineResources will be created. (2 times git repository to clone the source and 2 time output image)
 
 Quick overview:
@@ -275,7 +275,7 @@ Quick overview:
 * api-image: will be used as _image_ in the Pipeline for the Backend
 
 {{% alert title="Note" color="primary" %}}
-We use a template to adapt the image registry URL to match your project.
+We use a template, to adapt the image registry URL that matches your project.
 {{% /alert %}}
 
 ```yaml
@@ -400,19 +400,19 @@ tkn pipeline logs
 
 ## Task {{% param sectionnumber %}}.6: OpenShift WebUI
 
-With the OpenShift Pipeline operator a new menu item is introduced on the WebUI of OpenShift. All Tekton CLI command which are used above, can actually be replaced with the web interface, in case you prefer this. The big advantage is th graphical presentation of Pipelines and their lifetime.
+With the OpenShift Pipeline operator, a new menu item is introduced to the WebUI of OpenShift. All Tekton CLI commands, which are used above, could be replaced with the web interface. The big advantage is the graphical presentation of Pipelines and their lifetime.
 
 
 ### Checking your application
 
-Now our Pipeline built and deployed the voting application, where you can vote if you prefer cats or dogs (Cats or course :) )
+Now our Pipeline is built and deployed the voting application. Now you can vote whether you prefer cats or dogs (Cats or course :) )
 
 Get the route of your project and open the URL in the browser.
 
 
 ## High quality and secure Pipeline
 
-This was only an example pipeline building a container image and deploying it to OpenShift. There are lots of security features missing.
+This was just an example for a pipeline, that builds and deploys a container image to OpenShift. There are lots of security features missing.
 
 TODO: <https://github.com/puzzle/delivery-pipeline-concept>
 
