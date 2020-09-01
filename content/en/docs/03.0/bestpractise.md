@@ -19,7 +19,7 @@ description: >
 
 ### One process per container
 
-It is recommended to start only one process per container. This simplifies following things.
+It is recommended to start only one process per container. This simplifies the following things.
 
 * Docker can recognize if your container failed and restart it if needed
 * Reduce Image size and startup time
@@ -29,7 +29,7 @@ It is recommended to start only one process per container. This simplifies follo
 
 ### Instructions order
 
-The order of the Docker instruction matters. When a single Layer become invalid, because of changing files or modifying lines in the Dockerfile, the subsequent layers become invalid too. As a rule of thumb: Order your steps from least to most frequently changing steps to optimize caching.
+The order of the Docker instruction matters. When a single Layer becomes invalid, because of changing files or modifying lines in the Dockerfile, the subsequent layers become invalid too. As a rule of thumb: Order your steps from least to most frequently changing steps to optimize caching.
 
 **Bad:**
 
@@ -40,7 +40,7 @@ COPY . src/
 RUN apt get update && apt get install git openssh-client curl build-essential
 ```
 
-In this case every time your source code changed and you build the Image, all the linux packages are installed again.
+In this case, every time your source code changed and you build the Image, all the Linux packages are installed again.
 
 **Good:**
 
@@ -56,7 +56,7 @@ If you switch the RUN and COPY instructions, you only download the packages once
 
 ### Use multistage build
 
-To reduce the size of your Image, you can use [Multi-Stage Builds](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#use-multi-stage-builds). As an example ew took the Go Application from Chapter 2. Here is what a single stage Go build looks like:
+To reduce the size of your image, you can use [Multi-Stage Builds](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#use-multi-stage-builds). As an example ew took the Go application from Chapter 2. Here is what a single stage Go build looks like:
 
 ```Dockerfile
 FROM golang:1.14-alpine as builder
@@ -66,8 +66,8 @@ RUN env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o go-hello-world-app 
 ```
 
 
-In this example you can see a two layer build. The first layer (called builder) uses a alpine base Image with the Golang tools / libs. It is responsible for building the golang application. The second layer is based on the Docker Scratch Image. Scratch image is used for super minimal Images that contain only a single binary.
-At line 6 the compiled binary from the build stage is copied into the second stage. This ensures that we only copy the artifacts we need into the final Image.
+In this example, you can see a two-layer build. The first layer (called builder) uses an alpine base Image with the Golang tools / libs. It is responsible for building the golang application. The second layer is based on the Docker Scratch Image. Scratch image is used for super minimal images that contain only a single binary.
+At line 6 the compiled binary from the build stage is copied into the second stage. This ensures that we only copy the artifacts we need into the final image.
 
 {{< highlight dockerfile "hl_lines=1 6 7" >}}
 FROM golang:1.14-alpine as builder
@@ -95,7 +95,7 @@ appuio/multi-stage      latest              3ac9ffdc7bcc        3 minutes ago   
 appuio/one-stage        latest              eaf0e3ea3a2a        4 minutes ago       404MB
 ```
 
-Both images containing our sample go application. But the difference in size is about 395MB!
+Both images containing our sample Go application. But the difference in size is about 395MB!
 
 
 It is also possible to make use of multi-stage builds in OpenShift.
@@ -105,15 +105,15 @@ It is also possible to make use of multi-stage builds in OpenShift.
 
 [OpenShift Container Platform-specific guidelines](https://docs.openshift.com/container-platform/4.5/openshift_images/create-images.html#images-create-guide-openshift_create-images)
 
-There are two options, how to deploy and run Docker images on OpenShift
+There are two options, on how to deploy and run Docker images on OpenShift
 
-1. Use an OpenShift capable Image
-2. Extend your Docker Image for OpenShift
+1. Use an OpenShift capable image
+2. Extend your Docker image for OpenShift
 
 
 ### Root Users
 
-By default Docker containers run as `root` user. But container Images which running under root user, are not permitted in OpenShift clusters. (Except the Security Context Configuration allows it explicit)
+By default, Docker containers run as `root` user. But container images which running under the root user, are not permitted in OpenShift clusters. (Except the Security Context Configuration allows it explicit)
 
 
 ### Random User IDs
@@ -131,4 +131,4 @@ Find more information about this topic in the [OpenShift Guidelines](https://doc
 
 ### Logging
 
-Always log to standard out. This makes it easier to collect the logs from the container and send it to an centralized logging service.
+Always log to standard out. This makes it easier to collect the logs from the container and send it to a centralized logging service.
