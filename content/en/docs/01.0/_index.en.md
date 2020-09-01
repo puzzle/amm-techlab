@@ -14,7 +14,7 @@ description: >
 
 ## Task {{% param sectionnumber %}}.1: Login
 
-First thing we're going to do is to explore our lab environment and get in touch with the different components.
+The first thing we're going to do is to explore our lab environment and get in touch with the different components.
 
 Login into the web console of the Lab Cluster with the provided Username and Password.
 
@@ -25,14 +25,14 @@ The project with your username is going to be used for all the hands-on labs.
 
 ### Task {{% param sectionnumber %}}.1.1: Web IDE
 
-As your lab environment we use a so called web IDE, directly deployed on the lab environment. To login into your specific web IDE we need to figure out the IDE Password, which is configured as Environment Variable in the DeploymentConfig `amm-techlab-ide` in your project.
+As your lab environment, we use a so-called web IDE, directly deployed on the lab environment. To login to your specific web IDE, we need to figure out the IDE Password, which is configured as Environment Variable in the DeploymentConfig `amm-techlab-ide` in your project.
 
 Go and get the value out of the Environment Variable and log into the Web IDE.
 
-{{% alert title="Note" color="primary" %}}Use Chrome for the best experience. The Url to the Web IDE can be found in your project as well. The deployment is exposed with a route. {{% /alert %}}
+{{% alert title="Note" color="primary" %}}Use Chrome for the best experience. The Url to the Web IDE also can be found in your project. The deployment is exposed with a route. {{% /alert %}}
 
 
-Once you've successfully logged into the web IDE open a new Terminal by hitting `CTRL + SHIFT + C` or clicking the Menu button --> Terminal --> new Terminal and check the installed oc version by executing the following command:
+Once you're successfully logged into the web IDE open a new Terminal by hitting `CTRL + SHIFT + C` or clicking the Menu button --> Terminal --> new Terminal and check the installed oc version by executing the following command:
 
 ```bash
 oc version
@@ -56,18 +56,18 @@ The files under `~/amm-techlab` are stored in a persistence volume.
 
 The easiest way to login to the lab cluster using the oc tool is, by copying the login command from the web console (Click on the Username in the top right corner of your web console and then Copy Login Command, to get to the login command).
 
-Paste this login command into the Terminal and verify the output `Logged into...`.
+Paste this login command in the Terminal and verify the output `Logged into...`.
 
 Switch to your project with `oc project <username>`
 
-If you want to use your local `oc` tool, make sure to get te appropriate version.
+If you want to use your local `oc` tool, make sure to get the appropriate version.
 
 
 ### Task {{% param sectionnumber %}}.1.3: explore other namespaces
 
-Alongside the Lab Cluster we also deployed a couple of additional Tools and Services we're going to use during the lab:
+Alongside the Lab Cluster, we also deployed a couple of additional Tools and Services we're going to use during the lab:
 
-* Git Server `<name>`, this will contain the sourcecode (Login with your username and password)
+* Git Server `<name>`, this will contain the source code (Login with your username and password)
 * Prometheus and Grafana in the project `<name>` (Login using Oauth OpenShift)
 * Tracing (jaeger) in the project `<name>`
 * ArgoCD in the project `<name>`
