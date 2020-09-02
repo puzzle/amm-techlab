@@ -10,7 +10,6 @@ description: >
 {{% alert title="Warning" color="secondary" %}}Dieses Lab muss noch überarbeitet werden{{% /alert %}}
 
 
-
 ## TODO Lab Monitroing
 
 * [ ] Java App deployen [die hier nehmen](https://gitlab.puzzle.ch/craaflaub/techlab/-/blob/master/07-prometheus.md) oder auf [unsere eigene Springboot app](https://github.com/appuio/example-spring-boot-helloworld) erweitern
