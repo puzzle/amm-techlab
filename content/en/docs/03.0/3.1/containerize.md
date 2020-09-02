@@ -7,19 +7,10 @@ description: >
   Containerize an existing application.
 ---
 
-
-## {{% param sectionnumber %}}.1 Containerize an existing application
-
-
-## TODO
-
-* [ ] BuildConfig mehr CPU und Memory geben
-
-
 The main goal of this lab is to show you how to containerize an existing Java application. Including deployment on OpenShift and exposing the service with a route.
 
 
-### Setup Project
+## Task {{% param sectionnumber %}}.1: Setup Project
 
 Prepare a new OpenShift project
 
@@ -28,7 +19,7 @@ oc new-project spring-boot-userXY
 ```
 
 
-### Dockerfile
+## Task {{% param sectionnumber %}}.2: Inspect Dockerfile
 
 First we need a Dockerfile. You can find the `Dockerfile` in the root directory of the example Java application
 [Git Repository](https://gitea.techlab.openshift.ch/APPUiO-AMM-Techlab/example-spring-boot-helloworld).
@@ -63,7 +54,7 @@ This Dockerfile is responsible for building the Java application. For this we us
 To build the Java Spring Boot application, the `Dockerfile` make use of the [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html).
 
 
-### BuildConfig
+## Task {{% param sectionnumber %}}.3: Create BuildConfig
 
 The [BuildConfig](https://docs.openshift.com/container-platform/4.5/builds/understanding-buildconfigs.html) describes how a single build task is performed. The BuildConfig is primary characterized by the Build strategy and its resources. For our build we use the Docker strategy. (Other strategies will be discussed in Chapter 4) The Docker strategy invokes the Docker build command. Furthermore it expects a `Dockerfile` in the source repository.
 Beside we configure the source and the triggers as well. For the source we can specify any Git repository. This is where the application sources resides. The triggers describe how to trigger the build. In this example we provide four different triggers. (Generic webhook, GitHub webhook, ConfigMap change, Image change)
@@ -130,7 +121,7 @@ buildconfig.build.openshift.io/appuio-spring-boot-ex created
 ```
 
 
-### ImageStreams
+## Task {{% param sectionnumber %}}.4: Create ImageStreams
 
 Next we need to configure an [ImageStream](https://docs.openshift.com/container-platform/4.5/openshift_images/image-streams-manage.html) for the Java base image (ubi8/openjdk-11) and our application image (appuio-spring-boot-ex). The ImageStream is an abstraction for referencing images from within OpenShift Container Platform. Simplified the ImageStream tracks changes for the defined images and reacts by performing a new Build.
 
@@ -180,7 +171,7 @@ imagestream.image.openshift.io/openjdk-11 created
 ```
 
 
-### Deployment
+## Task {{% param sectionnumber %}}.5: Deploy Application
 
 After the ImageStream definition we can setup our Deployment. Please note the Deployment annotation `image.openshift.io/triggers`, this annotation connects the Deployment with the ImageStreamTag (which is automatically created by the ImageSource object)
 
@@ -232,7 +223,7 @@ When you check your project in the web console (Developer view) the example app 
 The pod will be deployed successfully when the build finishes and the application image is pushed to the image stream.
 
 
-### Service
+## Task {{% param sectionnumber %}}.6: Create Service
 
 Expose the container ports to the to the cluster with a Service. For the Service we configure two different ports. `8080` for the Web API, `9000` for the metrics and health check. We set the Service type to ClusterIP to expose the Service cluster internal only.
 
@@ -272,7 +263,7 @@ service/appuio-spring-boot-ex created
 ```
 
 
-### Route
+## Task {{% param sectionnumber %}}.7: Create Route
 
 Create a Route to expose the service at a host name. This will make the application available outside of the cluster.
 
@@ -311,7 +302,7 @@ route.route.openshift.io/appuio-spring-boot-ex created
 ```
 
 
-### Verify deployed resources
+## Task {{% param sectionnumber %}}.8: Verify deployed resources
 
 Now we can list all resources in our project to double check if everything is up und running.
 Use the following command to display all resources within our project.
@@ -356,7 +347,7 @@ route.route.openshift.io/appuio-spring-boot-ex   appuio-spring-boot-ex-spring-bo
 ```
 
 
-### Access application by browser
+## Task {{% param sectionnumber %}}.9: Access application by browser
 
 Finally you can visit your application with the URL provided from the Route: <https://appuio-spring-boot-ex-spring-boot-userXY.techlab.openshift.ch/>
 
