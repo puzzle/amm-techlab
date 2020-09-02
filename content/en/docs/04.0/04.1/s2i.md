@@ -1,6 +1,6 @@
 ---
 title: "4.1 Source to Image"
-linkTitle: "Source to Image"
+linkTitle: "4.1 Source to Image"
 weight: 41
 sectionnumber: 4.1
 description: >
