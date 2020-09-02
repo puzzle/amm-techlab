@@ -1,0 +1,18 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  labels:
+    app: spring-boot-id
+  name: spring-boot-id
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+  - from:
+      kind: DockerImage
+      name: appuio/example-spring-boot
+    name: latest
+    importPolicy:
+      scheduled: true
+    referencePolicy:
+      type: Source

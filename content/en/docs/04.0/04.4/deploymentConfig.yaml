@@ -1,0 +1,34 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: spring-boot-id
+spec:
+  replicas: 1
+  selector:
+    name: spring-boot-id
+  template:
+    metadata:
+      labels:
+        name: spring-boot-id
+    spec:
+      containers:
+      - image: 'appuio-spring-boot:latest'
+        imagePullPolicy: IfNotPresent
+        name: spring-boot-id
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 9000
+          protocol: TCP
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - spring-boot-id
+      from:
+        kind: ImageStreamTag
+        name: spring-boot-id:latest
+    type: ImageChange  
+  strategy:
+    type: Rolling
