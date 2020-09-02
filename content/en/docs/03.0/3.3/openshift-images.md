@@ -6,7 +6,7 @@ sectionnumber: 3.3
 description: >
   This section is covering how to build a runnable image for OpenShift clusters.
 ---
-
+<!-- sgl: A bit weird to have a Go Application in the Java section ;)  -->
 ## Application
 
 We use the same Go application from Lab 2 and extend it with a log file. Every request is logged with the actual time and the client IP address. The log file is placed under `/home/golang/hello-go.log`
@@ -71,6 +71,7 @@ func appendToFile(remoteAddr string) {
 
 The dockerfile is the same as in chapter 2.
 
+<!-- sgl: This code didn't work for me but the included Dockerfile from this repo worked. -->
 ``` dockerfile
 FROM golang:1.14-alpine as builder
 COPY main.go /opt/app-root/src
@@ -214,7 +215,7 @@ buildah bud -f Dockerfile -t go-hello-world-os .
 ```BASH
 podman push localhost/go-hello-world-os docker://docker.io/appuio/go-hello-world.os:latest
 ```
-
+<!-- sgl: The Image doesn't automatically update -->
 
 ```BASH
 oc logs go-hello-world-os-576dcb6994-xwn6b
@@ -274,6 +275,7 @@ oc get pods
 
 ## Create route
 
+<!-- sgl: error: you need to provide a route port via --port when exposing a non-existent service -->
 ```BASH
 oc create route edge --service=go-hello
 ```
