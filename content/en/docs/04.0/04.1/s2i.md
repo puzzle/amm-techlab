@@ -43,8 +43,33 @@ The main reasons to use this build strategy are.
 First we define the username and project name as environment variables. We're going to use them later for the Template parameters.
 
 ```BASH
-export USERNAME=userXY
+export USER_NAME=userXY
 export PROJECT_NAME=$(oc project -q)
+```
+
+Next we clone the sample repository into our private git repo. Navigate to your Gitea instance
+[https://gitea.techlab.openshift.ch/userXY] and click on create in the top right menu and select "New Migration". Use following parameters:
+
+* **Migrate / Clone From URL** [https://github.com/appuio/example-spring-boot-helloworld]
+* **Owner** userXY
+* **Repository Name** example-spring-boot-helloworld
+* **Visibility**  [x] Make Repository Private
+
+Click Migrate Repository
+
+After the migration is finished, create a new file `.s2i/bin/assemble` with following content in it
+
+```BASH
+#!/bin/bash
+echo "assembling"
+
+cd /tmp/src && sh gradlew build -Dorg.gradle.daemon=false
+
+ls -lah
+
+echo "assembled"
+
+exit
 ```
 
 
@@ -107,7 +132,7 @@ objects:
 [Source](https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.0/04.1/buildConfig.yaml)
 
 ```BASH
-oc process -f https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.0/04.1/buildConfig.yaml -p USERNAME=$USERNAME | oc apply -f -
+oc process -f https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.0/04.1/buildConfig.yaml -p USERNAME=$USER_NAME | oc apply -f -
 ```
 
 Next we need the definitions for our two ImageStreamTag references.
@@ -239,7 +264,7 @@ parameters:
 Then we can create the secret
 
 ```BASH
-oc process -f https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.0/04.1/secret.yaml -p USERNAME=$USERNAME -p PASSWORD=youPassword | oc apply -f -
+oc process -f https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.0/04.1/secret.yaml -p USERNAME=$USER_NAME -p PASSWORD=youPassword | oc apply -f -
 ```
 
 Next we reference the freshly created secret in our BuildConfig. The following command will open the VIM editor ([VIM Cheat Sheet](https://devhints.io/vim)), where you can edit the YAML file directly. As soon you save the file and close the editor, the changes are applied to the resource.
@@ -387,7 +412,7 @@ parameters:
 [Source](https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.0/04.1/deploymentConfig.yaml)
 
 ```BASH
-oc process -f https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.0/04.1/deploymentConfig.yaml -p PROJECT_NAME=$PROJECT | oc apply -f -
+oc process -f https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.0/04.1/deploymentConfig.yaml -p PROJECT_NAME=$PROJECT_NAME | oc apply -f -
 ```
 
 
@@ -465,7 +490,7 @@ parameters:
 Then we can create the route
 
 ```BASH
-oc process -f https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.0/04.1/route.yaml -p USERNAME=$USERNAME | oc apply -f -
+oc process -f https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.0/04.1/route.yaml -p USERNAME=$USER_NAME | oc apply -f -
 ```
 
 Check if the route was created successfully
