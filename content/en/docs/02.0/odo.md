@@ -86,7 +86,7 @@ MaxCPU
 Create the file `main.go` with the content of the go-hello-world application ([source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/main.go)).
 
 ```bash
-cp content/en/docs/02.0/main.go main.go
+cp ../content/en/docs/02.0/main.go main.go
 ```
 
 This all happened locally. Use `odo push` to create the component in OpenShift.
@@ -97,19 +97,19 @@ odo push
 
 ```
 Validation
- ✓  Checking component [152ms]
+ ✓  Checking component [226ms]
 
 Configuration changes
  ✓  Initializing component
- ✓  Creating component [441ms]
+ ✓  Creating component [664ms]
 
 Applying URL changes
  ✓  URLs are synced with the cluster, no changes are required.
 
-Pushing to component golang-odo-ontc of type local
- ✓  Checking files for pushing [2ms]
- ✓  Waiting for component to start [30s]
- ✓  Syncing files to the component [462ms]
+Pushing to component golang-odo-applicat-asqd of type local
+ ✓  Checking files for pushing [320679ns]
+ ✓  Waiting for component to start [1m]
+ ✓  Syncing files to the component [706ms]
  ✓  Building component [2s]
  ✓  Changes successfully pushed to component
 ```
@@ -133,17 +133,17 @@ odo push
 
 ```
 Validation
- ✓  Checking component [153ms]
+ ✓  Checking component [247ms]
 
 Configuration changes
- ✓  Retrieving component data [195ms]
- ✓  Applying configuration [223ms]
+ ✓  Retrieving component data [318ms]
+ ✓  Applying configuration [336ms]
 
 Applying URL changes
  ✓  URL go-app: https://go-app-app-odo-userXY.appuio.ch created
 
-Pushing to component golang-odo-ontc of type local
- ✓  Checking file changes for pushing [704657ns]
+Pushing to component golang-odo-applicat-asqd of type local
+ ✓  Checking file changes for pushing [958674ns]
  ✓  No file changes detected, skipping build. Use the '-f' flag to force the build.
 ```
 
