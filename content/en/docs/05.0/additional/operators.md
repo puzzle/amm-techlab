@@ -7,8 +7,6 @@ description: >
   Operators.
 ---
 
-## TODO
-
 Operators are a way to package, deploy and manage Kubernetes-native applications. Kubernetes-native applications are applications that are deployed in Kubernetes/OpenShift and managed via the Kubernetes/OpenShift API (kubectl/oc). Since the introduction of OpenShift 4, OpenShift itself uses several operators to manage the OpenShift cluster.
 
 
@@ -59,7 +57,7 @@ We will deploy a etcd-cluster and see what we can do.
 
 ### Subscription
 
-> :warning: Since operator subscriptions need cluster-admin permissions, your local cluster-admin has already created the project and the subscription for you. Please proceed with creating the etcd-cluster.
+Warning: {{% alert title="Warning" color="secondary" %}}Since operator subscriptions need cluster-admin permissions, your local cluster-admin has already created the project and the subscription for you. Please proceed with creating the etcd-cluster.{{% /alert %}} 
 
 To be able to consume an operator we will create a subscription within a project. This will enable the CRDs, as well as install the operator that watches our CRDs as well as the deployed clusters.
 
@@ -103,7 +101,7 @@ You can see the running operator:
 oc get pods --namespace <namespace>
 ```
 
-> :information: Start here, if you do not have system-admin permissions.
+Notes: {{% alert title="Note" color="primary" %}}Start here, if you do not have system-admin permissions. {{% /alert %}}
 
 Once this is done, you are able to deploy a cluster, by using a crd.
 
