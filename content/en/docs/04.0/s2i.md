@@ -42,9 +42,9 @@ The main reasons to use this build strategy are.
 
 First let's create a BuildConfig. The important part in this specification are the source, output and strategy section.
 
-* The source is pointing towards a private Git repository where the source code resides.
+* The source is pointing towards a private Git repository where the source code resides. Replace the git uri in the yaml below to your corresponding private git repo.
 * We already discussed the strategy section in the beginning of this chapter. For this example we set the strategy to sourceStrategy (know as Source-to-Image / S2I)
-* The last part is the output section. In our example we reference a ImageStreamTag as an output.
+* The last part is the output section. In our example we reference a ImageStreamTag as an output. This means the resulting image will be pushed into the internal registry and will be consumable as ImageStream.
 
 ```YAML
 apiVersion: build.openshift.io/v1
@@ -400,8 +400,7 @@ NAME              HOST/PORT                                          PATH   SERV
 spring-boot-s2i   spring-boot-s2i-amm-userXY.ocp.aws.puzzle.ch          spring-boot-s2i   8080-tcp   edge          None
 ```
 
-And finally check if you can reach your application within a browser  
-[https://spring-boot-s2i-amm-userXY.ocp.aws.puzzle.ch](https://spring-boot-s2i-amm-userXY.ocp.aws.puzzle.ch)
+And finally check if you can reach your application within a browser by accessing the public route.
 
 
 Do you not find a suitable S2I builder image for you application. [Create your own](https://www.openshift.com/blog/create-s2i-builder-image).
