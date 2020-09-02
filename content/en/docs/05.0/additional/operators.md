@@ -9,11 +9,6 @@ description: >
 
 ## TODO
 
-* [ ] Testen und durchspielen
-* [ ] Intro Text auf Englisch übersetzen.
-* [ ] Synchen mit [APPUiO Lab](https://github.com/appuio/techlab/blob/lab-4.3/labs/07_operators.md)
-
-
 Operators are a way to package, deploy and manage Kubernetes-native applications. Kubernetes-native applications are applications that are deployed in Kubernetes/OpenShift and managed via the Kubernetes/OpenShift API (kubectl/oc). Since the introduction of OpenShift 4, OpenShift itself uses several operators to manage the OpenShift cluster.
 
 
@@ -64,12 +59,14 @@ We will deploy a etcd-cluster and see what we can do.
 
 ### Subscription
 
+> :warning: Since operator subscriptions need cluster-admin permissions, your local cluster-admin has already created the project and the subscription for you. Please proceed with creating the etcd-cluster.
+
 To be able to consume an operator we will create a subscription within a project. This will enable the CRDs, as well as install the operator that watches our CRDs as well as the deployed clusters.
 
 Create project:
 
 ```bash
-oc new-project operator-userXY
+oc new-project hanneloreXY-operator
 ```
 
 Subscribe to the etcd operator, by creating a file called `etcd-subscription.yaml` with the following content:
@@ -80,24 +77,22 @@ apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
   generateName: etcd-
-  namespace: operator-userXY
   name: etcd
+  namespace: <namespace>
 spec:
-  source: rh-operators
+  channel: singlenamespace-alpha
+  installPlanApproval: Automatic
   name: etcd
-  startingCSV: etcdoperator.v0.9.2
-  channel: alpha
+  source: community-operators
+  sourceNamespace: openshift-marketplace
+  startingCSV: etcdoperator.v0.9.4
 ```
 
 Now subscribe using the file:
 
 
 ```bash
-oc create -f etcd-subscription.yaml
-```
-
-```bash
-oc get pods
+oc create -f etcd-subscription.yaml --namespace <namespace>
 ```
 
 You can also subscribe to the operator through the Console, though not all integration might be ready, due to being technical preview by default.
@@ -105,8 +100,10 @@ You can also subscribe to the operator through the Console, though not all integ
 You can see the running operator:
 
 ```bash
-oc get pods
+oc get pods --namespace <namespace>
 ```
+
+> :information: Start here, if you do not have system-admin permissions.
 
 Once this is done, you are able to deploy a cluster, by using a crd.
 
@@ -124,25 +121,26 @@ spec:
 ```
 
 ```bash
-oc create -f etcd-cluster.yaml
+oc create -f etcd-cluster.yaml --namepsace <namespace>
 ```
 
 Your cluster will be bootstrapped and will become ready:
 
 ```bash
-oc get pods -w
-oc get service
+oc get pods --namespace <namespace> -w
+oc get service --namespace <namespace>
 ```
 
 Describing the configured CRD gives us more information about the deployment:
 
 ```bash
-oc describe EtcdCluster example-etcd-cluster
+oc describe EtcdCluster example-etcd-cluster --namespace <namespace>
 ```
 
 We can also store something within our cluster:
 
 ```bash
+oc project <namespace>
 oc rsh example-etcd-cluster-XYZ
 export ETCDCTL_API=3
 etcdctl get foo
@@ -156,8 +154,9 @@ etcdctl get foo
 The operator is watching the deployed cluster and will recover it from failures. This is not a feature driven by a StatefulSet or a DeploymentConfig, rather the operator watches the deployed cluster and ensures it is kept in the desired overall state:
 
 ```bash
-oc delete pod example-etcd-cluster-XYZ
-oc get pods
+oc delete pod example-etcd-cluster-XYZ --namespace <namespace>
+oc get pods --namespace <namespace>
+oc project <namespace>
 oc rsh example-etcd-cluster-ABC
 export ETCDCTL_API=3
 etcdctl get foo
@@ -166,7 +165,7 @@ etcdctl get foo
 See how the changes got logged.
 
 ```bash
-oc describe EtcdCluster example-etcd-cluster
+oc describe EtcdCluster example-etcd-cluster --namespace <namespace>
 ```
 
 
@@ -175,14 +174,14 @@ oc describe EtcdCluster example-etcd-cluster
 But well it looks like we didn't deploy a recent enough version:
 
 ```bash
-oc describe pod -l app=etcd | grep -E 'Image:.*etcd' | uniq
+oc describe pod -l app=etcd  --namespace <namespace> | grep -E 'Image:.*etcd' | uniq
     Image:         quay.io/coreos/etcd:v3.1.10
 ```
 
 Let's update the cluster. This is done by patching the CRD to a new version
 
 ```bash
-oc get EtcdCluster example-etcd-cluster -o yaml
+oc get EtcdCluster example-etcd-cluster --namespace <namespace> -o yaml
 # check the version
 ```
 
@@ -200,17 +199,17 @@ spec:
 ```
 
 ```bash
-oc apply -f etcd-update.yaml
+oc apply -f etcd-update.yaml --namespace <namespace>
 ```
 
 Now watch how each member is being updated to 3.2.13 until all of them are updated:
 
 ```bash
-oc describe EtcdCluster example-etcd-cluster
+oc describe EtcdCluster example-etcd-cluster --namespace <namespace>
 # watch the events of the resource or the overall events
-oc get events
+oc get events --namespace <namespace>
 # in the end all images should be updated
-oc describe pod -l app=etcd | grep -E 'Image:.*etcd' | uniq
+oc describe pod -l app=etcd --namespace <namespace> | grep -E 'Image:.*etcd' | uniq
     Image:         quay.io/coreos/etcd:v3.2.13
 ```
 
@@ -231,10 +230,10 @@ spec:
 ```
 
 ```bash
-oc apply -f etcd-scaleup.yaml
-oc get events -w
+oc apply -f etcd-scaleup.yaml --namespace <namespace>
+oc get events --namespace <namespace> -w 
 # until all are up
-oc get pods -l app=etcd
+oc get pods -l app=etcd --namespace <namespace>
 ```
 
 
