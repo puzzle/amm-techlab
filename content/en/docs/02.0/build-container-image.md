@@ -100,7 +100,10 @@ buildah bud -f Dockerfile -t go-hello-world .
 The image is available locally:
 
 ```bash
-$ buildah images
+buildah images
+```
+
+```
 REPOSITORY                                    TAG      IMAGE ID       CREATED         SIZE
 localhost/go-hello-world                      latest   7f3ed9de1e49   3 seconds ago   219 MB
 registry.access.redhat.com/ubi8/ubi           8.2      7923da9ba983   6 days ago      212 MB
@@ -113,15 +116,15 @@ registry.access.redhat.com/ubi8/go-toolset    1.13.4   4bf10ac637aa   5 weeks ag
 Test the container image locally using [Podman](https://podman.io/). Use this command to run the container:
 
 ```bash
-podman run -p 8080:8080 -ti go-hello-world
+podman run -p 8088:8080 -ti go-hello-world
 ```
 
-This makes the Go application accessible by the port 8080 of your device.
+This makes the Go application accessible by the port 8088 of your device.
 
-It can be tested with a browser (<http://localhost:8080/world>) or using curl:
+It can be tested with a browser (<http://localhost:8088/world>) or using curl:
 
 ```bash
-curl localhost:8080/world
+curl localhost:8088/world
 ```
 
 
@@ -131,5 +134,8 @@ To make the image accessible to OpenShift, it must be pushed to an image registr
 
 ```bash
 podman login
+```
+
+```bash
 podman push localhost/go-hello-world:latest docker://docker.io/appuio/go-hello-world:latest
 ```

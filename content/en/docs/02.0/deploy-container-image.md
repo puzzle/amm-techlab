@@ -46,7 +46,7 @@ oc get routes.route.openshift.io go-hello-world -o template --template '{{.spec.
 ```
 
 ```
-go-hello-world-cschlatter-amm2.ocp.aws.puzzle.ch
+go-hello-world-hanneloreXY.techlab.openshift.ch
 ```
 
 Now you can test the go-hello-world application over the route.
