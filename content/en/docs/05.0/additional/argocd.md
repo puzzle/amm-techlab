@@ -43,8 +43,10 @@ Let's start by downloading the latest Argo CD version from <https://github.com/a
 You can access Argo CD via UI or using the CLI. For CLI usage use the following command to login (credentials are given by your teacher):
 
 ```bash
-argocd login <ARGOCD_SERVER>
+argocd login <ARGOCD_SERVER> --sso --grpc-web
 ```
+
+{{% alert title="Note" color="primary" %}}Follow the sso login steps in the new browser window. The `--grpc-web` parameter is necessary due to missing http 2.0 router.{{% /alert %}}
 
 
 ## Task {{% param sectionnumber %}}.2: Create an Application
