@@ -1,8 +1,8 @@
 ---
-title: "5.5.2 Argo CD"
-linkTitle: "Argo CD"
-weight: 552
-sectionnumber: 5.5.2
+title: "5.2 Argo CD"
+linkTitle: "5.2 Argo CD"
+weight: 520
+sectionnumber: 5.2
 description: >
   GitOps with Argo CD.
 ---
@@ -41,6 +41,8 @@ argocd login <ARGOCD_SERVER> --sso --grpc-web
 ```
 
 {{% alert title="Note" color="primary" %}}Follow the sso login steps in the new browser window. The `--grpc-web` parameter is necessary due to missing http 2.0 router.{{% /alert %}}
+
+{{% alert title="Warning" color="secondary" %}}The login with sso does not work in the web ide at the moment. Download the cli locally and process this way.{{% /alert %}}
 
 
 ## Task {{% param sectionnumber %}}.2: Create an Application

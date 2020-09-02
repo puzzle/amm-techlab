@@ -1,6 +1,6 @@
 ---
 title: "2.1 Build a container image"
-linkTitle: "Build container image"
+linkTitle: "2.1 Build container image"
 weight: 210
 sectionnumber: 2.1
 description: >
@@ -15,7 +15,7 @@ The sample application is an HTTP server written in the [Go programming language
 
 The following files are needed inside your application repository:
 
-* [Dockerfile](#application-build-instruction)
+* [Dockerfile](#image-build-instruction)
 * [main.go](#sample-go-application)
 
 

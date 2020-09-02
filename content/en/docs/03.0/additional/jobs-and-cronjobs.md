@@ -1,6 +1,6 @@
 ---
 title: "3.5.2 Jobs and Cronjobs"
-linkTitle: "Jobs and Cronjobs"
+linkTitle: "3.5.2 Jobs and Cronjobs"
 weight: 352
 sectionnumber: 3.5.2
 description: >
@@ -61,14 +61,14 @@ spec:
         - name: MYSQL_USER
           value: appuio
         - name: MYSQL_HOST
-          value: mysql
+          value: mariadb
         - name: MYSQL_PORT
           value: "3306"
         - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mysql-password
-              key: password
+              key: database-password
+              name: mariadb
       restartPolicy: Never
 ```
 
@@ -77,25 +77,25 @@ The parameter `.spec.template.spec.containers[0].image` shows that we use the sa
 Let's create our Job: Create a file `job_mysql-dump.yaml` with the content above:
 
 ```bash
-kubectl create -f ./job_mysql-dump.yaml --namespace <namespace>
+oc create -f ./job_mysql-dump.yaml
 ```
 
 Check if the Job was successful:
 
 ```bash
-kubectl describe jobs/mysql-dump --namespace <namespace>
+oc describe jobs/mysql-dump
 ```
 
 The executed Pod can be shown as follows:
 
 ```bash
-kubectl get pods --namespace <namespace>
+oc get pods
 ```
 
 To show all Pods belonging to a Job in a human-readable format, the following command can be used:
 
 ```bash
-kubectl get pods --selector=job-name=mysql-dump --output=go-template='{{range .items}}{{.metadata.name}}{{end}}' --namespace <namespace>
+oc get pods --selector=job-name=mysql-dump --output=go-template='{{range .items}}{{.metadata.name}}{{end}}'
 ```
 
 
@@ -140,7 +140,7 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       key: database-user
-                      name: mysql
+                      name: mariadb
                 - name: MYSQL_HOST
                   value: mysql
                 - name: MYSQL_PORT
@@ -149,7 +149,7 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       key: database-password
-                      name: mysql
+                      name: mariadb
           restartPolicy: OnFailure
           backoffLimit: 3
   schedule: 12 23 * * *

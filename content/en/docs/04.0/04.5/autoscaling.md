@@ -1,6 +1,6 @@
 ---
 title: "4.5.2 Autoscaling"
-linkTitle: "Autoscaling"
+linkTitle: "4.5.2 Autoscaling"
 weight: 452
 sectionnumber: 4.5.2
 description: >

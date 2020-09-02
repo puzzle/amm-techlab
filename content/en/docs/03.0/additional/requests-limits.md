@@ -1,20 +1,11 @@
 ---
 title: "3.5.1 Requests and Limits"
-linkTitle: "Requests and Limits"
+linkTitle: "3.5.1 Requests and Limits"
 weight: 351
 sectionnumber: 3.5.1
 description: >
   Requests and Limits.
 ---
-
-
-## TODO
-
-* [ ] Bin nicht ganz sicher ob dieses Lab am richtigen ort ist hier, die leute haben ja noch gar nichts mit OpenShift gemacht, evtl. ins Lab 4 moven
-* [ ] Testen und durchspielen
-* [ ] Setup und init.
-  * Für alle Teilnehmer ein Quota Projekt erstellen in dem Quotas, limitranges definiert sind.
-  * Teilnehmer müssen Berechtigungen haben Limitranges zu erfassen.
 
 In this lab, we are going to look at ResourceQuotas and LimitRanges. As OpenShift users, we are most certainly going to encounter the limiting effects that ResourceQuotas and LimitRanges impose.
 
@@ -128,7 +119,7 @@ The possibility of enforcing minimum and maximum resources and defining Resource
 Check whether your Namespace contains a LimitRange:
 
 ```bash
-kubectl describe limitrange --namespace <namespace>
+oc describe limitrange --namespace <namespace>
 ```
 
 Above command should output this (name and Namespace will vary):
@@ -146,7 +137,7 @@ Container   cpu       -    -    10m              100m           -
 Check whether a ResourceQuota exists in your Namespace:
 
 ```bash
-kubectl describe quota --namespace <namespace>
+oc describe quota --namespace <namespace>
 ```
 
 Above command could (must not) output this (name and Namespace will vary):

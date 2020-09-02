@@ -7,6 +7,9 @@ description: >
 ---
 
 
+{{% alert title="Warning" color="secondary" %}}Lab noch in Alpha!{{% /alert %}}
+
+
 ## TODO Lab
 
 * [ ] Private GitHub repo / Deploy keys / Token?

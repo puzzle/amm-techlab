@@ -1,6 +1,6 @@
 ---
 title: "3.3 OpenShift images"
-linkTitle: "OpenShift images"
+linkTitle: "3.3 penShift images"
 weight: 33
 sectionnumber: 3.3
 description: >

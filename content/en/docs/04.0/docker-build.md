@@ -1,6 +1,6 @@
 ---
 title: "4.3 Docker Build"
-linkTitle: "Docker Build"
+linkTitle: "4.3 Docker Build"
 weight: 430
 sectionnumber: 4.3
 description: >

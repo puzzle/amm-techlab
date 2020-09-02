@@ -20,6 +20,8 @@ The project with your username is going to be used for all the hands-on labs.
 
 ### Task {{% param sectionnumber %}}.1.1: Web IDE
 
+{{% alert title="Note" color="primary" %}}ALPHA: you can also use you local installation of the cli tools.{{% /alert %}}
+
 As your lab environment, we use a so-called web IDE, directly deployed on the lab environment. To login to your specific web IDE, we need to figure out the IDE Password, which is configured as Environment Variable in the DeploymentConfig `amm-techlab-ide` in your project.
 
 Go and get the value out of the Environment Variable and log into the Web IDE.
@@ -43,6 +45,7 @@ The Web IDE Pod consists of the following tools:
 * kubens
 * tekton cli
 * odo
+* argocd
 
 The files in the home directory under `/home/coder` are stored in a persistence volume.
 

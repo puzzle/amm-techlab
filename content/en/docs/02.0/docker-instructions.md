@@ -1,6 +1,6 @@
 ---
 title: "2.3 Docker Instructions"
-linkTitle: "Docker Instructions"
+linkTitle: "2.3 Docker Instructions"
 weight: 230
 sectionnumber: 2.3
 description: >

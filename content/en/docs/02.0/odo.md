@@ -1,6 +1,6 @@
 ---
 title: "2.4 OpenShift Do (odo)"
-linkTitle: "OpenShift Do odo"
+linkTitle: "2.4 OpenShift Do odo"
 weight: 240
 sectionnumber: 2.4
 description: >

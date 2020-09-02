@@ -1,5 +1,5 @@
 ---
-title: "Additional Labs"
+title: "3.5 Additional Labs"
 weight: 350
 sectionnumber: 3.5
 description: >

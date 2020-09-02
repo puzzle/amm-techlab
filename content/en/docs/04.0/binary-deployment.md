@@ -1,6 +1,6 @@
 ---
 title: "4.2 Binary Deployment"
-linkTitle: "Binary Deployment"
+linkTitle: "4.2 Binary Deployment"
 weight: 420
 sectionnumber: 4.2
 description: >

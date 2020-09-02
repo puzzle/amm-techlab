@@ -1,6 +1,6 @@
 ---
 title: "5.1 Tekton Pipelines"
-linkTitle: "Tekton Pipelines"
+linkTitle: "5.1 Tekton Pipelines"
 weight: 510
 sectionnumber: 5.1
 description: >

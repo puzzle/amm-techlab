@@ -1,6 +1,6 @@
 ---
 title: "3.2 Configure the application"
-linkTitle: "Configure the application"
+linkTitle: "3.2 Configure the application"
 weight: 32
 sectionnumber: 3.2
 description: >

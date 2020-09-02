@@ -1,6 +1,6 @@
 ---
 title: "2.2 Deploy a container image"
-linkTitle: "Deploy container image"
+linkTitle: "2.2 Deploy container image"
 weight: 220
 sectionnumber: 2.2
 description: >
