@@ -1,7 +1,7 @@
 ---
 title: "4.1 Source to Image"
 linkTitle: "Source to Image"
-weight: 410
+weight: 41
 sectionnumber: 4.1
 description: >
   Building images using Source to Image.
@@ -47,46 +47,57 @@ First let's create a BuildConfig. The important part in this specification are t
 * The last part is the output section. In our example we reference a ImageStreamTag as an output. This means the resulting image will be pushed into the internal registry and will be consumable as ImageStream.
 
 ```YAML
-apiVersion: build.openshift.io/v1
-kind: BuildConfig
+apiVersion: v1
+kind: Template
 metadata:
-  labels:
-    app: spring-boot-s2i
-  name: spring-boot-s2i
-spec:
-  failedBuildsHistoryLimit: 5
-  nodeSelector: null
-  output:
-    to:
-      kind: ImageStreamTag
-      name: spring-boot-s2i:latest
-  postCommit: {}
-  resources: {}
-  runPolicy: Serial
-  source:
-    git:
-      uri: https://github.com/userXY/spring-boot-private
-    type: Git
-  strategy:
-    sourceStrategy:
-      env:
-      - name: JAVA_APP_JAR
-        value: /tmp/src/build/libs/springboots2idemo-0.1.1-SNAPSHOT.jar
-      from:
+  name: buildconfig-s2i-template
+objects:
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      app: spring-boot-s2i
+    name: spring-boot-s2i
+  spec:
+    failedBuildsHistoryLimit: 5
+    nodeSelector: null
+    output:
+      to:
         kind: ImageStreamTag
-        name: openjdk11:latest
-    type: Source
-  successfulBuildsHistoryLimit: 5
-  triggers:
-  - github:
-      secret: 122hfrCzIb9Ls4q-PLEC
-    type: GitHub
-  - generic:
-      secret: ALAzMOOHHdneC_2cdvV6
-    type: Generic
-  - type: ConfigChange
-  - imageChange:
-    type: ImageChange
+        name: spring-boot-s2i:latest
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      git:
+        uri: https://gitea.techlab.openshift.ch/${USERNAME}/example-spring-boot-helloworld
+      type: Git
+    strategy:
+      sourceStrategy:
+        env:
+        - name: JAVA_APP_JAR
+          value: /tmp/src/build/libs/springboots2idemo-0.1.1-SNAPSHOT.jar
+        from:
+          kind: ImageStreamTag
+          name: openjdk11:latest
+      type: Source
+    successfulBuildsHistoryLimit: 5
+    triggers:
+    - github:
+        secret: 122hfrCzIb9Ls4q-PLEC
+      type: GitHub
+    - generic:
+        secret: ALAzMOOHHdneC_2cdvV6
+      type: Generic
+    - type: ConfigChange
+    - imageChange:
+      type: ImageChange
+```
+
+[Source](https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.1/buildConfig.yaml)
+
+```BASH
+oc process -f https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.1/buildConfig.yaml -p USERNAME=userXY | oc apply -f -
 ```
 
 Next we need the definitions for our two ImageStreamTag references.
@@ -129,6 +140,13 @@ spec:
     name: latest
     referencePolicy:
       type: Source
+```
+
+
+[Source](https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.1/imageStreams.yaml)
+
+```BASH
+oc apply -f https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.1/imageStreams.yaml
 ```
 
 Let's check if the build is complete.
@@ -185,20 +203,33 @@ Next we create a secret containing our Git credentials. Your username and passwo
 
 ```YAML
 apiVersion: v1
-kind: Secret
+kind: Template
 metadata:
-  name: git-credentials
-data:
-stringData:
-  username: "<username>"
-  password: "<token>"
-type: kubernetes.io/basic-auth
+  name: secret-s2i-template
+objects:
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: git-credentials
+  stringData:
+    username: ${PASSWORD}
+    password: ${USERNAME}
+  type: kubernetes.io/basic-auth
+parameters:
+- description: AMM techlab participant username
+  name: USERNAME
+  mandatory: true
+- description: AMM techlab participants password
+  name: PASSWORD
+  mandatory: true
 ```
+
+[Source](https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.1/secret.yaml)
 
 Then we can create the secret
 
 ```BASH
-oc create -f git-credentials.yaml
+oc process -f https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.1/secret.yaml -p USERNAME=userXY -p PASSWORD=youPassword | oc apply -f -
 ```
 
 Next we reference the freshly created secret in our BuildConfig. The following command will open the VIM editor ([VIM Cheat Sheet](https://devhints.io/vim)), where you can edit the YAML file directly. As soon you save the file and close the editor, the changes are applied to the resource.
@@ -217,7 +248,7 @@ export KUBE_EDITOR='code --wait' #vsc
 {{% /alert %}}
 
 ```BASH
-oc edit deploymentconfig spring-boot-s2i
+oc edit buildconfig spring-boot-s2i
 ```
 
 As soon the file is open, you can add the highlighted lines below.
@@ -369,23 +400,40 @@ spec:
 
 
 ```YAML
-apiVersion: route.openshift.io/v1
-kind: Route
+apiVersion: v1
+kind: Template
 metadata:
-  labels:
-    app: spring-boot-s2i
-  name: spring-boot-s2i
-spec:
-  host: spring-boot-s2i-amm-userXY.ocp.aws.puzzle.ch
-  port:
-    targetPort: 8080-tcp
-  tls:
-    termination: edge
-  to:
-    kind: Service
+  name: route-s2i-template
+objects:
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    labels:
+      app: spring-boot-s2i
     name: spring-boot-s2i
-    weight: 100
-  wildcardPolicy: None
+  spec:
+    host: spring-boot-s2i-${USERNAME}.techlab.openshift.ch
+    port:
+      targetPort: 8080-tcp
+    tls:
+      termination: edge
+    to:
+      kind: Service
+      name: spring-boot-s2i
+      weight: 100
+    wildcardPolicy: None
+parameters:
+- description: AMM techlab participant username
+  name: USERNAME
+  mandatory: true
+```
+
+[Source](https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.1/route.yaml)
+
+Then we can create the route
+
+```BASH
+oc process -f https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.1/route.yaml -p USERNAME=userXY | oc apply -f -
 ```
 
 Check if the route was created successfully
