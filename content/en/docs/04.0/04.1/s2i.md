@@ -48,9 +48,9 @@ export PROJECT_NAME=$(oc project -q)
 ```
 
 Next we clone the sample repository into our private git repo. Navigate to your Gitea instance
-[https://gitea.techlab.openshift.ch/userXY] and click on create in the top right menu and select "New Migration". Use following parameters:
+[https://gitea.techlab.openshift.ch/userXY](https://gitea.techlab.openshift.ch/userXY) and click on create in the top right menu and select "New Migration". Use following parameters:
 
-* **Migrate / Clone From URL** [https://github.com/appuio/example-spring-boot-helloworld]
+* **Migrate / Clone From URL** [https://github.com/appuio/example-spring-boot-helloworld](https://github.com/appuio/example-spring-boot-helloworld)
 * **Owner** userXY
 * **Repository Name** example-spring-boot-helloworld
 * **Visibility**  [x] Make Repository Private
@@ -505,7 +505,7 @@ NAME              HOST/PORT                                          PATH   SERV
 spring-boot-s2i   spring-boot-s2i-amm-userXY.ocp.aws.puzzle.ch          spring-boot-s2i   8080-tcp   edge          None
 ```
 
-And finally check if you can reach your application within a browser by accessing the public route. [https://spring-boot-s2i-amm-userXY.ocp.aws.puzzle.ch]
+And finally check if you can reach your application within a browser by accessing the public route. [https://spring-boot-s2i-amm-userXY.ocp.aws.puzzle.ch](https://spring-boot-s2i-amm-userXY.ocp.aws.puzzle.ch)
 
 
 Do you not find a suitable S2I builder image for you application. [Create your own](https://www.openshift.com/blog/create-s2i-builder-image)
