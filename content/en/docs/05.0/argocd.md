@@ -1,8 +1,8 @@
 ---
-title: "5.5.2 Argo CD"
+title: "5.2 Argo CD"
 linkTitle: "Argo CD"
-weight: 552
-sectionnumber: 5.5.2
+weight: 520
+sectionnumber: 5.2
 description: >
   GitOps with Argo CD.
 ---

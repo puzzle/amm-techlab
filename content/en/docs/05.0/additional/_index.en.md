@@ -1,7 +1,7 @@
 ---
-title: "Additional Labs"
-weight: 550
-sectionnumber: 5.5
+title: "5.3 Additional Labs"
+weight: 530
+sectionnumber: 5.3
 description: >
   Additional Labs
 ---
