@@ -45,6 +45,7 @@ The Web IDE Pod consists of the following tools:
 * kubens
 * tekton cli
 * odo
+* argocd
 
 The files in the home directory under `/home/coder` are stored in a persistence volume.
 
