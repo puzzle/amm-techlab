@@ -1,0 +1,33 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewBuild
+  labels:
+    build: spring-boot-bb
+  name: spring-boot-bb
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: spring-boot-bb:latest
+  postCommit: {}
+  resources: {}
+  source:
+    binary: {}
+    type: Binary
+  strategy:
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        name: wildfly-160-centos7:latest
+    type: Source
+  triggers:
+  - github:
+      secret: u7kQquuC1Hpap8pv82Xz
+    type: GitHub
+  - generic:
+      secret: MduzcwKRw37WrDWWSfCf
+    type: Generic
+status:
+  lastVersion: 0
