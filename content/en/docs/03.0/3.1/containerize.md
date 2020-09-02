@@ -1,6 +1,6 @@
 ---
 title: "3.1 Containerize an existing application"
-linkTitle: "Containerize an existing application"
+linkTitle: "3.1 Containerize an existing application"
 weight: 31
 sectionnumber: 3.1
 description: >

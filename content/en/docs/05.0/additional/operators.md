@@ -1,6 +1,6 @@
 ---
 title: "5.3.1 Operators"
-linkTitle: "Operators"
+linkTitle: "5.3.1 Operators"
 weight: 531
 sectionnumber: 5.3.1
 description: >

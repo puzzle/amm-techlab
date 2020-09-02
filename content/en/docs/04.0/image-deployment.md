@@ -1,6 +1,6 @@
 ---
 title: "4.4 Image Deployment"
-linkTitle: "Image Deployment"
+linkTitle: "4.4 Image Deployment"
 weight: 440
 sectionnumber: 4.4
 description: >

@@ -1,6 +1,6 @@
 ---
 title: "2.1 Build a container image"
-linkTitle: "Build container image"
+linkTitle: "2.1 Build container image"
 weight: 210
 sectionnumber: 2.1
 description: >

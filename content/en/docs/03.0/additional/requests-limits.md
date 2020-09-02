@@ -1,6 +1,6 @@
 ---
 title: "3.5.1 Requests and Limits"
-linkTitle: "Requests and Limits"
+linkTitle: "3.5.1 Requests and Limits"
 weight: 351
 sectionnumber: 3.5.1
 description: >

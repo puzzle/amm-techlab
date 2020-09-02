@@ -7,7 +7,7 @@ description: >
 ---
 
 
-{{% alert title="Warning" color="secondary" %}}Lab noch in Alpha stadium!{{% /alert %}}
+{{% alert title="Warning" color="secondary" %}}Lab noch in Alpha!{{% /alert %}}
 
 
 ## TODO Lab

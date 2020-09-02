@@ -1,6 +1,6 @@
 ---
 title: "3.4 Best practices"
-linkTitle: "Best practices"
+linkTitle: "3.4 Best practices"
 weight: 34
 sectionnumber: 3.4
 description: >

@@ -1,6 +1,6 @@
 ---
 title: "5.2 Argo CD"
-linkTitle: "Argo CD"
+linkTitle: "5.2 Argo CD"
 weight: 520
 sectionnumber: 5.2
 description: >
