@@ -9,6 +9,7 @@ ARG KUSTOMIZE_CLI=https://github.com/kubernetes-sigs/kustomize/releases/download
 ARG TEKTON_CLI=https://github.com/tektoncd/cli/releases/download/v0.10.0/tkn_0.10.0_Linux_x86_64.tar.gz
 ARG ODO=https://mirror.openshift.com/pub/openshift-v4/clients/odo/latest/odo-linux-amd64
 ARG OPENSHIFT_CLIENT_TOOL=https://downloads.ocp.aws.puzzle.ch/amd64/linux/oc.tar
+ARG ARGOCD_CLI=https://github.com/argoproj/argo-cd/releases/download/v1.7.3/argocd-linux-amd64
 
 USER root
 
@@ -23,6 +24,7 @@ RUN mkdir -p ~/.local/bin \
     && curl -L ${TEKTON_CLI} -o ~/.local/bin/tkn.tar.gz && tar xvfz ~/.local/bin/tkn.tar.gz -C /usr/local/bin/ && rm -rf ~/.local/bin/tkn.tar.gz \
     && curl ${ODO} -o /usr/local/bin/odo \
     && curl ${OPENSHIFT_CLIENT_TOOL} -o ~/.local/bin/oc.tar &&  tar -xvf ~/.local/bin/oc.tar -C /usr/local/bin/ && rm -rf ~/.local/bin/oc.tar \
+    && curl ${ARGOCD_CLI} -o /usr/local/bin/argocd \
     && chmod +x /usr/local/bin/*
 
 USER coder
