@@ -15,6 +15,7 @@ The sample application is an HTTP server written in the [Go programming language
 
 The following files are needed inside your application repository:
 
+<!-- sgl: Dockerfilepath doesn't work -->
 * [Dockerfile](#application-build-instruction)
 * [main.go](#sample-go-application)
 
@@ -135,7 +136,7 @@ To make the image accessible to OpenShift, it must be pushed to an image registr
 ```bash
 podman login
 ```
-
+<!-- sgl: The resulting Image couldn't be used with oc new-app -->
 ```bash
 podman push localhost/go-hello-world:latest docker://docker.io/appuio/go-hello-world:latest
 ```

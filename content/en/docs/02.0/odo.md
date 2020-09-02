@@ -86,6 +86,7 @@ MaxCPU
 Create the file `main.go` with the content of the go-hello-world application ([source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/main.go)).
 
 ```bash
+# sgl: This path doesn't include the odo-application path. Plus it assumes that the amm-techlab git-repo is checked out
 cp content/en/docs/02.0/main.go main.go
 ```
 

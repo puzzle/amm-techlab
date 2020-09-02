@@ -88,6 +88,7 @@ spec:
   runPolicy: Serial
   source:
     git:
+      # sgl: There is no description to fork the repo. So either use the appuio repo or add description to clone the repo
       uri: https://github.com/userXY/example-spring-boot-helloworld
     type: Git
   strategy:
@@ -179,7 +180,7 @@ imagestream.image.openshift.io/openjdk-11 created
 
 
 ### Deployment
-
+<!-- sgl: create deployment.yaml -->
 After the ImageStream definition we can setup our Deployment. Please note the Deployment annotation `image.openshift.io/triggers`, this annotation connects the Deployment with the ImageStreamTag (which is automatically created by the ImageSource object)
 
 ```YAML
@@ -279,6 +280,7 @@ metadata:
     app: appuio-spring-boot-ex
   name: appuio-spring-boot-ex
 spec:
+  # sgl: Wrong route. This is the Puzzle and not Techlab specific route
   host: appuio-spring-boot-ex-spring-boot-userXY.ocp.aws.puzzle.ch
   port:
     targetPort: 8080-tcp
