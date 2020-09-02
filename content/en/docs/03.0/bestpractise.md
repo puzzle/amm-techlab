@@ -118,8 +118,10 @@ By default, Docker containers run as `root` user. But container images which run
 
 ### Random User IDs
 
-Unlike Docker, OpenShift uses arbitrary assigned User IDs.  
-For an image to support running as an arbitrary user, directories and files that may be written to by processes in the image should be owned by the root group and be read/writable by that group. Files to be executed should also have group execute permissions.
+Unlike Docker, OpenShift uses arbitrary assigned User IDs.
+This requires the image to have set root group permissions on directories and files that may be written.
+The directories and files must be owned by the root group and be read/writable by that group.
+Files to be executed must also have root group execute permissions.
 
 ``` DOCKERFILE
 RUN chgrp -R 0 /some/directory && \

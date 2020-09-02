@@ -275,7 +275,7 @@ Quick overview:
 * api-image: will be used as _image_ in the Pipeline for the Backend
 
 {{% alert title="Note" color="primary" %}}
-We use a template, to adapt the image registry URL that matches your project.
+We use a template to adapt the image registry URL to match to your project.
 {{% /alert %}}
 
 ```yaml
