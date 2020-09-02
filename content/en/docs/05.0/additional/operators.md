@@ -231,7 +231,7 @@ spec:
 
 ```bash
 oc apply -f etcd-scaleup.yaml --namespace <namespace>
-oc get events --namespace <namespace> -w 
+oc get events --namespace <namespace> -w
 # until all are up
 oc get pods -l app=etcd --namespace <namespace>
 ```
