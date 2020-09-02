@@ -38,7 +38,7 @@ For a quick 10 minute overview of Argo CD, check out the demo presented to the S
 
 ## Task {{% param sectionnumber %}}.1: Getting started
 
-Let's start by downloading the latest Argo CD version from <https://github.com/argoproj/argo-cd/releases/latest>. More detailed installation instructions can be found via the [CLI installation documentation](https://argoproj.github.io/argo-cd/cli_installation/).
+Let's start by downloading the latest Argo CD version from <https://github.com/argoproj/argo-cd/releases/latest>. More detailed installation instructions can be found via the [CLI installation documentation](https://argoproj.github.io/argo-cd/cli_installation/). The cli is already installed in the Web IDE.
 
 You can access Argo CD via UI or using the CLI. For CLI usage use the following command to login (credentials are given by your teacher):
 
