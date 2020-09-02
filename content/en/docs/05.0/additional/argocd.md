@@ -8,12 +8,6 @@ description: >
 ---
 
 
-## TODO
-
-* [ ] Testen und durchspielen
-* [ ] ev. auf example spring boot app Umbauen
-
-
 ## Introduction to GitOps
 
 > [GitOps](https://www.weave.works/technologies/gitops/) is a way to do Kubernetes cluster management and application delivery.  It works by using Git as a single source of truth for declarative infrastructure and applications. With GitOps, the use of software agents can alert on any divergence between Git with what's running in a cluster, and if there's a difference, Kubernetes reconcilers automatically update or rollback the cluster depending on the case. With Git at the center of your delivery pipelines, developers use familiar tools to make pull requests to accelerate and simplify both application deployments and operations tasks to Kubernetes.
@@ -51,75 +45,79 @@ argocd login <ARGOCD_SERVER> --sso --grpc-web
 
 ## Task {{% param sectionnumber %}}.2: Create an Application
 
-An example repository containing a guestbook application is available at <https://github.com/argoproj/argocd-example-apps.git> to demonstrate how Argo CD works.
+An example repository containing the appuio example application is available at <https://github.com/puzzle/amm-argocd-example.git> to demonstrate how Argo CD works.
 
 To deploy this application using the Argo CD CLI use the following command:
 
 ```bash
-argocd app create guestbook-<username> --repo https://github.com/argoproj/argocd-example-apps.git --path guestbook --dest-server https://kubernetes.default.svc --dest-namespace <username>-argocd
+argocd app create argo-example-<username> --repo https://github.com/puzzle/amm-argocd-example.git --path example-app --dest-server https://kubernetes.default.svc --dest-namespace <username>
 ```
 
-Once the guestbook application is created, you can now view its status:
+{{% alert title="Note" color="primary" %}}If you want to deploy it in a different namespace, make sure the namespaces exists before synching the app{{% /alert %}}
+
+Once the application is created, you can now view its status:
 
 ```bash
-argocd app get guestbook-<username>
+argocd app get argo-example-<username>
 ```
 
 ```
-Name:               guestbook-<username>
+Name:               argo-example-<username>
+Project:            default
 Server:             https://kubernetes.default.svc
-Namespace:          <username>-argocd
-URL:                https://<ARGOCD_SERVER>/applications/guestbook
-Repo:               https://github.com/argoproj/argocd-example-apps.git
+Namespace:          <username>
+URL:                https://argo.techlab.openshift.ch/applications/argo-example-hannelore15
+Repo:               https://github.com/puzzle/amm-argocd-example.git
 Target:
-Path:               guestbook
+Path:               example-app
+SyncWindow:         Sync Allowed
 Sync Policy:        <none>
-Sync Status:        OutOfSync from  (1ff8a67)
-Health Status:      Missing
+Sync Status:        Synced to  (eb54f2e)
+Health Status:      Healthy
 
-GROUP  KIND        NAMESPACE  NAME      STATUS     HEALTH
-apps   Deployment  <username>-argocd    guestbook-ui  OutOfSync  Missing
-       Service     <username>-argocd    guestbook-ui  OutOfSync  Missing
+GROUP  KIND        NAMESPACE    NAME                           STATUS     HEALTH   HOOK  MESSAGE
+       Service     hannelore15  example-php-docker-helloworld  OutOfSync  Missing
+apps   Deployment  hannelore15  example-php-docker-helloworld  OutOfSync  Missing
 ```
 
 The application status is initially in OutOfSync state since the application has yet to be deployed and no Kubernetes resources have been created. To sync (deploy) the application, run:
 
 ```bash
-argocd app sync guestbook-<username>
+argocd app sync argo-example-<username>
 ```
 
 This command retrieves the manifests from the repository and performs a `kubectl apply` of the manifests. The guestbook app is now running and you can now view its resource components, logs, events, and assessed health status.
 
 Check the ArgoCD UI application:
 
-![Guestbook App](../guestbook-app.png)
+![Guestbook App](../argo-app.png)
 
-![Guestbook Tree](../guestbook-tree.png)
+![Guestbook Tree](../argo-tree.png)
 
 Or use the CLI:
 
 ```bash
-argocd app get guestbook-<username>
+argocd app get argo-example-<username>
 ```
 
 which gives you an output similar to this:
 
 ```
 
-Name:               guestbook-<username>
+Name:               argo-example-<username>
 Server:             https://kubernetes.default.svc
 Namespace:          <username>-argocd
-URL:                https://<ARGOCD_SERVER>/applications/guestbook
-Repo:               https://github.com/argoproj/argocd-example-apps.git
+URL:                https://<ARGOCD_SERVER>/applications/argo-example
+Repo:               https://github.com/puzzle/amm-argocd-example.git
 Target:
-Path:               guestbook
+Path:               example-app
 Sync Policy:        <none>
 Sync Status:        Synced to HEAD (6bed858)
 Health Status:      Healthy
 
-GROUP  KIND        NAMESPACE            NAME          STATUS  HEALTH
-apps   Deployment  <username>-argocd    guestbook-ui  Synced  Healthy
-       Service     <username>-argocd    guestbook-ui  Synced  Healthy
+GROUP  KIND        NAMESPACE            NAME                           STATUS  HEALTH
+apps   Deployment  <username>           example-php-docker-helloworld  Synced  Healthy
+       Service     <username>           example-php-docker-helloworld  Synced  Healthy
 ```
 
 So the application is synced now and a Kubernetes Deployment and a Kubernetes Service was created. You can check this with:
@@ -129,63 +127,63 @@ oc get all
 ```
 
 ```
-NAME                                READY   STATUS    RESTARTS   AGE
-pod/guestbook-ui-85c9c5f9cb-v4x5p   1/1     Running   0          61m
+NAME                                                 READY   STATUS    RESTARTS   AGE
+pod/example-php-docker-helloworld-85c9c5f9cb-v4x5p   1/1     Running   0          61m
 
-NAME                   TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
-service/guestbook-ui   ClusterIP   10.43.169.62   <none>        80/TCP    62m
+NAME                                    TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
+service/example-php-docker-helloworld   ClusterIP   10.43.169.62   <none>        80/TCP    62m
 
-NAME                           READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/guestbook-ui   1/1     1            1           61m
+NAME                                            READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/example-php-docker-helloworld   1/1     1            1           61m
 
-NAME                                      DESIRED   CURRENT   READY   AGE
-replicaset.apps/guestbook-ui-85c9c5f9cb   1         1         1       61m
+NAME                                                       DESIRED   CURRENT   READY   AGE
+replicaset.apps/example-php-docker-helloworld-85c9c5f9cb   1         1         1       61m
 ```
 
 
 ## Task {{% param sectionnumber %}}.3: Automated Sync Policy and Diff
 
-When there is a new commit in your Git Repository, the Argo CD Application becomes OutOfSync again. To simulate a change (because we don't have controll over the Argo CD repository) in your application, lets manually change our Deployment, e.g. scale your `guestbook-ui` Deployment to 2:
+When there is a new commit in your Git Repository, the Argo CD Application becomes OutOfSync again. To simulate a change (because we don't have control over the Argo CD repository) in your application, lets manually change our Deployment, e.g. scale your `guestbook-ui` Deployment to 2:
 
 ```bash
-oc scale deployment guestbook-ui --replicas=2
+oc scale deployment example-php-docker-helloworld --replicas=2
 ```
 
 Check the application status with:
 
-![Application Out-of-Sync](../argocd_outofsync.png)
+![Application Out-of-Sync](../argo-outofsynch.png)
 
-which should show that the application is OutOfSync. This means you live state is not the same as the target state from the Git repository. the `argocd app get guestbook-<username>`
+which should show that the application is OutOfSync. This means you live state is not the same as the target state from the Git repository. the `argocd app get argo-example-<username>`
 
 ```bash
-Name:               guestbook-<username>
+Name:               argo-example-<username>
 Project:            default
 Server:             https://kubernetes.default.svc
-Namespace:          guestbook-<username>
-URL:                https://<ARGOCD_SERVER>/applications/guestbook
-Repo:               https://github.com/argoproj/argocd-example-apps.git
-Target:             HEAD
-Path:               guestbook
+Namespace:          <username>
+URL:                https://argo.techlab.openshift.ch/applications/argo-example-hannelore15
+Repo:               https://github.com/puzzle/amm-argocd-example.git
+Target:
+Path:               example-app
 SyncWindow:         Sync Allowed
-Sync Policy:        Automated
-Sync Status:        OutOfSync from HEAD (6bed858)
+Sync Policy:        <none>
+Sync Status:        OutOfSync from  (eb54f2e)
 Health Status:      Healthy
 
-GROUP  KIND        NAMESPACE             NAME          STATUS     HEALTH   HOOK  MESSAGE
-apps   Deployment  guestbook-<username>  guestbook-ui  OutOfSync  Healthy        deployment.apps/guestbook-ui configured
-       Service     guestbook-<username>  guestbook-ui  Synced     Healthy
+GROUP  KIND        NAMESPACE    NAME                           STATUS     HEALTH   HOOK  MESSAGE
+       Service     <username>   example-php-docker-helloworld  Synced     Healthy        service/example-php-docker-helloworld created
+apps   Deployment  <username>   example-php-docker-helloworld  OutOfSync  Healthy        deployment.apps/example-php-docker-helloworld created
 ```
 
-As you see, your `guestbook-ui` Deployment resource is OutOfSync. You can perform a diff against the target and live state using:
+As you see, your `example-php-docker-helloworld` Deployment resource is OutOfSync. You can perform a diff against the target and live state using:
 
 ```bash
-argocd app diff guestbook-<username>
+argocd app diff argo-example-<username>
 ```
 
 which should give you an output similar to:
 
 ```bash
-===== apps/Deployment guestbook-<username>/guestbook-ui ======
+===== apps/Deployment argo-example-<username>/guestbook-ui ======
 8c8
 <   replicas: 2
 ---
@@ -197,7 +195,7 @@ Which is the change we simulated by scaling our Deployment.
 With:
 
 ```bash
-argocd app sync guestbook-<username>
+argocd app sync argo-example-<username>
 ```
 
 you can sync your application again against the target state.
@@ -207,7 +205,7 @@ Argo CD has the ability to automatically sync an application when it detects dif
 To configure automated sync run (or use the UI):
 
 ```bash
-argocd app set guestbook-<username> --sync-policy automated
+argocd app set argo-example-<username> --sync-policy automated
 ```
 
 and now everytime you create a new commit in your Git Repository, Argo CD will automaticly perform a sync of your application.
@@ -218,23 +216,33 @@ and now everytime you create a new commit in your Git Repository, Argo CD will a
 By default, changes that are made to the live cluster will not trigger automated sync. To enable automatic sync when the live cluster's state deviates from the state defined in Git, run:
 
 ```bash
-argocd app set guestbook-<username> --self-heal
+argocd app set argo-example-<username> --self-heal
 ```
 
-Let's scale our `guestbook-ui` Deployment and observe whats happening:
+Let's scale our `example-php-docker-helloworld` Deployment and observe whats happening:
 
 ```bash
-oc scale deployment guestbook-ui --replicas=2
+oc scale deployment example-php-docker-helloworld --replicas=2
 ```
 
-Argo CD will immediatly scale back the `guestbook-ui` Deployment to `1` replica. You can verify this with:
+Argo CD will immediatly scale back the `example-php-docker-helloworld` Deployment to `1` replica. You can verify this with:
 
 ```bash
-oc get deployment guestbook-ui
+oc get deployment example-php-docker-helloworld
 ```
 
 ```
-NAME           READY   UP-TO-DATE   AVAILABLE   AGE
-guestbook-ui   1/1     1            1           22m
+NAME                            READY   UP-TO-DATE   AVAILABLE   AGE
+example-php-docker-helloworld   1/1     1            1           22m
 ```
 
+
+## Task {{% param sectionnumber %}}.4: Additional Task
+
+You now learnt the basic functionality of argocd, as an additional lab you can now:
+
+* Fork the git repository with the k8s manifests <https://github.com/puzzle/amm-argocd-example.git>
+* create a new argocd app using the new git repository
+* create a route resource yaml which exposes the example application
+* push it to your git repository
+* and let the magic happen
