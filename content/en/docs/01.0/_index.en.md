@@ -6,10 +6,6 @@ description: >
   Get familiar with the lab environment.
 ---
 
-## TODO
-
-* [ ]: Set Projectnames in the X.1.3 lab
-
 
 ## Task {{% param sectionnumber %}}.1: Login
 
@@ -48,7 +44,7 @@ The Web IDE Pod consists of the following tools:
 * tekton cli
 * odo
 
-The files under `~/amm-techlab` are stored in a persistence volume.
+The files in the home directory under `/home/coder` are stored in a persistence volume.
 
 
 ### Task {{% param sectionnumber %}}.1.2: Login with oc tool
@@ -64,9 +60,10 @@ If you want to use your local `oc` tool, make sure to get the appropriate versio
 
 ### Task {{% param sectionnumber %}}.1.3: explore other namespaces
 
-Alongside the Lab Cluster, we also deployed a couple of additional Tools and Services we're going to use during the lab:
+Alongside the Lab Cluster, we also deployed a couple of additional Tools and Services we're going to use during the lab.
 
-* Git Server `<name>`, this will contain the source code (Login with your username and password)
-* Prometheus and Grafana in the project `<name>` (Login using Oauth OpenShift)
-* Tracing (jaeger) in the project `<name>`
-* ArgoCD in the project `<name>`
+checkout the Deployed resources and then Login into the services. (URLs are provided by the trainer)
+
+* Git Server `pitc-infra-gitea`, this will contain the source code (Login with your username and password)
+* Prometheus and Grafana in the project `pitc-infra-apps-monitoring` (Login using Oauth OpenShift)
+* ArgoCD in the project `pitc-infra-argocd` (Login via OpenShift)
