@@ -24,7 +24,7 @@ RUN mkdir -p ~/.local/bin \
     && curl -L ${TEKTON_CLI} -o ~/.local/bin/tkn.tar.gz && tar xvfz ~/.local/bin/tkn.tar.gz -C /usr/local/bin/ && rm -rf ~/.local/bin/tkn.tar.gz \
     && curl ${ODO} -o /usr/local/bin/odo \
     && curl ${OPENSHIFT_CLIENT_TOOL} -o ~/.local/bin/oc.tar &&  tar -xvf ~/.local/bin/oc.tar -C /usr/local/bin/ && rm -rf ~/.local/bin/oc.tar \
-    && curl ${ARGOCD_CLI} -o /usr/local/bin/argocd \
+    && curl -L ${ARGOCD_CLI} -o /usr/local/bin/argocd \
     && chmod +x /usr/local/bin/*
 
 USER coder
