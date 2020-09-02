@@ -235,3 +235,11 @@ After the container has started successfully, the application should be reachabl
 
 Check if the changes were applied correct. Open your browser and navigate to your application:
 <https://appuio-spring-boot-ex-amm-userXY.ocp.aws.puzzle.ch/>
+
+
+## Task {{% param sectionnumber %}}.5: Important notes
+
+We showed how to change the OpenShift resources using the commands `oc patch` and `oc set env`.
+This is good for developing or debugging the setup of an application project.
+
+For changing stages and productive environments we propose updating the YAML representations inside the Git repository and apply the files again.
