@@ -38,6 +38,16 @@ The main reasons to use this build strategy are.
 * **Security** - Dockerfiles are usually running as root and having access to the container network. This is a possible security risk. S2I Images allow more control what permissions and privileges are available to the builder image since the build launches only a single container. OpenShift allows cluster administrator tightly control what privileges developers have at build time.
 
 
+## Setup
+
+First we define the username and project name as environment variables. We're going to use them later for the Template parameters.
+
+```BASH
+export USERNAME=userXY
+export PROJECT_NAME=$(oc project -q)
+```
+
+
 ## Create BuildConfig
 
 First let's create a BuildConfig. The important part in this specification are the source, output and strategy section.
@@ -94,10 +104,10 @@ objects:
       type: ImageChange
 ```
 
-[Source](https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.1/buildConfig.yaml)
+[Source](https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.0/04.1/buildConfig.yaml)
 
 ```BASH
-oc process -f https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.1/buildConfig.yaml -p USERNAME=userXY | oc apply -f -
+oc process -f https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.0/04.1/buildConfig.yaml -p USERNAME=$USERNAME | oc apply -f -
 ```
 
 Next we need the definitions for our two ImageStreamTag references.
@@ -143,10 +153,10 @@ spec:
 ```
 
 
-[Source](https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.1/imageStreams.yaml)
+[Source](https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.0/04.1/imageStreams.yaml)
 
 ```BASH
-oc apply -f https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.1/imageStreams.yaml
+oc apply -f https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.0/04.1/imageStreams.yaml
 ```
 
 Let's check if the build is complete.
@@ -212,8 +222,8 @@ objects:
   metadata:
     name: git-credentials
   stringData:
-    username: ${PASSWORD}
-    password: ${USERNAME}
+    username: ${USERNAME}
+    password: ${PASSWORD}
   type: kubernetes.io/basic-auth
 parameters:
 - description: AMM techlab participant username
@@ -224,12 +234,12 @@ parameters:
   mandatory: true
 ```
 
-[Source](https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.1/secret.yaml)
+[Source](https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.0/04.1/secret.yaml)
 
 Then we can create the secret
 
 ```BASH
-oc process -f https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.1/secret.yaml -p USERNAME=userXY -p PASSWORD=youPassword | oc apply -f -
+oc process -f https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.0/04.1/secret.yaml -p USERNAME=$USERNAME -p PASSWORD=youPassword | oc apply -f -
 ```
 
 Next we reference the freshly created secret in our BuildConfig. The following command will open the VIM editor ([VIM Cheat Sheet](https://devhints.io/vim)), where you can edit the YAML file directly. As soon you save the file and close the editor, the changes are applied to the resource.
@@ -324,45 +334,60 @@ Until now we just created the build resources. Up next is the creation of the De
 
 ```YAML
 
-apiVersion: apps.openshift.io/v1
-kind: DeploymentConfig
+apiVersion: v1
+kind: Template
 metadata:
-  labels:
-    app: spring-boot-s2i
-  name: spring-boot-s2i
-spec:
-  replicas: 1
-  selector:
-    deploymentconfig: spring-boot-s2i
-  strategy:
-    resources: {}
-  template:
-    metadata:
-      labels:
-        deploymentconfig: spring-boot-s2i
-    spec:
-      containers:
-      - image: image-registry.openshift-image-registry.svc:5000/amm-userXY/spring-boot-s2i:latest
-        name: spring-boot-s2i
-        ports:
-        - containerPort: 8080
-          protocol: TCP
-        - containerPort: 8443
-          protocol: TCP
-        - containerPort: 8778
-          protocol: TCP
-        resources: {}
-  test: false
-  triggers:
-  - type: ConfigChange
-  - imageChangeParams:
-      automatic: true
-      containerNames:
-      - spring-boot-s2i
-      from:
-        kind: ImageStreamTag
-        name: spring-boot-s2i:latest
-    type: ImageChange
+  name: deploymentconfig-s2i-template
+objects:
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app: spring-boot-s2i
+    name: spring-boot-s2i
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: spring-boot-s2i
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        labels:
+          deploymentconfig: spring-boot-s2i
+      spec:
+        containers:
+        - image: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAME}/spring-boot-s2i:latest
+          name: spring-boot-s2i
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 8443
+            protocol: TCP
+          - containerPort: 8778
+            protocol: TCP
+          resources: {}
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - spring-boot-s2i
+        from:
+          kind: ImageStreamTag
+          name: spring-boot-s2i:latest
+      type: ImageChange
+parameters:
+- description: OpenShift Project Name
+  name: PROJECT_NAME
+  mandatory: true
+```
+
+[Source](https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.0/04.1/deploymentConfig.yaml)
+
+```BASH
+oc process -f https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.0/04.1/deploymentConfig.yaml -p PROJECT_NAME=$PROJECT | oc apply -f -
 ```
 
 
@@ -393,6 +418,13 @@ spec:
     deploymentconfig: spring-boot-s2i
   sessionAffinity: None
   type: ClusterIP
+```
+
+
+[Source](https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.0/04.1/service.yaml)
+
+```BASH
+oc create -f https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.0/04.1/service.yaml
 ```
 
 
@@ -428,12 +460,12 @@ parameters:
   mandatory: true
 ```
 
-[Source](https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.1/route.yaml)
+[Source](https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.0/04.1/route.yaml)
 
 Then we can create the route
 
 ```BASH
-oc process -f https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.1/route.yaml -p USERNAME=userXY | oc apply -f -
+oc process -f https://raw.githubusercontent.com/schlapzz/amm-techlab/master/content/en/docs/04.0/04.1/route.yaml -p USERNAME=$USERNAME | oc apply -f -
 ```
 
 Check if the route was created successfully
@@ -448,8 +480,7 @@ NAME              HOST/PORT                                          PATH   SERV
 spring-boot-s2i   spring-boot-s2i-amm-userXY.ocp.aws.puzzle.ch          spring-boot-s2i   8080-tcp   edge          None
 ```
 
-And finally check if you can reach your application within a browser by accessing the public route.
+And finally check if you can reach your application within a browser by accessing the public route. [https://spring-boot-s2i-amm-userXY.ocp.aws.puzzle.ch]
 
 
-Do you not find a suitable S2I builder image for you application. [Create your own](https://www.openshift.com/blog/create-s2i-builder-image).
-[S2I Build Strategy](https://docs.openshift.com/container-platform/4.5/builds/build-strategies.html#build-strategy-s2i_build-strategies)
+Do you not find a suitable S2I builder image for you application. [Create your own](https://www.openshift.com/blog/create-s2i-builder-image)
