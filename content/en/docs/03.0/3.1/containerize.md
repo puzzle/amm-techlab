@@ -13,12 +13,10 @@ description: >
 
 ## TODO
 
-* [ ] Source files überprüfen und updaten
+* [ ] BuildConfig mehr CPU und Memory geben
 
 
 The main goal of this lab is to show you how to containerize an existing Java application. Including deployment on OpenShift and exposing the service with a route.
-
-> Replace `userXY with your username.
 
 
 ### Setup Project
@@ -32,12 +30,13 @@ oc new-project spring-boot-userXY
 
 ### Dockerfile
 
-First we need a Dockerfile. You can find the `Dockerfile` in the root directory of the example Java application.
-As base image we use the `registry.access.redhat.com/ubi8/openjdk-11` which is pre configured for Java builds.
+First we need a Dockerfile. You can find the `Dockerfile` in the root directory of the example Java application
+[Git Repository](https://gitea.techlab.openshift.ch/APPUiO-AMM-Techlab/example-spring-boot-helloworld).
+The base image is a `fabric8/java-centos-openjdk11-jdk` which is pre configured for Java builds.
 
 
 ```Dockerfile
-FROM registry.access.redhat.com/ubi8/openjdk-11
+FROM fabric8/java-centos-openjdk11-jdk
 
 LABEL maintainer="philipona@puzzle.ch"
 
@@ -57,7 +56,7 @@ RUN cd /tmp/src && sh gradlew build -Dorg.gradle.daemon=false
 RUN cp -a  /tmp/src/build/libs/springboots2idemo*.jar /deployments/springboots2idemo.jar
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/Dockerfile)
+[source](https://gitea.techlab.openshift.ch/APPUiO-AMM-Techlab/example-spring-boot-helloworld/raw/branch/master/Dockerfile)
 
 
 This Dockerfile is responsible for building the Java application. For this we use the UBI Docker image. This image is pre configured to build and run Java applications.
@@ -66,10 +65,13 @@ To build the Java Spring Boot application, the `Dockerfile` make use of the [Gra
 
 ### BuildConfig
 
-Create a new file called `buildConfig.yaml` for the BuildConfig.
 The [BuildConfig](https://docs.openshift.com/container-platform/4.5/builds/understanding-buildconfigs.html) describes how a single build task is performed. The BuildConfig is primary characterized by the Build strategy and its resources. For our build we use the Docker strategy. (Other strategies will be discussed in Chapter 4) The Docker strategy invokes the Docker build command. Furthermore it expects a `Dockerfile` in the source repository.
 Beside we configure the source and the triggers as well. For the source we can specify any Git repository. This is where the application sources resides. The triggers describe how to trigger the build. In this example we provide four different triggers. (Generic webhook, GitHub webhook, ConfigMap change, Image change)
 
+It is a good practice to use [Red Hat Universal Base Images](https://developers.redhat.com/products/rhel/ubi).
+With the BuildConfig of OpenShift we can overwrite the base image of a Dockerfile (FROM directive).
+See the highlighted line of the following BuildConfig, where we define a new base image.
+The image ([registry.access.redhat.com/ubi8/openjdk-11](https://catalog.redhat.com/software/containers/ubi8/openjdk-11/5dd6a4b45a13461646f677f4)) is referenced by the image stream `openjdk-11`.
 
 ```YAML
 apiVersion: build.openshift.io/v1
@@ -88,7 +90,7 @@ spec:
   runPolicy: Serial
   source:
     git:
-      uri: https://github.com/userXY/example-spring-boot-helloworld
+      uri: https://gitea.techlab.openshift.ch/APPUiO-AMM-Techlab/example-spring-boot-helloworld
     type: Git
   strategy:
     dockerStrategy:
@@ -115,12 +117,12 @@ spec:
     type: ImageChange
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/buildConfig.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.1/buildConfig.yaml)
 
 Create the build config.
 
 ```BASH
-oc create -f buildConfig.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.1/buildConfig.yaml
 ```
 
 ```
@@ -130,7 +132,7 @@ buildconfig.build.openshift.io/appuio-spring-boot-ex created
 
 ### ImageStreams
 
-Next we need to configure an [ImageStream](https://docs.openshift.com/container-platform/4.5/openshift_images/image-streams-manage.html) for the Java base image (ubi8/openjdk-11) and our application image (appuio-spring-boot-ex). Create a new file called `imageStreams.yaml`. The ImageStream is an abstraction for referencing images from within OpenShift Container Platform. Simplified the ImageStream tracks changes for the defined images and reacts by performing a new Build.
+Next we need to configure an [ImageStream](https://docs.openshift.com/container-platform/4.5/openshift_images/image-streams-manage.html) for the Java base image (ubi8/openjdk-11) and our application image (appuio-spring-boot-ex). The ImageStream is an abstraction for referencing images from within OpenShift Container Platform. Simplified the ImageStream tracks changes for the defined images and reacts by performing a new Build.
 
 ```YAML
 apiVersion: image.openshift.io/v1
@@ -164,12 +166,12 @@ spec:
       type: Source
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/imageStreams.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.1/imageStreams.yaml)
 
 Let's create the ImageStreams
 
 ```BASH
-oc create -f imageStreams.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.1/imageStreams.yaml
 ```
 
 ```
@@ -214,22 +216,25 @@ spec:
         resources: {}
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/deployment.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.1/deployment.yaml)
 
 Let's create the deployment with following command
 
 ```BASH
-oc create -f deployment.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.1/deployment.yaml
 ```
 
 ```
 deployment/appuio-spring-boot-ex created
 ```
 
+When you check your project in the web console (Developer view) the example app is visible.
+The pod will be deployed successfully when the build finishes and the application image is pushed to the image stream.
+
 
 ### Service
 
-Expose the Service to the cluster with a Service. First create a new file named `svc.yaml`. For the Service we configure two different ports. `8080` for the Web API, `9000` for the metrics and health check. We set the Service type to ClusterIP to expose the Service cluster internal only.
+Expose the container ports to the to the cluster with a Service. For the Service we configure two different ports. `8080` for the Web API, `9000` for the metrics and health check. We set the Service type to ClusterIP to expose the Service cluster internal only.
 
 ```YAML
 apiVersion: v1
@@ -254,12 +259,12 @@ spec:
   type: ClusterIP
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/svc.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.1/svc.yaml)
 
 Create the Service in OpenShift
 
 ```bash
-oc create -f svc.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.1/svc.yaml
 ```
 
 ```
@@ -269,7 +274,9 @@ service/appuio-spring-boot-ex created
 
 ### Route
 
-Create a Route to expose the service at a host name. The TLS type is set to Edge
+Create a Route to expose the service at a host name. This will make the application available outside of the cluster.
+
+The TLS type is set to Edge. That will configure the router to terminate the SSL connection and forward to the service with HTTP.
 
 ```YAML
 apiVersion: route.openshift.io/v1
@@ -279,7 +286,6 @@ metadata:
     app: appuio-spring-boot-ex
   name: appuio-spring-boot-ex
 spec:
-  host: appuio-spring-boot-ex-spring-boot-userXY.ocp.aws.puzzle.ch
   port:
     targetPort: 8080-tcp
   to:
@@ -291,13 +297,13 @@ spec:
   wildcardPolicy: None
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/route.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.1/route.yaml)
 
 
 Create the Route in OpenShift
 
 ```bash
-oc create -f route.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.1/route.yaml
 ```
 
 ```
@@ -350,42 +356,8 @@ route.route.openshift.io/appuio-spring-boot-ex   appuio-spring-boot-ex-spring-bo
 ```
 
 
-### Update source code
+### Access application by browser
 
-Go to your GitHub repo and modify anything in the `index.html` file. Commit and push your changes back to your repository.
-Thereafter you can trigger a new build with following command.
+Finally you can visit your application with the URL provided from the Route: <https://appuio-spring-boot-ex-spring-boot-userXY.techlab.openshift.ch/>
 
-```BASH
-oc start-build appuio-spring-boot-ex
-```
-
-```
-build.build.openshift.io/appuio-spring-boot-ex-2 started
-```
-
-To verify if your changes triggers a new build, you can enter following command to list and watch all builds in your project.
-
-```BASH
-oc get build -w
-```
-
-As you can see in the output, there was recently started a new Build. If the status is changing, the output will be updated.
-
-```
-NAME                      TYPE     FROM          STATUS     STARTED              DURATION
-appuio-spring-boot-ex-1   Docker   Git@396de3a   Complete   2 hours ago          7m22s
-appuio-spring-boot-ex-2   Docker   Git@396de3a   Running    About a minute ago
-
-```
-
-Under the column FROM you see the Git commit SHA which was used to build the image.
-
-You can exit the watch function with `ctrl + c`
-
-As soon the Build is complete, the deployment is going to be updated with the new builded image.
-
-
-### Verify updated application
-
-Finally you can visit and verify your application with the URL provided from the Route.
-[https://appuio-spring-boot-ex-spring-boot-userXY.ocp.aws.puzzle.ch/](https://appuio-spring-boot-ex-spring-boot-userXY.ocp.aws.puzzle.ch/)
+> Replace `userXY with your username or get the url from your route.

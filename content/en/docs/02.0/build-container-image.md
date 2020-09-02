@@ -15,7 +15,7 @@ The sample application is an HTTP server written in the [Go programming language
 
 The following files are needed inside your application repository:
 
-* [Dockerfile](#application-build-instruction)
+* [Dockerfile](#image-build-instruction)
 * [main.go](#sample-go-application)
 
 
