@@ -134,5 +134,5 @@ wget -O deployments/ROOT.war 'https://github.com/appuio/hello-world-war/blob/mas
 Now we can start our build with following command:
 
 ```BASH
-oc start-build hello-world --from-dir=. --follow
+oc start-build spring-boot-bb --from-dir=. --follow
 ```

@@ -19,11 +19,7 @@ description: >
 * Beschreiben: Private Registry wie und wo muss man das pull secret angeben.
 
 
-In this section we cover how to deploy an existing Docker Image from an image registry. Besides we show how to create a ImageStream to track changes on the deployed image and trigger an update on the deployment.
-
-
-There are three options for updating the ImageStreams.
-
+In this section we cover how to deploy an existing Docker Image from an private image registry. Besides we show how to create a ImageStream to track changes on the deployed image and trigger an update on the deployment.
 
 Let's start with the deployment configuration
 
@@ -64,6 +60,12 @@ spec:
     type: Rolling  
 ```
 
+[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.4/deploymentConfig.yaml)
+
+```BASH
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.4/deploymentConfig.yaml
+```
+
 Next we create the ImageStream definition. The important part is under the `tags` section. There we define a reference to an external Docker registry and define which image to track. Another important field is the import policy. If you query an image from an external registry, you can set scheduled import to true.
 
 ```YAML
@@ -85,4 +87,25 @@ spec:
       scheduled: true
     referencePolicy:
       type: Source
+```
+
+[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.4/imageStream.yaml)
+
+```BASH
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.4/imageStream.yaml
+```
+
+
+### Credentials
+
+In this section we create a docker secret to access the private registry and pull the docker image.
+
+```BASH
+oc create secret docker-registry regcred --docker-server=<registry_server> --docker-username=<user_name> --docker-password=<password> --docker-email=<email>
+```
+
+Next we link the secret with our default service account.
+
+```BASH
+oc secrets link default regcred --for=pull
 ```
