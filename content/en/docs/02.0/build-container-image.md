@@ -132,11 +132,9 @@ curl localhost:8088/world
 ### Publish image to Docker Hub
 
 To make the image accessible to OpenShift, it must be pushed to an image registry. We use Docker Hub as the registry.
-
+<!-- sgl: split the two commands in two fields so it can be cop easier -->
 ```bash
 podman login
-```
-<!-- sgl: The resulting Image couldn't be used with oc new-app -->
-```bash
+# sgl: The resulting Image couldn't be used with oc new-app
 podman push localhost/go-hello-world:latest docker://docker.io/appuio/go-hello-world:latest
 ```
