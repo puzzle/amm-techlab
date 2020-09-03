@@ -57,7 +57,7 @@ spec:
 {{< / highlight >}}
 ```
 
-We update the service using the `oc path` command. This will update the resource directly in the project.
+We update the service using the `oc patch` command. This will update the resource directly in the project.
 
 Change the port with following command:
 
