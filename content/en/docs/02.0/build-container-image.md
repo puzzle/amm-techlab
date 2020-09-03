@@ -116,7 +116,7 @@ registry.access.redhat.com/ubi8/go-toolset    1.13.4   4bf10ac637aa   5 weeks ag
 Test the container image locally using [Podman](https://podman.io/). Use this command to run the container:
 
 ```bash
-podman run -p 8088:8080 -ti go-hello-world
+podman run -p 8088:8080 -ti localhost/go-hello-world
 ```
 
 This makes the Go application accessible by the port 8088 of your device.

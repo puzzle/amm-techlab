@@ -43,7 +43,7 @@ metadata:
 spec:
   ports:
   - name: 8080-tcp
-    port: 8081
+    port: 8080
     protocol: TCP
     targetPort: 8081
   - name: 9000-tcp
