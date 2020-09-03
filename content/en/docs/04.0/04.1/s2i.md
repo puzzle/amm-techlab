@@ -40,6 +40,13 @@ The main reasons to use this build strategy are.
 
 ## Setup
 
+Create a new project, replace userXY with your username.
+
+```BASH
+oc new-project amm-userXY
+```
+
+
 First we define the username and project name as environment variables. We're going to use them later for the Template parameters.
 
 ```BASH
