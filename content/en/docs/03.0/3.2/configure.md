@@ -31,7 +31,7 @@ We have to change a port on the service that we have created in the previous lab
 
 ### Change service target port
 
-Change the target port in the service `appuio-spring-boot-ex` to match the new configured port in the deployment. Note that we only have to change the target port in the service definition. For this case other existing services can still connect to the 8080 service port without any further changes.
+Change the target port in the service `appuio-spring-boot-ex`. Note that we only have to change the target port in the service definition. For this case other existing services can still connect to the 8080 service port without any further changes.
 
 ```
 {{< highlight YAML "hl_lines=11" >}}
