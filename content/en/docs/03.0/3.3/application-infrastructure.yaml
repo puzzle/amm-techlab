@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: List
+metadata: {}
+items:
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    labels:
+      app: container-openshift-ifie
+    name: container-openshift-ifie
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - from:
+        kind: DockerImage
+        name: chrira/container-openshift-ifie
+      importPolicy: {}
+      name: latest
+      referencePolicy:
+        type: Source
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: container-openshift-ifie
+      app.kubernetes.io/component: container-openshift-ifie
+      app.kubernetes.io/instance: container-openshift-ifie
+    name: container-openshift-ifie
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: container-openshift-ifie
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          deploymentconfig: container-openshift-ifie
+      spec:
+        containers:
+        - image: 'container-openshift-ifie:latest'
+          name: container-openshift-ifie
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+    test: false
+    triggers:
+    - type: ConfigChange
+      triggers:
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+          - container-openshift-ifie
+        from:
+          kind: ImageStreamTag
+          name: 'container-openshift-ifie:latest'
+  status:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: container-openshift-ifie
+      app.kubernetes.io/component: container-openshift-ifie
+      app.kubernetes.io/instance: container-openshift-ifie
+    name: container-openshift-ifie
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      deploymentconfig: container-openshift-ifie
+  status:

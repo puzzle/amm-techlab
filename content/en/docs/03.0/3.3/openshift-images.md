@@ -1,15 +1,27 @@
 ---
-title: "3.3 OpenShift images"
-linkTitle: "3.3 penShift images"
+title: "3.3 OpenShift image requirements"
+linkTitle: "3.3 OpenShift image requirements"
 weight: 33
 sectionnumber: 3.3
 description: >
   This section is covering how to build a runnable image for OpenShift clusters.
 ---
 
-## Application
 
-We use the same Go application from Lab 2 and extend it with a log file. Every request is logged with the actual time and the client IP address. The log file is placed under `/home/golang/hello-go.log`
+## Task {{% param sectionnumber %}}.1: Additional requirements
+
+OpenShift has additional security features enabled in comparison to Docker or a vanilla Kubernetes plattform.
+The most relevant mechanism are prevention of root user, [SELinux](https://de.wikipedia.org/wiki/SELinux) enabled and arbitrary user ids.
+
+That adds additional requirements to the container images that will be deployed to OpenShift. This lab shows how to deal with them.
+
+
+## Task {{% param sectionnumber %}}.2: Demo application
+
+We use a Go application similar to the one from Lab 2. It is extended it with a log file. Every request is logged with the actual time and the client IP address. The log file is placed under `/home/golang/hello-go.log`
+
+
+### Go source
 
 ``` golang
 package main
@@ -64,10 +76,10 @@ func appendToFile(remoteAddr string) {
 
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.3/main.go)
+[source](https://raw.githubusercontent.com/chrira/container-openshift-ifie/master/main.go)
 
 
-## Dockerfile
+### Dockerfile
 
 The dockerfile is the same as in chapter 2.
 
@@ -83,60 +95,85 @@ ENTRYPOINT /home/golang/go-hello-world-app
 
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.3/Dockerfile)
+[source](https://raw.githubusercontent.com/chrira/container-openshift-ifie/master/Dockerfile)
 
 
-### Build
+## Task {{% param sectionnumber %}}.3: Deploy application
 
-Let's build the image with following command:
+The application is available on Docker Hub: [chrira/container-openshift-ifie](https://hub.docker.com/repository/docker/chrira/container-openshift-ifie)
 
+This is a list with all needed OpenShift resources.
 
-```BASH
-buildah bud -f Dockerfile -t go-hello-world-os .
+```YAML
+apiVersion: v1
+kind: List
+metadata: {}
+items:
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: container-openshift-ifie
+      app.kubernetes.io/component: container-openshift-ifie
+      app.kubernetes.io/instance: container-openshift-ifie
+    name: container-openshift-ifie
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: container-openshift-ifie
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          deploymentconfig: container-openshift-ifie
+      spec:
+        containers:
+        - image: chrira/container-openshift-ifie:latest
+          name: container-openshift-ifie
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+    test: false
+    triggers:
+    - type: ConfigChange
+  status:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: container-openshift-ifie
+      app.kubernetes.io/component: container-openshift-ifie
+      app.kubernetes.io/instance: container-openshift-ifie
+    name: container-openshift-ifie
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      deploymentconfig: container-openshift-ifie
+  status:
 ```
 
-Check if the image is available locally
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.3/application-infrastructure.yaml)
 
-```BASH
-buildah images
-```
-
-```
-REPOSITORY                                   TAG           IMAGE ID       CREATED         SIZE
-localhost/go-hello-world-os                  latest        d51386c82b80   2 minutes ago   7.42 MB
-localhost/go-hello-world                     latest        0493b6a22386   23 hours ago    218 MB
-```
-
-
-### Image test
-
-Test the container image locally using Podman. Use this command to run the container:
-
-```BASH
-podman run -p 8082:8080 -ti go-hello-world-os
-```
-
-Be aware of the new allocated port! (8082)
-
-```BASH
-curl localhost:8082/world
-```
-
-
-### Publish image to Dockerhub
-
-
-```BASH
-podman push localhost/go-hello-world-os:latest docker://docker.io/appuio/go-hello-world.os:latest
-```
-
-
-## Deploy
 
 Now it is time to deploy the image in our OpenShift cluster.
 
 ```BASH
-oc new-app appuio/go-hello-world-os:latest
+oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.3/application-infrastructure.yaml
+```
+
+```
+imagestream.image.openshift.io/container-openshift-ifie created
+deploymentconfig.apps.openshift.io/container-openshift-ifie created
+service/container-openshift-ifie created
 ```
 
 Verify if all resources are created
@@ -146,35 +183,32 @@ oc get all
 ```
 
 ```
-{{< highlight text "hl_lines=2 8" >}}
-NAME                                     READY   STATUS             RESTARTS   AGE
-pod/go-hello-world-os-576dcb6994-zjk58   0/1     CrashLoopBackOff   5          3m54s
+{{< highlight text "hl_lines=2 6" >}}
+NAME                                        READY   STATUS             RESTARTS   AGE
+pod/container-openshift-ifie-1-d8rln        0/1     CrashLoopBackOff   6          9m19s
+pod/container-openshift-ifie-1-deploy       1/1     Running            0          9m22s
 
-NAME                        TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-service/go-hello-world-os   ClusterIP   172.30.170.77   <none>        8080/TCP   3m55s
+NAME                                               DESIRED   CURRENT   READY   AGE
+replicationcontroller/container-openshift-ifie-1   1         1         0       9m22s
 
-NAME                                READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/go-hello-world-os   0/1     1            0           3m55s
+NAME                               TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
+service/container-openshift-ifie   ClusterIP   172.30.40.136    <none>        8080/TCP            9m22s
 
-NAME                                           DESIRED   CURRENT   READY   AGE
-replicaset.apps/go-hello-world-os-576dcb6994   1         1         0       3m54s
-replicaset.apps/go-hello-world-os-5bc7bfc75d   1         0         0       3m55s
-
-NAME                                               IMAGE REPOSITORY                                                                    TAGS     UPDATED
-imagestream.image.openshift.io/go-hello-world-os   image-registry.openshift-image-registry.svc:5000/amm-cschlatter/go-hello-world-os   latest   3 minutes ago
+NAME                                                          REVISION   DESIRED   CURRENT   TRIGGERED BY
+deploymentconfig.apps.openshift.io/container-openshift-ifie   1          1         1         config
 {{< / highlight >}}
 ```
 
 You can see that your Deployment isn't ready and the corresponding Pod has the status `CrashLoopBackOff`
 
 
-## Troubleshoot
+### Troubleshoot
 
 Let' figure out what happened.
 First let's examine the Pods log
 
 ```BASH
-oc logs go-hello-world-os-576dcb6994-zjk58
+oc logs container-openshift-ifie-1-d8rln
 ```
 
 ```
@@ -182,44 +216,100 @@ panic: open /home/golang/hello-go.log: permission denied
 
 goroutine 1 [running]:
 main.main()
-  /opt/app-root/src/main.go:16 +0xdc
-
+        /opt/app-root/src/main.go:18 +0x126
 ```
 
 As we can see in the log, there is a permission denied error when we try to create our log file. The reason is because OpenShift will run by containers as non root user and we don't have permissions as non root user to write into the `/home/golang` directory.
 
-So let us extend our `Dockerfile` with a specified user.
+
+## Task {{% param sectionnumber %}}.4: Add a user to the container
+
+So let us extend the image with a specified user.
+
+For that we add a BuildConfiguration with a new Dockerfile extending the used image.
 
 
 ```
-{{< highlight dockerfile  "hl_lines=6" >}}
-FROM golang:1.14-alpine as builder
-COPY main.go /opt/app-root/src
-RUN env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o go-hello-world-app .
-
-FROM alpine
-USER golang
-COPY --from=builder /opt/app-root/src/go-hello-world-app /home/golang/
-EXPOSE 8080
-ENTRYPOINT /home/golang/go-hello-world-app
+{{< highlight text "hl_lines=43-44" >}}
+apiVersion: v1
+kind: List
+metadata: {}
+items:
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: container-openshift-ifie
+      build: container-openshift-ifie
+    name: container-openshift-ifie-original
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - from:
+        kind: DockerImage
+        name: chrira/container-openshift-ifie
+      importPolicy: {}
+      name: latest
+      referencePolicy:
+        type: Source
+  status:
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: container-openshift-ifie
+      build: container-openshift-ifie
+    name: container-openshift-ifie
+  spec:
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: container-openshift-ifie:latest
+    postCommit: {}
+    resources: {}
+    source:
+      dockerfile: |-
+        FROM chrira/container-openshift-ifie:latest
+        USER golang
+      type: Dockerfile
+    strategy:
+      dockerStrategy:
+        from:
+          kind: ImageStreamTag
+          name: container-openshift-ifie-original:latest
+      type: Docker
+    triggers: []
+  status:
+    lastVersion: 0
 {{< / highlight >}}
 ```
 
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.3/buildconfig.yaml)
+
+Create BuildConfiguration:
 
 ```BASH
-buildah bud -f Dockerfile -t go-hello-world-os .
+oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.3/buildconfig.yaml
 ```
 
+```
+imagestream.image.openshift.io/container-openshift-ifie-original created
+buildconfig.build.openshift.io/container-openshift-ifie created
+```
+
+We do not have trigger, start the build manually:
 
 ```BASH
-podman push localhost/go-hello-world-os docker://docker.io/appuio/go-hello-world.os:latest
+oc start-build container-openshift-ifie
 ```
 
-
-```BASH
-oc logs go-hello-world-os-576dcb6994-xwn6b
 ```
-
+build.build.openshift.io/container-openshift-ifie-1 started
+```
 
 We still get same error.
 
@@ -228,43 +318,39 @@ panic: open /home/golang/hello-go.log: permission denied
 
 goroutine 1 [running]:
 main.main()
-  /opt/app-root/src/main.go:16 +0xdc
-
+  /opt/app-root/src/main.go:18 +0x126
 ```
 
-So what is the reason for this? We already specified the `golang` user in the `Dockerfile`. So technically the user should have access to its own home directory. Even if we specify a user with the USER directive in a Dockerfile, OpenShift is going to ignore it. We need to fix the permissions for this particular user. Add following lines to your `Dockerfile`
+So what is the reason for this? We already specified the `golang` user in the `Dockerfile`. So technically the user should have access to its own home directory. Even if we specify a user with the USER directive in a Dockerfile, OpenShift is going to ignore it. We need to fix the permissions for this particular user.
 
+
+## Task {{% param sectionnumber %}}.5: Fix permissions
+
+We need to extend the `Dockerfile`
 
 ```
-{{< highlight dockerfile  "hl_lines=7-10" >}}
-FROM golang:1.14-alpine
-WORKDIR /opt/app-root/src
-COPY main.go .
-RUN env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o go-hello-world-app .
-
-FROM registry.access.redhat.com/ubi8/ubi:8.2
-RUN useradd -ms /bin/bash golang
+{{< highlight dockerfile  "hl_lines=2-4" >}}
+FROM chrira/container-openshift-ifie:latest
 RUN chgrp -R 0 /home/golang && \
     chmod -R g+rwX /home/golang
 USER golang
-COPY --from=0 /opt/app-root/src/go-hello-world-app /home/golang/
-EXPOSE 8080
-ENTRYPOINT ["/home/golang/go-hello-world-app"]
 {{< / highlight >}}
 ```
 
-We add three additional command before the USER directive. First we run the `useradd` command to create a new user named golang. Next we add the home directory to the group 0 (root group) with the `chgrp` command. Last step is adding read/write/execute permission to the group. We do this with the `chmod` command. Now the application should be able to access the home directory and write the log file.
 
-Let's build and deploy the app again.
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.3/buildconfig-permissions.yaml)
 
+We add additional commands before the USER directive. First we add the home directory to the group 0 (root group) with the `chgrp` command. Last step is adding read/write/execute permission to the group. We do this with the `chmod` command. Now the application should be able to access the home directory and write the log file.
+
+
+Let's update the BuildConfiguration and build and deploy the app again.
 
 ```BASH
-buildah bud -f Dockerfile -t go-hello-world-os .
+oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.3/buildconfig-permissions.yaml
 ```
 
-
 ```BASH
-podman push localhost/go-hello-world-os docker://docker.io/appuio/go-hello-world.os:latest
+oc start-build container-openshift-ifie
 ```
 
 ```BASH
