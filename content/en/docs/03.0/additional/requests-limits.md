@@ -10,7 +10,7 @@ description: >
 In this lab, we are going to look at ResourceQuotas and LimitRanges. As OpenShift users, we are most certainly going to encounter the limiting effects that ResourceQuotas and LimitRanges impose.
 
 {{% alert title="Note" color="primary" %}}
-Use the existing Namespace <username>-resources for this lab.
+Use the existing Namespace `<username>-resources` for this lab.
 {{% /alert %}}
 
 
