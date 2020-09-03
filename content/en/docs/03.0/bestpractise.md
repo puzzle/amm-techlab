@@ -7,9 +7,7 @@ description: >
   Best practices for creating OpenShift containers.
 ---
 
-## TODO
-
-* [ ] Docker Befehle durch podman / buildah ersetzen
+> Here you find best practices. It is not a lab to play through.
 
 
 ## Best practices for container in general
