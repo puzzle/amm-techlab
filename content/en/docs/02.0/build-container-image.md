@@ -81,7 +81,7 @@ It is a [multi-stage build](https://docs.docker.com/develop/develop-images/multi
 2. copy the go binary from the build to a minimal ubi image [Universal Base Image](https://developers.redhat.com/products/rhel/ubi)
 
 {{% alert title="Note" color="primary" %}}
-Multi-stage builds have two major advantages; smaller image size and higher security. The resulting image does only contain the minimal set of required packages. This reduces the image size and increases security (smaller attac surface).
+Multi-stage builds have two major advantages; smaller image size and higher security. The resulting image does only contain the minimal set of required packages. This reduces the image size and increases security (smaller attack surface).
 {{% /alert %}}
 
 
