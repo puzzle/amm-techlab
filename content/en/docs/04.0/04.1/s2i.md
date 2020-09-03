@@ -134,6 +134,10 @@ objects:
     - type: ConfigChange
     - imageChange:
       type: ImageChange
+parameters:
+- description: AMM techlab participant username
+  name: USERNAME
+  mandatory: true
 ```
 
 [Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.1/buildConfig.yaml)
