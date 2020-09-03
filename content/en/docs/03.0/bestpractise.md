@@ -54,7 +54,7 @@ If you switch the RUN and COPY instructions, you only download the packages once
 
 ### Use multistage build
 
-To reduce the size of your image, you can use [Multi-Stage Builds](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#use-multi-stage-builds). As an example ew took the Go application from Chapter 2. Here is what a single stage Go build looks like:
+To reduce the size of your image, you can use [Multi-Stage Builds](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#use-multi-stage-builds). As an example we took the Go application from Chapter 2. Here is what a single stage Go build looks like:
 
 ```Dockerfile
 FROM golang:1.14-alpine as builder
