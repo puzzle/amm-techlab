@@ -88,7 +88,7 @@ The application status is initially in OutOfSync state since the application has
 argocd app sync argo-example-<username>
 ```
 
-This command retrieves the manifests from the repository and performs a `kubectl apply` of the manifests. The guestbook app is now running and you can now view its resource components, logs, events, and assessed health status.
+This command retrieves the manifests from the repository and performs a `kubectl apply` of the manifests. The example app is now running and you can now view its resource components, logs, events, and assessed health status.
 
 Check the ArgoCD UI application:
 
@@ -145,7 +145,7 @@ replicaset.apps/example-php-docker-helloworld-85c9c5f9cb   1         1         1
 
 ## Task {{% param sectionnumber %}}.3: Automated Sync Policy and Diff
 
-When there is a new commit in your Git Repository, the Argo CD Application becomes OutOfSync again. To simulate a change (because we don't have control over the Argo CD repository) in your application, lets manually change our Deployment, e.g. scale your `guestbook-ui` Deployment to 2:
+When there is a new commit in your Git Repository, the Argo CD Application becomes OutOfSync again. To simulate a change (because we don't have control over the Argo CD repository) in your application, lets manually change our Deployment, e.g. scale your `example-php-docker-helloworld` Deployment to 2:
 
 ```bash
 oc scale deployment example-php-docker-helloworld --replicas=2
@@ -185,7 +185,7 @@ argocd app diff argo-example-<username>
 which should give you an output similar to:
 
 ```bash
-===== apps/Deployment argo-example-<username>/guestbook-ui ======
+===== apps/Deployment argo-example-<username>/example-php-docker-helloworld ======
 8c8
 <   replicas: 2
 ---
