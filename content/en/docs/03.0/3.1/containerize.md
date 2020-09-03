@@ -220,7 +220,7 @@ deployment/appuio-spring-boot-ex created
 ```
 
 When you check your project in the web console (Developer view) the example app is visible.
-The pod will be deployed successfully when the build finishes and the application image is pushed to the image stream.
+The pod will be deployed successfully when the build finishes and the application image is pushed to the image stream. Please note this might take several minutes.
 
 
 ## Task {{% param sectionnumber %}}.6: Create Service
