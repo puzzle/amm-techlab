@@ -9,6 +9,10 @@ description: >
 
 Operators are a way to package, deploy and manage Kubernetes-native applications. Kubernetes-native applications are applications that are deployed in Kubernetes/OpenShift and managed via the Kubernetes/OpenShift API (kubectl/oc). Since the introduction of OpenShift 4, OpenShift itself uses several operators to manage the OpenShift cluster.
 
+{{% alert title="Note" color="primary" %}}
+Use the existing Namespace `<username>-operator` for this lab.
+{{% /alert %}}
+
 
 ## Introduction / Terms
 
