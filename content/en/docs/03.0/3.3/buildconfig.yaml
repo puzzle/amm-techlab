@@ -36,8 +36,13 @@ items:
       to:
         kind: ImageStreamTag
         name: container-openshift-ifie:latest
-    postCommit: {}
-    resources: {}
+    resources: 
+      limits:
+        cpu: 100m
+        memory: 500Mi
+      requests:
+        cpu: 10m
+        memory: 10Mi
     source:
       dockerfile: |-
         FROM chrira/container-openshift-ifie:latest
