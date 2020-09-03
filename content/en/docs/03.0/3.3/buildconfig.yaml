@@ -36,7 +36,7 @@ items:
       to:
         kind: ImageStreamTag
         name: container-openshift-ifie:latest
-    resources: 
+    resources:
       limits:
         cpu: 100m
         memory: 500Mi
