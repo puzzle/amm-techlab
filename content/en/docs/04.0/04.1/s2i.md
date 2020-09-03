@@ -40,10 +40,10 @@ The main reasons to use this build strategy are.
 
 ## Setup
 
-Create a new project, replace userXY with your username.
+Create a new project, replace \<userXY> with your username.
 
 ```BASH
-oc new-project amm-userXY
+oc new-project amm-<userXY>
 ```
 
 
@@ -55,7 +55,7 @@ export PROJECT_NAME=$(oc project -q)
 ```
 
 Next we clone the sample repository into our private git repo. Navigate to your Gitea instance
-[https://gitea.techlab.openshift.ch/userXY](https://gitea.techlab.openshift.ch/userXY) and click on create in the top right menu and select "New Migration". Use following parameters:
+[https://gitea.techlab.openshift.ch/userXY](https://gitea.techlab.openshift.ch/userXY) and click on create in the top right menu and select "New Migration". Use following parameters to clone the sample repository as a private repository:
 
 * **Migrate / Clone From URL** [https://github.com/appuio/example-spring-boot-helloworld](https://github.com/appuio/example-spring-boot-helloworld)
 * **Owner** userXY
@@ -269,6 +269,7 @@ parameters:
 [Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.1/secret.yaml)
 
 Then we can create the secret
+>Replace the password parameter with your personal Gitea password!
 
 ```BASH
 oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.1/secret.yaml -p USERNAME=$USER_NAME -p PASSWORD=youPassword | oc apply -f -
@@ -503,7 +504,7 @@ oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/conten
 Check if the route was created successfully
 
 ```BASH
-oc get oc get route spring-boot-s2i
+oc get route spring-boot-s2i
 ```
 
 
