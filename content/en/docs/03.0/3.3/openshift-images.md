@@ -361,7 +361,7 @@ oc get pods
 ## Create route
 
 ```BASH
-oc create route edge --service=go-hello
+oc create route edge --service=container-openshift-ifie
 ```
 
 ```BASH
