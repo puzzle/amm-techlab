@@ -13,7 +13,7 @@ ARG ARGOCD_CLI=https://github.com/argoproj/argo-cd/releases/download/v1.7.3/argo
 
 USER root
 
-RUN apt-get update && apt-get install bash-completion
+RUN apt-get update && apt-get install bash-completion wget
 
 RUN mkdir -p ~/.local/bin \
     && curl ${HELM_CLI} -o /usr/local/bin/helm \
