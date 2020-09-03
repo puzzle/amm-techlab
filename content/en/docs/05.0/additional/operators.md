@@ -57,7 +57,7 @@ We will deploy a etcd-cluster and see what we can do.
 
 ### Subscription
 
-Warning: {{% alert title="Warning" color="secondary" %}}Since operator subscriptions need cluster-admin permissions, your local cluster-admin has already created the project and the subscription for you. Please proceed with creating the etcd-cluster.{{% /alert %}}
+Warning: {{% alert title="Warning" color="secondary" %}}Since operator subscriptions need cluster-admin permissions, your local cluster-admin has already created the project and the subscription for you. Change into that project first: `oc project hanneloreXY-operator`. Please proceed directly with creating the etcd-cluster.{{% /alert %}}
 
 To be able to consume an operator we will create a subscription within a project. This will enable the CRDs, as well as install the operator that watches our CRDs as well as the deployed clusters.
 
