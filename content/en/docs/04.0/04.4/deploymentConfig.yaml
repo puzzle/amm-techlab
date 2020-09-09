@@ -1,34 +1,35 @@
 apiVersion: apps.openshift.io/v1
 kind: DeploymentConfig
 metadata:
-  name: spring-boot-id
+  labels:
+    app: go-hello-world
+  name: go-hello-world
 spec:
   replicas: 1
   selector:
-    name: spring-boot-id
+    app: go-hello-world
+    deploymentconfig: go-hello-world
   template:
     metadata:
       labels:
-        name: spring-boot-id
+        app: go-hello-world
+        deploymentconfig: go-hello-world
     spec:
       containers:
-      - image: 'appuio-spring-boot:latest'
+      - image: 'go-hello-world:latest'
         imagePullPolicy: IfNotPresent
-        name: spring-boot-id
+        name: go-hello-world
         ports:
         - containerPort: 8080
           protocol: TCP
-        - containerPort: 9000
-          protocol: TCP
   triggers:
-  - type: ConfigChange
   - imageChangeParams:
       automatic: true
       containerNames:
-      - spring-boot-id
+      - go-hello-world
       from:
         kind: ImageStreamTag
-        name: spring-boot-id:latest
-    type: ImageChange  
+        name: go-hello-world:latest
+    type: ImageChange
   strategy:
     type: Rolling
