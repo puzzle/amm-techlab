@@ -1,6 +1,8 @@
 FROM codercom/code-server:3.4.1
 
+ARG ARGOCD_CLI=https://github.com/argoproj/argo-cd/releases/download/v1.7.3/argocd-linux-amd64
 ARG HELM_CLI=https://mirror.openshift.com/pub/openshift-v4/clients/helm/latest/helm-linux-amd64
+ARG K8S_DEBUGBOX=https://github.com/puzzle/k8s-debugbox/releases/download/v1.0.5/k8s-debugbox-v1.0.5.tar.gz
 ARG KUBECTL=https://storage.googleapis.com/kubernetes-release/release/
 ARG KUBECTL_STABLE=https://storage.googleapis.com/kubernetes-release/release/stable.txt
 ARG KUBECTX=https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx
@@ -9,14 +11,15 @@ ARG KUSTOMIZE_CLI=https://github.com/kubernetes-sigs/kustomize/releases/download
 ARG TEKTON_CLI=https://github.com/tektoncd/cli/releases/download/v0.10.0/tkn_0.10.0_Linux_x86_64.tar.gz
 ARG ODO=https://mirror.openshift.com/pub/openshift-v4/clients/odo/latest/odo-linux-amd64
 ARG OPENSHIFT_CLIENT_TOOL=https://downloads.ocp.aws.puzzle.ch/amd64/linux/oc.tar
-ARG ARGOCD_CLI=https://github.com/argoproj/argo-cd/releases/download/v1.7.3/argocd-linux-amd64
 
 USER root
 
 RUN apt-get update && apt-get install bash-completion wget
 
 RUN mkdir -p ~/.local/bin \
+    && curl -L ${ARGOCD_CLI} -o /usr/local/bin/argocd \
     && curl ${HELM_CLI} -o /usr/local/bin/helm \
+    && curl -L ${K8S_DEBUGBOX} -o /tmp/k8s-debugbox.tar.gz && tar xvfz /tmp/k8s-debugbox.tar.gz -C /tmp && cd /tmp/k8s-debugbox-v1.0.5/ && ./install.sh && cd - && rm -rf /tmp/k8s-debugbox* \
     && curl -L ${KUBECTL}`curl -s ${KUBECTL_STABLE}`/bin/linux/amd64/kubectl -o /usr/local/bin/kubectl \
     && curl ${KUBECTX} -o /usr/local/bin/kubectx \
     && curl ${KUBENS} -o /usr/local/bin/kubens \
@@ -24,7 +27,6 @@ RUN mkdir -p ~/.local/bin \
     && curl -L ${TEKTON_CLI} -o ~/.local/bin/tkn.tar.gz && tar xvfz ~/.local/bin/tkn.tar.gz -C /usr/local/bin/ && rm -rf ~/.local/bin/tkn.tar.gz \
     && curl ${ODO} -o /usr/local/bin/odo \
     && curl ${OPENSHIFT_CLIENT_TOOL} -o ~/.local/bin/oc.tar &&  tar -xvf ~/.local/bin/oc.tar -C /usr/local/bin/ && rm -rf ~/.local/bin/oc.tar \
-    && curl -L ${ARGOCD_CLI} -o /usr/local/bin/argocd \
     && chmod +x /usr/local/bin/*
 
 USER coder

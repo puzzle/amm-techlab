@@ -7,13 +7,6 @@ description: >
   This lab shows how to debug applications and which tools are available.
 ---
 
-
-## TODO Lab
-
-* [ ] Test Applikation vorbereiten (deplyoed in Projekt)?
-* [ ] Debugbox in IDE vor-installieren
-
-
 ## Task {{% param sectionnumber %}}.1: Prepare Test Application
 
 First create a project called "debugbox-userXY".
@@ -81,6 +74,8 @@ We use it in the next tasks to debug the application.
 
 
 ## Task {{% param sectionnumber %}}.3: Install debug box
+
+The [k8s-debugbox](https://github.com/puzzle/k8s-debugbox) has been developed for troubleshooting containers which are missing debugging tools.
 
 Install the [k8s-debugbox](https://github.com/puzzle/k8s-debugbox) using the instructions: <https://github.com/puzzle/k8s-debugbox>.
 
