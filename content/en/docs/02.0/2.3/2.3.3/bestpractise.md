@@ -1,8 +1,8 @@
 ---
-title: "3.4 Best practices"
-linkTitle: "3.4 Best practices"
-weight: 34
-sectionnumber: 3.4
+title: "2.3.3 Best practices"
+linkTitle: "2.3.3 Best practices"
+weight: 233
+sectionnumber: 2.3.3
 description: >
   Best practices for creating OpenShift containers.
 ---
