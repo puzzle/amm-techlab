@@ -1,8 +1,8 @@
 ---
-title: "3.2 Configure the application"
-linkTitle: "3.2 Configure the application"
-weight: 32
-sectionnumber: 3.2
+title: "2.2 Configure the application"
+linkTitle: "2.2 Configure the application"
+weight: 22
+sectionnumber: 2.2
 description: >
   Configure a Spring Boot application based on environment variables.
 ---

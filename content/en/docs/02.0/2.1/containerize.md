@@ -1,8 +1,8 @@
 ---
-title: "3.1 Containerize an existing application"
-linkTitle: "3.1 Containerize an existing application"
-weight: 31
-sectionnumber: 3.1
+title: "2.1 Containerize an existing application"
+linkTitle: "2.1 Containerize an existing application"
+weight: 21
+sectionnumber: 2.1
 description: >
   Containerize an existing application.
 ---
@@ -108,12 +108,12 @@ spec:
     type: ImageChange
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.1/buildConfig.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/buildConfig.yaml)
 
 Create the build config.
 
 ```BASH
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.1/buildConfig.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/buildConfig.yaml
 ```
 
 ```
@@ -157,12 +157,12 @@ spec:
       type: Source
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.1/imageStreams.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/imageStreams.yaml)
 
 Let's create the ImageStreams
 
 ```BASH
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.1/imageStreams.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/imageStreams.yaml
 ```
 
 ```
@@ -207,12 +207,12 @@ spec:
         resources: {}
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.1/deployment.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/deployment.yaml)
 
 Let's create the deployment with following command
 
 ```BASH
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.1/deployment.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/deployment.yaml
 ```
 
 ```
@@ -250,12 +250,12 @@ spec:
   type: ClusterIP
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.1/svc.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/svc.yaml)
 
 Create the Service in OpenShift
 
 ```bash
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.1/svc.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/svc.yaml
 ```
 
 ```
@@ -288,13 +288,13 @@ spec:
   wildcardPolicy: None
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.1/route.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/route.yaml)
 
 
 Create the Route in OpenShift
 
 ```bash
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.1/route.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/route.yaml
 ```
 
 ```
