@@ -1,8 +1,8 @@
 ---
-title: "2.2 Deploy a container image"
-linkTitle: "2.2 Deploy container image"
-weight: 220
-sectionnumber: 2.2
+title: "2.3.2 Deploy a container image"
+linkTitle: "Deploy image"
+weight: 232
+sectionnumber: 2.3.2
 description: >
   This section covers deploying a container image to OpenShift.
 ---

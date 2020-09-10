@@ -1,8 +1,8 @@
 ---
-title: "2.1 Build a container image"
-linkTitle: "2.1 Build container image"
-weight: 210
-sectionnumber: 2.1
+title: "2.3.1 Build a container image"
+linkTitle: "Build image"
+weight: 231
+sectionnumber: 2.3.1
 description: >
   This setion covers building a container image using a `Dockerfile`.
 ---
@@ -41,7 +41,7 @@ func HelloServer(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/main.go)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.3/2.3.1/main.go)
 
 Calling this app will return "Hello," followed by the given path.
 
@@ -73,7 +73,7 @@ EXPOSE 8080
 CMD /home/golang/go-hello-world-app
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/Dockerfile)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.3/2.3.1/Dockerfile)
 
 It is a [multi-stage build](https://docs.docker.com/develop/develop-images/multistage-build/). The build is done in several stages using different containers.
 
