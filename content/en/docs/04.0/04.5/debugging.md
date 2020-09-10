@@ -73,14 +73,11 @@ For this case, there is the [k8s-debugbox](https://github.com/puzzle/k8s-debugbo
 We use it in the next tasks to debug the application.
 
 
-## Task {{% param sectionnumber %}}.3: Install debug box
+## Task {{% param sectionnumber %}}.3: Apply debug box
 
 The [k8s-debugbox](https://github.com/puzzle/k8s-debugbox) has been developed for troubleshooting containers which are missing debugging tools.
 
-Install the [k8s-debugbox](https://github.com/puzzle/k8s-debugbox) using the instructions: <https://github.com/puzzle/k8s-debugbox>.
-
-
-## Task {{% param sectionnumber %}}.4: Apply debug box
+The `k8s-debugbox` binary is available inside your ide.
 
 Display the options using the help parameter.
 
