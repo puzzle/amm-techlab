@@ -189,7 +189,7 @@ oc describe deployment data-producer
 
 ## Task {{% param sectionnumber %}}.3: Configure application
 
-There are several options how to configure a Quarkus application. We'll show how to do it with environment variables. You can overwrite every property in the `application.properties` file with the corresponding environment variable. (eg. server.port=8081 in the application.properties is the same like QUARKUS_HTTP_PORT=8081 as an environment variable)
+There are several options how to configure a Quarkus application. We'll show how to do it with environment variables. You can overwrite every property in the `application.properties` file with the corresponding environment variable. (eg. `quarkus.http.port=8081` in the application.properties is the same like `QUARKUS_HTTP_PORT=8081` as an environment variable) [Quarkus: overriding-properties-at-runtime](https://quarkus.io/guides/config#overriding-properties-at-runtime)
 
 The environment of the Deployment has to be changed with a new environment variable named `QUARKUS_HTTP_PORT`.
 
