@@ -1,6 +1,6 @@
 ---
 title: "2.3.2 OpenShift image requirements"
-linkTitle: "OpenShift image requirements"
+linkTitle: "2.3.2 OpenShift image requirements"
 weight: 232
 sectionnumber: 2.3.2
 description: >
