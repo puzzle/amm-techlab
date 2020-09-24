@@ -107,7 +107,6 @@ buildconfig.build.openshift.io/data-producer created
 ## Task {{% param sectionnumber %}}.4: Create ImageStreams
 
 Next we need to configure an [ImageStream](https://docs.openshift.com/container-platform/4.5/openshift_images/image-streams-manage.html) for the Java base image (ubi8/openjdk-11) and our application image (appuio-spring-boot-ex). The ImageStream is an abstraction for referencing images from within OpenShift Container Platform. Simplified the ImageStream tracks changes for the defined images and reacts by triggering a new Build.
-
 **TODO: Check if everything is working**
 
 ```YAML
@@ -226,7 +225,7 @@ spec:
   triggers:
     - imageChangeParams:
         automatic: true
-        containerNames: 
+        containerNames:
           - data-producer
         from:
           kind: ImageStreamTag

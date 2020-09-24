@@ -72,7 +72,7 @@ Verify the changed port of the service with `oc describe`
 ```BASH
 oc describe svc data-producer
 ```
- 
+
 ```
 {{< highlight YAML "hl_lines=9" >}}
 Name:              data-producer
@@ -156,7 +156,7 @@ spec:
   triggers:
     - imageChangeParams:
         automatic: true
-        containerNames: 
+        containerNames:
           - data-producer
         from:
           kind: ImageStreamTag
@@ -252,7 +252,7 @@ spec:
   triggers:
     - imageChangeParams:
         automatic: true
-        containerNames: 
+        containerNames:
           - data-producer
         from:
           kind: ImageStreamTag
