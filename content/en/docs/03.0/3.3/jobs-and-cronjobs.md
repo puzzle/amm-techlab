@@ -103,7 +103,7 @@ oc get pods --selector=job-name=mysql-dump --output=go-template='{{range .items}
 
 A Kubernetes CronJob is nothing else than a resource which creates a Job at a defined time, which in turn starts (as we saw in the previous section) a Pod to run a command. Typical use cases are cleanup Jobs, which tidy up old data for a running Pod, or a Job to regularly create and save a database dumps, batch jobs that create reports and so on.
 
-Further information can be found at the [OpenShift CronJob Documentation](hhttps://docs.openshift.com/container-platform/4.5/nodes/jobs/nodes-nodes-jobs.html#nodes-nodes-jobs-creating-cron_nodes-nodes-jobs).
+Further information can be found at the [OpenShift CronJob Documentation](https://docs.openshift.com/container-platform/4.5/nodes/jobs/nodes-nodes-jobs.html#nodes-nodes-jobs-creating-cron_nodes-nodes-jobs).
 
 ```yaml
 apiVersion: batch/v1beta1
