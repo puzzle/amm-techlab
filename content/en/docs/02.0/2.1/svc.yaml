@@ -1,20 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: appuio-spring-boot-ex
+  name: quarkus-producer
   labels:
-    app: appuio-spring-boot-ex
+    application: quarkus-producer
 spec:
   ports:
   - name: 8080-tcp
     port: 8080
     protocol: TCP
     targetPort: 8080
-  - name: 9000-tcp
-    port: 9000
-    protocol: TCP
-    targetPort: 9000
   selector:
-    deployment: appuio-spring-boot-ex
+    deployment: quarkus-producer
   sessionAffinity: None
   type: ClusterIP

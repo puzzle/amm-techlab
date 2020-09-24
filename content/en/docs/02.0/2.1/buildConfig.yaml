@@ -1,40 +1,40 @@
 apiVersion: build.openshift.io/v1
 kind: BuildConfig
 metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewBuild
   labels:
-    app: appuio-spring-boot-ex
-  name: appuio-spring-boot-ex
+    build: data-producer
+    application: amm-techlab
+  name: data-producer-docker
 spec:
-  completionDeadlineSeconds: 1800
-  failedBuildsHistoryLimit: 5
   output:
     to:
       kind: ImageStreamTag
-      name: appuio-spring-boot-ex:latest
-  runPolicy: Serial
-  source:
-    git:
-      uri: https://gitea.techlab.openshift.ch/APPUiO-AMM-Techlab/example-spring-boot-helloworld
-    type: Git
-  strategy:
-    dockerStrategy:
-      from:
-        kind: ImageStreamTag
-        name: openjdk-11:latest
-    type: Docker
+      name: data-producer:latest
+  postCommit: {}
   resources:
     limits:
       cpu: "500m"
-      memory: "2G"
+      memory: "512Mi"
     requests:
       cpu: "250m"
-      memory: "1G"
+      memory: "512Mi"
+  source:
+    git:
+      uri: https://github.com/g1raffi/quarkus-techlab-data-consumer.git
+      ref: rest
+    type: Git
+  strategy:
+    dockerStrategy:
+      dockerfilePath: src/main/docker/Dockerfile.multistage
+    type: Docker
   triggers:
   - github:
-      secret: soV621heA_1fUIh4tXvK
+      secret: PPMUkybOXqfoY_bJd-ou
     type: GitHub
   - generic:
-      secret: nQT4ROYzckEUOmLnqHTX
+      secret: f31PWzHXBGI9iYw-fTli
     type: Generic
   - type: ConfigChange
   - imageChange: {}

@@ -1,18 +1,24 @@
 apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewBuild
   labels:
-    app: appuio-spring-boot-ex
-  name: appuio-spring-boot-ex
+    build: data-producer
+    application: amm-techlab
+  name: data-producer
 spec:
   lookupPolicy:
     local: false
+status:
+  dockerImageRepository: ""
 ---
 apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
   labels:
     app: appuio-spring-boot-ex
+    application: amm-techlab
   name: openjdk-11
 spec:
   lookupPolicy:

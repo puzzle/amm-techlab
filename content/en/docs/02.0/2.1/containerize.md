@@ -15,7 +15,7 @@ The main goal of this lab is to show you how to containerize an existing Java ap
 Prepare a new OpenShift project
 
 ```bash
-oc new-project spring-boot-userXY
+oc new-project producer-consumer-userXY
 ```
 
 
@@ -27,24 +27,7 @@ The base image is a `fabric8/java-centos-openjdk11-jdk` which is pre configured 
 
 
 ```Dockerfile
-FROM fabric8/java-centos-openjdk11-jdk
 
-LABEL maintainer="philipona@puzzle.ch"
-
-EXPOSE 8080 9000
-
-
-LABEL io.k8s.description="Example Spring Boot App" \
-      io.k8s.display-name="APPUiO Spring Boot App" \
-      io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,springboot"
-
-RUN mkdir -p /tmp/src/
-ADD . /tmp/src/
-
-RUN cd /tmp/src && sh gradlew build -Dorg.gradle.daemon=false
-
-RUN cp -a  /tmp/src/build/libs/springboots2idemo*.jar /deployments/springboots2idemo.jar
 ```
 
 [source](https://gitea.techlab.openshift.ch/APPUiO-AMM-Techlab/example-spring-boot-helloworld/raw/branch/master/Dockerfile)
@@ -68,40 +51,40 @@ The image ([registry.access.redhat.com/ubi8/openjdk-11](https://catalog.redhat.c
 apiVersion: build.openshift.io/v1
 kind: BuildConfig
 metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewBuild
   labels:
-    app: appuio-spring-boot-ex
-  name: appuio-spring-boot-ex
+    build: data-producer
+    application: amm-techlab
+  name: data-producer-docker
 spec:
-  completionDeadlineSeconds: 1800
-  failedBuildsHistoryLimit: 5
   output:
     to:
       kind: ImageStreamTag
-      name: appuio-spring-boot-ex:latest
-  runPolicy: Serial
-  source:
-    git:
-      uri: https://gitea.techlab.openshift.ch/APPUiO-AMM-Techlab/example-spring-boot-helloworld
-    type: Git
-  strategy:
-    dockerStrategy:
-      from:
-        kind: ImageStreamTag
-        name: openjdk-11:latest
-    type: Docker
+      name: data-producer:latest
+  postCommit: {}
   resources:
     limits:
       cpu: "500m"
-      memory: "2G"
+      memory: "512Mi"
     requests:
       cpu: "250m"
-      memory: "1G"
+      memory: "512Mi"
+  source:
+    git:
+      uri: https://github.com/g1raffi/quarkus-techlab-data-consumer.git
+      ref: rest
+    type: Git
+  strategy:
+    dockerStrategy:
+      dockerfilePath: src/main/docker/Dockerfile.multistage
+    type: Docker
   triggers:
   - github:
-      secret: soV621heA_1fUIh4tXvK
+      secret: PPMUkybOXqfoY_bJd-ou
     type: GitHub
   - generic:
-      secret: nQT4ROYzckEUOmLnqHTX
+      secret: f31PWzHXBGI9iYw-fTli
     type: Generic
   - type: ConfigChange
   - imageChange: {}
@@ -117,7 +100,7 @@ oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content
 ```
 
 ```
-buildconfig.build.openshift.io/appuio-spring-boot-ex created
+buildconfig.build.openshift.io/data-producer created
 ```
 
 
@@ -125,22 +108,31 @@ buildconfig.build.openshift.io/appuio-spring-boot-ex created
 
 Next we need to configure an [ImageStream](https://docs.openshift.com/container-platform/4.5/openshift_images/image-streams-manage.html) for the Java base image (ubi8/openjdk-11) and our application image (appuio-spring-boot-ex). The ImageStream is an abstraction for referencing images from within OpenShift Container Platform. Simplified the ImageStream tracks changes for the defined images and reacts by triggering a new Build.
 
+**TODO: Check if everything is working**
+
 ```YAML
 apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewBuild
+  creationTimestamp: null
   labels:
-    app: appuio-spring-boot-ex
-  name: appuio-spring-boot-ex
+    build: data-producer
+    application: amm-techlab
+  name: data-producer
 spec:
   lookupPolicy:
     local: false
+status:
+  dockerImageRepository: ""
 ---
 apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
   labels:
     app: appuio-spring-boot-ex
+    application: amm-techlab
   name: openjdk-11
 spec:
   lookupPolicy:
@@ -166,7 +158,7 @@ oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content
 ```
 
 ```
-imagestream.image.openshift.io/appuio-spring-boot-ex created
+imagestream.image.openshift.io/data-producer created
 imagestream.image.openshift.io/openjdk-11 created
 ```
 
@@ -176,35 +168,72 @@ imagestream.image.openshift.io/openjdk-11 created
 After the ImageStream definition we can setup our Deployment. Please note the Deployment annotation `image.openshift.io/triggers`, this annotation connects the Deployment with the ImageStreamTag (which is automatically created by the ImageSource object)
 
 ```YAML
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: DeploymentConfig
 metadata:
   annotations:
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"appuio-spring-boot-ex:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"appuio-spring-boot-ex\")].image"}]'
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"data-producer:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"data-producer\")].image"}]'
   labels:
-    app: appuio-spring-boot-ex
-  name: appuio-spring-boot-ex
+    application: amm-techlab
+  name: data-producer
 spec:
   replicas: 1
   selector:
-    matchLabels:
-      deployment: appuio-spring-boot-ex
+    deploymentConfig: data-producer
+  strategy:
+    type: Recreate
   template:
     metadata:
-      creationTimestamp: null
       labels:
-        deployment: appuio-spring-boot-ex
+        application: amm-techlab
+        deploymentConfig: data-producer
     spec:
       containers:
-      - image: 'appuio-spring-boot-ex:latest'
-        imagePullPolicy: IfNotPresent
-        name: appuio-spring-boot-ex
-        ports:
-        - containerPort: 8080
-          protocol: TCP
-        - containerPort: 9000
-          protocol: TCP
-        resources: {}
+        - image: data-producer
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 20
+            successThreshhold: 1
+            timeoutSeconds: 15
+          readinessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 15
+          name: data-producer
+          port:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          resources:
+            limits:
+              cpu: "1"
+              memory: 500Mi
+            requests:
+              cpu: 50m
+              memory: 100Mi
+  triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames: 
+          - data-producer
+        from:
+          kind: ImageStreamTag
+          name: data-producer:latest
+      type: ImageChange
+    - type: ConfigChange
+  
 ```
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/deployment.yaml)
@@ -216,7 +245,7 @@ oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content
 ```
 
 ```
-deployment/appuio-spring-boot-ex created
+deployment/data-producer created
 ```
 
 When you check your project in the web console (Developer view) the example app is visible.
@@ -225,27 +254,23 @@ The pod will be deployed successfully when the build finishes and the applicatio
 
 ## Task {{% param sectionnumber %}}.6: Create Service
 
-Expose the container ports to the to the cluster with a Service. For the Service we configure two different ports. `8080` for the Web API, `9000` for the metrics and health check. We set the Service type to ClusterIP to expose the Service cluster internal only.
+Expose the container ports to the to the cluster with a Service. For the Service we configure the port `8080` for the Web API. We set the Service type to ClusterIP to expose the Service cluster internal only.
 
 ```YAML
 apiVersion: v1
 kind: Service
 metadata:
-  name: appuio-spring-boot-ex
+  name: quarkus-producer
   labels:
-    app: appuio-spring-boot-ex
+    application: quarkus-producer
 spec:
   ports:
   - name: 8080-tcp
     port: 8080
     protocol: TCP
     targetPort: 8080
-  - name: 9000-tcp
-    port: 9000
-    protocol: TCP
-    targetPort: 9000
   selector:
-    deployment: appuio-spring-boot-ex
+    deployment: quarkus-producer
   sessionAffinity: None
   type: ClusterIP
 ```
@@ -259,7 +284,7 @@ oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content
 ```
 
 ```
-service/appuio-spring-boot-ex created
+service/data-producer created
 ```
 
 
@@ -274,14 +299,13 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   labels:
-    app: appuio-spring-boot-ex
-  name: appuio-spring-boot-ex
-spec:
+     application: amm-techlab
+  name: quarkus-producer
   port:
     targetPort: 8080-tcp
   to:
     kind: Service
-    name: appuio-spring-boot-ex
+    name: quarkus-producer
     weight: 100
   tls:
     termination: edge
@@ -298,7 +322,7 @@ oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content
 ```
 
 ```
-route.route.openshift.io/appuio-spring-boot-ex created
+route.route.openshift.io/data-consumer created
 ```
 
 
@@ -313,36 +337,7 @@ oc get all
 
 ```
 {{< highlight text "hl_lines=9 22" >}}
-NAME                                         READY   STATUS      RESTARTS   AGE
-pod/appuio-spring-boot-ex-1-build            0/1     Completed   0          22h
-pod/appuio-spring-boot-ex-589c4f8855-cm9n6   1/1     Running     0          21h
-
-NAME                            TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
-service/appuio-spring-boot-ex   ClusterIP   172.30.236.178   <none>        8080/TCP,9000/TCP   22h
-
-NAME                                    READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/appuio-spring-boot-ex   1/1     1            1           22h
-
-NAME                                               DESIRED   CURRENT   READY   AGE
-replicaset.apps/appuio-spring-boot-ex-589c4f8855   1         1         1       21h
-replicaset.apps/appuio-spring-boot-ex-598c8bb597   0         0         0       21h
-replicaset.apps/appuio-spring-boot-ex-59b5447f8f   0         0         0       21h
-replicaset.apps/appuio-spring-boot-ex-74c797b9d    0         0         0       22h
-replicaset.apps/appuio-spring-boot-ex-84bc88878c   0         0         0       22h
-
-NAME                                                   TYPE     FROM   LATEST
-buildconfig.build.openshift.io/appuio-spring-boot-ex   Docker   Git    2
-
-NAME                                               TYPE     FROM          STATUS     STARTED        DURATION
-build.build.openshift.io/appuio-spring-boot-ex-1   Docker   Git@5f65829   Complete   23 hours ago   7m12s
-
-NAME                                                       IMAGE REPOSITORY                                                                            TAGS     UPDATED
-imagestream.image.openshift.io/appuio-spring-boot-ex       image-registry.openshift-image-registry.svc:5000/spring-boot-userXY/appuio-spring-boot-ex       latest   22 hours ago
-imagestream.image.openshift.io/openjdk-11   image-registry.openshift-image-registry.svc:5000/spring-boot-userXY/openjdk-11   latest   23 hours ago
-
-NAME                                             HOST/PORT                                                PATH   SERVICES                PORT       TERMINATION   WILDCARD
-route.route.openshift.io/appuio-spring-boot-ex   appuio-spring-boot-ex-spring-boot-userXY.ocp.aws.puzzle.ch          appuio-spring-boot-ex   8080-tcp   edge          None
-
+TODO
 {{< / highlight >}}
 ```
 

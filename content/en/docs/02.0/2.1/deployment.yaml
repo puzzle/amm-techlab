@@ -1,29 +1,66 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: DeploymentConfig
 metadata:
   annotations:
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"appuio-spring-boot-ex:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"appuio-spring-boot-ex\")].image"}]'
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"data-producer:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"data-producer\")].image"}]'
   labels:
-    app: appuio-spring-boot-ex
-  name: appuio-spring-boot-ex
+    application: amm-techlab
+  name: data-producer
 spec:
   replicas: 1
   selector:
-    matchLabels:
-      deployment: appuio-spring-boot-ex
+    deploymentConfig: data-producer
+  strategy:
+    type: Recreate
   template:
     metadata:
-      creationTimestamp: null
       labels:
-        deployment: appuio-spring-boot-ex
+        application: amm-techlab
+        deploymentConfig: data-producer
     spec:
       containers:
-      - image: 'appuio-spring-boot-ex:latest'
-        imagePullPolicy: IfNotPresent
-        name: appuio-spring-boot-ex
-        ports:
-        - containerPort: 8080
-          protocol: TCP
-        - containerPort: 9000
-          protocol: TCP
-        resources: {}
+        - image: data-producer
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 20
+            successThreshhold: 1
+            timeoutSeconds: 15
+          readinessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 15
+          name: data-producer
+          port:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          resources:
+            limits:
+              cpu: "1"
+              memory: 500Mi
+            requests:
+              cpu: 50m
+              memory: 100Mi
+  triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames: 
+          - data-producer
+        from:
+          kind: ImageStreamTag
+          name: data-producer:latest
+      type: ImageChange
+    - type: ConfigChange
+  
