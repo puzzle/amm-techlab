@@ -1,8 +1,8 @@
 ---
-title: "5.1 Tekton Pipelines"
-linkTitle: "5.1 Tekton Pipelines"
-weight: 510
-sectionnumber: 5.1
+title: "4.1 Tekton Pipelines"
+linkTitle: "4.1 Tekton Pipelines"
+weight: 410
+sectionnumber: 4.1
 description: >
   Build and deployment automation with Tekton on OpenShift.
 ---

@@ -1,7 +1,7 @@
 ---
-title: "5. Automation with CI/CD pipelines"
-weight: 5
-sectionnumber: 5
+title: "4. Automation with CI/CD pipelines"
+weight: 4
+sectionnumber: 4
 description: >
   Automation of the build and deployment pipeline.
 ---
