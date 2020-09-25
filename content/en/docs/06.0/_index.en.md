@@ -21,3 +21,32 @@ description: >
 ## TODO Lab Tracing
 
 * [ ] [Tracing Demo](https://github.com/RedHat-Middleware-Workshops/quarkus-workshop/blob/master/docs/tracing.adoc) übernehmen.
+
+
+### Notes Jaeger
+
+Deploy Jaeger:
+
+```s
+
+oc apply -f jaeger.yaml
+
+```
+
+Deploy Kafka:
+
+```s
+
+oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.2/kafka-cluster.yaml
+oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.2/manual-topic.yaml
+
+```
+
+Deploy Microservices:
+
+```s
+
+oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/06.0/data-consumer.yaml
+oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/06.0/data-producer.yaml
+
+```
