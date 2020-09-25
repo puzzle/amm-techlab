@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: List
+metadata:
+  labels:
+    application: quarkus-techlab
+items:
+
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        application: quarkus-techlab
+      name: data-producer
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          deployment: data-producer
+      strategy:
+        type: Recreate
+      template:
+        metadata:
+          labels:
+            application: quarkus-techlab
+            deployment: data-producer
+        spec:
+          containers:
+            - image: g1raffi/quarkus-techlab-data-producer:kafka
+              imagePullPolicy: Always
+              livenessProbe:
+                failureThreshold: 5
+                httpGet:
+                  path: /health
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 3
+                periodSeconds: 20
+                successThreshhold: 1
+                timeoutSeconds: 15
+              readinessProbe:
+                failureThreshold: 5
+                httpGet:
+                  path: /health
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 3
+                periodSeconds: 20
+                successThreshold: 1
+                timeoutSeconds: 15
+              name: data-producer
+              port:
+                - containerPort: 8080
+                  name: http
+                  protocol: TCP
+              resources:
+                limits:
+                  cpu: 1
+                  memory: 500Mi
+                requests:
+                  cpu: 50m
+                  memory: 100Mi
+      triggers:
+        - type: ConfigChange
+        - imageChangeParams:
+            automatic: true
+            containerNames:
+              - data-producer
+            from:
+              kind: ImageStreamTag
+              name: data-producer:kafka
+          type: ImageChange
+
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        application: quarkus-techlab
+      name: data-producer
+    spec:
+      ports:
+        - name: data-producer-http
+          port: 8080
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        deployment: data-producer
+      sessionAffinity: None
+      type: ClusterIP
+          
