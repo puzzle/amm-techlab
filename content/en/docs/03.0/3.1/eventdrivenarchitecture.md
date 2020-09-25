@@ -1,14 +1,14 @@
 ---
-title: "3.1 Event Driven Architecture"
-linkTitle: "3.1 Event Driven Architecture"
+title: "3.1 Event driven architecture theory"
+linkTitle: "3.1 Event driven architecture theory"
 weight: 31
 sectionnumber: 3.1
 description: >
-   Event Driven Architecture.
+   Theory of event driven architecture.
 ---
 
 
-## {{% param sectionnumber %}}.1: Event Driven Architecture
+## {{% param sectionnumber %}}.1: Event driven architecture
 
 When designing applications or software systems we usually tend to follow a very imperative way of building our components. Especially in monolithic applications the communication between two components will often come from function or method calls from one component to another. Even when we follow a microservice architecture the most intuitive way for most people would be to simply replace these calls with REST calls. In theory this is a valid approach and will often be the first step when migrating a monolith towards a microservice approach. The downside however will be the same, whenever two components talk directly to each other they rely on an often synchronous direct communication channel. What happens if the other component is not available?
 
