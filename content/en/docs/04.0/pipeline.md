@@ -120,31 +120,7 @@ spec:
           echo Applying manifests in $(inputs.params.manifest_dir) directory
           oc apply -f $(inputs.params.manifest_dir)
           echo -----------------------------------
----
-apiVersion: tekton.dev/v1alpha1
-kind: Task
-metadata:
-  name: update-deployment
-spec:
-  inputs:
-    resources:
-      - {type: image, name: image}
-    params:
-      - name: deployment
-        description: The name of the deployment patch the image
-        type: string
-  steps:
-    - name: patch
-      image: appuio/oc:v4.3
-      command: ["/bin/bash", "-c"]
-      args:
-        - |-
-          oc patch deployment $(inputs.params.deployment) --patch='{"spec":{"template":{"spec":{
-            "containers":[{
-              "name": "$(inputs.params.deployment)",
-              "image":"$(inputs.resources.image.url)"
-            }]
-          }}}}'
+
 ```
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/05.0/deploy-tasks.yaml)
@@ -152,7 +128,7 @@ spec:
 Let's create the tasks:
 
 ```bash
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/05.0/deploy-tasks.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/deploy-tasks.yaml
 ```
 
 Verify that the two tasks have been created using the Tekton CLI:
@@ -164,7 +140,6 @@ tkn task ls
 ```
 NAME                AGE
 apply-manifests     7 minutes ago
-update-deployment   7 minutes ago
 ```
 
 
@@ -177,7 +152,7 @@ The example Pipeline below uses two resources:
 * git-repo: defines the Git-Source
 * image: Defines the target at a repository
 
-It first uses the Task *buildah*, which is a default task the OpenShift operator created automatically. This task will build the image. The resulted image is pushed to an image registry, defined in the *output* parameter. After that, our created tasks *apply-manifest* and *update-deployment* are executed. The execution order of these tasks is defined with the *runAfter* Parameter in the yaml definition.
+It first uses the Task *buildah*, which is a default task the OpenShift operator created automatically. This task will build the image. The resulted image is pushed to an image registry, defined in the *output* parameter. After that, the created tasks *apply-manifest* is executed. The execution order of these tasks is defined with the *runAfter* Parameter in the yaml definition.
 
 {{% alert title="Note" color="primary" %}}
 The Pipeline should be re-usable across multiple projects or environments, that's why the resources (git-repo and image) are not defined here. When a Pipeline is executed, these resources will get defined.
@@ -203,6 +178,13 @@ spec:
     description: Path to the Dockerfile
     default: src/main/docker/Dockerfile.multistage.jvm
   tasks:
+  - name: apply-manifests
+    taskRef:
+      name: apply-manifests
+    resources:
+      inputs:
+      - name: source
+        resource: git-repo
   - name: build-image
     taskRef:
       name: buildah
@@ -218,26 +200,7 @@ spec:
     - name: TLSVERIFY
       value: "false"
     - name: DOCKERFILE
-      value: ${params.docker-file}
-  - name: apply-manifests
-    taskRef:
-      name: apply-manifests
-    resources:
-      inputs:
-      - name: source
-        resource: git-repo
-    runAfter:
-    - build-image
-  - name: update-deployment
-    taskRef:
-      name: update-deployment
-    resources:
-      inputs:
-      - name: image
-        resource: image
-    params:
-    - name: deployment
-      value: $(params.deployment-name)
+      value: $(params.docker-file)
     runAfter:
     - apply-manifests
 ```
@@ -301,6 +264,8 @@ objects:
     params:
     - name: url
       value: https://github.com/g1raffi/quarkus-techlab-data-consumer.git
+    - name: revision
+      value: tekton
 - apiVersion: tekton.dev/v1alpha1
   kind: PipelineResource
   metadata:
@@ -319,6 +284,8 @@ objects:
     params:
     - name: url
       value: https://github.com/g1raffi/quarkus-techlab-data-producer.git
+    - name: revision
+      value: tekton
 - apiVersion: tekton.dev/v1alpha1
   kind: PipelineResource
   metadata:
@@ -363,7 +330,7 @@ producer-image   image   url: image-registry.openshift-image-registry.svc:5000/a
 
 ### Execute Pipelines using tkn
 
-Start the Pipeline for the backend:
+Start the Pipeline for the data-consumer:
 
 ```bash
 tkn pipeline start build-and-deploy \
@@ -375,7 +342,7 @@ tkn pipeline start build-and-deploy \
 
 This will create and execute a PipelineRun. The logs of the run will be shown in the console.
 
-Now start the same Pipeline with the frontend resources:
+Now start the same Pipeline with the producer resources:
 
 ```bash
 tkn pipeline start build-and-deploy \
