@@ -12,6 +12,9 @@ spec:
   - name: deployment-name
     type: string
     description: name of the deployment to be patched
+  - name: docker-file
+    description: Path to the Dockerfile
+    default: src/main/docker/Dockerfile.multistage.jvm
   tasks:
   - name: build-image
     taskRef:
@@ -27,6 +30,8 @@ spec:
     params:
     - name: TLSVERIFY
       value: "false"
+    - name: DOCKERFILE
+      value: $(params.docker-file)
   - name: apply-manifests
     taskRef:
       name: apply-manifests
@@ -36,15 +41,3 @@ spec:
         resource: git-repo
     runAfter:
     - build-image
-  - name: update-deployment
-    taskRef:
-      name: update-deployment
-    resources:
-      inputs:
-      - name: image
-        resource: image
-    params:
-    - name: deployment
-      value: $(params.deployment-name)
-    runAfter:
-    - apply-manifests

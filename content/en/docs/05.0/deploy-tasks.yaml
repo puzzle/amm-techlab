@@ -10,7 +10,7 @@ spec:
       - name: manifest_dir
         description: The directory in source that contains yaml manifests
         type: string
-        default: "k8s"
+        default: "src/main/openshift/templates"
   steps:
     - name: apply
       image: appuio/oc:v4.3
@@ -21,28 +21,3 @@ spec:
           echo Applying manifests in $(inputs.params.manifest_dir) directory
           oc apply -f $(inputs.params.manifest_dir)
           echo -----------------------------------
----
-apiVersion: tekton.dev/v1alpha1
-kind: Task
-metadata:
-  name: update-deployment
-spec:
-  inputs:
-    resources:
-      - {type: image, name: image}
-    params:
-      - name: deployment
-        description: The name of the deployment patch the image
-        type: string
-  steps:
-    - name: patch
-      image: appuio/oc:v4.3
-      command: ["/bin/bash", "-c"]
-      args:
-        - |-
-          oc patch deployment $(inputs.params.deployment) --patch='{"spec":{"template":{"spec":{
-            "containers":[{
-              "name": "$(inputs.params.deployment)",
-              "image":"$(inputs.resources.image.url)"
-            }]
-          }}}}'

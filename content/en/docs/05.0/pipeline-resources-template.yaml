@@ -8,39 +8,43 @@ objects:
 - apiVersion: tekton.dev/v1alpha1
   kind: PipelineResource
   metadata:
-    name: ui-repo
+    name: consumer-repo
   spec:
     type: git
     params:
     - name: url
-      value: http://github.com/openshift-pipelines/vote-ui.git
+      value: https://github.com/g1raffi/quarkus-techlab-data-consumer.git
+    - name: revision
+      value: tekton
 - apiVersion: tekton.dev/v1alpha1
   kind: PipelineResource
   metadata:
-    name: ui-image
+    name: consumer-image
   spec:
     type: image
     params:
     - name: url
-      value: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAME}/vote-ui:latest
+      value: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAME}/data-consumer:latest
 - apiVersion: tekton.dev/v1alpha1
   kind: PipelineResource
   metadata:
-    name: api-repo
+    name: producer-repo
   spec:
     type: git
     params:
     - name: url
-      value: http://github.com/openshift-pipelines/vote-api.git
+      value: https://github.com/g1raffi/quarkus-techlab-data-producer.git
+    - name: revision
+      value: tekton
 - apiVersion: tekton.dev/v1alpha1
   kind: PipelineResource
   metadata:
-    name: api-image
+    name: producer-image
   spec:
     type: image
     params:
     - name: url
-      value: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAME}/vote-api:latest
+      value: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAME}/data-producer:latest
 parameters:
 - description: OpenShift Project Name
   name: PROJECT_NAME

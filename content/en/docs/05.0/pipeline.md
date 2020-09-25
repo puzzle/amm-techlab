@@ -109,7 +109,7 @@ spec:
       - name: manifest_dir
         description: The directory in source that contains yaml manifests
         type: string
-        default: "k8s"
+        default: "src/main/openshift/templates"
   steps:
     - name: apply
       image: appuio/oc:v4.3
@@ -199,6 +199,9 @@ spec:
   - name: deployment-name
     type: string
     description: name of the deployment to be patched
+  - name: docker-file
+    description: Path to the Dockerfile
+    default: src/main/docker/Dockerfile.multistage.jvm
   tasks:
   - name: build-image
     taskRef:
@@ -214,6 +217,8 @@ spec:
     params:
     - name: TLSVERIFY
       value: "false"
+    - name: DOCKERFILE
+      value: ${params.docker-file}
   - name: apply-manifests
     taskRef:
       name: apply-manifests
@@ -265,14 +270,14 @@ After the Pipeline has been created, it can be triggered to execute the Tasks.
 ### Create PipelineResources
 
 Since the Pipeline is generic, we first need to define 2 *PipelineResources*, to execute a Pipeline.
-Our example application contains a frontend (vote-ui) AND a backend (vote-api), therefore 4 PipelineResources will be created. (2 times git repository to clone the source and 2 time output image)
+We are going to automate the deployment of our sample application we used in previous examples. There will be two microservices deployed, a data producer and a data consumer.
 
 Quick overview:
 
-* ui-repo: will be used as _git_repo_ in the Pipeline for the Frontend
-* ui-image: will be used as _image_ in the Pipeline for the Frontend
-* api-repo: will be used as _git_repo_ in the Pipeline for the Backend
-* api-image: will be used as _image_ in the Pipeline for the Backend
+* consumer-repo: will be used as _git_repo_ in the Pipeline for the data consumer
+* consumer-image: will be used as _image_ in the Pipeline for the data consumer
+* producer-repo: will be used as _git_repo_ in the Pipeline for the data producer
+* producer-image: will be used as _image_ in the Pipeline for the data producer
 
 {{% alert title="Note" color="primary" %}}
 We use a template to adapt the image registry URL to match to your project.
@@ -290,39 +295,39 @@ objects:
 - apiVersion: tekton.dev/v1alpha1
   kind: PipelineResource
   metadata:
-    name: ui-repo
+    name: consumer-repo
   spec:
     type: git
     params:
     - name: url
-      value: http://github.com/openshift-pipelines/vote-ui.git
+      value: https://github.com/g1raffi/quarkus-techlab-data-consumer.git
 - apiVersion: tekton.dev/v1alpha1
   kind: PipelineResource
   metadata:
-    name: ui-image
+    name: consumer-image
   spec:
     type: image
     params:
     - name: url
-      value: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAME}/vote-ui:latest
+      value: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAME}/data-consumer:latest
 - apiVersion: tekton.dev/v1alpha1
   kind: PipelineResource
   metadata:
-    name: api-repo
+    name: producer-repo
   spec:
     type: git
     params:
     - name: url
-      value: http://github.com/openshift-pipelines/vote-api.git
+      value: https://github.com/g1raffi/quarkus-techlab-data-producer.git
 - apiVersion: tekton.dev/v1alpha1
   kind: PipelineResource
   metadata:
-    name: api-image
+    name: producer-image
   spec:
     type: image
     params:
     - name: url
-      value: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAME}/vote-api:latest
+      value: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAME}/data-producer:latest
 parameters:
 - description: OpenShift Project Name
   name: PROJECT_NAME
@@ -347,11 +352,12 @@ tkn resource ls
 ```
 
 ```
-NAME        TYPE    DETAILS
-api-repo    git     url: http://github.com/openshift-pipelines/vote-api.git
-ui-repo     git     url: http://github.com/openshift-pipelines/vote-ui.git
-api-image   image   url: image-registry.openshift-image-registry.svc:5000/pipelines-userXY/vote-api:latest
-ui-image    image   url: image-registry.openshift-image-registry.svc:5000/pipelines-userXY/vote-ui:latest
+NAME             TYPE    DETAILS
+consumer-repo    git     url: https://github.com/g1raffi/quarkus-techlab-data-consumer.git
+producer-repo    git     url: https://github.com/g1raffi/quarkus-techlab-data-producer.git
+consumer-image   image   url: image-registry.openshift-image-registry.svc:5000/amm-techlab-tekton/data-consumer:latest
+producer-image   image   url: image-registry.openshift-image-registry.svc:5000/amm-techlab-tekton/data-producer:latest
+
 ```
 
 
@@ -361,9 +367,9 @@ Start the Pipeline for the backend:
 
 ```bash
 tkn pipeline start build-and-deploy \
--r git-repo=api-repo \
--r image=api-image \
--p deployment-name=vote-api \
+-r git-repo=consumer-repo \
+-r image=consumer-image \
+-p deployment-name=data-consumer \
 -s pipeline
 ```
 
@@ -373,9 +379,9 @@ Now start the same Pipeline with the frontend resources:
 
 ```bash
 tkn pipeline start build-and-deploy \
--r git-repo=ui-repo \
--r image=ui-image \
--p deployment-name=vote-ui \
+-r git-repo=producer-repo \
+-r image=producer-image \
+-p deployment-name=data-producer \
 -s pipeline
 ```
 
