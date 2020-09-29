@@ -1,8 +1,8 @@
 ---
-title: "3.3.1 Requests and Limits"
-linkTitle: "3.3.1 Requests and Limits"
-weight: 331
-sectionnumber: 3.3.1
+title: "4.3.2 Requests and Limits"
+linkTitle: "4.3.2 Requests and Limits"
+weight: 432
+sectionnumber: 4.3.2
 description: >
   Requests and Limits.
 ---
