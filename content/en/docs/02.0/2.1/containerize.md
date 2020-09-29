@@ -48,7 +48,7 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
 [source](https://gitea.techlab.openshift.ch/APPUiO-AMM-Techlab/example-spring-boot-helloworld/raw/branch/master/Dockerfile)
 
 
-Here is the full example of the  Dockerfile for buiölding the application from source. 
+Here is the full example of the  Dockerfile for buiölding the application from source.
 In this example we make use of the Docker Multistage builds. In the first stage we use the centOS Quarkus image and perform a Quarkus nativ build. The resulting binary will be used in the second build stage. For the second stage we use the UBI minimal image.
 
 ```Dockerfile
@@ -78,6 +78,9 @@ USER 1001
 
 CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
 ```
+
+[source](https://gitea.techlab.openshift.ch/APPUiO-AMM-Techlab/example-spring-boot-helloworld/raw/branch/master/Dockerfile.complete)
+
 
 ## Task {{% param sectionnumber %}}.3: Create BuildConfig
 
@@ -245,7 +248,7 @@ spec:
   triggers:
     - imageChangeParams:
         automatic: true
-        containerNames: 
+        containerNames:
           - data-producer
         from:
           kind: ImageStreamTag
@@ -354,23 +357,98 @@ oc get all
 ```
 
 ```
-{{< highlight text "hl_lines=9 22" >}}
-TODO
+{{< highlight text "hl_lines=" >}}
+NAME                         READY   STATUS      RESTARTS   AGE
+pod/data-producer-1-build    0/1     Completed   0          4m4s
+pod/data-producer-1-deploy   0/1     Completed   0          2m44s
+pod/data-producer-1-h4bwj    1/1     Running     0          2m41s
+
+NAME                                    DESIRED   CURRENT   READY   AGE
+replicationcontroller/data-producer-1   1         1         1       2m44s
+
+NAME                    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/data-producer   ClusterIP   172.30.211.87   <none>        8080/TCP   3m54s
+
+NAME                                               REVISION   DESIRED   CURRENT   TRIGGERED BY
+deploymentconfig.apps.openshift.io/data-producer   1          1         1         config,image(data-producer:rest)
+
+NAME                                           TYPE     FROM       LATEST
+buildconfig.build.openshift.io/data-producer   Docker   Git@rest   1
+
+NAME                                       TYPE     FROM          STATUS     STARTED         DURATION
+build.build.openshift.io/data-producer-1   Docker   Git@838be5c   Complete   4 minutes ago   1m21s
+
+NAME                                           IMAGE REPOSITORY                                                                              TAGS   UPDATED
+imagestream.image.openshift.io/data-producer   image-registry.openshift-image-registry.svc:5000/producer-consumer-hanelore15/data-producer   rest   2 minutes ago
+
+NAME                                     HOST/PORT                                                         PATH   SERVICES        PORT       TERMINATION   WILDCARD
+route.route.openshift.io/data-producer   data-producer-producer-consumer-hanelore15.techlab.openshift.ch          data-producer   8080-tcp   edge          None
+
 {{< / highlight >}}
 ```
 
 
 ## Task {{% param sectionnumber %}}.9: Access application by browser
 
-Finally you can visit your application with the URL provided from the Route: <https://appuio-spring-boot-ex-spring-boot-userXY.techlab.openshift.ch/>
+Finally you can visit your application with the URL provided from the Route: <https://data-producer-producer-consumer-userXY.techlab.openshift.ch/data>
 
 > Replace `userXY with your username or get the url from your route.
 
 
 ## Task {{% param sectionnumber %}}.10: Deploy consumer application
 
-Now it's time to deploy the counterpart. Use following command to deploy the data-consumer application
+Now it's time to deploy the counterpart. Use following command to deploy the data-consumer application. The consumer application consists of three resource definitions. First we create a deployment, pointing to the consumer Docker Image on docker Hub. Next the service which exposes the application inside our cluster and last the route to access the app from outside the cluster.
 
 ```BASH
-oc new-app --docker-image=g1raffi/quarkus-techlab-data-consumer --allow-missing-images --name=data-consumer
+oc create -f  https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/consumer.yaml
+```
+
+```
+deployment.apps/data-consumer created
+service/data-consumer created
+route.route.openshift.io/data-consumer created
+```
+
+Let's verify if everything was deployed and is up running.
+
+```BASH
+oc get all
+```
+
+
+```
+NAME                                 READY   STATUS             RESTARTS   AGE
+pod/data-consumer-7f44cc5647-q2hqc   1/1     Running            0          4m38s
+pod/data-producer-1-build            0/1     Completed          0          10m
+pod/data-producer-1-deploy           0/1     Completed          0          9m33s
+pod/data-producer-1-h4bwj            1/1     Running            0          9m30s
+
+NAME                                    DESIRED   CURRENT   READY   AGE
+replicationcontroller/data-producer-1   1         1         1       9m33s
+
+NAME                    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/data-consumer   ClusterIP   172.30.22.100   <none>        8080/TCP   4m38s
+service/data-producer   ClusterIP   172.30.211.87   <none>        8080/TCP   10m
+
+NAME                            READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/data-consumer   1/1     1            1           4m38s
+
+NAME                                       DESIRED   CURRENT   READY   AGE
+replicaset.apps/data-consumer-7f44cc5647   1         1         0       4m38s
+
+NAME                                               REVISION   DESIRED   CURRENT   TRIGGERED BY
+deploymentconfig.apps.openshift.io/data-producer   1          1         1         config,image(data-producer:rest)
+
+NAME                                           TYPE     FROM       LATEST
+buildconfig.build.openshift.io/data-producer   Docker   Git@rest   1
+
+NAME                                       TYPE     FROM          STATUS     STARTED          DURATION
+build.build.openshift.io/data-producer-1   Docker   Git@838be5c   Complete   10 minutes ago   1m21s
+
+NAME                                           IMAGE REPOSITORY                                                                              TAGS   UPDATED
+imagestream.image.openshift.io/data-producer   image-registry.openshift-image-registry.svc:5000/producer-consumer-hanelore15/data-producer   rest   9 minutes ago
+
+NAME                                     HOST/PORT                                                         PATH   SERVICES        PORT       TERMINATION   WILDCARD
+route.route.openshift.io/data-consumer   data-consumer-producer-consumer-hanelore15.techlab.openshift.ch   /      data-consumer   <all>      edge/Allow    None
+route.route.openshift.io/data-producer   data-producer-producer-consumer-hanelore15.techlab.openshift.ch          data-producer   8080-tcp   edge          None
 ```

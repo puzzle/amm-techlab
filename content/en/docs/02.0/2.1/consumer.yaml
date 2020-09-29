@@ -1,7 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
   labels:
     app: data-consumer
     application: amm-techlab
@@ -19,7 +18,7 @@ spec:
         app: data-consumer
     spec:
       containers:
-      - image: data-consumer:rest
+      - image: g1raffi/quarkus-techlab-data-consumer:rest
         imagePullPolicy: Always
         livenessProbe:
           failureThreshold: 5
