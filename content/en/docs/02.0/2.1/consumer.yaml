@@ -82,10 +82,7 @@ metadata:
 spec:
   path: /
   tls:
-    caCertificate: null
-    certificate: null
     insecureEdgeTerminationPolicy: Allow
-    key: null
     termination: edge
   to:
     kind: Service
