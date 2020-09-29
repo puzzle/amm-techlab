@@ -6,12 +6,12 @@ metadata:
   labels:
     build: data-producer
     application: amm-techlab
-  name: data-producer-docker
+  name: data-producer
 spec:
   output:
     to:
       kind: ImageStreamTag
-      name: data-producer:latest
+      name: data-producer:rest
   postCommit: {}
   resources:
     limits:
@@ -22,12 +22,12 @@ spec:
       memory: "512Mi"
   source:
     git:
-      uri: https://github.com/g1raffi/quarkus-techlab-data-consumer.git
+      uri: https://github.com/schlapzz/quarkus-techlab-data-producer.git
       ref: rest
     type: Git
   strategy:
     dockerStrategy:
-      dockerfilePath: src/main/docker/Dockerfile.multistage
+      dockerfilePath: src/main/docker/Dockerfile.binary
     type: Docker
   triggers:
   - github:

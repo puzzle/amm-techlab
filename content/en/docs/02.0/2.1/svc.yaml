@@ -11,6 +11,6 @@ spec:
     protocol: TCP
     targetPort: 8080
   selector:
-    deployment: data-producer
+    deploymentConfig: data-producer
   sessionAffinity: None
   type: ClusterIP

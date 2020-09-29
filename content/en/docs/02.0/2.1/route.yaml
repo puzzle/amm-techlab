@@ -3,13 +3,13 @@ kind: Route
 metadata:
   labels:
      application: amm-techlab
-  name: quarkus-producer
+  name: data-producer
 spec:
   port:
     targetPort: 8080-tcp
   to:
     kind: Service
-    name: quarkus-producer
+    name: data-producer
     weight: 100
   tls:
     termination: edge

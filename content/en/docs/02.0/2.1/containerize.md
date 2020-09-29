@@ -25,6 +25,31 @@ First we need a Dockerfile. You can find the `Dockerfile` in the root directory 
 [Git Repository](https://gitea.techlab.openshift.ch/APPUiO-AMM-Techlab/example-spring-boot-helloworld).
 The base image is a `uay.io/quarkus/centos-quarkus-maven:20.1.0-java11` which is pre configured for Quarkus Maven builds.
 
+Because the build needs a huge amount of memory (>8GB) and takes a lot of time (+5min) we refrain building the app from source. Instead we take the pre built Quarkus app from the Github release page.
+
+```Dockerfile
+FROM registry.access.redhat.com/ubi8/ubi
+WORKDIR /work/
+
+#Install wget
+RUN yum install wget -y
+
+#Fetch the latest binary release from the GutHub release page
+RUN wget https://github.com/puzzle/amm-techlab/releases/download/1.0.0/application
+
+RUN chmod -R 775 /work
+EXPOSE 8080
+
+#Run the application
+CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
+
+```
+
+[source](https://gitea.techlab.openshift.ch/APPUiO-AMM-Techlab/example-spring-boot-helloworld/raw/branch/master/Dockerfile)
+
+
+Here is the full example of the  Dockerfile for buiölding the application from source. 
+In this example we make use of the Docker Multistage builds. In the first stage we use the centOS Quarkus image and perform a Quarkus nativ build. The resulting binary will be used in the second build stage. For the second stage we use the UBI minimal image.
 
 ```Dockerfile
 ## Stage 1 : build with maven builder image with native capabilities
@@ -54,13 +79,6 @@ USER 1001
 CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
 ```
 
-[source](https://gitea.techlab.openshift.ch/APPUiO-AMM-Techlab/example-spring-boot-helloworld/raw/branch/master/Dockerfile)
-
-**TODO. rewrite section**
-This Dockerfile is responsible for building the Quarkus application. For this we use the UBI Docker image. This image is pre configured to build and run Java applications.
-To build the Java Spring Boot application, the `Dockerfile` uses the [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html).
-
-
 ## Task {{% param sectionnumber %}}.3: Create BuildConfig
 
 The [BuildConfig](https://docs.openshift.com/container-platform/4.5/builds/understanding-buildconfigs.html) describes how a single build task is performed. The BuildConfig is primary characterized by the Build strategy and its resources. For our build we use the Docker strategy. (Other strategies will be discussed in Chapter 4) The Docker strategy invokes the Docker build command. Furthermore it expects a `Dockerfile` in the source repository.
@@ -85,7 +103,7 @@ spec:
   output:
     to:
       kind: ImageStreamTag
-      name: data-producer:latest
+      name: data-producer:rest
   postCommit: {}
   resources:
     limits:
@@ -101,7 +119,7 @@ spec:
     type: Git
   strategy:
     dockerStrategy:
-      dockerfilePath: src/main/docker/Dockerfile.multistage
+      dockerfilePath: src/main/docker/Dockerfile.small
     type: Docker
   triggers:
   - github:
@@ -149,32 +167,11 @@ spec:
     local: false
 status:
   dockerImageRepository: ""
----
-apiVersion: image.openshift.io/v1
-kind: ImageStream
-metadata:
-  labels:
-    app: appuio-spring-boot-ex
-    application: amm-techlab
-  name: openjdk-11
-spec:
-  lookupPolicy:
-    local: false
-  tags:
-  - annotations:
-      openshift.io/imported-from: registry.access.redhat.com/ubi8/openjdk-11
-    from:
-      kind: DockerImage
-      name: registry.access.redhat.com/ubi8/openjdk-11
-    importPolicy: {}
-    name: latest
-    referencePolicy:
-      type: Source
 ```
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/imageStreams.yaml)
 
-Let's create the ImageStreams
+Let's create the ImageStream
 
 ```BASH
 oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/imageStreams.yaml
@@ -182,7 +179,6 @@ oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content
 
 ```
 imagestream.image.openshift.io/data-producer created
-imagestream.image.openshift.io/openjdk-11 created
 ```
 
 
@@ -195,7 +191,7 @@ apiVersion: v1
 kind: DeploymentConfig
 metadata:
   annotations:
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"data-producer:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"data-producer\")].image"}]'
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"data-producer:rest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"data-producer\")].image"}]'
   labels:
     application: amm-techlab
   name: data-producer
@@ -242,21 +238,20 @@ spec:
           resources:
             limits:
               cpu: "1"
-              memory: 500Mi
+              memory: 200Mi
             requests:
               cpu: 50m
               memory: 100Mi
   triggers:
     - imageChangeParams:
         automatic: true
-        containerNames:
+        containerNames: 
           - data-producer
         from:
           kind: ImageStreamTag
-          name: data-producer:latest
+          name: data-producer:rest
       type: ImageChange
     - type: ConfigChange
-  
 ```
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/deployment.yaml)
