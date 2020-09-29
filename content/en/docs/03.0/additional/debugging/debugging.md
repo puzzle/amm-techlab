@@ -1,8 +1,8 @@
 ---
-title: "4.5.1 Debugging"
-linkTitle: "4.5.1 Debugging"
-weight: 451
-sectionnumber: 4.5.1
+title: "3.3.1 Debugging"
+linkTitle: "3.3.1 Debugging"
+weight: 331
+sectionnumber: 3.3.1
 description: >
   This lab shows how to debug applications and which tools are available.
 ---

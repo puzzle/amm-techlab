@@ -1,8 +1,8 @@
 ---
-title: "4.2 Binary Deployment"
-linkTitle: "4.2 Binary Deployment"
-weight: 420
-sectionnumber: 4.2
+title: "Binary Deployment"
+linkTitle: "9.2.2 Binary Deployment"
+weight: 922
+sectionnumber: 9.2.2
 description: >
   Building images from binary using Binary Build.
 ---
@@ -71,10 +71,10 @@ spec:
     local: false
 ```
 
-[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.2/imageStreams.yaml)
+[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/binary/imageStreams.yaml)
 
 ```BASH
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.2/imageStreams.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/binary/imageStreams.yaml
 ```
 
 Afterwards we can create the Build Config for the binary deployment.
@@ -116,10 +116,10 @@ status:
 ```
 
 
-[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.2/buildConfig.yaml)
+[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/binary/buildConfig.yaml)
 
 ```BASH
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.2/buildConfig.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/binary/buildConfig.yaml
 ```
 
 The next step is to prepare our binary. We're going to use a prebuilt WAR file from appuio.

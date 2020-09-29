@@ -1,7 +1,8 @@
 ---
-title: "4. OpenShift build types"
-weight: 4
-sectionnumber: 4
+title: "9.2 OpenShift build types"
+linkTitle: "OpenShift build types"
+weight: 92
+sectionnumber: 9.2
 description: >
   Build and deploy application to OpenShift using the different build types.
 ---

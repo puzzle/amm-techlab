@@ -1,8 +1,8 @@
 ---
-title: "4.4 Image Deployment"
-linkTitle: "4.4 Image Deployment"
-weight: 440
-sectionnumber: 4.4
+title: "Image Deployment"
+linkTitle: "9.2.4 Image Deployment"
+weight: 924
+sectionnumber: 9.2.4
 description: >
   Container Image Deployment.
 ---
@@ -60,10 +60,10 @@ spec:
     type: Rolling  
 ```
 
-[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.4/deploymentConfig.yaml)
+[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/image/deploymentConfig.yaml)
 
 ```BASH
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.4/deploymentConfig.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/image/deploymentConfig.yaml
 ```
 
 Next we create the ImageStream definition. The important part is under the `tags` section. There we define a reference to an external Docker registry and define which image to track. Another important field is the import policy. If you query an image from an external registry, you can set scheduled import to true.
@@ -89,10 +89,10 @@ spec:
       type: Source
 ```
 
-[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.4/imageStream.yaml)
+[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/image/imageStream.yaml)
 
 ```BASH
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.4/imageStream.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/image/imageStream.yaml
 ```
 
 

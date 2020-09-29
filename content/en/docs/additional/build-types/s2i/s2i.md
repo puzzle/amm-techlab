@@ -1,8 +1,8 @@
 ---
-title: "4.1 Source to Image"
-linkTitle: "4.1 Source to Image"
-weight: 41
-sectionnumber: 4.1
+title: "Source to Image"
+linkTitle: "9.2.1 Source to Image"
+weight: 921
+sectionnumber: 9.2.1
 description: >
   Building images using Source to Image.
 ---
@@ -140,10 +140,10 @@ parameters:
   mandatory: true
 ```
 
-[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.1/buildConfig.yaml)
+[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/buildConfig.yaml)
 
 ```BASH
-oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.1/buildConfig.yaml -p USERNAME=$USER_NAME | oc apply -f -
+oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/buildConfig.yaml -p USERNAME=$USER_NAME | oc apply -f -
 ```
 
 Next we need the definitions for our two ImageStreamTag references.
@@ -189,10 +189,10 @@ spec:
 ```
 
 
-[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.1/imageStreams.yaml)
+[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/imageStreams.yaml)
 
 ```BASH
-oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.1/imageStreams.yaml
+oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/imageStreams.yaml
 ```
 
 Let's check if the build is complete.
@@ -270,13 +270,13 @@ parameters:
   mandatory: true
 ```
 
-[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.1/secret.yaml)
+[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/secret.yaml)
 
 Then we can create the secret
 >Replace the password parameter with your personal Gitea password!
 
 ```BASH
-oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.1/secret.yaml -p USERNAME=$USER_NAME -p PASSWORD=youPassword | oc apply -f -
+oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/secret.yaml -p USERNAME=$USER_NAME -p PASSWORD=youPassword | oc apply -f -
 ```
 
 Next we reference the freshly created secret in our BuildConfig. The following command will open the VIM editor ([VIM Cheat Sheet](https://devhints.io/vim)), where you can edit the YAML file directly. As soon you save the file and close the editor, the changes are applied to the resource.
@@ -421,10 +421,10 @@ parameters:
   mandatory: true
 ```
 
-[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.1/deploymentConfig.yaml)
+[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/deploymentConfig.yaml)
 
 ```BASH
-oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.1/deploymentConfig.yaml -p PROJECT_NAME=$PROJECT_NAME | oc apply -f -
+oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/deploymentConfig.yaml -p PROJECT_NAME=$PROJECT_NAME | oc apply -f -
 ```
 
 
@@ -458,10 +458,10 @@ spec:
 ```
 
 
-[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.1/service.yaml)
+[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/service.yaml)
 
 ```BASH
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.1/service.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/service.yaml
 ```
 
 
@@ -497,12 +497,12 @@ parameters:
   mandatory: true
 ```
 
-[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.1/route.yaml)
+[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/route.yaml)
 
 Then we can create the route
 
 ```BASH
-oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/04.1/route.yaml -p USERNAME=$USER_NAME | oc apply -f -
+oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/route.yaml -p USERNAME=$USER_NAME | oc apply -f -
 ```
 
 Check if the route was created successfully

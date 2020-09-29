@@ -1,8 +1,8 @@
 ---
-title: "4.5.2 Autoscaling"
-linkTitle: "4.5.2 Autoscaling"
-weight: 452
-sectionnumber: 4.5.2
+title: "3.3.2 Autoscaling"
+linkTitle: "3.3.2 Autoscaling"
+weight: 332
+sectionnumber: 3.3.2
 description: >
   Using the autoscaling feature of OpenShift.
 ---
