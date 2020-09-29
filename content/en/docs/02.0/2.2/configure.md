@@ -34,13 +34,14 @@ We have to change a port on the service that we have created in the previous lab
 Change the target port in the service `data-producer`. Note that we only have to change the target port in the service definition. For this case other existing services can still connect to the 8080 service port without any further changes.
 
 ```
-{{< highlight YAML "hl_lines=12" >}}
+{{< highlight YAML "hl_lines=11" >}}
 apiVersion: v1
 kind: Service
 metadata:
   name: data-producer
   labels:
     application: amm-techlab
+    app: data-producer
 spec:
   ports:
   - name: 8080-tcp
@@ -95,14 +96,14 @@ With that change, the application is not reachable any more.
 
 ### Update exposed port of deployment
 
-To fix the connection between the pod and the service, the pod port has to be changed too.
+To fix the connection between the pod and the service, the pod ports has to be changed too.
 
 {{< highlight YAML "hl_lines=28 38 46" >}}
 apiVersion: v1
 kind: DeploymentConfig
 metadata:
   annotations:
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"data-producer:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"data-producer\")].image"}]'
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"data-producer:rest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"data-producer\")].image"}]'
   labels:
     application: amm-techlab
   name: data-producer
@@ -149,7 +150,7 @@ spec:
           resources:
             limits:
               cpu: "1"
-              memory: 500Mi
+              memory: 200Mi
             requests:
               cpu: 50m
               memory: 100Mi
@@ -160,7 +161,7 @@ spec:
           - data-producer
         from:
           kind: ImageStreamTag
-          name: data-producer:latest
+          name: data-producer:rest
       type: ImageChange
     - type: ConfigChange
 {{< / highlight >}}
@@ -170,9 +171,9 @@ Update the HTTP Port from 8080 to 8081 using `oc patch` again:
 There are total three ports to change. The container port itself, and the ports for the liveness/readiness probe.
 
 ```BASH
-oc patch deployment data-producer --type "json" -p '[{"op":"replace","path":"/spec/template/spec/containers/0/ports/0/containerPort","value":8081}]'
-oc patch deployment data-producer --type "json" -p '[{"op":"replace","path":"/spec/template/spec/containers/0/livenessProbe/httpGet/port","value":8081}]'
-oc patch deployment data-producer --type "json" -p '[{"op":"replace","path":"/spec/template/spec/containers/0/readinessProbe/httpGet/port","value":8081}]'
+oc patch dc/data-producer --type "json" -p '[{"op":"replace","path":"/spec/template/spec/containers/0/ports/0/containerPort","value":8081}]'
+oc patch dc/data-producer --type "json" -p '[{"op":"replace","path":"/spec/template/spec/containers/0/livenessProbe/httpGet/port","value":8081}]'
+oc patch dc/data-producer --type "json" -p '[{"op":"replace","path":"/spec/template/spec/containers/0/readinessProbe/httpGet/port","value":8081}]'
 ```
 
 ```
@@ -264,11 +265,11 @@ spec:
 First let's check the environment:
 
 ```BASH
-oc set env deployment data-producer --list
+oc set env dc/data-producer --list
 ```
 
 ```
-# deployments/data-producer, container data-producer
+deploymentconfigs/data-producer, container data-producer
 ```
 
 There are no environment variables configured.
@@ -276,21 +277,21 @@ There are no environment variables configured.
 Add the environment variable `QUARKUS_HTTP_PORT` with the value 8081:
 
 ```BASH
-oc set env deployment data-producer QUARKUS_HTTP_PORT=8081
+oc set env dc/data-producer QUARKUS_HTTP_PORT=8081
 ```
 
 ```
-deployment.apps/data-producer updated
+deploymentconfig.apps.openshift.io/data-producer updated
 ```
 
 The variable should be configured now.
 
 ```BASH
-oc set env deployment data-producer --list
+oc set env dc/data-producer --list
 ```
 
 ```
-# deployments/data-producer, container data-producer
+deploymentconfigs/data-producer, container data-producer
 QUARKUS_HTTP_PORT=8081
 ```
 
@@ -300,8 +301,9 @@ QUARKUS_HTTP_PORT=8081
 Changing the environment of a deployment triggers a rollout of the application pod.
 After the container has started successfully, the application should be reachable again.
 
-Check if the changes were applied correct. Open your browser and navigate to your application:
-<https://data-producer-amm-userXY.ocp.aws.puzzle.ch/>
+Check if the changes were applied correct. Open your browser and navigate to your application:  
+<https://data-producer-amm-userXY.ocp.aws.puzzle.ch/data>
+> Replace userXY with your username!
 
 
 ## Task {{% param sectionnumber %}}.5: Important notes

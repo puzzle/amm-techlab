@@ -42,10 +42,10 @@ spec:
             successThreshold: 1
             timeoutSeconds: 15
           name: data-producer
-          port:
-            - containerPort: 8080
-              name: http
-              protocol: TCP
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
           resources:
             limits:
               cpu: "1"
