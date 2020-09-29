@@ -398,7 +398,15 @@ route.route.openshift.io/data-producer   data-producer-producer-consumer-hanelor
 
 Finally you can visit your application with the URL provided from the Route: <https://data-producer-producer-consumer-userXY.techlab.openshift.ch/data>
 
-> Replace `userXY with your username or get the url from your route.
+> Replace **userXY** with your username or get the url from your route.
+
+When you open the url you should see the producers data
+
+```json
+{"data":0.6681209742895893}
+```
+
+If you just see `Your new Cloud-Native application is ready!`, then you forget to append the `/data`path to the url
 
 
 ## Task {{% param sectionnumber %}}.10: Deploy consumer application
