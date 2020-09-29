@@ -7,7 +7,7 @@ description: >
   Containerize an existing application.
 ---
 
-The main goal of this lab is to show you how to containerize an existing Java application. Including deployment on OpenShift and exposing the service with a route.
+The main goal of this lab is to show you how to containerize an existing Java application. Including deployment on OpenShift and exposing the service with a route. In this example we want to build a microservice which produces random data when it’s REST interface is called. Another microservice consumes then the data and exposes it on it’s own endpoint.
 
 
 ## Task {{% param sectionnumber %}}.1: Setup Project
@@ -370,3 +370,12 @@ TODO
 Finally you can visit your application with the URL provided from the Route: <https://appuio-spring-boot-ex-spring-boot-userXY.techlab.openshift.ch/>
 
 > Replace `userXY with your username or get the url from your route.
+
+
+## Task {{% param sectionnumber %}}.10: Deploy consumer application
+
+Now it's time to deploy the counterpart. Use following command to deploy the data-consumer application
+
+```BASH
+oc new-app --docker-image=g1raffi/quarkus-techlab-data-consumer --allow-missing-images --name=data-consumer
+```
