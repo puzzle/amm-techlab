@@ -1,10 +1,10 @@
 ---
-title: "2.3.4 OpenShift Do (odo)"
+title: "OpenShift Do (odo)"
 linkTitle: "OpenShift Do odo"
-weight: 234
-sectionnumber: 2.3.4
+weight: 91
+sectionnumber: 9.1
 description: >
-  Developing applications on OpenShift with odo.
+  Developing applications on OpenShift with the new OpenShift developer cli.
 ---
 
 ## {{% param sectionnumber %}}.1 odo
@@ -83,7 +83,7 @@ MaxCPU
 
 ## {{% param sectionnumber %}}.3 Create Application
 
-Create the file `main.go` with the content of the go-hello-world application ([source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.3/2.3.1/main.go)).
+Create the file `main.go` with the content of the go-hello-world application ([source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/demo/main.go)).
 
 ```bash
 cp ../content/en/docs/02.0/main.go main.go

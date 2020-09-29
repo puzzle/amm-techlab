@@ -167,6 +167,14 @@ spec:
 
 With the Strimzi operator we can manage our Kafka cluster with Kubernetes-native custom resource definitions. The operator will set up your broker tailored to your needs and configuration. We will also manage our topics with the Strimzi operator.
 
+Create the cluster with:
+
+```s
+
+oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.2/kafka-cluster.yaml
+
+```
+
 To create a new topic in our Kafka cluster create a file called `manual-topic.yaml` with the following content:
 
 ```yml
@@ -189,56 +197,207 @@ spec:
 
 This will create the 'manual' topic which allows our microservices to communicate.
 
-Update the data-consumer / data-producers ImageStreams to pull the Kafka tag and see how they communicate through the Kafka broker in your very own project:
+```s
 
-```yml
+oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.2/manual-topic.yaml
 
-# [...]
-
-  - apiVersion: v1
-    kind: ImageStream
-    metadata:
-      labels:
-        application: quarkus-techlab
-      name: data-producer
-    spec:
-      lookupPolicy:
-        local: false
-      tags:
-        - annotations:
-            openshift.io/imported-from: g1raffi/quarkus-techlab-data-producer:kafka
-          from:
-            kind: DockerImage
-            name: g1raffi/quarkus-techlab-data-producer:kafka
-          name: kafka
-          referencePolicy:
-            type: Source
-
-# [...]
 ```
 
+Create the deployments for the two microservices with the following two resource definitions:
+
 ```yml
+# data-consumer.yaml
+apiVersion: v1
+kind: List
+metadata:
+  labels:
+    application: quarkus-techlab
+items:
 
-# [...]
-
-  - apiVersion: v1
-    kind: ImageStream
+  - apiVersion: apps/v1
+    kind: Deployment
     metadata:
       labels:
         application: quarkus-techlab
       name: data-consumer
     spec:
-      lookupPolicy:
-        local: false
-      tags:
-        - annotations:
-            openshift.io/imported-from: g1raffi/quarkus-techlab-data-consumer:kafka
-          from:
-            kind: DockerImage
-            name: g1raffi/quarkus-techlab-data-consumer:kafka
-          name: kafka
-          referencePolicy:
-            type: Source
+      replicas: 1
+      selector:
+        matchLabels:
+          deployment: data-consumer
+      strategy:
+        type: Recreate
+      template:
+        metadata:
+          labels:
+            application: quarkus-techlab
+            deployment: data-consumer
+        spec:
+          containers:
+            - image: g1raffi/quarkus-techlab-data-consumer:kafka
+              imagePullPolicy: Always
+              livenessProbe:
+                failureThreshold: 5
+                httpGet:
+                  path: /health
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 3
+                periodSeconds: 20
+                successThreshhold: 1
+                timeoutSeconds: 15
+              readinessProbe:
+                failureThreshold: 5
+                httpGet:
+                  path: /health
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 3
+                periodSeconds: 20
+                successThreshold: 1
+                timeoutSeconds: 15
+              name: data-consumer
+              port:
+                - containerPort: 8080
+                  name: http
+                  protocol: TCP
+              resources:
+                limits:
+                  cpu: 1
+                  memory: 500Mi
+                requests:
+                  cpu: 50m
+                  memory: 100Mi
+      triggers:
+        - type: ConfigChange
+        - imageChangeParams:
+            automatic: true
+            containerNames:
+              - data-consumer
+            from:
+              kind: ImageStreamTag
+              name: data-consumer:kafka
+          type: ImageChange
 
-# [...]
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        application: quarkus-techlab
+      name: data-consumer
+    spec:
+      ports:
+        - name: data-consumer-http
+          port: 8080
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        deployment: data-consumer
+      sessionAffinity: None
+      type: ClusterIP
+
 ```
+
+```yml
+# data-producer.yaml
+apiVersion: v1
+kind: List
+metadata:
+  labels:
+    application: quarkus-techlab
+items:
+
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        application: quarkus-techlab
+      name: data-producer
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          deployment: data-producer
+      strategy:
+        type: Recreate
+      template:
+        metadata:
+          labels:
+            application: quarkus-techlab
+            deployment: data-producer
+        spec:
+          containers:
+            - image: g1raffi/quarkus-techlab-data-producer:kafka
+              imagePullPolicy: Always
+              livenessProbe:
+                failureThreshold: 5
+                httpGet:
+                  path: /health
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 3
+                periodSeconds: 20
+                successThreshhold: 1
+                timeoutSeconds: 15
+              readinessProbe:
+                failureThreshold: 5
+                httpGet:
+                  path: /health
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 3
+                periodSeconds: 20
+                successThreshold: 1
+                timeoutSeconds: 15
+              name: data-producer
+              port:
+                - containerPort: 8080
+                  name: http
+                  protocol: TCP
+              resources:
+                limits:
+                  cpu: 1
+                  memory: 500Mi
+                requests:
+                  cpu: 50m
+                  memory: 100Mi
+      triggers:
+        - type: ConfigChange
+        - imageChangeParams:
+            automatic: true
+            containerNames:
+              - data-producer
+            from:
+              kind: ImageStreamTag
+              name: data-producer:kafka
+          type: ImageChange
+
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        application: quarkus-techlab
+      name: data-producer
+    spec:
+      ports:
+        - name: data-producer-http
+          port: 8080
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        deployment: data-producer
+      sessionAffinity: None
+      type: ClusterIP
+
+```
+
+Apply the resource definitions and let OpenShift rollout your freshly created deployments:
+
+```s
+
+oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.2/data-consumer.yaml
+oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.2/data-producer.yaml
+
+```
+
+Log into your OpenShift project and check the logs of the data-consumer pod. You can see that he will consume data from the kafka manual topic produced by the data-producer microservice!

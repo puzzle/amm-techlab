@@ -1,8 +1,8 @@
 ---
-title: "2.3.3 Docker Instructions"
+title: "9.9.3 Docker Instructions"
 linkTitle: "Docker Instructions"
-weight: 233
-sectionnumber: 2.3.3
+weight: 993
+sectionnumber: 9.9.3
 description: >
   Docker instructions for building and publishing the Go application as container image.
 ---

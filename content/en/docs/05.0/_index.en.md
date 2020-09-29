@@ -1,7 +1,8 @@
 ---
-title: "5. Automation with CI/CD pipelines"
+title: "5. Observability"
 weight: 5
 sectionnumber: 5
 description: >
-  Automation of the build and deployment pipeline.
+  Monitoring and tracing of applications running on OpenShift.
 ---
+

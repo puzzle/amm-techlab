@@ -1,8 +1,8 @@
 ---
-title: "2.3.2 OpenShift image requirements"
-linkTitle: "OpenShift image requirements"
-weight: 232
-sectionnumber: 2.3.2
+title: "2.3.1 OpenShift image requirements"
+linkTitle: "2.3.1 OpenShift image requirements"
+weight: 231
+sectionnumber: 2.3.1
 description: >
   This section is covering how to build a runnable image for OpenShift clusters.
 ---
@@ -161,13 +161,13 @@ items:
   status:
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.3/2.3.2/application-infrastructure.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/additional/ocp-image-requirements/application-infrastructure.yaml)
 
 
 Now it is time to deploy the image in our OpenShift cluster.
 
 ```BASH
-oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.3/2.3.2/application-infrastructure.yaml
+oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/additional/ocp-image-requirements/application-infrastructure.yaml
 ```
 
 ```
@@ -288,12 +288,12 @@ items:
 {{< / highlight >}}
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.3/2.3.2/buildconfig.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/additional/ocp-image-requirements/buildconfig.yaml)
 
 Create BuildConfiguration:
 
 ```BASH
-oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.3/2.3.2/buildconfig.yaml
+oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/additional/ocp-image-requirements/buildconfig.yaml
 ```
 
 ```
@@ -338,7 +338,7 @@ USER golang
 ```
 
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.3/2.3.2/buildconfig-permissions.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/additional/ocp-image-requirements/buildconfig-permissions.yaml)
 
 We add additional commands before the USER directive. First we add the home directory to the group 0 (root group) with the `chgrp` command. Last step is adding read/write/execute permission to the group. We do this with the `chmod` command. Now the application should be able to access the home directory and write the log file.
 
@@ -346,7 +346,7 @@ We add additional commands before the USER directive. First we add the home dire
 Let's update the BuildConfiguration and build and deploy the app again.
 
 ```BASH
-oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.3/2.3.2/buildconfig-permissions.yaml
+oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/additional/ocp-image-requirements/buildconfig-permissions.yaml
 ```
 
 ```BASH
