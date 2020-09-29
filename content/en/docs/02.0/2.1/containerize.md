@@ -1,13 +1,23 @@
 ---
-title: "2.1 Containerize an existing application"
-linkTitle: "2.1 Containerize an existing application"
+title: "2.1 Containerize an application"
+linkTitle: "2.1 Containerize an application"
 weight: 21
 sectionnumber: 2.1
 description: >
-  Containerize an existing application.
+  Containerize an application.
 ---
 
-The main goal of this lab is to show you how to containerize an existing Java application. Including deployment on OpenShift and exposing the service with a route. In this example we want to build a microservice which produces random data when it’s REST interface is called. Another microservice consumes then the data and exposes it on it’s own endpoint.
+The main goal of this lab is to show you how to containerize a Java application. Including deployment on OpenShift and exposing the service with a route. In this example we want to build a microservice based on Quarkus, which produces random data when it’s REST interface is called. Another Quarkus microservice consumes then the data and exposes it on it’s own endpoint.
+
+Some words about Quarkus:
+
+{{% alert  color="primary" %}}
+“Quarkus is a Kubernetes Native Java stack tailored for GraalVM & OpenJDK HotSpot, crafted from the best of breed Java libraries and standards. Also focused on developer experience, making things just work with little to no configuration and allowing to do live coding.” - quarkus.io
+{{% /alert %}}
+
+In short, Quarkus brings a framework built upon JakartaEE standards to build microservices in the Java environment. Per default Quarkus comes with full CDI integration, RESTeasy-JAX-RS, dev mode and many more features.
+
+If you wanna know more about quarkus, you can checkout our [Puzzle Quarkus Techlab](https://puzzle.github.io/quarkus-techlab/)
 
 
 ## Task {{% param sectionnumber %}}.1: Setup Project
@@ -84,13 +94,9 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
 
 ## Task {{% param sectionnumber %}}.3: Create BuildConfig
 
-The [BuildConfig](https://docs.openshift.com/container-platform/4.5/builds/understanding-buildconfigs.html) describes how a single build task is performed. The BuildConfig is primary characterized by the Build strategy and its resources. For our build we use the Docker strategy. (Other strategies will be discussed in Chapter 4) The Docker strategy invokes the Docker build command. Furthermore it expects a `Dockerfile` in the source repository.
+The [BuildConfig](https://docs.openshift.com/container-platform/4.5/builds/understanding-buildconfigs.html) describes how a single build task is performed. The BuildConfig is primary characterized by the Build strategy and its resources. For our build we use the Docker strategy which invokes the Docker build command. Furthermore it expects a `Dockerfile` in the source repository. If the Dockerfile is not in the root directory, then you can sepcify the location with the `dockerfilePath`.
 Beside we configure the source and the triggers as well. For the source we can specify any Git repository. This is where the application sources resides. The triggers describe how to trigger the build. In this example we provide four different triggers. (Generic webhook, GitHub webhook, ConfigMap change, Image change)
 
-It is a good practice to use [Red Hat Universal Base Images](https://developers.redhat.com/products/rhel/ubi).
-With the BuildConfig of OpenShift we can overwrite the base image of a Dockerfile (FROM directive).
-See the highlighted line of the following BuildConfig, where we define a new base image.
-The image ([registry.access.redhat.com/ubi8/openjdk-11](https://catalog.redhat.com/software/containers/ubi8/openjdk-11/5dd6a4b45a13461646f677f4)) is referenced by the image stream `openjdk-11`.
 
 ```YAML
 apiVersion: build.openshift.io/v1
@@ -101,7 +107,7 @@ metadata:
   labels:
     build: data-producer
     application: amm-techlab
-  name: data-producer-docker
+  name: data-producer
 spec:
   output:
     to:
@@ -117,12 +123,12 @@ spec:
       memory: "512Mi"
   source:
     git:
-      uri: https://github.com/g1raffi/quarkus-techlab-data-consumer.git
+      uri: https://github.com/schlapzz/quarkus-techlab-data-producer.git
       ref: rest
     type: Git
   strategy:
     dockerStrategy:
-      dockerfilePath: src/main/docker/Dockerfile.small
+      dockerfilePath: src/main/docker/Dockerfile.binary
     type: Docker
   triggers:
   - github:
@@ -151,8 +157,8 @@ buildconfig.build.openshift.io/data-producer created
 
 ## Task {{% param sectionnumber %}}.4: Create ImageStreams
 
-Next we need to configure an [ImageStream](https://docs.openshift.com/container-platform/4.5/openshift_images/image-streams-manage.html) for the Java base image (ubi8/openjdk-11) and our application image (appuio-spring-boot-ex). The ImageStream is an abstraction for referencing images from within OpenShift Container Platform. Simplified the ImageStream tracks changes for the defined images and reacts by triggering a new Build.
-**TODO: Check if everything is working**
+Next we need to configure an [ImageStream](https://docs.openshift.com/container-platform/4.5/openshift_images/image-streams-manage.html) for the output Image. The ImageStream is an abstraction for referencing images from within OpenShift Container Platform. Simplified the ImageStream tracks changes for the defined images and reacts by triggering a new Build.
+
 
 ```YAML
 apiVersion: image.openshift.io/v1
@@ -160,7 +166,6 @@ kind: ImageStream
 metadata:
   annotations:
     openshift.io/generated-by: OpenShiftNewBuild
-  creationTimestamp: null
   labels:
     build: data-producer
     application: amm-techlab
@@ -172,12 +177,12 @@ status:
   dockerImageRepository: ""
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/imageStreams.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/imageStream.yaml)
 
 Let's create the ImageStream
 
 ```BASH
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/imageStreams.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/imageStream.yaml
 ```
 
 ```
@@ -187,7 +192,7 @@ imagestream.image.openshift.io/data-producer created
 
 ## Task {{% param sectionnumber %}}.5: Deploy Application
 
-After the ImageStream definition we can setup our Deployment. Please note the Deployment annotation `image.openshift.io/triggers`, this annotation connects the Deployment with the ImageStreamTag (which is automatically created by the ImageSource object)
+After the ImageStream definition we can setup our Deployment.
 
 ```YAML
 apiVersion: v1
@@ -234,10 +239,10 @@ spec:
             successThreshold: 1
             timeoutSeconds: 15
           name: data-producer
-          port:
-            - containerPort: 8080
-              name: http
-              protocol: TCP
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
           resources:
             limits:
               cpu: "1"
@@ -257,12 +262,12 @@ spec:
     - type: ConfigChange
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/deployment.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/deploymentConfig.yaml)
 
 Let's create the deployment with following command
 
 ```BASH
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/deployment.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/deploymentConfig.yaml
 ```
 
 ```
@@ -281,9 +286,9 @@ Expose the container ports to the to the cluster with a Service. For the Service
 apiVersion: v1
 kind: Service
 metadata:
-  name: quarkus-producer
+  name: data-producer
   labels:
-    application: quarkus-producer
+    application: amm-techlab
 spec:
   ports:
   - name: 8080-tcp
@@ -291,7 +296,7 @@ spec:
     protocol: TCP
     targetPort: 8080
   selector:
-    deployment: quarkus-producer
+    deploymentConfig: data-producer
   sessionAffinity: None
   type: ClusterIP
 ```
@@ -321,12 +326,13 @@ kind: Route
 metadata:
   labels:
      application: amm-techlab
-  name: quarkus-producer
+  name: data-producer
+spec:
   port:
     targetPort: 8080-tcp
   to:
     kind: Service
-    name: quarkus-producer
+    name: data-producer
     weight: 100
   tls:
     termination: edge

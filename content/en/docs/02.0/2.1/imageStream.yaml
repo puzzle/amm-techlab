@@ -3,7 +3,6 @@ kind: ImageStream
 metadata:
   annotations:
     openshift.io/generated-by: OpenShiftNewBuild
-  creationTimestamp: null
   labels:
     build: data-producer
     application: amm-techlab
