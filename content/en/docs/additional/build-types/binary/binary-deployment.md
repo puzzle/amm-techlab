@@ -1,6 +1,6 @@
 ---
-title: "Binary Deployment"
-linkTitle: "9.2.2 Binary Deployment"
+title: "9.2.2 Binary Deployment"
+linkTitle: "Binary Deployment"
 weight: 922
 sectionnumber: 9.2.2
 description: >

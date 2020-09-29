@@ -1,6 +1,6 @@
 ---
-title: "Docker Build"
-linkTitle: "9.2.3 Docker Build"
+title: "9.2.3 Docker Build"
+linkTitle: "Docker Build"
 weight: 923
 sectionnumber: 9.2.3
 description: >

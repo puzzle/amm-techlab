@@ -1,6 +1,6 @@
 ---
-title: "Source to Image"
-linkTitle: "9.2.1 Source to Image"
+title: "9.2.1 Source to Image"
+linkTitle: "Source to Image"
 weight: 921
 sectionnumber: 9.2.1
 description: >

@@ -1,6 +1,6 @@
 ---
-title: "Image Deployment"
-linkTitle: "9.2.4 Image Deployment"
+title: "9.2.4 Image Deployment"
+linkTitle: "Image Deployment"
 weight: 924
 sectionnumber: 9.2.4
 description: >
