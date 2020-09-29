@@ -2,14 +2,14 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   labels:
-    app: appuio-spring-boot-ex
-  name: appuio-spring-boot-ex
+     application: amm-techlab
+  name: data-producer
 spec:
   port:
     targetPort: 8080-tcp
   to:
     kind: Service
-    name: appuio-spring-boot-ex
+    name: data-producer
     weight: 100
   tls:
     termination: edge

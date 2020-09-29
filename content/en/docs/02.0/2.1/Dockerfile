@@ -1,18 +1,14 @@
-FROM registry.access.redhat.com/ubi8/openjdk-11
+FROM registry.access.redhat.com/ubi8/ubi
+WORKDIR /work/
 
-LABEL maintainer="philipona@puzzle.ch"
+#Install wget
+RUN yum install wget -y
 
-EXPOSE 8080 9000
+#Fetch the latest binary release from the GutHub release page
+RUN wget https://github.com/puzzle/amm-techlab/releases/download/1.0.0/application
 
+RUN chmod -R 775 /work
+EXPOSE 8080
 
-LABEL io.k8s.description="Example Spring Boot App" \
-      io.k8s.display-name="APPUiO Spring Boot App" \
-      io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,springboot"
-
-RUN mkdir -p /tmp/src/
-ADD . /tmp/src/
-
-RUN cd /tmp/src && sh gradlew build -Dorg.gradle.daemon=false
-
-RUN cp -a  /tmp/src/build/libs/springboots2idemo*.jar /deployments/springboots2idemo.jar
+#Run the application
+CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]

@@ -9,7 +9,7 @@ description: >
 
 ## {{% param sectionnumber %}}.1 Docker instructions
 
-Building, testing and publishing of the container image using [Docker](https://www.docker.com/). This includes the commands for [Lab: 2.1 Build a container image](build-container-image/).
+Building, testing and publishing of the container image using [Docker](https://www.docker.com/).
 
 
 ### Image build
@@ -17,7 +17,7 @@ Building, testing and publishing of the container image using [Docker](https://w
 Docker build command:
 
 ```bash
-docker build -t go-hello-world .
+docker build -t go-hello-world
 ```
 
 
