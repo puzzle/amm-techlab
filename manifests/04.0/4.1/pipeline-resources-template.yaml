@@ -13,7 +13,7 @@ objects:
     type: git
     params:
     - name: url
-      value: https://github.com/g1raffi/quarkus-techlab-data-consumer.git
+      value: https://github.com/puzzle/quarkus-techlab-data-consumer.git
     - name: revision
       value: tekton
 - apiVersion: tekton.dev/v1alpha1
@@ -33,7 +33,7 @@ objects:
     type: git
     params:
     - name: url
-      value: https://github.com/g1raffi/quarkus-techlab-data-producer.git
+      value: https://github.com/puzzle/quarkus-techlab-data-producer.git
     - name: revision
       value: tekton
 - apiVersion: tekton.dev/v1alpha1
