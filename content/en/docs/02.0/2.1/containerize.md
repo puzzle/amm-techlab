@@ -7,12 +7,18 @@ description: >
   Containerize an application.
 ---
 
-The main goal of this lab is to show you how to containerize a Java application. Including deployment on OpenShift and exposing the service with a route. In this example we want to build a microservice based on Quarkus, which produces random data when it’s REST interface is called. Another Quarkus microservice consumes then the data and exposes it on it’s own endpoint.
+The main goal of this lab is to show you how to containerize a Java application. Including deployment on OpenShift and exposing the service with a route. In this example we want to build a microservice based on [Quarkus](https://quarkus.io/), which produces random data when it’s REST interface is called. Another Quarkus microservice consumes then the data and exposes it on it’s own endpoint.
+
+```
++----------+                    +----------+
+| producer +<-------------------+ consumer +
++----------+                    +----------+
+```
 
 Some words about Quarkus:
 
 {{% alert  color="primary" %}}
-“Quarkus is a Kubernetes Native Java stack tailored for GraalVM & OpenJDK HotSpot, crafted from the best of breed Java libraries and standards. Also focused on developer experience, making things just work with little to no configuration and allowing to do live coding.” - quarkus.io
+“Quarkus is a Kubernetes Native Java stack tailored for GraalVM & OpenJDK HotSpot, crafted from the best of breed Java libraries and standards. Also focused on developer experience, making things just work with little to no configuration and allowing to do live coding.” - [quarkus.io](https://quarkus.io/)
 {{% /alert %}}
 
 In short, Quarkus brings a framework built upon JakartaEE standards to build microservices in the Java environment. Per default Quarkus comes with full CDI integration, RESTeasy-JAX-RS, dev mode and many more features.

@@ -21,10 +21,10 @@ Let's take a look at a example to make our point. Imagine we do have an applicat
 If we would implement this with synchronous communication the system would look something like this:
 
 ```
-   +------------+                     +------------+                     +--------------+
-   | shop       |        create order | order      |     process payment |   payment    |
-   | component  +-------------------->+ component  +-------------------->+   component  |
-   +------------+                     +------------+                     +--------------+
++------------+                     +------------+                     +--------------+
+| shop       |        create order | order      |     process payment |   payment    |
+| component  +-------------------->+ component  +-------------------->+   component  |
++------------+                     +------------+                     +--------------+
 ```
 
 If the order component breaks down or will not accept any communication, the shop component must handle the entire fault tolerance and the system's reliability will depend on it's error handling.
@@ -36,14 +36,14 @@ For handling these streams of events we need a message broker. Whenever a event 
 The architecture might look something like this:
 
 ```
-                +------------------+                +-----------------+
-        +------->     orders       |---+        +---> payment request +-----+
-        |       +------------------+   |        |   +-----------------+     |
-        |                              |        |                           |
-  +-------------+                    +-v----------+                     +---v----------+
-  | shop        |                    | order      |                     |   payment    |
-  | component   |                    | component  |                     |   component  |
-  +-------------+                    +------------+                     +--------------+
+              +------------------+                +-----------------+
+      +------->     orders       |---+        +---> payment request +-----+
+      |       +------------------+   |        |   +-----------------+     |
+      |                              |        |                           |
++-------------+                    +-v----------+                     +---v----------+
+| shop        |                    | order      |                     |   payment    |
+| component   |                    | component  |                     |   component  |
++-------------+                    +------------+                     +--------------+
 ```
 
 In this example the shop component emits an event to a data stream called orders. The order component subscribes to the orders data stream and gets notified whenever a event is submitted and can be handled, he then emits an event to the payment request which will get processed by the subscribing payment component.
