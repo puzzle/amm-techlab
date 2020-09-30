@@ -15,7 +15,7 @@ In this section we are going to deploy a Apache Kafka cluster with the Strimzi O
 
 ### {{% param sectionnumber %}}.1.1: Publish-subscribe durable messaging system
 
-Apache Kafka is a durable messaging system which uses the publish-subscribe pattern for data exchange. Components publish events to a *topic* and subscribed components will get notified with said event whenever a new message is published. *Topics* represent a datastream which holds a stream of data in temporal order. Applications can send and process records to or from a *topic*. A *record* is a byte array that can store any object in any format. A *record* has four attributes, *key* and *value* are mandatory, and the other attributes, *timestamp* and *headers* are optional. The value can be whatever needs to be sent.
+Apache Kafka is a durable messaging system which uses the publish-subscribe pattern for data exchange. Components publish events to a *topic* and subscribed components will get notified with said event whenever a new message is published. *Topics* represent a data stream which holds a stream of data in temporal order. Applications can send and process records to or from a *topic*. A *record* is a byte array that can store any object in any format. A *record* has four attributes, *key* and *value* are mandatory, and the other attributes, *timestamp* and *headers* are optional. The value can be whatever needs to be sent.
 
 There are four important parts of any Kafka system:
 
@@ -24,7 +24,7 @@ There are four important parts of any Kafka system:
 * *Producer*: The producer sends records to the broker.
 * *Consumer*: The consumer subscribes to a topic and consumes records from the broker.
 
-If you want to dive deeper into the Kafka world take a look at the officail [documentation](https://kafka.apache.org/documentation/).
+If you want to dive deeper into the Kafka world take a look at the official [documentation](https://kafka.apache.org/documentation/).
 
 
 ## {{% param sectionnumber %}}.2: Hands-on
@@ -171,7 +171,7 @@ Create the cluster with:
 
 ```s
 
-oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.2/kafka-cluster.yaml
+oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/kafka/kafka-cluster.yaml
 
 ```
 
@@ -199,7 +199,7 @@ This will create the 'manual' topic which allows our microservices to communicat
 
 ```s
 
-oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.2/manual-topic.yaml
+oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/kafka/manual-topic.yaml
 
 ```
 
@@ -395,8 +395,8 @@ Apply the resource definitions and let OpenShift rollout your freshly created de
 
 ```s
 
-oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.2/data-consumer.yaml
-oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.2/data-producer.yaml
+oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/kafka/data-consumer.yaml
+oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/kafka/data-producer.yaml
 
 ```
 
