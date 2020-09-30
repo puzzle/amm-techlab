@@ -19,7 +19,7 @@ description: >
 * [ ] Hinweis eigenes Build Image verwenden, falls in ext. privater Registry -> Proxy Einstellungen
 
 
-> Binary builds require content from the local file system. Therefore automatic triggering a build is not possible.
+{{% alert  color="primary" %}}Binary builds require content from the local file system. Therefore automatic triggering a build is not possible.{{% /alert %}}
 
 
 ### Uses cases of binary builds

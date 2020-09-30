@@ -7,7 +7,7 @@ description: >
   Best practices for creating OpenShift containers.
 ---
 
-> Here you find best practices. It is not a lab to play through.
+{{% alert  color="primary" %}}Here you find best practices. It is not a lab to play through.{{% /alert %}}
 
 
 ## Best practices for container in general

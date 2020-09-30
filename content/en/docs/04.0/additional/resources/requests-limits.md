@@ -101,7 +101,9 @@ As its class name suggests, these are the kinds of Pods that will be killed by t
 
 As you now know what limits and requests are, we can come back to the statement made above:
 
-> As we've already seen, compute ResourceQuotas limit the amount of memory and CPU we can use in a Namespace. Only defining a ResourceQuota, however is not going to have an effect on Pods that don't define the amount of resources they want to use. This is where the concept of limits and requests comes into play.
+{{% alert  color="primary" %}}
+As we've already seen, compute ResourceQuotas limit the amount of memory and CPU we can use in a Namespace. Only defining a ResourceQuota, however is not going to have an effect on Pods that don't define the amount of resources they want to use. This is where the concept of limits and requests comes into play.
+{{% /alert %}}
 
 So if a cluster administrator wanted to make sure that every Pod in the cluster counted against the compute ResourceQuota, the administrator would have to have a way of defining some kind of default limits and requests that were applied if none were defined in the containers.
 This is exactly what _LimitRanges_ are for.

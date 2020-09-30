@@ -7,7 +7,9 @@ description: >
   This setion covers building a container image using a `Dockerfile`.
 ---
 
-> This is a demo lab because your WEB-IDE does not contain the needed tools. Ask the moderator for a demo or install the tools on your computer.
+{{% alert  color="primary" %}}
+This is a demo lab because your WEB-IDE does not contain the needed tools. Ask the moderator for a demo or install the tools on your computer.
+{{% /alert %}}
 
 
 ## Task {{% param sectionnumber %}}.1: Build a container image

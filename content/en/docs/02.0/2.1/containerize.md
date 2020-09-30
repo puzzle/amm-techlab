@@ -405,7 +405,7 @@ route.route.openshift.io/data-producer   data-producer-producer-consumer-hanelor
 
 Finally you can visit your application with the URL provided from the Route: <https://data-producer-producer-consumer-userXY.techlab.openshift.ch/data>
 
-> Replace **userXY** with your username or get the url from your route.
+{{% alert  color="primary" %}}Replace **userXY** with your username or get the url from your route.{{% /alert %}}
 
 When you open the url you should see the producers data
 

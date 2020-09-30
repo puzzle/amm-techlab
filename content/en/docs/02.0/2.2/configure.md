@@ -303,7 +303,8 @@ After the container has started successfully, the application should be reachabl
 
 Check if the changes were applied correct. Open your browser and navigate to your application:  
 <https://data-producer-amm-userXY.ocp.aws.puzzle.ch/data>
-> Replace **userXY** with your username!
+
+{{% alert  color="primary" %}}Replace **userXY** with your username!{{% /alert %}}
 
 
 ## Task {{% param sectionnumber %}}.5: Important notes
