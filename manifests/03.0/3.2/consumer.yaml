@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: data-consumer
+    application: amm-techlab
+  name: data-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deployment: data-consumer
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        deployment: data-consumer
+        app: data-consumer
+    spec:
+      containers:
+      - image: g1raffi/quarkus-techlab-data-consumer:rest
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 5
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 3
+          periodSeconds: 20
+          successThreshhold: 1
+          timeoutSeconds: 15
+        readinessProbe:
+          failureThreshold: 5
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 3
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 15
+        name: data-consumer
+        port:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+        resources:
+          limits:
+            cpu: 1
+            memory: 500Mi
+          requests:
+            cpu: 50m
+            memory: 100Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    application: amm-techlab
+    app: data-consumer
+  name: data-consumer
+spec:
+  ports:
+    - name: data-consumer-http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    deployment: data-consumer
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Route
+metadata:
+  labels:
+    application: amm-techlab
+    app: data-consumer
+  name: data-consumer
+spec:
+  path: /
+  tls:
+    insecureEdgeTerminationPolicy: Allow
+    termination: edge
+  to:
+    kind: Service
+    name: data-consumer

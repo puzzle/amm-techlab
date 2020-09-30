@@ -30,12 +30,28 @@ This Jaeger deployment is not meant for production use! Data is only stored in-m
 {{% /alert %}}
 
 
-Deploy Jaeger:
+Create the local file `<workspace>/jaeger.yaml` with the following content:
+
+```yaml
+apiVersion: jaegertracing.io/v1
+kind: Jaeger
+metadata:
+  name: jaeger-all-in-one-inmemory
+```
+
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/05.0/5.2/jaeger.yaml)
+
+And then execute the following command:
 
 ```bash
-oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/05.0/jaeger.yaml
 oc apply -f jaeger.yaml
 
+```
+
+Expected result:
+
+```bash
+jaeger.jaegertracing.io/jaeger-all-in-one-inmemory created
 ```
 
 Verify the deployment
@@ -43,6 +59,19 @@ Verify the deployment
 ```bash
 oc get pod -w
 ```
+
+The newly deployed Jaeger instance is also available over a route.
+
+```bash
+oc get route jaeger-all-in-one-inmemory
+```
+
+```bash
+NAME                         HOST/PORT                                                                 PATH   SERVICES                           PORT    TERMINATION   WILDCARD
+jaeger-all-in-one-inmemory   jaeger-all-in-one-inmemory-<namespace>.techlab.openshift.ch                      jaeger-all-in-one-inmemory-query   <all>   reencrypt     None
+```
+
+Open the Jaeger webconsole in a Browserwindow and login with your credetials
 
 
 ## Task {{% param sectionnumber %}}.2: Send Traces to Jaeger
@@ -56,9 +85,9 @@ g1raffi/quarkus-techlab-data-consumer:jaegerkafka
 g1raffi/quarkus-techlab-data-producer:jaegerkafka
 ```
 
-Update your resources and run the pipeline or argocd synch or change the images manually.
+Update your resources and apply the changes running `oc apply -f`
 
 
 ## Task {{% param sectionnumber %}}.3: Explore the Traces
 
-Explore the Traces in the Jaeger Console
+Explore the Traces in the Jaeger Console once again.
