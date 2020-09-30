@@ -50,7 +50,7 @@ For each task, a pod will be allocated and for each step inside this task, a con
 We start by creating a new project:
 
 ```bash
-oc new-project pipelines-userXY
+oc new-project <user>-pipelines
 ```
 
 The OpenShift Pipeline operator will automatically create a pipeline serviceaccount with all required permissions to build and push an image. This serviceaccount is used by PipelineRuns:
@@ -93,7 +93,7 @@ A Task is the smallest block of a Pipeline which by itself can contain one or mo
 You can find more examples of reusable tasks in the [Tekton Catalog](https://github.com/tektoncd/catalog) and [OpenShift Catalog](https://github.com/openshift/pipelines-catalog) repositories.
 {{% /alert %}}
 
-Let's examine two tasks that do a deployment.
+Let's examine two tasks that do a deployment. Create the local file `<workspace>/deploy-tasks.yaml` with the following content:
 
 ```yaml
 # deploy-tasks.yaml
@@ -123,12 +123,12 @@ spec:
 
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/05.0/deploy-tasks.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.1/deploy-tasks.yaml)
 
 Let's create the tasks:
 
 ```bash
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/04.0/deploy-tasks.yaml
+oc apply -f deploy-tasks.yaml
 ```
 
 Verify that the two tasks have been created using the Tekton CLI:
@@ -157,6 +157,8 @@ It first uses the Task *buildah*, which is a default task the OpenShift operator
 {{% alert title="Note" color="primary" %}}
 The Pipeline should be re-usable across multiple projects or environments, that's why the resources (git-repo and image) are not defined here. When a Pipeline is executed, these resources will get defined.
 {{% /alert %}}
+
+Create the following pipeline `<workspace>/deploy-pipeline.yaml`:
 
 ```yaml
 # deploy-pipeline.yaml
@@ -205,13 +207,15 @@ spec:
     - apply-manifests
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/05.0/deploy-pipeline.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.1/deploy-pipeline.yaml)
 
 Create the Pipeline:
 
 ```bash
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/05.0/deploy-pipeline.yaml
+oc create -f deploy-pipeline.yaml
 ```
+
+which will result in: `pipeline.tekton.dev/build-and-deploy created`
 
 Verify that the Pipeline has been created using the Tekton CLI:
 
@@ -246,6 +250,8 @@ Quick overview:
 We use a template to adapt the image registry URL to match to your project.
 {{% /alert %}}
 
+Create the following openshift template `<workspace>/deploy-resources-template.yaml`:
+
 ```yaml
 # pipeline-resources-template.yaml
 apiVersion: v1
@@ -263,7 +269,7 @@ objects:
     type: git
     params:
     - name: url
-      value: https://github.com/g1raffi/quarkus-techlab-data-consumer.git
+      value: https://github.com/puzzle/quarkus-techlab-data-consumer.git
     - name: revision
       value: tekton
 - apiVersion: tekton.dev/v1alpha1
@@ -283,7 +289,7 @@ objects:
     type: git
     params:
     - name: url
-      value: https://github.com/g1raffi/quarkus-techlab-data-producer.git
+      value: https://github.com/puzzle/quarkus-techlab-data-producer.git
     - name: revision
       value: tekton
 - apiVersion: tekton.dev/v1alpha1
@@ -301,15 +307,23 @@ parameters:
   mandatory: true
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/05.0/pipeline-resources-template.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.1/pipeline-resources-template.yaml)
 
 Create the Pipeline resources by processing the template and creating the generated resources:
 
 ```bash
-
-oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/05.0/pipeline-resources-template.yaml \
+oc process -f pipeline-resources-template.yaml \
   --param=PROJECT_NAME=$(oc project -q) \
 | oc create -f-
+```
+
+will result in:
+
+```bash
+pipelineresource.tekton.dev/consumer-repo created
+pipelineresource.tekton.dev/consumer-image created
+pipelineresource.tekton.dev/producer-repo created
+pipelineresource.tekton.dev/producer-image created
 ```
 
 The resources can be listed with:
@@ -320,10 +334,10 @@ tkn resource ls
 
 ```
 NAME             TYPE    DETAILS
-consumer-repo    git     url: https://github.com/g1raffi/quarkus-techlab-data-consumer.git
-producer-repo    git     url: https://github.com/g1raffi/quarkus-techlab-data-producer.git
-consumer-image   image   url: image-registry.openshift-image-registry.svc:5000/amm-techlab-tekton/data-consumer:latest
-producer-image   image   url: image-registry.openshift-image-registry.svc:5000/amm-techlab-tekton/data-producer:latest
+consumer-repo    git     url: https://github.com/puzzle/quarkus-techlab-data-consumer.git
+producer-repo    git     url: https://github.com/puzzle/quarkus-techlab-data-producer.git
+consumer-image   image   url: image-registry.openshift-image-registry.svc:5000/<user>-pipelines/data-consumer:latest
+producer-image   image   url: image-registry.openshift-image-registry.svc:5000/<user>-pipelines/data-producer:latest
 
 ```
 
@@ -340,7 +354,7 @@ tkn pipeline start build-and-deploy \
 -s pipeline
 ```
 
-This will create and execute a PipelineRun. The logs of the run will be shown in the console.
+This will create and execute a PipelineRun. Use the command `tkn pipelinerun logs build-and-deploy-run-<pod> -f -n <user>-pipelines` to display the logs
 
 Now start the same Pipeline with the producer resources:
 
@@ -387,7 +401,7 @@ Get the route of your project and open the URL in the browser.
 
 This was just an example for a pipeline, that builds and deploys a container image to OpenShift. There are lots of security features missing.
 
-TODO: <https://github.com/puzzle/delivery-pipeline-concept>
+checkout the Puzzle [delivery pipeline concept](https://github.com/puzzle/delivery-pipeline-concept) for further infos.
 
 
 ## Links and Sources
