@@ -19,7 +19,7 @@ spec:
         deploymentConfig: data-producer
     spec:
       containers:
-        - image: data-producer
+        - image: g1raffi/quarkus-techlab-data-producer:kafka
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 5
@@ -54,13 +54,5 @@ spec:
               cpu: 50m
               memory: 100Mi
   triggers:
-    - imageChangeParams:
-        automatic: true
-        containerNames: 
-          - data-producer
-        from:
-          kind: ImageStreamTag
-          name: data-producer:rest
-      type: ImageChange
     - type: ConfigChange
   

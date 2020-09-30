@@ -7,7 +7,7 @@ description: >
    Event driven architecture with Apache Kafka.
 ---
 
-This lab gives you an introduction to event driven architecture with Apache Kafka. You will deploy an event driven version of the producer-consumer application from [Lab 2](../../../02.0).
+This lab gives you an introduction to event driven architecture with Apache Kafka. You will deploy an event driven version of the producer-consumer application from [lab 2](../../../02.0).
 
 
 ## {{% param sectionnumber %}}.1: Apache Kafka
@@ -43,22 +43,32 @@ There are four important parts of any Kafka system:
 If you want to dive deeper into the Kafka world take a look at the official [documentation](https://kafka.apache.org/documentation/).
 
 
-## Task {{% param sectionnumber %}}.2: Setup Project
+## Task {{% param sectionnumber %}}.2: Lap Setup
 
-Prepare a new OpenShift project
+This lab bases on [lab 2](../../../02.0). Make sure that you are in the same OpenShift project.
 
-```bash
-oc new-project event-driven-userXY
+```s
+oc project
 ```
 
+```
+Using project "producer-consumer-userXY" on server "https://api.techlab.openshift.ch:6443".
+```
 
-## Task {{% param sectionnumber %}}.3: Deploy an event driven application on OpenShift
+The returned project should be "producer-consumer-userXY".
 
-Let's get our kafka instance, producer and consumers up and running in the cloud.
+{{% alert  color="primary" %}}When the application does not run correctly, see the solution section of lab 2 or ask for assistance.{{% /alert %}}
 
-> When you like to try it locally with docker-compose, see [Kafka local](../../additional/kafka-local/kafka-local/)
+
+## Task {{% param sectionnumber %}}.3: Deploy and configure Kafka on OpenShift
+
+Let's get our Kafka instance up and running in the cloud and configure it for the event driven application.
+
+{{% alert  color="primary" %}}When you like to try it locally with docker-compose, see [Kafka local](../../additional/kafka-local/kafka-local/){{% /alert %}}
 
 The following Kubernetes-native [custom resource definitions, short crd](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/), defines and configures a Kafka cluster.
+
+Create a file called `<workspace>/kafka-cluster.yaml` with the following content:
 
 ```yml
 apiVersion: kafka.strimzi.io/v1beta1
@@ -96,17 +106,16 @@ spec:
   entityOperator:
     topicOperator: {}
     userOperator: {}
-
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/kafka/kafka-cluster.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/kafka-cluster.yaml)
 
 With the [Strimzi Operator](https://strimzi.io/) we can manage our Kafka cluster with custom resource definitions. The operator will set up your broker tailored to your needs and configuration. We will also manage our topics with the Strimzi operator.
 
 Create the cluster by creating the crd resource inside your project:
 
 ```s
-oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/kafka/kafka-cluster.yaml
+oc apply -f kafka-cluster.yaml
 ```
 
 Expected output:
@@ -121,7 +130,7 @@ Let's check the created pods for the Kafka cluster:
 oc get pods
 ```
 
-Expected output:
+Expected Kafka pods after all pods have been started:
 
 ```
 NAME                                           READY   STATUS    RESTARTS   AGE
@@ -130,7 +139,7 @@ amm-techlab-kafka-0                            2/2     Running   0          2m24
 amm-techlab-zookeeper-0                        1/1     Running   0          2m56s
 ```
 
-To create a new topic in our Kafka cluster we use another custom resource definition with the following content:
+To create a new topic in our Kafka cluster we use another custom resource definition. Create a file called `<workspace>/manual-topic.yaml` with the following content:
 
 ```yml
 apiVersion: kafka.strimzi.io/v1beta1
@@ -148,12 +157,12 @@ spec:
     segment.bytes: 1073741824
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/kafka/manual-topic.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/manual-topic.yaml)
 
 This will create the 'manual' topic which allows our microservices to communicate.
 
 ```s
-oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/kafka/manual-topic.yaml
+oc apply -f manual-topic.yaml
 ```
 
 Expected output:
@@ -175,116 +184,61 @@ NAME     PARTITIONS   REPLICATION FACTOR
 manual   1
 ```
 
-Now it's time to deploy the application. It consists of the two microservices producer and consumer. The following YAML file defines the needed resources for the producer to run on OpenShift:
 
-```yml
-# data-producer.yaml
+## Task {{% param sectionnumber %}}.4: Change your application to event driven
+
+Now it's time to change your producer-consumer application from REST to event driven. The Kafka cluster is up and running.
+
+We do not rebuild our producer. Instead we use a prepared container image. Do two change inside your file `<workspace>/deploymentConfig.yaml`. Change the image to `g1raffi/quarkus-techlab-data-producer:kafka` and remove the ImageChange trigger.
+
+```
+{{< highlight YAML "hl_lines=22 27-28" >}}
 apiVersion: v1
-kind: List
+kind: DeploymentConfig
 metadata:
+  annotations:
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"data-producer:rest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"data-producer\")].image"}]'
   labels:
-    application: quarkus-techlab
-items:
-
-  - apiVersion: apps/v1
-    kind: Deployment
+    application: amm-techlab
+  name: data-producer
+spec:
+  replicas: 1
+  selector:
+    deploymentConfig: data-producer
+  strategy:
+    type: Recreate
+  template:
     metadata:
       labels:
-        application: quarkus-techlab
-      name: data-producer
+        application: amm-techlab
+        deploymentConfig: data-producer
     spec:
-      replicas: 1
-      selector:
-        matchLabels:
-          deployment: data-producer
-      strategy:
-        type: Recreate
-      template:
-        metadata:
-          labels:
-            application: quarkus-techlab
-            deployment: data-producer
-        spec:
-          containers:
-            - image: g1raffi/quarkus-techlab-data-producer:kafka
-              imagePullPolicy: Always
-              livenessProbe:
-                failureThreshold: 5
-                httpGet:
-                  path: /health
-                  port: 8080
-                  scheme: HTTP
-                initialDelaySeconds: 3
-                periodSeconds: 20
-                successThreshhold: 1
-                timeoutSeconds: 15
-              readinessProbe:
-                failureThreshold: 5
-                httpGet:
-                  path: /health
-                  port: 8080
-                  scheme: HTTP
-                initialDelaySeconds: 3
-                periodSeconds: 20
-                successThreshold: 1
-                timeoutSeconds: 15
-              name: data-producer
-              port:
-                - containerPort: 8080
-                  name: http
-                  protocol: TCP
-              resources:
-                limits:
-                  cpu: 1
-                  memory: 500Mi
-                requests:
-                  cpu: 50m
-                  memory: 100Mi
-      triggers:
-        - type: ConfigChange
-        - imageChangeParams:
-            automatic: true
-            containerNames:
-              - data-producer
-            from:
-              kind: ImageStreamTag
-              name: data-producer:kafka
-          type: ImageChange
+      containers:
+        - image: g1raffi/quarkus-techlab-data-producer:kafka
+          imagePullPolicy: Always
 
-  - apiVersion: v1
-    kind: Service
-    metadata:
-      labels:
-        application: quarkus-techlab
-      name: data-producer
-    spec:
-      ports:
-        - name: data-producer-http
-          port: 8080
-          protocol: TCP
-          targetPort: 8080
-      selector:
-        deployment: data-producer
-      sessionAffinity: None
-      type: ClusterIP
+          ...
+
+  triggers:
+    - type: ConfigChange
+{{< / highlight >}}
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/kafka/data-producer.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/deploymentConfig.yaml)
 
-Apply the content of the YAML file to let OpenShift rollout your freshly created deployment of the producer.
+Apply the updated content of the YAML file to let OpenShift rollout your freshly created deployment of the producer.
 
 ```s
-oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/kafka/data-producer.yaml
+oc apply -f deploymentConfig.yaml
 ```
 
 Expected output:
 
 ```
-deployment.apps/data-producer created
-service/data-producer created
+deploymentconfig.apps.openshift.io/data-producer configured
 ```
 
-The consumer has similar resources defined. The [YAML file](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/kafka/data-consumer.yaml) only differs by image and resource names.
+The consumer has similar resources defined. The file from lab 2 `<workspace>/consumer.yaml` defines all needed resources as a list.
 
 Also apply the resource definition and let OpenShift deploy the consumer:
 
@@ -302,3 +256,14 @@ service/data-consumer created
 Go with the web-console to your OpenShift project (Developer view). There you see the Kafka cluster and the two microservices.
 
 Log into your OpenShift project and check the logs of the data-consumer pod. You can see that he will consume data from the kafka manual topic produced by the data-producer microservice!
+
+
+## Solution
+
+The needed resource files are available inside the folder <manifests/03.0/3.2/>.
+
+When you were not successful, you can update your project with the solution by executing this command:
+
+```s
+oc apply -f manifests/03.0/3.2/
+```
