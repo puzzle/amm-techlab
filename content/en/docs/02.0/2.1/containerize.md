@@ -432,7 +432,7 @@ route.route.openshift.io/data-consumer created
 
 Let's verify if everything was deployed and is up running.
 
-```BASH
+```s
 oc get all
 ```
 
@@ -472,4 +472,15 @@ imagestream.image.openshift.io/data-producer   image-registry.openshift-image-re
 NAME                                     HOST/PORT                                                         PATH   SERVICES        PORT       TERMINATION   WILDCARD
 route.route.openshift.io/data-consumer   data-consumer-producer-consumer-hanelore15.techlab.openshift.ch   /      data-consumer   <all>      edge/Allow    None
 route.route.openshift.io/data-producer   data-producer-producer-consumer-hanelore15.techlab.openshift.ch          data-producer   8080-tcp   edge          None
+```
+
+
+## Solution
+
+The needed resource files are available inside the folder <manifests/02.0/2.1/>.
+
+When you were not successful, you can update your project with the solution by executing this command:
+
+```s
+oc apply -f manifests/02.0/2.1/
 ```
