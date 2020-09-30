@@ -7,16 +7,14 @@ description: >
   Run the event driven application with Apache Kafka local.
 ---
 
-> Your WEB-IDE does not contain the needed tools for this lab.
-  When you like to do it, you have to install the tools (Docker, docker-compose) on your computer.
+> Your WEB-IDE does not contain the needed tools for this lab. When you like to do it, you have to install the tools (Docker, docker-compose) on your computer.
 
 
 ## Task {{% param sectionnumber %}}.1: Run an event driven application on your computer
 
 Let's get our kafka instance, producer and consumers up and running on your local machine.
 
-> This is the correspondent lab to [Event driven architecture with Apache Kafka](../../../kafka/kafka/)
-  where you run the application on OpenShift.
+> This is the correspondent lab to [Event driven architecture with Apache Kafka](../../../kafka/kafka/) where you run the application on OpenShift.
 
 With the following docker-compose file you can start your own local kafka cluster.
 
