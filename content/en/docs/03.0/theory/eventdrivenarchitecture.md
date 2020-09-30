@@ -21,15 +21,13 @@ Let's take a look at a example to make our point. Imagine we do have an applicat
 If we would implement this with synchronous communication the system would look something like this:
 
 ```
-
    +------------+                     +------------+                     +--------------+
-   | shop       |        create order | order      |      process payment    payment    |
-   | component  +-------------------->+ component  +-------------------->|   component  |
+   | shop       |        create order | order      |     process payment |   payment    |
+   | component  +-------------------->+ component  +-------------------->+   component  |
    +------------+                     +------------+                     +--------------+
-
 ```
 
-If the order component breaks down or will not accept any communication, the shop component must handle the enitre fault tolerance and the system's reliability will depend on it's error handling.
+If the order component breaks down or will not accept any communication, the shop component must handle the entire fault tolerance and the system's reliability will depend on it's error handling.
 
 We can take a step back now and take a look at this workflow from another perspective. On a meta level all the workflows in this application do get triggered by events. We can think of the order or the payment request as events. The order component should not really care from whom the order comes nor should the shop component care from where this event was triggered. The entire workflow moves away from the pattern that we rely on any calls from one component to another, but we just emit events whenever another workflow should be triggered and components listen to a stream of events which will start their connected workflow.
 
@@ -38,16 +36,14 @@ For handling these streams of events we need a message broker. Whenever a event 
 The architecture might look something like this:
 
 ```
-
-                +-------------------+               +-----------------+
-        +------->     orders       |---+        +--->  payment request+-----+
-        |       +-------------------+  |        |   +-----------------+     |
+                +------------------+                +-----------------+
+        +------->     orders       |---+        +---> payment request +-----+
+        |       +------------------+   |        |   +-----------------+     |
         |                              |        |                           |
   +-------------+                    +-v----------+                     +---v----------+
   | shop        |                    | order      |                     |   payment    |
   | component   |                    | component  |                     |   component  |
   +-------------+                    +------------+                     +--------------+
-
 ```
 
 In this example the shop component emits an event to a data stream called orders. The order component subscribes to the orders data stream and gets notified whenever a event is submitted and can be handled, he then emits an event to the payment request which will get processed by the subscribing payment component.
@@ -59,7 +55,7 @@ Here are some additional practices and design patterns for event driven architec
 
 ### {{% param sectionnumber %}}.1.1: Event notification
 
-In this approach, microservices emit events through channels to trigger behaviour or notify other components about the change of a state in the application. Notification events do not carry too much data and are very light weight. This results in a very effective and ressource friendly communication between the microservices.
+In this approach, microservices emit events through channels to trigger behavior or notify other components about the change of a state in the application. Notification events do not carry too much data and are very light weight. This results in a very effective and ressource friendly communication between the microservices.
 
 
 ### {{% param sectionnumber %}}.1.2: Event-carried state transfer
