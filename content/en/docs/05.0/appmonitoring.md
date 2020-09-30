@@ -60,29 +60,45 @@ oc describe crd ServiceMonitor
 
 ## Task {{% param sectionnumber %}}.1: Create Service Monitor
 
-Let's now create our first ServiceMonitor
+Let's now create our first ServiceMonitor, switch back to the project of lab 3
+
+```bash
+oc project <namespace>
+```
+
+Create the following ServiceMonitor resource as local file `<workspace>/servicemonitor-consumer.yaml` and make sure to replace the `<namespace>` with your project name.
 
 ```yaml
 apiVersion: monitoring.coreos.com/v1
-  kind: ServiceMonitor
-  metadata:
-    labels:
-      k8s-app: quarkus-techlab-monitor
-    name: consumer-monitor
-  spec:
-    endpoints:
-    - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
-      interval: 30s
-      port: data-consumer-http
-      scheme: http
-      path: /metrics
-    namespaceSelector:
-      matchNames:
-        - <namespace>
-    selector:
-      matchLabels:
-        application: quarkus-techlab
+kind: ServiceMonitor
+metadata:
+  labels:
+    k8s-app: quarkus-techlab-monitor
+  name: consumer-monitor
+spec:
+  endpoints:
+  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    interval: 30s
+    port: data-consumer-http
+    scheme: http
+    path: /metrics
+  namespaceSelector:
+    matchNames:
+      - <namespace>
+  selector:
+    matchLabels:
+      application: quarkus-techlab
 ```
+
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/05.0/5.1/servicemonitor-consumer.yaml)
+
+Create the build config.
+
+```BASH
+oc apply -f servicemonitor-consumer.yaml
+```
+
+Expected result: `servicemonitor.monitoring.coreos.com/consumer-monitor created`
 
 
 ## Task {{% param sectionnumber %}}.2: Verify whether the Prometheus Targets gets scraped or not
@@ -112,8 +128,3 @@ Since the Metrics are now collected from both services, let's execute a query an
 ```
 TODO: create a query
 ```
-
-
-## Task {{% param sectionnumber %}}.5: Change OpenShift Resources using Tekton or ArgoCD
-
-To make the changes persistent, makes sure to update the Resources which are deployed either Tekton or ArgoCD, then run the pipeline or synch the Resources.

@@ -7,21 +7,6 @@ description: >
   Build and deployment automation with Tekton on OpenShift.
 ---
 
-## TODO
-
-* [ ] Testen und durchspielen
-* [ ] ev. Tekton zusammen erarbeiten und auf git pushen
-* [ ] Bspw. eine ENV anpassen und dann die Pipeline starten.
-* [ ] Maria DB auch noch definieren als DeploymentConfig und Ressource im Git Repo erstellen (Analog APPUiO Techlab Lab 8) resp. via Pipeline Deployen
-* [ ] App so umkonfigurieren, dass die sie neu die DB verwendet.
-* [ ] Tekton lab, evtl. anhand von der App oben:
-  * [x] Basis Red Hat nehmen
-    * [ ] und vielleicht wenn die Zeit noch da ist auf unsere App umstellen
-* [ ] ev. noch mit [WebHook](https://docs.openshift.com/container-platform/4.4/pipelines/creating-applications-with-cicd-pipelines.html#creating-webhooks_creating-applications-with-cicd-pipelines) erweitern
-* [ ] ev. mit Task aus Catalog erweitern: <https://github.com/tektoncd/catalog> oder <https://github.com/openshift/pipelines-catalog>
-* [ ] Security Aspekte einfliessen lassen. im Lab Text schreiben, Waf vorschalten, Owasp checks machen, Zap Proxy
-
-
 We will deploy an example application to test OpenShift Pipelines. OpenShift Pipelines are based on [Tekton](https://tekton.dev/).
 
 

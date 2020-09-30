@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    k8s-app: quarkus-techlab-monitor
+  name: consumer-monitor
+spec:
+  endpoints:
+  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    interval: 30s
+    port: data-consumer-http
+    scheme: http
+    path: /metrics
+  namespaceSelector:
+    matchNames:
+      - <namespace>
+  selector:
+    matchLabels:
+      application: quarkus-techlab
