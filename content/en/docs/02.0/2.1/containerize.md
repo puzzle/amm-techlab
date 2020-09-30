@@ -100,9 +100,10 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
 
 ## Task {{% param sectionnumber %}}.3: Create BuildConfig
 
-The [BuildConfig](https://docs.openshift.com/container-platform/4.5/builds/understanding-buildconfigs.html) describes how a single build task is performed. The BuildConfig is primary characterized by the Build strategy and its resources. For our build we use the Docker strategy which invokes the Docker build command. Furthermore it expects a `Dockerfile` in the source repository. If the Dockerfile is not in the root directory, then you can sepcify the location with the `dockerfilePath`.
+The [BuildConfig](https://docs.openshift.com/container-platform/4.5/builds/understanding-buildconfigs.html) describes how a single build task is performed. The BuildConfig is primary characterized by the Build strategy and its resources. For our build we use the Docker strategy which invokes the Docker build command. Furthermore it expects a `Dockerfile` in the source repository. If the Dockerfile is not in the root directory, then you can specify the location with the `dockerfilePath`.
 Beside we configure the source and the triggers as well. For the source we can specify any Git repository. This is where the application sources resides. The triggers describe how to trigger the build. In this example we provide four different triggers. (Generic webhook, GitHub webhook, ConfigMap change, Image change)
 
+Prepare a file inside your workspace `<workspace>/buildConfig.yaml` and add the following resource configuration:
 
 ```YAML
 apiVersion: build.openshift.io/v1
@@ -148,12 +149,12 @@ spec:
     type: ImageChange
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/buildConfig.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/buildConfig.yaml)
 
 Create the build config.
 
 ```BASH
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/buildConfig.yaml
+oc apply -f buildConfig.yaml
 ```
 
 ```
@@ -183,12 +184,12 @@ status:
   dockerImageRepository: ""
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/imageStream.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/imageStream.yaml)
 
 Let's create the ImageStream
 
 ```BASH
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/imageStream.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/imageStream.yaml
 ```
 
 ```
@@ -268,12 +269,12 @@ spec:
     - type: ConfigChange
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/deploymentConfig.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/deploymentConfig.yaml)
 
 Let's create the deployment with following command
 
 ```BASH
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/deploymentConfig.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/deploymentConfig.yaml
 ```
 
 ```
@@ -307,12 +308,12 @@ spec:
   type: ClusterIP
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/svc.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/svc.yaml)
 
 Create the Service in OpenShift
 
 ```bash
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/svc.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/svc.yaml
 ```
 
 ```
@@ -345,13 +346,13 @@ spec:
   wildcardPolicy: None
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/route.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/route.yaml)
 
 
 Create the Route in OpenShift
 
 ```bash
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/route.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/route.yaml
 ```
 
 ```
@@ -420,7 +421,7 @@ If you just see `Your new Cloud-Native application is ready!`, then you forget t
 Now it's time to deploy the counterpart. Use following command to deploy the data-consumer application. The consumer application consists of three resource definitions. First we create a deployment, pointing to the consumer Docker Image on docker Hub. Next the service which exposes the application inside our cluster and last the route to access the app from outside the cluster.
 
 ```BASH
-oc create -f  https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/2.1/consumer.yaml
+oc create -f  https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/consumer.yaml
 ```
 
 ```

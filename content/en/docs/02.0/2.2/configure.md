@@ -166,7 +166,6 @@ spec:
     - type: ConfigChange
 {{< / highlight >}}
 
-
 Update the HTTP Port from 8080 to 8081 using `oc patch` again:
 There are total three ports to change. The container port itself, and the ports for the liveness/readiness probe.
 
@@ -180,8 +179,9 @@ oc patch dc/data-producer --type "json" -p '[{"op":"replace","path":"/spec/templ
 deployment.apps/data-producer patched
 ```
 
-Verify the changed port of the pod with `oc describe`
+{{% alert title="Note" color="primary" %}} The changed DeploymentConfig should now represent the [solution](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/deploymentConfig.yaml) {{% /alert %}}
 
+Verify the changed port of the pod with `oc describe`
 
 ```BASH
 oc describe deployment data-producer

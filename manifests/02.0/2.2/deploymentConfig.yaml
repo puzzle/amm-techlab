@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"data-producer:rest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"data-producer\")].image"}]'
+  labels:
+    application: amm-techlab
+  name: data-producer
+spec:
+  replicas: 1
+  selector:
+    deploymentConfig: data-producer
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        application: amm-techlab
+        deploymentConfig: data-producer
+    spec:
+      containers:
+        - image: data-producer
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 20
+            successThreshhold: 1
+            timeoutSeconds: 15
+          readinessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 15
+          name: data-producer
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          resources:
+            limits:
+              cpu: "1"
+              memory: 200Mi
+            requests:
+              cpu: 50m
+              memory: 100Mi
+  triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames: 
+          - data-producer
+        from:
+          kind: ImageStreamTag
+          name: data-producer:rest
+      type: ImageChange
+    - type: ConfigChange
+  
