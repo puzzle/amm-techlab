@@ -61,7 +61,14 @@ Switch to your project with `oc project <username>`
 If you want to use your local `oc` tool, make sure to get the appropriate version.
 
 
-### Task {{% param sectionnumber %}}.1.3: explore other namespaces
+### Task {{% param sectionnumber %}}.1.3: Local Workspace Directory
+
+During the lab, you're going to be using local files (eg. yaml resources) which will be applied in your lab project.
+
+Create your local lab workspace directory `<workspace>` for example`~/amm-techlab/`
+
+
+### Task {{% param sectionnumber %}}.1.4: explore other namespaces
 
 Alongside the Lab Cluster, we also deployed a couple of additional Tools and Services we're going to use during the lab.
 
