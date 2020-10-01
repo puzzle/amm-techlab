@@ -77,8 +77,7 @@ metadata:
   name: consumer-monitor
 spec:
   endpoints:
-  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
-    interval: 30s
+  - interval: 30s
     port: data-consumer-http
     scheme: http
     path: /metrics
@@ -100,11 +99,17 @@ oc apply -f servicemonitor-consumer.yaml
 
 Expected result: `servicemonitor.monitoring.coreos.com/consumer-monitor created`
 
+{{% alert title="Warning" color="secondary" %}}
+Your current user must have the following rights in the current namespace: `oc policy add-role-to-user monitoring-edit <user> -n <namespace>`
+Tell your trainer if you get a permission error while creating the ServiceMonitor
+{{% /alert %}}
+
 
 ## Task {{% param sectionnumber %}}.2: Verify whether the Prometheus Targets gets scraped or not
 
-Prometheus is nicely integrated into the OpenShift Console under the Menu Item Monitoring.
-Explore the Monitoring part and execute the following query to check whether your target is configured or not:
+Prometheus is integrated into the OpenShift Console under the Menu Item Monitoring.
+But as part of this lab, we want to use grafana to interact with prometheus. 
+Open Grafana (URL provided by the trainer) and switch to the explore tab, then execute the following query to check whether your target is configured or not:
 
 {{% alert title="Note" color="primary" %}}
 Make sure to replace `<namespace>` with your current namespace
@@ -112,7 +117,7 @@ Make sure to replace `<namespace>` with your current namespace
 
 
 ```
-prometheus_sd_discovered_targets{namespace="<namespace>"}
+prometheus_sd_discovered_targets{config="<namespace>/consumer-monitor/0"}
 ```
 
 
@@ -125,6 +130,8 @@ Similar to Task {{% param sectionnumber %}}.1 create a ServiceMonitor or alter t
 
 Since the Metrics are now collected from both services, let's execute a query and visualise the data.
 
+for example the total seconds the Garbage Collector ran
+
 ```
-TODO: create a query
+sum(base_gc_time_total_seconds{namespace="<namespace>-eventdriven"})
 ```
