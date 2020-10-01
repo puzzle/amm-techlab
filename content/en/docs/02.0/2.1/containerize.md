@@ -66,7 +66,7 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
 
 Here is the full example of the  Dockerfile for building the application from source.
 In this example we make use of the Docker Multistage builds. In the first stage we use the centOS Quarkus image and perform a Quarkus nativ build. The resulting binary will be used in the second build stage. For the second stage we use the UBI minimal image.
-(see [best practices](http://localhost:8081/docs/02.0/additional/container-best-practices/bestpractise/#use-multistage-build) for more information on Multistage builds)
+(see [best practices](https://gitea.techlab.openshift.ch/APPUiO-AMM-Techlab/docs/02.0/additional/container-best-practices/bestpractise/#use-multistage-build) for more information on Multistage builds)
 
 ```Dockerfile
 ## Stage 1 : build with maven builder image with native capabilities

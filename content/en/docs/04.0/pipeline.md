@@ -7,7 +7,7 @@ description: >
   Build and deployment automation with Tekton on OpenShift.
 ---
 
-We will deploy an example application to test OpenShift Pipelines. OpenShift Pipelines are based on [Tekton](https://tekton.dev/).
+We will deploy our Quarkus application to test OpenShift Pipelines. OpenShift Pipelines are based on [Tekton](https://tekton.dev/).
 
 
 ## Task {{% param sectionnumber %}}.1: Basic Concepts
@@ -235,7 +235,7 @@ Quick overview:
 We use a template to adapt the image registry URL to match to your project.
 {{% /alert %}}
 
-Create the following openshift template `<workspace>/deploy-resources-template.yaml`:
+Create the following openshift template `<workspace>/pipeline-resources-template.yaml`:
 
 ```yaml
 # pipeline-resources-template.yaml
