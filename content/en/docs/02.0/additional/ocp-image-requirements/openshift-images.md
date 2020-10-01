@@ -13,7 +13,7 @@ description: >
 OpenShift has additional security features enabled in comparison to Docker or a vanilla Kubernetes plattform.
 The most relevant mechanism are prevention of root user, [SELinux](https://de.wikipedia.org/wiki/SELinux) enabled and arbitrary user ids.
 
-That adds additional requirements to the container images that will be deployed to OpenShift. This lab shows how to deal with them.
+This adds additional requirements to the container images that will be deployed to OpenShift. This lab shows how to deal with them.
 
 
 ## Task {{% param sectionnumber %}}.2: Demo application
@@ -326,7 +326,8 @@ So what is the reason for this? We already specified the `golang` user in the `D
 
 ## Task {{% param sectionnumber %}}.5: Fix permissions
 
-We need to extend the `Dockerfile`
+Even if we specify a user with the USER directive in a Dockerfile, OpenShift is going to ignore it. It starts the container with an arbitrary userID and group 0 (root group).
+We need to extend the `Dockerfile` to give group 0 access.
 
 ```
 {{< highlight dockerfile  "hl_lines=2-4" >}}

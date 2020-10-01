@@ -51,7 +51,7 @@ WORKDIR /work/
 RUN yum install wget -y
 
 #Fetch the latest binary release from the GutHub release page
-RUN wget https://github.com/puzzle/amm-techlab/releases/download/1.0.0/application
+RUN wget https://github.com/puzzle/quarkus-techlab-data-producer/releases/download/1.0.0-rest/application
 
 RUN chmod -R 775 /work
 EXPOSE 8080
@@ -64,8 +64,9 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
 [source](https://gitea.techlab.openshift.ch/APPUiO-AMM-Techlab/example-spring-boot-helloworld/raw/branch/master/Dockerfile)
 
 
-Here is the full example of the  Dockerfile for buiölding the application from source.
+Here is the full example of the  Dockerfile for building the application from source.
 In this example we make use of the Docker Multistage builds. In the first stage we use the centOS Quarkus image and perform a Quarkus nativ build. The resulting binary will be used in the second build stage. For the second stage we use the UBI minimal image.
+(see [best practices](http://localhost:8081/docs/02.0/additional/container-best-practices/bestpractise/#use-multistage-build) for more information on Multistage builds)
 
 ```Dockerfile
 ## Stage 1 : build with maven builder image with native capabilities
@@ -95,7 +96,7 @@ USER 1001
 CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
 ```
 
-[source](https://gitea.techlab.openshift.ch/APPUiO-AMM-Techlab/example-spring-boot-helloworld/raw/branch/master/Dockerfile.complete)
+[source](https://gitea.techlab.openshift.ch/APPUiO-AMM-Techlab/quarkus-techlab-data-consumer/raw/branch/master/Dockerfile.multistage)
 
 
 ## Task {{% param sectionnumber %}}.3: Create BuildConfig

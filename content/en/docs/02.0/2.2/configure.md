@@ -4,7 +4,7 @@ linkTitle: "2.2 Configure the application"
 weight: 22
 sectionnumber: 2.2
 description: >
-  Configure a Spring Boot application based on environment variables.
+  Configure the application based on environment variables.
 ---
 
 In this stage we show you how to configure your application.
