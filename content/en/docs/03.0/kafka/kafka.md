@@ -48,7 +48,7 @@ If you want to dive deeper into the Kafka world take a look at the official [doc
 This lab bases on [lab 2](../../../02.0). Make sure that you are in the same OpenShift project.
 
 ```s
-oc project
+oc project userXY
 ```
 
 ```
@@ -110,7 +110,7 @@ spec:
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/kafka-cluster.yaml)
 
-With the [Strimzi Operator](https://strimzi.io/) we can manage our Kafka cluster with custom resource definitions. The operator will set up your broker tailored to your needs and configuration. We will also manage our topics with the Strimzi operator.
+With the [Strimzi Operator](https://strimzi.io/) we can manage our Kafka cluster with custom resource definitions. The operator is already installed in our techlab cluster. It will set up your broker tailored to your needs and configuration. We will also manage our topics with the Strimzi operator.
 
 Create the cluster by creating the crd resource inside your project:
 
@@ -192,7 +192,7 @@ Now it's time to change your producer-consumer application from REST to event dr
 
 ### Task {{% param sectionnumber %}}.4.1: Update the producer
 
-We do not rebuild our producer. Instead we use a prepared container image. Do two change inside your file `<workspace>/deploymentConfig.yaml`. Change the image to `g1raffi/quarkus-techlab-data-producer:kafka` and remove the ImageChange trigger.
+We do not rebuild our producer. Instead we use a prepared container image. Do two changes inside your file `<workspace>/deploymentConfig.yaml`. Change the image to `g1raffi/quarkus-techlab-data-producer:kafka` and remove the ImageChange trigger.
 
 ```
 {{< highlight YAML "hl_lines=22 27-28" >}}
