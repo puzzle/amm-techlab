@@ -184,6 +184,20 @@ NAME     PARTITIONS   REPLICATION FACTOR
 manual   1
 ```
 
+As an alternative we can also connect to the kafka server and list all topics
+
+You need to rsh into the kafka pod
+
+```bash
+oc rsh amm-techlab-kafka-0
+```
+
+The helper scripts within the bin directory allow you to query your kafka server. Execute the following command to list all topics, including the topic we've created before.
+
+```bash
+./bin/kafka-topics.sh --bootstrap-server localhost:9092  --describe
+```
+
 
 ## Task {{% param sectionnumber %}}.4: Change your application to event driven
 
@@ -253,6 +267,8 @@ Instead of the OpenShift DeploymentConfig of the producer, the consumer uses a K
 
 Checkout the [Consumer Sourcecode (kafka branch)](https://github.com/puzzle/quarkus-techlab-data-consumer/tree/kafka) to see what changed in the consumer service.
 
+./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic manual --from-beginning
+
 ```
 {{< highlight YAML "hl_lines=21" >}}
 apiVersion: apps/v1
@@ -301,6 +317,32 @@ route.route.openshift.io/data-consumer unchanged
 Go with the web-console to your OpenShift project (Developer view). There you see the Kafka cluster and the two microservices.
 
 Log into your OpenShift project and check the logs of the data-consumer pod. You can see that he will consume data from the Kafka manual topic produced by the data-producer microservice!
+
+
+### Task {{% param sectionnumber %}}.4.3: Verify the events on the kafka topic
+
+To verify the produced events end up in the `manual` topic, we can once again rsh into the kafka pod and use the helpler scripts.
+
+```bash
+oc rsh amm-techlab-kafka-0
+```
+
+Then execute the following command to read events from the topic
+
+```bash
+./bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic manual
+```
+
+Expected result, something similar to:
+
+```bash
+{"data":0.14970117407591477}
+{"data":0.3119723463354409}
+...
+{"data":0.48397732353720324}
+```
+
+{{% alert title="Note" color="primary" %}} Use the `--from-beginning` param to read the whole topic {{% /alert %}}
 
 
 ## Solution
