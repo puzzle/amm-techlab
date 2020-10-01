@@ -385,7 +385,6 @@ Get the route of your project and open the URL in the browser.
 ## High quality and secure Pipeline
 
 This was just an example for a pipeline, that builds and deploys a container image to OpenShift. There are lots of security features missing.
-<!-- A bit of a better explanation would be nice -->
 
 checkout the Puzzle [delivery pipeline concept](https://github.com/puzzle/delivery-pipeline-concept) for further infos.
 

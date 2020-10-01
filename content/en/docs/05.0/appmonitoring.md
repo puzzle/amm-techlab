@@ -67,7 +67,6 @@ oc project <namespace>
 ```
 
 Create the following ServiceMonitor resource as local file `<workspace>/servicemonitor-consumer.yaml` and make sure to replace the `<namespace>` with your project name.
-
 ```yaml
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
@@ -115,7 +114,7 @@ Open Grafana (URL provided by the trainer) and switch to the explore tab, then e
 Make sure to replace `<namespace>` with your current namespace
 {{% /alert %}}
 
-
+<!-- Didn't work had no data showing -->
 ```
 prometheus_sd_discovered_targets{config="<namespace>/consumer-monitor/0"}
 ```
