@@ -18,7 +18,7 @@ spec:
         app: data-consumer
     spec:
       containers:
-      - image: puzzle/quarkus-techlab-data-consumer:kafka
+      - image: puzzle/quarkus-techlab-data-consumer:jaegerkafka
         imagePullPolicy: Always
         livenessProbe:
           failureThreshold: 5

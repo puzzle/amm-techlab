@@ -19,7 +19,7 @@ spec:
         deploymentConfig: data-producer
     spec:
       containers:
-        - image: puzzle/quarkus-techlab-data-producer:kafka
+        - image: puzzle/quarkus-techlab-data-producer:jaegerkafka
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 5

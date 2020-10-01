@@ -192,7 +192,7 @@ Now it's time to change your producer-consumer application from REST to event dr
 
 ### Task {{% param sectionnumber %}}.4.1: Update the producer
 
-We do not rebuild our producer. Instead we use a prepared container image. Do two changes inside your file `<workspace>/deploymentConfig.yaml`. Change the image to `g1raffi/quarkus-techlab-data-producer:kafka` and remove the ImageChange trigger.
+We do not rebuild our producer. Instead we use a prepared container image. Do two changes inside your file `<workspace>/deploymentConfig.yaml`. Change the image to `puzzle/quarkus-techlab-data-producer:kafka` and remove the ImageChange trigger.
 
 ```
 {{< highlight YAML "hl_lines=22 27-28" >}}
@@ -217,7 +217,7 @@ spec:
         deploymentConfig: data-producer
     spec:
       containers:
-        - image: g1raffi/quarkus-techlab-data-producer:kafka
+        - image: puzzle/quarkus-techlab-data-producer:kafka
           imagePullPolicy: Always
 
           ...
@@ -244,7 +244,7 @@ deploymentconfig.apps.openshift.io/data-producer configured
 
 ### Task {{% param sectionnumber %}}.4.2: Update the consumer
 
-Also the consumer has a prepared container image. We only have to change the image to `g1raffi/quarkus-techlab-data-consumer:kafka`.
+Also the consumer has a prepared container image. We only have to change the image to `puzzle/quarkus-techlab-data-consumer:kafka`.
 
 The file from lab 2 `<workspace>/consumer.yaml` defines all needed resources as a list.
 Instead of the OpenShift DeploymentConfig of the producer, the consumer uses a Kubernetes-native Deployment. There you change the used container image.
@@ -271,7 +271,7 @@ spec:
         app: data-consumer
     spec:
       containers:
-      - image: g1raffi/quarkus-techlab-data-consumer:kafka
+      - image: puzzle/quarkus-techlab-data-consumer:kafka
         imagePullPolicy: Always
         ...
 {{< / highlight >}}

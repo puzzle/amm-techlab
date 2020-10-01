@@ -17,10 +17,10 @@ In our Quarkus applications we use [Eclipse MicroProfile OpenTracing](https://gi
 
 ## Task {{% param sectionnumber %}}.1: Deploy Jaeger instance
 
-Make sure to be in the namespace where your application and other services are deployed:
+Make sure to currently be in your main project where your application and other services are deployed:
 
 ```bash
-oc project
+oc project <user>
 ```
 
 Then let's quickly deploy a Jaeger instance.
@@ -78,14 +78,20 @@ Open the Jaeger webconsole in a Browserwindow and login with your credetials
 
 Now let's make sure the traces that are collected within our microservices are also been sent to the running Jaeger services.
 
-To achieve that, we need to deploy a different version of our microservices. Update the deployment config to use the new image:
+To achieve that, we need to deploy a different version of our microservices. Update the deployment config (`consumer.yaml` and `deploymentConfig.yaml`) to use the new images:
 
 ```
-g1raffi/quarkus-techlab-data-consumer:jaegerkafka
-g1raffi/quarkus-techlab-data-producer:jaegerkafka
+puzzle/quarkus-techlab-data-consumer:jaegerkafka
+puzzle/quarkus-techlab-data-producer:jaegerkafka
 ```
 
-Update your resources and apply the changes running `oc apply -f`
+
+Update your resources and apply the changes running the following command
+
+```bash
+oc apply -f consumer.yaml
+oc apply -f deploymentConfig.yaml
+```
 
 
 ## Task {{% param sectionnumber %}}.3: Explore the Traces

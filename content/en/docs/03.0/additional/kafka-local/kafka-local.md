@@ -70,7 +70,7 @@ We can now start the data-producer microservice which will produce data and send
 Run this command in a new terminal:
 
 ```s
-docker run --rm --network host -e QUARKUS_PROFILE=dev -p 8080:8080 g1raffi/quarkus-techlab-data-producer:kafka
+docker run --rm --network host -e QUARKUS_PROFILE=dev -p 8080:8080 puzzle/quarkus-techlab-data-producer:kafka
 ```
 
 As soon as you start your microservice you will see that he will start to produce data to the kafka cluster. Let's verify this and consume our kafka topic manually.
@@ -94,7 +94,7 @@ Stop this consumer inside the container by pressing `Ctrl+C` and `Ctrl+D` to lea
 Additional we can start the consumer microservice as well which will start to consume the data produced by our data-producer microservice.
 
 ```s
-docker run --rm --network host -e QUARKUS_PROFILE=dev -p 8080:8080 g1raffi/quarkus-techlab-data-consumer:kafka
+docker run --rm --network host -e QUARKUS_PROFILE=dev -p 8080:8080 puzzle/quarkus-techlab-data-consumer:kafka
 ```
 
 You will see the console logs with the data consumed from the kafka topic. It works!

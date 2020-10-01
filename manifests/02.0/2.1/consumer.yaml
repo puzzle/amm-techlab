@@ -18,7 +18,7 @@ spec:
         app: data-consumer
     spec:
       containers:
-      - image: g1raffi/quarkus-techlab-data-consumer:rest
+      - image: puzzle/quarkus-techlab-data-consumer:rest
         imagePullPolicy: Always
         livenessProbe:
           failureThreshold: 5
