@@ -183,6 +183,7 @@ deployment.apps/data-producer patched
 
 Verify the changed port of the pod with `oc describe`
 
+<!-- ist eine deploymentConfig -->
 ```BASH
 oc describe deployment data-producer
 ```

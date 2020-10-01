@@ -64,7 +64,7 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
 [source](https://gitea.techlab.openshift.ch/APPUiO-AMM-Techlab/example-spring-boot-helloworld/raw/branch/master/Dockerfile)
 
 
-Here is the full example of the  Dockerfile for buiölding the application from source.
+Here is the full example of the  Dockerfile for building the application from source.
 In this example we make use of the Docker Multistage builds. In the first stage we use the centOS Quarkus image and perform a Quarkus nativ build. The resulting binary will be used in the second build stage. For the second stage we use the UBI minimal image.
 
 ```Dockerfile
@@ -130,6 +130,7 @@ spec:
       memory: "512Mi"
   source:
     git:
+    # Non Puzzle Link
       uri: https://github.com/schlapzz/quarkus-techlab-data-producer.git
       ref: rest
     type: Git
@@ -161,7 +162,6 @@ oc apply -f buildConfig.yaml
 buildconfig.build.openshift.io/data-producer created
 ```
 
-
 ## Task {{% param sectionnumber %}}.4: Create ImageStreams
 
 Next we need to configure an [ImageStream](https://docs.openshift.com/container-platform/4.5/openshift_images/image-streams-manage.html) for the output Image. The ImageStream is an abstraction for referencing images from within OpenShift Container Platform. Simplified the ImageStream tracks changes for the defined images and reacts by triggering a new Build.
@@ -188,6 +188,8 @@ status:
 
 Let's create the ImageStream
 
+<!-- Wiso wird hier keine Datei erstellt sondern GithubLink -->
+<!-- Hier wird create verwendet und nicht apply wie zuvor?-->
 ```BASH
 oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/imageStream.yaml
 ```
@@ -420,6 +422,10 @@ If you just see `Your new Cloud-Native application is ready!`, then you forget t
 
 Now it's time to deploy the counterpart. Use following command to deploy the data-consumer application. The consumer application consists of three resource definitions. First we create a deployment, pointing to the consumer Docker Image on docker Hub. Next the service which exposes the application inside our cluster and last the route to access the app from outside the cluster.
 
+<!-- The Producer is a DeploymentConfig and the Consumer is a Deloyment -->
+<!-- Example explanation:
+Consumer and Producer are different Kind of Templates. The Producer is a DeploymentConfig and the Consumer a Deployment. The Producer needs to be a DeploymentConfig to make full use of the build process with imagestreams. Because the Consumer uses a external Image and doesn't need these features we can follow the best pracices and use the Kubernetes compatible Deployment
+ -->
 ```BASH
 oc create -f  https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/consumer.yaml
 ```
@@ -474,12 +480,12 @@ route.route.openshift.io/data-consumer   data-consumer-producer-consumer-hanelor
 route.route.openshift.io/data-producer   data-producer-producer-consumer-hanelore15.techlab.openshift.ch          data-producer   8080-tcp   edge          None
 ```
 
-
 ## Solution
-
+<!-- The Folder isn't present -->
+When you were not successful, you can update your project with the solution.
 The needed resource files are available inside the folder *manifests/02.0/2.1/*.
 
-When you were not successful, you can update your project with the solution by executing this command:
+To apply the Solution execute this command:
 
 ```s
 oc apply -f manifests/02.0/2.1/

@@ -191,7 +191,7 @@ Now it's time to change your producer-consumer application from REST to event dr
 
 
 ### Task {{% param sectionnumber %}}.4.1: Update the producer
-
+<!-- I don't have this file -->
 We do not rebuild our producer. Instead we use a prepared container image. Do two change inside your file `<workspace>/deploymentConfig.yaml`. Change the image to `g1raffi/quarkus-techlab-data-producer:kafka` and remove the ImageChange trigger.
 
 ```
@@ -243,9 +243,9 @@ deploymentconfig.apps.openshift.io/data-producer configured
 
 
 ### Task {{% param sectionnumber %}}.4.2: Update the consumer
-
 Also the consumer has a prepared container image. We only have to change the image to `g1raffi/quarkus-techlab-data-consumer:kafka`.
 
+<!-- I don't have this file -->
 The file from lab 2 `<workspace>/consumer.yaml` defines all needed resources as a list.
 Instead of the OpenShift DeploymentConfig of the producer, the consumer uses a Kubernetes-native Deployment. There you change the used container image.
 

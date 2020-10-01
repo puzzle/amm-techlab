@@ -7,7 +7,7 @@ description: >
   Build and deployment automation with Tekton on OpenShift.
 ---
 
-We will deploy an example application to test OpenShift Pipelines. OpenShift Pipelines are based on [Tekton](https://tekton.dev/).
+We will deploy our Quarkus Application to test OpenShift Pipelines. OpenShift Pipelines are based on [Tekton](https://tekton.dev/).
 
 
 ## Task {{% param sectionnumber %}}.1: Basic Concepts
@@ -235,7 +235,7 @@ Quick overview:
 We use a template to adapt the image registry URL to match to your project.
 {{% /alert %}}
 
-Create the following openshift template `<workspace>/deploy-resources-template.yaml`:
+Create the following openshift template `<workspace>/pipeline-resources-template.yaml`:
 
 ```yaml
 # pipeline-resources-template.yaml
@@ -369,14 +369,14 @@ Moreover, the logs can be viewed with the following command and selecting the ap
 tkn pipeline logs
 ```
 
-
 ## Task {{% param sectionnumber %}}.6: OpenShift WebUI
 
 With the OpenShift Pipeline operator, a new menu item is introduced to the WebUI of OpenShift. All Tekton CLI commands, which are used above, could be replaced with the web interface. The big advantage is the graphical presentation of Pipelines and their lifetime.
 
 
 ### Checking your application
-
+<!-- This lab didn't work. The Pipeline was succesful but the application didn't start. The pods searched for kafka which didn't exist -->
+<!-- Cats and Dogs??? -->
 Now our Pipeline is built and deployed the voting application. Now you can vote whether you prefer cats or dogs (Cats or course :) )
 
 Get the route of your project and open the URL in the browser.
@@ -385,6 +385,7 @@ Get the route of your project and open the URL in the browser.
 ## High quality and secure Pipeline
 
 This was just an example for a pipeline, that builds and deploys a container image to OpenShift. There are lots of security features missing.
+<!-- A bit of a better explanation would be nice -->
 
 checkout the Puzzle [delivery pipeline concept](https://github.com/puzzle/delivery-pipeline-concept) for further infos.
 
