@@ -115,6 +115,7 @@ Make sure to replace `<namespace>` with your current namespace
 {{% /alert %}}
 
 <!-- Didn't work had no data showing -->
+<!-- no copy button -->
 ```
 prometheus_sd_discovered_targets{config="<namespace>/consumer-monitor/0"}
 ```
