@@ -15,7 +15,7 @@ objects:
     - name: url
       value: https://github.com/puzzle/quarkus-techlab-data-consumer.git
     - name: revision
-      value: tekton
+      value: rest
 - apiVersion: tekton.dev/v1alpha1
   kind: PipelineResource
   metadata:
@@ -35,7 +35,7 @@ objects:
     - name: url
       value: https://github.com/puzzle/quarkus-techlab-data-producer.git
     - name: revision
-      value: tekton
+      value: rest
 - apiVersion: tekton.dev/v1alpha1
   kind: PipelineResource
   metadata:
