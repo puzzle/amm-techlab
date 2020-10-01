@@ -4,7 +4,7 @@ linkTitle: "2.2 Configure the application"
 weight: 22
 sectionnumber: 2.2
 description: >
-  Configure a Spring Boot application based on environment variables.
+  cbl: this seems wrong Configure a Spring Boot application based on environment variables.
 ---
 
 In this stage we show you how to configure your application.
@@ -27,7 +27,8 @@ Using project "producer-consumer-userXY" on server "https://api.techlab.openshif
 ## Task {{% param sectionnumber %}}.2: Change Networking
 
 We have to change a port on the service that we have created in the previous lab.
-
+cbl: why do we want to change the port? maybe change to  "Suppose we want to change the application port for some reason."
+cbl: maybe it would be better to change the order: start with the application (changing the application port with env is something the Student probably can relate to) and after that change the oc resources.
 
 ### Change service target port
 
@@ -308,6 +309,8 @@ Check if the changes were applied correct. Open your browser and navigate to you
 
 
 ## Important notes
+
+cbl: maybe move this to the top
 
 We showed how to change the OpenShift resources using the commands `oc patch` and `oc set env`.
 This is good for developing or debugging the setup of an application project.

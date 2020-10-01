@@ -13,8 +13,9 @@ description: >
 OpenShift has additional security features enabled in comparison to Docker or a vanilla Kubernetes plattform.
 The most relevant mechanism are prevention of root user, [SELinux](https://de.wikipedia.org/wiki/SELinux) enabled and arbitrary user ids.
 
-That adds additional requirements to the container images that will be deployed to OpenShift. This lab shows how to deal with them.
+This adds additional requirements to the container images that will be deployed to OpenShift. This lab shows how to deal with them.
 
+For more background information and links to the OpenShift documentation see the [best practices](http://localhost:8081/docs/02.0/additional/container-best-practices/bestpractise/#best-practices-for-creating-openshift-containers).
 
 ## Task {{% param sectionnumber %}}.2: Demo application
 
@@ -81,7 +82,7 @@ func appendToFile(remoteAddr string) {
 
 ### Dockerfile
 
-The dockerfile is the same as in chapter 2.
+The image was build with Docker Multistage builds (see [best practices](http://localhost:8081/docs/02.0/additional/container-best-practices/bestpractise/#use-multistage-build) for more information).
 
 ``` dockerfile
 FROM golang:1.14-alpine as builder
@@ -321,12 +322,13 @@ main.main()
   /opt/app-root/src/main.go:18 +0x126
 ```
 
-So what is the reason for this? We already specified the `golang` user in the `Dockerfile`. So technically the user should have access to its own home directory. Even if we specify a user with the USER directive in a Dockerfile, OpenShift is going to ignore it. We need to fix the permissions for this particular user.
+So what is the reason for this? We already specified the `golang` user in the `Dockerfile`. So technically the user should have access to its own home directory. We need to fix the permissions for this particular user.
 
 
 ## Task {{% param sectionnumber %}}.5: Fix permissions
 
-We need to extend the `Dockerfile`
+Even if we specify a user with the USER directive in a Dockerfile, OpenShift is going to ignore it. It starts the container with an arbitrary userID and group 0 (root group).
+We need to extend the `Dockerfile` to give group 0 access.
 
 ```
 {{< highlight dockerfile  "hl_lines=2-4" >}}
