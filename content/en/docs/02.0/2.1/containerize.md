@@ -477,7 +477,7 @@ route.route.openshift.io/data-producer   data-producer-producer-consumer-hanelor
 
 ## Solution
 
-The needed resource files are available inside the folder <manifests/02.0/2.1/>.
+The needed resource files are available inside the folder *manifests/02.0/2.1/*.
 
 When you were not successful, you can update your project with the solution by executing this command:
 

@@ -189,6 +189,9 @@ manual   1
 
 Now it's time to change your producer-consumer application from REST to event driven. The Kafka cluster is up and running.
 
+
+### Task {{% param sectionnumber %}}.4.1: Update the producer
+
 We do not rebuild our producer. Instead we use a prepared container image. Do two change inside your file `<workspace>/deploymentConfig.yaml`. Change the image to `g1raffi/quarkus-techlab-data-producer:kafka` and remove the ImageChange trigger.
 
 ```
@@ -238,29 +241,67 @@ Expected output:
 deploymentconfig.apps.openshift.io/data-producer configured
 ```
 
-The consumer has similar resources defined. The file from lab 2 `<workspace>/consumer.yaml` defines all needed resources as a list.
 
-Also apply the resource definition and let OpenShift deploy the consumer:
+### Task {{% param sectionnumber %}}.4.2: Update the consumer
+
+Also the consumer has a prepared container image. We only have to change the image to `g1raffi/quarkus-techlab-data-consumer:kafka`.
+
+The file from lab 2 `<workspace>/consumer.yaml` defines all needed resources as a list.
+Instead of the OpenShift DeploymentConfig of the producer, the consumer uses a Kubernetes-native Deployment. There you change the used container image.
+
+```
+{{< highlight YAML "hl_lines=21" >}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: data-consumer
+    application: amm-techlab
+  name: data-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deployment: data-consumer
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        deployment: data-consumer
+        app: data-consumer
+    spec:
+      containers:
+      - image: g1raffi/quarkus-techlab-data-consumer:kafka
+        imagePullPolicy: Always
+        ...
+{{< / highlight >}}
+```
+
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/consumer.yaml)
+
+
+Also apply the updated resource definition and let OpenShift deploy the consumer:
 
 ```s
-oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/kafka/data-consumer.yaml
+oc apply -f consumer.yaml
 ```
 
 Expected output:
 
 ```
-deployment.apps/data-consumer created
-service/data-consumer created
+deployment.apps/data-consumer configured
+service/data-consumer unchanged
+route.route.openshift.io/data-consumer unchanged
 ```
 
 Go with the web-console to your OpenShift project (Developer view). There you see the Kafka cluster and the two microservices.
 
-Log into your OpenShift project and check the logs of the data-consumer pod. You can see that he will consume data from the kafka manual topic produced by the data-producer microservice!
+Log into your OpenShift project and check the logs of the data-consumer pod. You can see that he will consume data from the Kafka manual topic produced by the data-producer microservice!
 
 
 ## Solution
 
-The needed resource files are available inside the folder <manifests/03.0/3.2/>.
+The needed resource files are available inside the folder *manifests/03.0/3.2/*.
 
 When you were not successful, you can update your project with the solution by executing this command:
 

@@ -307,9 +307,20 @@ Check if the changes were applied correct. Open your browser and navigate to you
 {{% alert  color="primary" %}}Replace **userXY** with your username!{{% /alert %}}
 
 
-## Task {{% param sectionnumber %}}.5: Important notes
+## Important notes
 
 We showed how to change the OpenShift resources using the commands `oc patch` and `oc set env`.
 This is good for developing or debugging the setup of an application project.
 
 For changing stages and productive environments we propose updating the YAML representations inside the Git repository and apply the files again.
+
+
+## Solution
+
+The needed resource files are available inside the folder *manifests/02.0/2.2/*.
+
+When you were not successful, you can update your project with the solution by executing this command:
+
+```s
+oc apply -f manifests/02.0/2.2/
+```
