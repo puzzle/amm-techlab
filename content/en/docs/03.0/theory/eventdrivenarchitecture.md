@@ -12,7 +12,7 @@ description: >
 
 When designing applications or software systems we usually tend to follow a very imperative way of building our components. Especially in monolithic applications the communication between two components will often come from function or method calls from one component to another. Even when we follow a microservice architecture the most intuitive way for most people would be to simply replace these calls with REST calls. In theory this is a valid approach and will often be the first step when migrating a monolith towards a microservice approach. The downside however will be the same, whenever two components talk directly to each other they rely on an often synchronous direct communication channel. What happens if the other component is not available?
 
-Let's take a look at a example to make our point. Imagine we do have an application or software systems where you can order shoes. An example workflow would be that a user selects his desired shoes, creates an order and finally pays them which will trigger a shipment.
+Let's take a look at an example to make our point. Imagine we do have an application or software systems where you can order shoes. An example workflow would be that a user selects his desired shoes, creates an order and finally pays them which will trigger a shipment.
 
 * shop component: Which handles all the products available.
 * order component: Handles products which were ordered.
