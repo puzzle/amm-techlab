@@ -25,6 +25,11 @@ In short, Quarkus brings a framework built upon JakartaEE standards to build mic
 
 If you wanna know more about quarkus, you can checkout our [Puzzle Quarkus Techlab](https://puzzle.github.io/quarkus-techlab/)
 
+The source code of our quarkus applications is awailable on github:
+
+* [Consumer](https://github.com/puzzle/quarkus-techlab-data-consumer)
+* [Producer](https://github.com/puzzle/quarkus-techlab-data-producer)
+
 
 ## Task {{% param sectionnumber %}}.1: Inspect Dockerfile
 

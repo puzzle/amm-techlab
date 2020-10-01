@@ -48,7 +48,7 @@ If you want to dive deeper into the Kafka world take a look at the official [doc
 This lab bases on [lab 2](../../../02.0). Make sure that you are in the same OpenShift project.
 
 ```s
-oc project userXY
+oc project <userXY>
 ```
 
 ```
@@ -194,6 +194,8 @@ Now it's time to change your producer-consumer application from REST to event dr
 
 We do not rebuild our producer. Instead we use a prepared container image. Do two changes inside your file `<workspace>/deploymentConfig.yaml`. Change the image to `puzzle/quarkus-techlab-data-producer:kafka` and remove the ImageChange trigger.
 
+If you're interested in the code changes needed to connect to the kafka server, checkout the [kafka branch of the producer](https://github.com/puzzle/quarkus-techlab-data-producer/tree/kafka).
+
 ```
 {{< highlight YAML "hl_lines=22 27-28" >}}
 apiVersion: v1
@@ -248,6 +250,8 @@ Also the consumer has a prepared container image. We only have to change the ima
 
 The file from lab 2 `<workspace>/consumer.yaml` defines all needed resources as a list.
 Instead of the OpenShift DeploymentConfig of the producer, the consumer uses a Kubernetes-native Deployment. There you change the used container image.
+
+Checkout the [Consumer Sourcecode (kafka branch)](https://github.com/puzzle/quarkus-techlab-data-consumer/tree/kafka) to see what changed in the consumer service.
 
 ```
 {{< highlight YAML "hl_lines=21" >}}

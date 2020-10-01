@@ -17,10 +17,10 @@ In our Quarkus applications we use [Eclipse MicroProfile OpenTracing](https://gi
 
 ## Task {{% param sectionnumber %}}.1: Deploy Jaeger instance
 
-Make sure to currently be in your main project where your application and other services are deployed:
+Make sure to currently be in your main project (lab 3) where your application and other services are deployed:
 
 ```bash
-oc project <user>
+oc project <userXY>
 ```
 
 Then let's quickly deploy a Jaeger instance.
