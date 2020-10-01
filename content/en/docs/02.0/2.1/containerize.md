@@ -26,16 +26,7 @@ In short, Quarkus brings a framework built upon JakartaEE standards to build mic
 If you wanna know more about quarkus, you can checkout our [Puzzle Quarkus Techlab](https://puzzle.github.io/quarkus-techlab/)
 
 
-## Task {{% param sectionnumber %}}.1: Setup Project
-
-Prepare a new OpenShift project
-
-```bash
-oc new-project producer-consumer-userXY
-```
-
-
-## Task {{% param sectionnumber %}}.2: Inspect Dockerfile
+## Task {{% param sectionnumber %}}.1: Inspect Dockerfile
 
 First we need a Dockerfile. You can find the `Dockerfile` in the root directory of the example Java application
 [Git Repository](https://gitea.techlab.openshift.ch/APPUiO-AMM-Techlab/example-spring-boot-helloworld).
@@ -99,7 +90,7 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
 [source](https://gitea.techlab.openshift.ch/APPUiO-AMM-Techlab/quarkus-techlab-data-consumer/raw/branch/master/Dockerfile.multistage)
 
 
-## Task {{% param sectionnumber %}}.3: Create BuildConfig
+## Task {{% param sectionnumber %}}.2: Create BuildConfig
 
 The [BuildConfig](https://docs.openshift.com/container-platform/4.5/builds/understanding-buildconfigs.html) describes how a single build task is performed. The BuildConfig is primary characterized by the Build strategy and its resources. For our build we use the Docker strategy which invokes the Docker build command. Furthermore it expects a `Dockerfile` in the source repository. If the Dockerfile is not in the root directory, then you can specify the location with the `dockerfilePath`.
 Beside we configure the source and the triggers as well. For the source we can specify any Git repository. This is where the application sources resides. The triggers describe how to trigger the build. In this example we provide four different triggers. (Generic webhook, GitHub webhook, ConfigMap change, Image change)
@@ -163,7 +154,7 @@ buildconfig.build.openshift.io/data-producer created
 ```
 
 
-## Task {{% param sectionnumber %}}.4: Create ImageStreams
+## Task {{% param sectionnumber %}}.3: Create ImageStreams
 
 Next we need to configure an [ImageStream](https://docs.openshift.com/container-platform/4.5/openshift_images/image-streams-manage.html) for the output Image. The ImageStream is an abstraction for referencing images from within OpenShift Container Platform. Simplified the ImageStream tracks changes for the defined images and reacts by triggering a new Build.
 
@@ -198,7 +189,7 @@ imagestream.image.openshift.io/data-producer created
 ```
 
 
-## Task {{% param sectionnumber %}}.5: Deploy Application
+## Task {{% param sectionnumber %}}.4: Deploy Application
 
 After the ImageStream definition we can setup our Deployment.
 
@@ -286,7 +277,7 @@ When you check your project in the web console (Developer view) the example app 
 The pod will be deployed successfully when the build finishes and the application image is pushed to the image stream. Please note this might take several minutes.
 
 
-## Task {{% param sectionnumber %}}.6: Create Service
+## Task {{% param sectionnumber %}}.5: Create Service
 
 Expose the container ports to the to the cluster with a Service. For the Service we configure the port `8080` for the Web API. We set the Service type to ClusterIP to expose the Service cluster internal only.
 
@@ -322,7 +313,7 @@ service/data-producer created
 ```
 
 
-## Task {{% param sectionnumber %}}.7: Create Route
+## Task {{% param sectionnumber %}}.6: Create Route
 
 Create a Route to expose the service at a host name. This will make the application available outside of the cluster.
 
@@ -361,7 +352,7 @@ route.route.openshift.io/data-consumer created
 ```
 
 
-## Task {{% param sectionnumber %}}.8: Verify deployed resources
+## Task {{% param sectionnumber %}}.7: Verify deployed resources
 
 Now we can list all resources in our project to double check if everything is up und running.
 Use the following command to display all resources within our project.
@@ -393,10 +384,10 @@ NAME                                       TYPE     FROM          STATUS     STA
 build.build.openshift.io/data-producer-1   Docker   Git@838be5c   Complete   4 minutes ago   1m21s
 
 NAME                                           IMAGE REPOSITORY                                                                              TAGS   UPDATED
-imagestream.image.openshift.io/data-producer   image-registry.openshift-image-registry.svc:5000/producer-consumer-hanelore15/data-producer   rest   2 minutes ago
+imagestream.image.openshift.io/data-producer   image-registry.openshift-image-registry.svc:5000/hanelore15/data-producer   rest   2 minutes ago
 
 NAME                                     HOST/PORT                                                         PATH   SERVICES        PORT       TERMINATION   WILDCARD
-route.route.openshift.io/data-producer   data-producer-producer-consumer-hanelore15.techlab.openshift.ch          data-producer   8080-tcp   edge          None
+route.route.openshift.io/data-producer   data-producer-hanelore15.techlab.openshift.ch          data-producer   8080-tcp   edge          None
 
 {{< / highlight >}}
 ```
@@ -404,7 +395,7 @@ route.route.openshift.io/data-producer   data-producer-producer-consumer-hanelor
 
 ## Task {{% param sectionnumber %}}.9: Access application by browser
 
-Finally you can visit your application with the URL provided from the Route: <https://data-producer-producer-consumer-userXY.techlab.openshift.ch/data>
+Finally you can visit your application with the URL provided from the Route: <https://data-producer-userXY.techlab.openshift.ch/data>
 
 {{% alert  color="primary" %}}Replace **userXY** with your username or get the url from your route.{{% /alert %}}
 
@@ -468,11 +459,11 @@ NAME                                       TYPE     FROM          STATUS     STA
 build.build.openshift.io/data-producer-1   Docker   Git@838be5c   Complete   10 minutes ago   1m21s
 
 NAME                                           IMAGE REPOSITORY                                                                              TAGS   UPDATED
-imagestream.image.openshift.io/data-producer   image-registry.openshift-image-registry.svc:5000/producer-consumer-hanelore15/data-producer   rest   9 minutes ago
+imagestream.image.openshift.io/data-producer   image-registry.openshift-image-registry.svc:5000/hanelore15/data-producer   rest   9 minutes ago
 
 NAME                                     HOST/PORT                                                         PATH   SERVICES        PORT       TERMINATION   WILDCARD
-route.route.openshift.io/data-consumer   data-consumer-producer-consumer-hanelore15.techlab.openshift.ch   /      data-consumer   <all>      edge/Allow    None
-route.route.openshift.io/data-producer   data-producer-producer-consumer-hanelore15.techlab.openshift.ch          data-producer   8080-tcp   edge          None
+route.route.openshift.io/data-consumer   data-consumer-hanelore15.techlab.openshift.ch   /      data-consumer   <all>      edge/Allow    None
+route.route.openshift.io/data-producer   data-producer-hanelore15.techlab.openshift.ch          data-producer   8080-tcp   edge          None
 ```
 
 

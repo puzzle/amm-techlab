@@ -8,23 +8,10 @@ description: >
 ---
 
 In this stage we show you how to configure your application.
-
-
-## Task {{% param sectionnumber %}}.1: Check Project
-
 For this lab the application of the previous lab is used.
-Verify that you are in the right project `producer-consumer-userXY`:
-
-```bash
-oc project
-```
-
-```
-Using project "producer-consumer-userXY" on server "https://api.techlab.openshift.ch:6443".
-```
 
 
-## Task {{% param sectionnumber %}}.2: Change Networking
+## Task {{% param sectionnumber %}}.1: Change Networking
 
 We have to change a port on the service that we have created in the previous lab.
 
@@ -188,7 +175,7 @@ oc describe deployment data-producer
 ```
 
 
-## Task {{% param sectionnumber %}}.3: Configure application
+## Task {{% param sectionnumber %}}.2: Configure application
 
 There are several options how to configure a Quarkus application. We'll show how to do it with environment variables. You can overwrite every property in the `application.properties` file with the corresponding environment variable. (eg. `quarkus.http.port=8081` in the application.properties is the same like `QUARKUS_HTTP_PORT=8081` as an environment variable) [Quarkus: overriding-properties-at-runtime](https://quarkus.io/guides/config#overriding-properties-at-runtime)
 
@@ -296,7 +283,7 @@ QUARKUS_HTTP_PORT=8081
 ```
 
 
-## Task {{% param sectionnumber %}}.4: Verify application
+## Task {{% param sectionnumber %}}.3: Verify application
 
 Changing the environment of a deployment triggers a rollout of the application pod.
 After the container has started successfully, the application should be reachable again.

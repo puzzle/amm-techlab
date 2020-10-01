@@ -52,10 +52,10 @@ oc project
 ```
 
 ```
-Using project "producer-consumer-userXY" on server "https://api.techlab.openshift.ch:6443".
+Using project "userXY" on server "https://api.techlab.openshift.ch:6443".
 ```
 
-The returned project should be "producer-consumer-userXY".
+The returned project should be "userXY".
 
 {{% alert  color="primary" %}}When the application does not run correctly, see the solution section of lab 2 or ask for assistance.{{% /alert %}}
 

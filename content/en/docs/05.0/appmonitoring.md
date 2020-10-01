@@ -63,10 +63,10 @@ oc describe crd ServiceMonitor
 Let's now create our first ServiceMonitor, switch back to the project of lab 3
 
 ```bash
-oc project <namespace>
+oc project <userXY>
 ```
 
-Create the following ServiceMonitor resource as local file `<workspace>/servicemonitor-consumer.yaml` and make sure to replace the `<namespace>` with your project name.
+Create the following ServiceMonitor resource as local file `<workspace>/servicemonitor-consumer.yaml` and make sure to replace the `<userXY>` with your project name.
 
 ```yaml
 apiVersion: monitoring.coreos.com/v1
@@ -83,7 +83,7 @@ spec:
     path: /metrics
   namespaceSelector:
     matchNames:
-      - <namespace>
+      - <userXY>
   selector:
     matchLabels:
       application: quarkus-techlab
@@ -100,7 +100,7 @@ oc apply -f servicemonitor-consumer.yaml
 Expected result: `servicemonitor.monitoring.coreos.com/consumer-monitor created`
 
 {{% alert title="Warning" color="secondary" %}}
-Your current user must have the following rights in the current namespace: `oc policy add-role-to-user monitoring-edit <user> -n <namespace>`
+Your current user must have the following rights in the current namespace: `oc policy add-role-to-user monitoring-edit <user> -n <userXY>`
 Tell your trainer if you get a permission error while creating the ServiceMonitor
 {{% /alert %}}
 
@@ -112,12 +112,12 @@ But as part of this lab, we want to use grafana to interact with prometheus.
 Open Grafana (URL provided by the trainer) and switch to the explore tab, then execute the following query to check whether your target is configured or not:
 
 {{% alert title="Note" color="primary" %}}
-Make sure to replace `<namespace>` with your current namespace
+Make sure to replace `<userXY>` with your current namespace
 {{% /alert %}}
 
 
 ```
-prometheus_sd_discovered_targets{config="<namespace>/consumer-monitor/0"}
+prometheus_sd_discovered_targets{config="<userXY>/consumer-monitor/0"}
 ```
 
 
@@ -133,5 +133,5 @@ Since the Metrics are now collected from both services, let's execute a query an
 for example the total seconds the Garbage Collector ran
 
 ```
-sum(base_gc_time_total_seconds{namespace="<namespace>-eventdriven"})
+sum(base_gc_time_total_seconds{namespace="<userXY>-eventdriven"})
 ```

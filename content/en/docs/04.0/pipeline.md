@@ -35,7 +35,7 @@ For each task, a pod will be allocated and for each step inside this task, a con
 We start by creating a new project:
 
 ```bash
-oc new-project <user>-pipelines
+oc new-project <userXY>-pipelines
 ```
 
 The OpenShift Pipeline operator will automatically create a pipeline serviceaccount with all required permissions to build and push an image. This serviceaccount is used by PipelineRuns:
@@ -321,8 +321,8 @@ tkn resource ls
 NAME             TYPE    DETAILS
 consumer-repo    git     url: https://github.com/puzzle/quarkus-techlab-data-consumer.git
 producer-repo    git     url: https://github.com/puzzle/quarkus-techlab-data-producer.git
-consumer-image   image   url: image-registry.openshift-image-registry.svc:5000/<user>-pipelines/data-consumer:latest
-producer-image   image   url: image-registry.openshift-image-registry.svc:5000/<user>-pipelines/data-producer:latest
+consumer-image   image   url: image-registry.openshift-image-registry.svc:5000/<userXY>-pipelines/data-consumer:latest
+producer-image   image   url: image-registry.openshift-image-registry.svc:5000/<userXY>-pipelines/data-producer:latest
 
 ```
 
@@ -339,7 +339,7 @@ tkn pipeline start build-and-deploy \
 -s pipeline
 ```
 
-This will create and execute a PipelineRun. Use the command `tkn pipelinerun logs build-and-deploy-run-<pod> -f -n <user>-pipelines` to display the logs
+This will create and execute a PipelineRun. Use the command `tkn pipelinerun logs build-and-deploy-run-<pod> -f -n <userXY>-pipelines` to display the logs
 
 Now start the same Pipeline with the producer resources:
 
