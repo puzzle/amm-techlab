@@ -48,14 +48,14 @@ If you want to dive deeper into the Kafka world take a look at the official [doc
 This lab bases on [lab 2](../../../02.0). Make sure that you are in the same OpenShift project.
 
 ```s
-oc project <userXY>
+oc project
 ```
 
 ```
 Using project "userXY" on server "https://api.techlab.openshift.ch:6443".
 ```
 
-The returned project should be "userXY".
+The returned project should be your user name.
 
 {{% alert  color="primary" %}}When the application does not run correctly, see the solution section of lab 2 or ask for assistance.{{% /alert %}}
 
@@ -90,6 +90,13 @@ spec:
       transaction.state.log.replication.factor: 1
       transaction.state.log.min.isr: 1
       log.message.format.version: "2.5"
+    resources:
+      requests:
+        memory: 128Mi
+        cpu: "50m"
+      limits:
+        memory: 4Gi
+        cpu: "2"
     storage:
       type: jbod
       volumes:
@@ -99,6 +106,13 @@ spec:
         deleteClaim: false
   zookeeper:
     replicas: 1
+    resources:
+      requests:
+        memory: 128Mi
+        cpu: "50m"
+      limits:
+        memory: 4Gi
+        cpu: "2"
     storage:
       type: persistent-claim
       size: 10Gi
@@ -147,8 +161,8 @@ kind: KafkaTopic
 metadata:
   name: manual
   labels:
-    application: quarkus-techlab
-    strimzi.io/cluster: quarkus-techlab
+    application: amm-techlab
+    strimzi.io/cluster: amm-techlab
 spec:
   partitions: 1
   replicas: 1
@@ -181,7 +195,7 @@ The listing should show one topic.
 
 ```
 NAME     PARTITIONS   REPLICATION FACTOR
-manual   1
+manual   1            1
 ```
 
 As an alternative we can also connect to the kafka server and list all topics
