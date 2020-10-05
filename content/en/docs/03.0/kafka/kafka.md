@@ -7,17 +7,17 @@ description: >
    Event driven architecture with Apache Kafka.
 ---
 
-This lab gives you an introduction to event driven architecture with Apache Kafka. You will deploy an event driven version of the producer-consumer application from [lab 2](../../../02.0).
+This lab gives you an introduction to event-driven architecture with Apache Kafka. You will deploy an event-driven version of the producer-consumer application from [lab 2](../../../02.0).
 
 
 ## {{% param sectionnumber %}}.1: Apache Kafka
 
-In this section we are going to deploy a [Apache Kafka](https://kafka.apache.org/) cluster with the [Strimzi Operator](https://strimzi.io/) and use it to distribute our events between the microservices. In modern large scale applications messages must be processed, reprocessed, analyzed and handled - often in real time. The key design principles of Kafka were formed based on the need of high-throughput architectures that are easily scalable and provide key features to store and process streamed data.
+In this section, we are going to deploy a [Apache Kafka](https://kafka.apache.org/) cluster with the [Strimzi Operator](https://strimzi.io/) and use it to distribute our events between the microservices. In modern large scale applications, messages must be processed, reprocessed, analyzed and handled - often in real-time. The key design principles of Kafka were formed based on the need for high-throughput architectures which are easily scalable and provide key features to store and process streamed data.
 
 
 ### {{% param sectionnumber %}}.1.1: Publish-subscribe durable messaging system
 
-[Apache Kafka](https://kafka.apache.org/) is a durable messaging system which uses the publish-subscribe pattern for data exchange. Components publish events to a *topic* and subscribed components will get notified with said event whenever a new message is published. *Topics* represent a data stream which holds a stream of data in temporal order. Applications can send and process records to or from a *topic*. A *record* is a byte array that can store any object in any format. A *record* has four attributes, *key* and *value* are mandatory, and the other attributes, *timestamp* and *headers* are optional. The value can be whatever needs to be sent.
+[Apache Kafka](https://kafka.apache.org/) is a durable messaging system that uses the publish-subscribe pattern for data exchange. Components publish events to a *topic* and subscribed components will get notified with said event whenever a new message is published. *Topics* represent a data stream that holds a stream of data in a temporal order. Applications can send and process records to or from a *topic*. A *record* is a byte array that can store any object in any format. A *record* has four attributes, *key* and *value* are mandatory, and the other attributes, *timestamp* and *headers* are optional. The value can be whatever needs to be sent.
 
 ```
                                                                       +--------------+
@@ -62,7 +62,7 @@ The returned project should be your user name.
 
 ## Task {{% param sectionnumber %}}.3: Deploy and configure Kafka on OpenShift
 
-Let's get our Kafka instance up and running in the cloud and configure it for the event driven application.
+Let's get our Kafka instance up and running in the cloud and configure it for the event-driven application.
 
 {{% alert  color="primary" %}}When you like to try it locally with docker-compose, see [Kafka local](../../additional/kafka-local/kafka-local/){{% /alert %}}
 
@@ -173,7 +173,7 @@ spec:
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/manual-topic.yaml)
 
-This will create the 'manual' topic which allows our microservices to communicate.
+This will create the 'manual' topic, which allows our microservices to communicate.
 
 ```s
 oc apply -f manual-topic.yaml
@@ -219,12 +219,12 @@ This listing should also show the `manual` topic.
 
 ## Task {{% param sectionnumber %}}.4: Change your application to event driven
 
-Now it's time to change your producer-consumer application from REST to event driven. The Kafka cluster is up and running.
+Now it's time to change your producer-consumer application from REST to event-driven. The Kafka cluster is up and running.
 
 
 ### Task {{% param sectionnumber %}}.4.1: Update the producer
 
-We do not rebuild our producer. Instead we use a prepared container image. Do two changes inside your file `<workspace>/deploymentConfig.yaml`. Change the image to `puzzle/quarkus-techlab-data-producer:kafka` and remove the ImageChange trigger.
+We do not rebuild our producer. Instead, we use a prepared container image. Do two changes inside your file `<workspace>/deploymentConfig.yaml`. Change the image to `puzzle/quarkus-techlab-data-producer:kafka` and remove the ImageChange trigger.
 
 If you're interested in the code changes needed to connect to the kafka server, checkout the [kafka branch of the producer](https://github.com/puzzle/quarkus-techlab-data-producer/tree/kafka).
 
@@ -278,7 +278,7 @@ deploymentconfig.apps.openshift.io/data-producer configured
 
 ### Task {{% param sectionnumber %}}.4.2: Update the consumer
 
-Also the consumer has a prepared container image. We only have to change the image to `puzzle/quarkus-techlab-data-consumer:kafka`.
+Also, the consumer has a prepared container image. We only have to change the image to `puzzle/quarkus-techlab-data-consumer:kafka`.
 
 The file from lab 2 `<workspace>/consumer.yaml` defines all needed resources as a list.
 Instead of the OpenShift DeploymentConfig of the producer, the consumer uses a Kubernetes-native Deployment. There you change the used container image.
@@ -339,7 +339,7 @@ Log into your OpenShift project and check the logs of the data-consumer pod. You
 
 ### Task {{% param sectionnumber %}}.4.3: Verify the events on the kafka topic
 
-To verify the produced events end up in the `manual` topic, we can once again rsh into the kafka pod and use the helpler scripts.
+To verify the produced events end up in the `manual` topic, we can once again rsh into the kafka pod and use the helper scripts.
 
 ```bash
 oc rsh amm-techlab-kafka-0
@@ -369,7 +369,7 @@ Expected result, something similar to:
 
 The needed resource files are available inside the folder *manifests/03.0/3.2/*.
 
-When you were not successful, you can update your project with the solution by executing this command:
+If you weren't successful, you can update your project with the solution by executing this command:
 
 ```s
 oc apply -f manifests/03.0/3.2/
