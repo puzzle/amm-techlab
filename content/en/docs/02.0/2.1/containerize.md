@@ -7,7 +7,7 @@ description: >
   Containerize an application.
 ---
 
-The main goal of this lab is to show you how to containerize a Java application. Including deployment on OpenShift and exposing the service with a route. In this example we want to build a microservice based on [Quarkus](https://quarkus.io/), which produces random data when it’s REST interface is called. Another Quarkus microservice consumes then the data and exposes it on it’s own endpoint.
+The main goal of this lab is to show you how to containerize a Java application. Including deployment on OpenShift and exposing the service with a route. In this example, we want to build a microservice-based on [Quarkus](https://quarkus.io/), which produces random data when it’s REST interface is called. Another Quarkus microservice consumes then the data and exposes it to its endpoint.
 
 ```
 +----------+                    +----------+
@@ -21,11 +21,11 @@ Some words about Quarkus:
 “Quarkus is a Kubernetes Native Java stack tailored for GraalVM & OpenJDK HotSpot, crafted from the best of breed Java libraries and standards. Also focused on developer experience, making things just work with little to no configuration and allowing to do live coding.” - [quarkus.io](https://quarkus.io/)
 {{% /alert %}}
 
-In short, Quarkus brings a framework built upon JakartaEE standards to build microservices in the Java environment. Per default Quarkus comes with full CDI integration, RESTeasy-JAX-RS, dev mode and many more features.
+In short, Quarkus brings a framework built upon JakartaEE standards to build microservices in the Java environment. Per default, Quarkus comes with full CDI integration, RESTeasy-JAX-RS, dev mode and many more features.
 
-If you wanna know more about quarkus, you can checkout our [Puzzle Quarkus Techlab](https://puzzle.github.io/quarkus-techlab/)
+If you wanna know more about Quarkus, you can checkout our [Puzzle Quarkus Techlab](https://puzzle.github.io/quarkus-techlab/)
 
-The source code of our quarkus applications is available on github:
+The source code of our Quarkus applications is available on Github:
 
 * [Consumer](https://github.com/puzzle/quarkus-techlab-data-consumer)
 * [Producer](https://github.com/puzzle/quarkus-techlab-data-producer)
@@ -33,9 +33,9 @@ The source code of our quarkus applications is available on github:
 
 ## Task {{% param sectionnumber %}}.1: Inspect Dockerfile
 
-First we need a Dockerfile that defines the application transformation from source code to a container image.
+First, we need a Dockerfile that defines the application transformation from source code to a container image.
 
-To build the producer, we make use of the Docker Multistage build feature. In the first stage we use the [centOS Quarkus image](https://quay.io/repository/quarkus/centos-quarkus-maven?tag=20.1.0-java11) and perform a Quarkus native build. The resulting binary will be used in the second build stage. For the second stage we use the UBI minimal image.
+To build the producer, we make use of the Docker Multistage build feature. In the first stage, we use the [centOS Quarkus image](https://quay.io/repository/quarkus/centos-quarkus-maven?tag=20.1.0-java11) and perform a Quarkus native build. The resulting binary will be used in the second build stage. For the second stage, we use the UBI minimal image.
 (see [best practices](../../additional/container-best-practices/bestpractise/#use-multistage-build) for more information on Multistage builds)
 
 ```Dockerfile
@@ -68,7 +68,7 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
 
 [source](https://raw.githubusercontent.com/puzzle/quarkus-techlab-data-producer/master/src/main/docker/Dockerfile.multistage)
 
-Because that the build needs a huge amount of memory (>8GB) and takes a lot of time (+5min) we refrain building the app from source. Instead we take the pre built Quarkus app from the Github release page.
+Because the build needs a huge amount of memory (>8GB) and takes a lot of time (+5min) we refrain from building the app from source. Instead, we take the pre-built Quarkus app from the Github release page.
 
 ```Dockerfile
 FROM registry.access.redhat.com/ubi8/ubi
@@ -89,12 +89,12 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
 
 [source](https://raw.githubusercontent.com/puzzle/quarkus-techlab-data-producer/rest/src/main/docker/Dockerfile.binary)
 
-This Dockerfile will be used building the image inside OpenShift.
+This Dockerfile will be used to build the image inside OpenShift.
 
 
 ## Task {{% param sectionnumber %}}.2: Create ImageStream
 
-We configure an [ImageStream](https://docs.openshift.com/container-platform/4.5/openshift_images/image-streams-manage.html) for the image that we will build inside OpenShift. The ImageStream is an abstraction for referencing images from within OpenShift Container Platform. Simplified the ImageStream tracks changes for the defined images and reacts by triggering a new Build. This image reference will also be used to deploy the application.
+We configure an [ImageStream](https://docs.openshift.com/container-platform/4.5/openshift_images/image-streams-manage.html) for the image that we will build inside OpenShift. ImageStream is an abstraction for referencing images from within OpenShift Container Platform. Simplified the ImageStream tracks changes for the defined images and reacts by triggering a new Build. This image reference will also be used to deploy the application.
 
 Prepare a file inside your workspace `<workspace>/imageStream.yaml` and add the following resource configuration:
 
@@ -125,10 +125,10 @@ imagestream.image.openshift.io/data-producer created
 
 ## Task {{% param sectionnumber %}}.3: Create BuildConfig
 
-In this section we create a OpenShift build that uses our Dockerfile to build the image for the producer.
+In this section, we create a OpenShift build that uses our Dockerfile to build the image for the producer.
 
-The [BuildConfig](https://docs.openshift.com/container-platform/4.5/builds/understanding-buildconfigs.html) describes how a single build task is performed. The BuildConfig is primary characterized by the Build strategy and its resources. For our build we use the Docker strategy which invokes the Docker build command. Furthermore it expects a `Dockerfile` in the source repository. If the Dockerfile is not in the root directory, then you can specify the location with the `dockerfilePath`.
-Beside we configure the source and the triggers as well. For the source we can specify any Git repository. This is where the application sources resides. The triggers describe how to trigger the build. In this example we provide four different triggers. (Generic webhook, GitHub webhook, ConfigMap change, Image change)
+The [BuildConfig](https://docs.openshift.com/container-platform/4.5/builds/understanding-buildconfigs.html) describes how a single build task is performed. The BuildConfig is primarily characterized by the Build strategy and its resources. For our build, we use the Docker strategy which invokes the Docker build command. Furthermore, it expects a `Dockerfile` in the source repository. If the Dockerfile is not in the root directory, then you can specify the location with the `dockerfilePath`.
+Beside we configure the source and the triggers as well. For the source, we can specify any Git repository. This is where the application sources reside. The triggers describe how to trigger the build. In this example, we provide four different triggers. (Generic webhook, GitHub webhook, ConfigMap change, Image change)
 
 Prepare a file inside your workspace `<workspace>/buildConfig.yaml` and add the following resource configuration:
 
@@ -199,7 +199,7 @@ oc logs -f data-producer-1-build
 
 ## Task {{% param sectionnumber %}}.4: Deploy Application
 
-After the ImageStream and BuildConfig definition we can setup our DeploymentConfig. The DeploymentConfig defines how our image is run inside OpenShift. The image ist referenced by our ImageStream `data-producer` with the `rest` tag.
+After the ImageStream and BuildConfig definition, we can set up our DeploymentConfig. The DeploymentConfig defines how our image is run inside OpenShift. The image is referenced by our ImageStream `data-producer` with the `rest` tag.
 
 Prepare a file inside your workspace `<workspace>/deploymentConfig.yaml` and add the following resource configuration:
 
@@ -295,9 +295,9 @@ The pod will be deployed successfully when the build finishes and the applicatio
 
 ## Task {{% param sectionnumber %}}.5: Create Service
 
-Services are used as bridges between the container and the OpenShift project. They enable the access from an OpenShift project to the port of an container.
+Services are used as bridges between the container and the OpenShift project. They enable access from an OpenShift project to the port of a container.
 
-Expose the container ports to the cluster with a Service. For the Service we configure the port `8080` for the Web API. We set the Service type to ClusterIP to expose the Service cluster internal only.
+Expose the container ports to the cluster with a Service. For the Service, we configure the port `8080` for the Web API. We set the Service type to ClusterIP to expose the Service cluster internal only.
 
 Prepare a file inside your workspace `<workspace>/svc.yaml` and add the following resource configuration:
 
@@ -341,9 +341,9 @@ service/data-producer created
 
 ## Task {{% param sectionnumber %}}.6: Create Route
 
-Create a Route to expose the service at a host name. This will make the application available outside of the cluster.
+Create a Route to expose the service at a hostname. This will make the application available outside of the cluster.
 
-The TLS type is set to Edge. That will configure the router to terminate the SSL connection and forward to the service with HTTP.
+The TLS type is set to Edge. That will configure the router to terminate the SSL connection and forward it to the service with HTTP.
 
 Prepare a file inside your workspace `<workspace>/route.yaml` and add the following resource configuration:
 
@@ -388,7 +388,7 @@ route.route.openshift.io/data-producer created
 
 ## Task {{% param sectionnumber %}}.7: Verify deployed resources
 
-Now we can list all resources in our project to double check if everything is up und running.
+Now we can list all resources in our project to double-check if everything is up and running.
 Use the following command to display all resources within our project.
 
 ```BASH
@@ -429,7 +429,7 @@ route.route.openshift.io/data-producer   data-producer-hanelore15.techlab.opensh
 
 ## Task {{% param sectionnumber %}}.9: Access application by browser
 
-Finally you can visit your application with the URL provided from the Route: <https://data-producer-userXY.techlab.openshift.ch/data>
+Finally, you can visit your application with the URL provided from the Route: <https://data-producer-userXY.techlab.openshift.ch/data>
 
 {{% alert  color="primary" %}}Replace **userXY** with your username or get the URL from your route.{{% /alert %}}
 
@@ -439,7 +439,7 @@ When you open the URL you should see the producers data
 {"data":0.6681209742895893}
 ```
 
-If you just see `Your new Cloud-Native application is ready!`, then you forget to append the `/data`path to the URL.
+If you only see `Your new Cloud-Native application is ready!`, then you forget to append the `/data`path to the URL.
 
 
 ## Task {{% param sectionnumber %}}.10: Deploy consumer application
@@ -523,7 +523,7 @@ route.route.openshift.io/data-consumer   data-consumer-hanelore15.techlab.opensh
 route.route.openshift.io/data-producer   data-producer-hanelore15.techlab.openshift.ch          data-producer   8080-tcp   edge          None
 ```
 
-Now you you can visit the consumer the URL provided from the Route: <https://data-consumer-userXY.techlab.openshift.ch/data>
+Now you can visit the consumer the URL provided from the Route: <https://data-consumer-userXY.techlab.openshift.ch/data>
 
 {{% alert  color="primary" %}}Replace **userXY** with your username or get the URL from your route.{{% /alert %}}
 
