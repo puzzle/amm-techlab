@@ -7,13 +7,13 @@ description: >
   Configure the application based on environment variables.
 ---
 
-In this stage we show you how to configure your application.
+In this stage, we show you how to configure your application.
 For this lab the application of the previous lab is used.
 
 
 ## Task {{% param sectionnumber %}}.1: Update application port inside deployment
 
-We will change the port of the application. With this change we need to adapt the deployment first. There are total three ports to change. The container port itself, and the ports for the liveness/readiness probes.
+We will change the port of the application. With this change we need to adapt the deployment first. There are three ports to change. The container port itself, and the ports for the liveness/readiness probes.
 
 {{< highlight YAML "hl_lines=28 38 46" >}}
 apiVersion: v1
@@ -129,7 +129,7 @@ There are several options how to configure a Quarkus application. We'll show how
 
 The environment of the DeploymentConfig has to be extended with a new environment variable named `QUARKUS_HTTP_PORT`.
 
-First let's check the environment:
+First, let's check the environment:
 
 ```BASH
 oc set env dc/data-producer --list
@@ -178,7 +178,7 @@ QUARKUS_HTTP_PORT=8081
 Changing the environment of a deployment triggers a rollout of the application pod.
 After the container has started successfully, the application should be reachable again.
 
-Check if the changes were applied correct. Open your browser and navigate to your application:  
+Check if the changes were applied correctly. Open your browser and navigate to your application:  
 <https://data-producer-userxy.techlab.openshift.ch/data>
 
 {{% alert  color="primary" %}}Replace `userxy` with your username!{{% /alert %}}
@@ -189,14 +189,14 @@ Check if the changes were applied correct. Open your browser and navigate to you
 We showed how to change the OpenShift resources using the commands `oc patch` and `oc set env`.
 This is good for developing or debugging the setup of an application project.
 
-For changing stages and productive environments we propose updating the YAML representations inside the Git repository and apply the files again.
+For changing stages and productive environments, we propose updating the YAML representations inside the Git repository and apply the files again.
 
 
 ## Solution
 
 The needed resource files are available inside the folder [manifests/02.0/2.2/](https://github.com/puzzle/amm-techlab/tree/master/manifests/02.0/2.2) of the techlab [github repository](https://github.com/puzzle/amm-techlab).
 
-When you were not successful, you can update your project with the solution by cloning the Techlab Repository `git clone https://github.com/puzzle/amm-techlab.git` and executing this command:
+If you weren't successful, you can update your project with the solution by cloning the Techlab Repository `git clone https://github.com/puzzle/amm-techlab.git` and executing this command:
 
 ```BASH
 oc apply -f manifests/02.0/2.2/
