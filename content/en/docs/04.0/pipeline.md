@@ -7,7 +7,7 @@ description: >
   Build and deployment automation with Tekton on OpenShift.
 ---
 
-We will deploy our Quarkus application to test OpenShift Pipelines. OpenShift Pipelines are based on [Tekton](https://tekton.dev/).
+It is time to automate the deployment of our application to OpenShift by using OpenShift Pipelines. OpenShift Pipelines are based on [Tekton](https://tekton.dev/).
 
 
 ## Task {{% param sectionnumber %}}.1: Basic Concepts
@@ -37,6 +37,8 @@ We start by creating a new project:
 ```bash
 oc new-project <userXY>-pipelines
 ```
+
+{{% alert  color="primary" %}}Replace **userXY** with your username.{{% /alert %}}
 
 The OpenShift Pipeline operator will automatically create a pipeline serviceaccount with all required permissions to build and push an image. This serviceaccount is used by PipelineRuns:
 
@@ -81,7 +83,6 @@ You can find more examples of reusable tasks in the [Tekton Catalog](https://git
 Let's examine two tasks that do a deployment. Create the local file `<workspace>/deploy-tasks.yaml` with the following content:
 
 ```yaml
-# deploy-tasks.yaml
 apiVersion: tekton.dev/v1alpha1
 kind: Task
 metadata:
@@ -123,8 +124,8 @@ tkn task ls
 ```
 
 ```
-NAME                AGE
-apply-manifests     7 minutes ago
+NAME              DESCRIPTION   AGE
+apply-manifests                 19 seconds ago
 ```
 
 
@@ -146,7 +147,6 @@ The Pipeline should be re-usable across multiple projects or environments, that'
 Create the following pipeline `<workspace>/deploy-pipeline.yaml`:
 
 ```yaml
-# deploy-pipeline.yaml
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
 metadata:
@@ -197,7 +197,7 @@ spec:
 Create the Pipeline:
 
 ```bash
-oc create -f deploy-pipeline.yaml
+oc apply -f deploy-pipeline.yaml
 ```
 
 which will result in: `pipeline.tekton.dev/build-and-deploy created`
@@ -210,7 +210,7 @@ tkn pipeline ls
 
 ```
 NAME               AGE              LAST RUN   STARTED   DURATION   STATUS
-build-and-deploy   34 seconds ago   ---        ---       ---        ---
+build-and-deploy   19 seconds ago   ---        ---       ---        ---
 ```
 
 
@@ -238,7 +238,6 @@ We use a template to adapt the image registry URL to match to your project.
 Create the following openshift template `<workspace>/pipeline-resources-template.yaml`:
 
 ```yaml
-# pipeline-resources-template.yaml
 apiVersion: v1
 kind: Template
 metadata:
@@ -256,7 +255,7 @@ objects:
     - name: url
       value: https://github.com/puzzle/quarkus-techlab-data-consumer.git
     - name: revision
-      value: tekton
+      value: rest
 - apiVersion: tekton.dev/v1alpha1
   kind: PipelineResource
   metadata:
@@ -276,7 +275,7 @@ objects:
     - name: url
       value: https://github.com/puzzle/quarkus-techlab-data-producer.git
     - name: revision
-      value: tekton
+      value: rest
 - apiVersion: tekton.dev/v1alpha1
   kind: PipelineResource
   metadata:
@@ -299,7 +298,7 @@ Create the Pipeline resources by processing the template and creating the genera
 ```bash
 oc process -f pipeline-resources-template.yaml \
   --param=PROJECT_NAME=$(oc project -q) \
-| oc create -f-
+| oc apply -f-
 ```
 
 will result in:
@@ -323,7 +322,6 @@ consumer-repo    git     url: https://github.com/puzzle/quarkus-techlab-data-con
 producer-repo    git     url: https://github.com/puzzle/quarkus-techlab-data-producer.git
 consumer-image   image   url: image-registry.openshift-image-registry.svc:5000/<userXY>-pipelines/data-consumer:latest
 producer-image   image   url: image-registry.openshift-image-registry.svc:5000/<userXY>-pipelines/data-producer:latest
-
 ```
 
 
@@ -372,21 +370,23 @@ tkn pipeline logs
 
 ## Task {{% param sectionnumber %}}.6: OpenShift WebUI
 
-With the OpenShift Pipeline operator, a new menu item is introduced to the WebUI of OpenShift. All Tekton CLI commands, which are used above, could be replaced with the web interface. The big advantage is the graphical presentation of Pipelines and their lifetime.
+Go tho the developer view of the WebUI of OpenShift and select your pipeline project.
+
+Do you remember that you did not create any Deployment for your application? That has been done by your Tekton pipeline.
+
+With the OpenShift Pipeline operator, a new menu item is introduced to the WebUI of OpenShift named Pipelines. All Tekton CLI commands, which are used above, could be replaced with the web interface. The big advantage is the graphical presentation of Pipelines and their lifetime.
 
 
 ### Checking your application
 
-Now our Pipeline is built and deployed the voting application. Now you can vote whether you prefer cats or dogs (Cats or course :) )
-
-Get the route of your project and open the URL in the browser.
+Get the routes of your components and open the URLs in the browser. Add the `/data` path to the consumer to see if the application works.
 
 
 ## High quality and secure Pipeline
 
 This was just an example for a pipeline, that builds and deploys a container image to OpenShift. There are lots of security features missing.
 
-checkout the Puzzle [delivery pipeline concept](https://github.com/puzzle/delivery-pipeline-concept) for further infos.
+Checkout the Puzzle [delivery pipeline concept](https://github.com/puzzle/delivery-pipeline-concept) for further infos.
 
 
 ## Links and Sources
