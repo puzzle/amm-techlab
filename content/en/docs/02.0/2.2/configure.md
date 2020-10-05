@@ -21,7 +21,7 @@ We have to change a port on the service that we have created in the previous lab
 Change the target port in the service `data-producer`. Note that we only have to change the target port in the service definition. For this case other existing services can still connect to the 8080 service port without any further changes.
 
 ```
-{{< highlight YAML "hl_lines=11" >}}
+{{< highlight YAML "hl_lines=13" >}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -41,6 +41,8 @@ spec:
   type: ClusterIP
 {{< / highlight >}}
 ```
+
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.2/svc.yaml)
 
 We update the service using the `oc patch` command. This will update the resource directly in the project.
 
@@ -64,15 +66,14 @@ oc describe svc data-producer
 ```
 {{< highlight YAML "hl_lines=9" >}}
 Name:              data-producer
-Namespace:         hannelore15
-Labels:            application=quarkus-techlab
-Annotations:       <none>
-Selector:          deploymentConfig=data-producer
+Namespace:         hanneloreXY
+Labels:            application=amm-techlab
+Annotations:       Selector:  deploymentConfig=data-producer
 Type:              ClusterIP
-IP:                172.30.253.166
-Port:              data-producer-http  8080/TCP
+IP:                172.30.118.194
+Port:              8080-tcp  8080/TCP
 TargetPort:        8081/TCP
-Endpoints:
+Endpoints:         10.129.3.115:8081
 Session Affinity:  None
 Events:            <none>
 {{< / highlight >}}
@@ -153,6 +154,8 @@ spec:
     - type: ConfigChange
 {{< / highlight >}}
 
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.2/deploymentConfig.yaml)
+
 Update the HTTP Port from 8080 to 8081 using `oc patch` again:
 There are total three ports to change. The container port itself, and the ports for the liveness/readiness probe.
 
@@ -160,18 +163,19 @@ There are total three ports to change. The container port itself, and the ports 
 oc patch dc/data-producer --type "json" -p '[{"op":"replace","path":"/spec/template/spec/containers/0/ports/0/containerPort","value":8081}]'
 oc patch dc/data-producer --type "json" -p '[{"op":"replace","path":"/spec/template/spec/containers/0/livenessProbe/httpGet/port","value":8081}]'
 oc patch dc/data-producer --type "json" -p '[{"op":"replace","path":"/spec/template/spec/containers/0/readinessProbe/httpGet/port","value":8081}]'
+
 ```
 
 ```
-deployment.apps/data-producer patched
+deploymentconfig.apps.openshift.io/data-producer patched
 ```
 
-{{% alert title="Note" color="primary" %}} The changed DeploymentConfig should now represent the [solution](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/deploymentConfig.yaml) {{% /alert %}}
+{{% alert title="Note" color="primary" %}} The changed DeploymentConfig should now represent the [solution](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.2/deploymentConfig.yaml) {{% /alert %}}
 
 Verify the changed port of the pod with `oc describe`
 
 ```BASH
-oc describe deployment data-producer
+oc describe deploymentconfig data-producer
 ```
 
 
@@ -179,75 +183,7 @@ oc describe deployment data-producer
 
 There are several options how to configure a Quarkus application. We'll show how to do it with environment variables. You can overwrite every property in the `application.properties` file with the corresponding environment variable. (eg. `quarkus.http.port=8081` in the application.properties is the same like `QUARKUS_HTTP_PORT=8081` as an environment variable) [Quarkus: overriding-properties-at-runtime](https://quarkus.io/guides/config#overriding-properties-at-runtime)
 
-The environment of the Deployment has to be changed with a new environment variable named `QUARKUS_HTTP_PORT`.
-
-{{< highlight YAML "hl_lines=" >}}
-apiVersion: v1
-kind: DeploymentConfig
-metadata:
-  annotations:
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"data-producer:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"data-producer\")].image"}]'
-  labels:
-    application: amm-techlab
-  name: data-producer
-spec:
-  replicas: 1
-  selector:
-    deploymentConfig: data-producer
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      labels:
-        application: amm-techlab
-        deploymentConfig: data-producer
-    spec:
-      containers:
-        - image: data-producer
-          imagePullPolicy: Always
-          livenessProbe:
-            failureThreshold: 5
-            httpGet:
-              path: /health
-              port: 8081
-              scheme: HTTP
-            initialDelaySeconds: 3
-            periodSeconds: 20
-            successThreshhold: 1
-            timeoutSeconds: 15
-          readinessProbe:
-            failureThreshold: 5
-            httpGet:
-              path: /health
-              port: 8081
-              scheme: HTTP
-            initialDelaySeconds: 3
-            periodSeconds: 20
-            successThreshold: 1
-            timeoutSeconds: 15
-          name: data-producer
-          port:
-            - containerPort: 8081
-              name: http
-              protocol: TCP
-          resources:
-            limits:
-              cpu: "1"
-              memory: 500Mi
-            requests:
-              cpu: 50m
-              memory: 100Mi
-  triggers:
-    - imageChangeParams:
-        automatic: true
-        containerNames:
-          - data-producer
-        from:
-          kind: ImageStreamTag
-          name: data-producer:latest
-      type: ImageChange
-    - type: ConfigChange
-{{< / highlight >}}
+The environment of the DeploymentConfig has to be extended with a new environment variable named `QUARKUS_HTTP_PORT`.
 
 First let's check the environment:
 
@@ -256,7 +192,7 @@ oc set env dc/data-producer --list
 ```
 
 ```
-deploymentconfigs/data-producer, container data-producer
+# deploymentconfigs/data-producer, container data-producer
 ```
 
 There are no environment variables configured.
@@ -278,7 +214,7 @@ oc set env dc/data-producer --list
 ```
 
 ```
-deploymentconfigs/data-producer, container data-producer
+# deploymentconfigs/data-producer, container data-producer
 QUARKUS_HTTP_PORT=8081
 ```
 
@@ -308,6 +244,6 @@ The needed resource files are available inside the folder *manifests/02.0/2.2/*.
 
 When you were not successful, you can update your project with the solution by executing this command:
 
-```s
+```BASH
 oc apply -f manifests/02.0/2.2/
 ```
