@@ -11,7 +11,7 @@ description: >
 
 The first thing we're going to do is to explore our lab environment and get in touch with the different components.
 
-Login into the web console of the Lab Cluster with the provided Username and Password.
+Login to the web console of the Lab Cluster with the provided Username and Password.
 
 {{% alert title="Note" color="primary" %}} Ask your trainer if you don't have your Cluster-URL or Username and Password {{% /alert %}}
 
@@ -63,16 +63,16 @@ If you want to use your local `oc` tool, make sure to get the appropriate versio
 
 ### Task {{% param sectionnumber %}}.1.3: Local Workspace Directory
 
-During the lab, you're going to be using local files (eg. yaml resources) which will be applied in your lab project.
+During the lab, you'll be using local files (eg. YAML resources) which will be applied in your lab project.
 
 Create your local lab workspace directory `<workspace>` for example`~/amm-techlab/`
 
 
 ### Task {{% param sectionnumber %}}.1.4: explore other namespaces
 
-Alongside the Lab Cluster, we also deployed a couple of additional Tools and Services we're going to use during the lab.
+Alongside the Lab Cluster, we also deployed a couple of additional tools and services we're going to use during the lab.
 
-checkout the Deployed resources and then Login into the services. (URLs are provided by the trainer)
+checkout the deployed resources and then login to the services. (URLs are provided by the trainer)
 
 * Git Server `pitc-infra-gitea`, this will contain the source code (Login with your username and password)
 * Prometheus and Grafana in the project `pitc-infra-monitoring` (Login using Oauth OpenShift)
