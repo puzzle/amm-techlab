@@ -56,7 +56,7 @@ spec:
   triggers:
     - imageChangeParams:
         automatic: true
-        containerNames: 
+        containerNames:
           - data-producer
         from:
           kind: ImageStreamTag

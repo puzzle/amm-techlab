@@ -25,7 +25,7 @@ In short, Quarkus brings a framework built upon JakartaEE standards to build mic
 
 If you wanna know more about quarkus, you can checkout our [Puzzle Quarkus Techlab](https://puzzle.github.io/quarkus-techlab/)
 
-The source code of our quarkus applications is awailable on github:
+The source code of our quarkus applications is available on github:
 
 * [Consumer](https://github.com/puzzle/quarkus-techlab-data-consumer)
 * [Producer](https://github.com/puzzle/quarkus-techlab-data-producer)
@@ -33,35 +33,9 @@ The source code of our quarkus applications is awailable on github:
 
 ## Task {{% param sectionnumber %}}.1: Inspect Dockerfile
 
-First we need a Dockerfile. You can find the `Dockerfile` in the root directory of the example Java application
-[Git Repository](https://gitea.techlab.openshift.ch/APPUiO-AMM-Techlab/example-spring-boot-helloworld).
-The base image is `quay.io/quarkus/centos-quarkus-maven:20.1.0-java11` which is pre configured for Quarkus Maven builds.
+First we need a Dockerfile that defines the application transformation from source code to a container image.
 
-Because the build needs a huge amount of memory (>8GB) and takes a lot of time (+5min) we refrain building the app from source. Instead we take the pre built Quarkus app from the Github release page.
-
-```Dockerfile
-FROM registry.access.redhat.com/ubi8/ubi
-WORKDIR /work/
-
-#Install wget
-RUN yum install wget -y
-
-#Fetch the latest binary release from the GutHub release page
-RUN wget https://github.com/puzzle/quarkus-techlab-data-producer/releases/download/1.0.0-rest/application
-
-RUN chmod -R 775 /work
-EXPOSE 8080
-
-#Run the application
-CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
-
-```
-
-[source](https://gitea.techlab.openshift.ch/APPUiO-AMM-Techlab/example-spring-boot-helloworld/raw/branch/master/Dockerfile)
-
-
-Here is the full example of the  Dockerfile for building the application from source.
-In this example we make use of the Docker Multistage builds. In the first stage we use the centOS Quarkus image and perform a Quarkus native build. The resulting binary will be used in the second build stage. For the second stage we use the UBI minimal image.
+To build the producer, we make use of the Docker Multistage build feature. In the first stage we use the [centOS Quarkus image](https://quay.io/repository/quarkus/centos-quarkus-maven?tag=20.1.0-java11) and perform a Quarkus native build. The resulting binary will be used in the second build stage. For the second stage we use the UBI minimal image.
 (see [best practices](https://gitea.techlab.openshift.ch/APPUiO-AMM-Techlab/docs/02.0/additional/container-best-practices/bestpractise/#use-multistage-build) for more information on Multistage builds)
 
 ```Dockerfile
@@ -92,10 +66,71 @@ USER 1001
 CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
 ```
 
-[source](https://gitea.techlab.openshift.ch/APPUiO-AMM-Techlab/quarkus-techlab-data-consumer/raw/branch/master/Dockerfile.multistage)
+[source](https://raw.githubusercontent.com/puzzle/quarkus-techlab-data-producer/master/src/main/docker/Dockerfile.multistage)
+
+Because that the build needs a huge amount of memory (>8GB) and takes a lot of time (+5min) we refrain building the app from source. Instead we take the pre built Quarkus app from the Github release page.
+
+```Dockerfile
+FROM registry.access.redhat.com/ubi8/ubi
+WORKDIR /work/
+
+# Install wget
+RUN yum install wget -y
+
+# Fetch the latest binary release from the GutHub release page
+RUN wget https://github.com/puzzle/quarkus-techlab-data-producer/releases/download/1.0.0-rest/application
+
+RUN chmod -R 775 /work
+EXPOSE 8080
+
+# Run the application
+CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
+```
+
+[source](https://raw.githubusercontent.com/puzzle/quarkus-techlab-data-producer/rest/src/main/docker/Dockerfile.binary)
+
+This Dockerfile will be used building the image inside OpenShift.
 
 
-## Task {{% param sectionnumber %}}.2: Create BuildConfig
+## Task {{% param sectionnumber %}}.2: Create ImageStream
+
+We configure an [ImageStream](https://docs.openshift.com/container-platform/4.5/openshift_images/image-streams-manage.html) for the image that we will build inside OpenShift. The ImageStream is an abstraction for referencing images from within OpenShift Container Platform. Simplified the ImageStream tracks changes for the defined images and reacts by triggering a new Build. This image reference will also be used to deploy the application.
+
+Prepare a file inside your workspace `<workspace>/imageStream.yaml` and add the following resource configuration:
+
+```YAML
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewBuild
+  labels:
+    build: data-producer
+    application: amm-techlab
+  name: data-producer
+spec:
+  lookupPolicy:
+    local: false
+status:
+  dockerImageRepository: ""
+```
+
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/imageStream.yaml)
+
+Let's create the ImageStream
+
+```BASH
+oc apply -f imageStream.yaml
+```
+
+```
+imagestream.image.openshift.io/data-producer created
+```
+
+
+## Task {{% param sectionnumber %}}.3: Create BuildConfig
+
+In this section we create a OpenShift build that uses our Dockerfile to build the image for the producer.
 
 The [BuildConfig](https://docs.openshift.com/container-platform/4.5/builds/understanding-buildconfigs.html) describes how a single build task is performed. The BuildConfig is primary characterized by the Build strategy and its resources. For our build we use the Docker strategy which invokes the Docker build command. Furthermore it expects a `Dockerfile` in the source repository. If the Dockerfile is not in the root directory, then you can specify the location with the `dockerfilePath`.
 Beside we configure the source and the triggers as well. For the source we can specify any Git repository. This is where the application sources resides. The triggers describe how to trigger the build. In this example we provide four different triggers. (Generic webhook, GitHub webhook, ConfigMap change, Image change)
@@ -127,7 +162,7 @@ spec:
       memory: "512Mi"
   source:
     git:
-      uri: https://github.com/schlapzz/quarkus-techlab-data-producer.git
+      uri: https://github.com/puzzle/quarkus-techlab-data-producer.git
       ref: rest
     type: Git
   strategy:
@@ -158,45 +193,18 @@ oc apply -f buildConfig.yaml
 buildconfig.build.openshift.io/data-producer created
 ```
 
-
-## Task {{% param sectionnumber %}}.3: Create ImageStreams
-
-Next we need to configure an [ImageStream](https://docs.openshift.com/container-platform/4.5/openshift_images/image-streams-manage.html) for the output Image. The ImageStream is an abstraction for referencing images from within OpenShift Container Platform. Simplified the ImageStream tracks changes for the defined images and reacts by triggering a new Build.
-
-
-```YAML
-apiVersion: image.openshift.io/v1
-kind: ImageStream
-metadata:
-  annotations:
-    openshift.io/generated-by: OpenShiftNewBuild
-  labels:
-    build: data-producer
-    application: amm-techlab
-  name: data-producer
-spec:
-  lookupPolicy:
-    local: false
-status:
-  dockerImageRepository: ""
-```
-
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/imageStream.yaml)
-
-Let's create the ImageStream
+The build starts automatically after creating the buildConfig. See the actual build logs:
 
 ```BASH
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/imageStream.yaml
-```
-
-```
-imagestream.image.openshift.io/data-producer created
+oc logs data-producer-1-build
 ```
 
 
 ## Task {{% param sectionnumber %}}.4: Deploy Application
 
-After the ImageStream definition we can setup our Deployment.
+After the ImageStream and BuildConfig definition we can setup our DeploymentConfig. The DeploymentConfig defines how our image is run inside OpenShift. The image ist referenced by our ImageStream `data-producer` with the `rest` tag.
+
+Prepare a file inside your workspace `<workspace>/deploymentConfig.yaml` and add the following resource configuration:
 
 ```YAML
 apiVersion: v1
@@ -271,11 +279,11 @@ spec:
 Let's create the deployment with following command
 
 ```BASH
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/deploymentConfig.yaml
+oc apply -f deploymentConfig.yaml
 ```
 
 ```
-deployment/data-producer created
+deploymentconfig.apps.openshift.io/data-producer created
 ```
 
 When you check your project in the web console (Developer view) the example app is visible.
@@ -284,7 +292,11 @@ The pod will be deployed successfully when the build finishes and the applicatio
 
 ## Task {{% param sectionnumber %}}.5: Create Service
 
-Expose the container ports to the to the cluster with a Service. For the Service we configure the port `8080` for the Web API. We set the Service type to ClusterIP to expose the Service cluster internal only.
+Services are used as bridges between the container and the OpenShift project. They enable the access from an OpenShift project to the port of an container.
+
+Expose the container ports to the cluster with a Service. For the Service we configure the port `8080` for the Web API. We set the Service type to ClusterIP to expose the Service cluster internal only.
+
+Prepare a file inside your workspace `<workspace>/svc.yaml` and add the following resource configuration:
 
 ```YAML
 apiVersion: v1
@@ -310,7 +322,7 @@ spec:
 Create the Service in OpenShift
 
 ```bash
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/svc.yaml
+oc apply -f svc.yaml
 ```
 
 ```
@@ -323,6 +335,8 @@ service/data-producer created
 Create a Route to expose the service at a host name. This will make the application available outside of the cluster.
 
 The TLS type is set to Edge. That will configure the router to terminate the SSL connection and forward to the service with HTTP.
+
+Prepare a file inside your workspace `<workspace>/route.yaml` and add the following resource configuration:
 
 ```YAML
 apiVersion: route.openshift.io/v1
@@ -349,11 +363,11 @@ spec:
 Create the Route in OpenShift
 
 ```bash
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/route.yaml
+oc apply -f route.yaml
 ```
 
 ```
-route.route.openshift.io/data-consumer created
+route.route.openshift.io/data-producer created
 ```
 
 
@@ -402,23 +416,34 @@ route.route.openshift.io/data-producer   data-producer-hanelore15.techlab.opensh
 
 Finally you can visit your application with the URL provided from the Route: <https://data-producer-userXY.techlab.openshift.ch/data>
 
-{{% alert  color="primary" %}}Replace **userXY** with your username or get the url from your route.{{% /alert %}}
+{{% alert  color="primary" %}}Replace **userXY** with your username or get the URL from your route.{{% /alert %}}
 
-When you open the url you should see the producers data
+When you open the URL you should see the producers data
 
 ```json
 {"data":0.6681209742895893}
 ```
 
-If you just see `Your new Cloud-Native application is ready!`, then you forget to append the `/data`path to the url
+If you just see `Your new Cloud-Native application is ready!`, then you forget to append the `/data`path to the URL.
 
 
 ## Task {{% param sectionnumber %}}.10: Deploy consumer application
 
-Now it's time to deploy the counterpart. Use following command to deploy the data-consumer application. The consumer application consists of three resource definitions. First we create a deployment, pointing to the consumer Docker Image on docker Hub. Next the service which exposes the application inside our cluster and last the route to access the app from outside the cluster.
+Now it's time to deploy the counterpart. The consumer application consists of three resource definitions. First we create a deployment, pointing to the consumer Docker Image on docker Hub. Next the service which exposes the application inside our cluster and last the route to access the app from outside the cluster.
+
+We get the needed [consumer.yaml](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/consumer.yaml) by curl. Execute the following command inside your workspace:
 
 ```BASH
-oc create -f  https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/consumer.yaml
+curl https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/consumer.yaml --output consumer.yaml
+```
+
+This should have created the file `<workspace>/consumer.yaml`.
+
+Use following command to deploy the data-consumer application:
+
+
+```BASH
+oc apply -f  consumer.yaml
 ```
 
 ```
@@ -469,6 +494,16 @@ imagestream.image.openshift.io/data-producer   image-registry.openshift-image-re
 NAME                                     HOST/PORT                                                         PATH   SERVICES        PORT       TERMINATION   WILDCARD
 route.route.openshift.io/data-consumer   data-consumer-hanelore15.techlab.openshift.ch   /      data-consumer   <all>      edge/Allow    None
 route.route.openshift.io/data-producer   data-producer-hanelore15.techlab.openshift.ch          data-producer   8080-tcp   edge          None
+```
+
+Now you you can visit the consumer the URL provided from the Route: <https://data-consumer-userXY.techlab.openshift.ch/data>
+
+{{% alert  color="primary" %}}Replace **userXY** with your username or get the URL from your route.{{% /alert %}}
+
+When you open the URL you should see the consumers data that he received from the producer
+
+```json
+{"data":0.6681209742895893}
 ```
 
 

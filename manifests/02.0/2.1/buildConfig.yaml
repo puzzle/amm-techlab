@@ -22,7 +22,7 @@ spec:
       memory: "512Mi"
   source:
     git:
-      uri: https://github.com/schlapzz/quarkus-techlab-data-producer.git
+      uri: https://github.com/puzzle/quarkus-techlab-data-producer.git
       ref: rest
     type: Git
   strategy:
