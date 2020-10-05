@@ -212,6 +212,10 @@ The helper scripts within the bin directory allow you to query your kafka server
 ./bin/kafka-topics.sh --bootstrap-server localhost:9092  --describe
 ```
 
+This listing should also show the `manual` topic.
+
+{{% alert  color="primary" %}}Press `Ctrl+D` to leave the container.{{% /alert %}}
+
 
 ## Task {{% param sectionnumber %}}.4: Change your application to event driven
 
@@ -229,8 +233,6 @@ If you're interested in the code changes needed to connect to the kafka server, 
 apiVersion: v1
 kind: DeploymentConfig
 metadata:
-  annotations:
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"data-producer:rest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"data-producer\")].image"}]'
   labels:
     application: amm-techlab
   name: data-producer
@@ -262,8 +264,10 @@ spec:
 Apply the updated content of the YAML file to let OpenShift rollout your freshly created deployment of the producer.
 
 ```s
-oc apply -f deploymentConfig.yaml
+oc apply -f deploymentConfig.yaml --overwrite=true --force=true
 ```
+
+{{% alert  color="primary" %}}We need the additional flags to reset the port changes from the previous lab.{{% /alert %}}
 
 Expected output:
 
@@ -357,6 +361,8 @@ Expected result, something similar to:
 ```
 
 {{% alert title="Note" color="primary" %}} Use the `--from-beginning` param to read the whole topic {{% /alert %}}
+
+{{% alert title="Note" color="primary" %}}Stop this consumer inside the container by pressing `Ctrl+C` and `Ctrl+D` to leave the container.{{% /alert %}}
 
 
 ## Solution
