@@ -35,7 +35,7 @@ The source code of our quarkus applications is awailable on github:
 
 First we need a Dockerfile. You can find the `Dockerfile` in the root directory of the example Java application
 [Git Repository](https://gitea.techlab.openshift.ch/APPUiO-AMM-Techlab/example-spring-boot-helloworld).
-The base image is a `uay.io/quarkus/centos-quarkus-maven:20.1.0-java11` which is pre configured for Quarkus Maven builds.
+The base image is `quay.io/quarkus/centos-quarkus-maven:20.1.0-java11` which is pre configured for Quarkus Maven builds.
 
 Because the build needs a huge amount of memory (>8GB) and takes a lot of time (+5min) we refrain building the app from source. Instead we take the pre built Quarkus app from the Github release page.
 
@@ -61,7 +61,7 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
 
 
 Here is the full example of the  Dockerfile for building the application from source.
-In this example we make use of the Docker Multistage builds. In the first stage we use the centOS Quarkus image and perform a Quarkus nativ build. The resulting binary will be used in the second build stage. For the second stage we use the UBI minimal image.
+In this example we make use of the Docker Multistage builds. In the first stage we use the centOS Quarkus image and perform a Quarkus native build. The resulting binary will be used in the second build stage. For the second stage we use the UBI minimal image.
 (see [best practices](https://gitea.techlab.openshift.ch/APPUiO-AMM-Techlab/docs/02.0/additional/container-best-practices/bestpractise/#use-multistage-build) for more information on Multistage builds)
 
 ```Dockerfile
@@ -429,7 +429,7 @@ route.route.openshift.io/data-consumer created
 
 Let's verify if everything was deployed and is up running.
 
-```s
+```BASH
 oc get all
 ```
 
@@ -478,6 +478,6 @@ The needed resource files are available inside the folder *manifests/02.0/2.1/*.
 
 When you were not successful, you can update your project with the solution by executing this command:
 
-```s
+```BASH
 oc apply -f manifests/02.0/2.1/
 ```
