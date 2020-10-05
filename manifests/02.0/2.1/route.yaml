@@ -6,7 +6,7 @@ metadata:
   name: data-producer
 spec:
   port:
-    targetPort: 8080-tcp
+    targetPort: http
   to:
     kind: Service
     name: data-producer

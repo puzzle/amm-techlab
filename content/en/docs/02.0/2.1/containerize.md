@@ -307,10 +307,10 @@ metadata:
     application: amm-techlab
 spec:
   ports:
-  - name: 8080-tcp
+  - name: http
     port: 8080
     protocol: TCP
-    targetPort: 8080
+    targetPort: http
   selector:
     deploymentConfig: data-producer
   sessionAffinity: None
@@ -347,7 +347,7 @@ metadata:
   name: data-producer
 spec:
   port:
-    targetPort: 8080-tcp
+    targetPort: http
   to:
     kind: Service
     name: data-producer

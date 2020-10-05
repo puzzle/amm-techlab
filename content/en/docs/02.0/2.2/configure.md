@@ -11,80 +11,9 @@ In this stage we show you how to configure your application.
 For this lab the application of the previous lab is used.
 
 
-## Task {{% param sectionnumber %}}.1: Change Networking
+## Task {{% param sectionnumber %}}.1: Update application port inside deployment
 
-We have to change a port on the service that we have created in the previous lab.
-
-
-### Change service target port
-
-Change the target port in the service `data-producer`. Note that we only have to change the target port in the service definition. For this case other existing services can still connect to the 8080 service port without any further changes.
-
-```
-{{< highlight YAML "hl_lines=13" >}}
-apiVersion: v1
-kind: Service
-metadata:
-  name: data-producer
-  labels:
-    application: amm-techlab
-    app: data-producer
-spec:
-  ports:
-  - name: 8080-tcp
-    port: 8080
-    protocol: TCP
-    targetPort: 8081
-  selector:
-    deployment: data-producer
-  sessionAffinity: None
-  type: ClusterIP
-{{< / highlight >}}
-```
-
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.2/svc.yaml)
-
-We update the service using the `oc patch` command. This will update the resource directly in the project.
-
-Change the port with following command:
-
-```BASH
-oc patch svc data-producer --type "json" -p '[{"op":"replace","path":"/spec/ports/0/targetPort","value":8081}]'
-```
-
-```
-service/data-producer patched
-```
-
-Verify the changed port of the service with `oc describe`
-
-
-```BASH
-oc describe svc data-producer
-```
-
-```
-{{< highlight YAML "hl_lines=9" >}}
-Name:              data-producer
-Namespace:         hanneloreXY
-Labels:            application=amm-techlab
-Annotations:       Selector:  deploymentConfig=data-producer
-Type:              ClusterIP
-IP:                172.30.118.194
-Port:              8080-tcp  8080/TCP
-TargetPort:        8081/TCP
-Endpoints:         10.129.3.115:8081
-Session Affinity:  None
-Events:            <none>
-{{< / highlight >}}
-```
-
-With that change, the application is not reachable any more.
-
-
-### Update exposed port of deployment
-
-To fix the connection between the pod and the service, the pod ports has to be changed too.
+We will change the port of the application. With this change we need to adapt the deployment first. There are total three ports to change. The container port itself, and the ports for the liveness/readiness probes.
 
 {{< highlight YAML "hl_lines=28 38 46" >}}
 apiVersion: v1
@@ -156,8 +85,7 @@ spec:
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.2/deploymentConfig.yaml)
 
-Update the HTTP Port from 8080 to 8081 using `oc patch` again:
-There are total three ports to change. The container port itself, and the ports for the liveness/readiness probe.
+Update the HTTP Port from 8080 to 8081 using `oc patch`:
 
 ```BASH
 oc patch dc/data-producer --type "json" -p '[{"op":"replace","path":"/spec/template/spec/containers/0/ports/0/containerPort","value":8081}]'
@@ -177,6 +105,8 @@ Verify the changed port of the pod with `oc describe`
 ```BASH
 oc describe deploymentconfig data-producer
 ```
+
+The pod does not start because that the readiness probe fails. Now we have to change the application to use the port 8081 for serving it's endpoint.
 
 
 ## Task {{% param sectionnumber %}}.2: Configure application
