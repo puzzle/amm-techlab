@@ -91,7 +91,7 @@ spec:
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/05.0/5.1/servicemonitor-consumer.yaml)
 
-Create the build config.
+Create the ServiceMonitor.
 
 ```BASH
 oc apply -f servicemonitor-consumer.yaml
@@ -133,5 +133,5 @@ Since the Metrics are now collected from both services, let's execute a query an
 for example the total seconds the Garbage Collector ran
 
 ```
-sum(base_gc_time_total_seconds{namespace="<userXY>-eventdriven"})
+sum(base_gc_time_total_seconds{namespace="<userXY>"})
 ```
