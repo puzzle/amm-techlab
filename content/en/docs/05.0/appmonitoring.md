@@ -86,7 +86,7 @@ spec:
       - <userXY>
   selector:
     matchLabels:
-      application: quarkus-techlab
+      application: amm-techlab
 ```
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/05.0/5.1/servicemonitor-consumer.yaml)
