@@ -514,10 +514,10 @@ oc get route spring-boot-s2i
 
 ```
 NAME              HOST/PORT                                          PATH   SERVICES          PORT       TERMINATION   WILDCARD
-spring-boot-s2i   spring-boot-s2i-amm-userXY.ocp.aws.puzzle.ch          spring-boot-s2i   8080-tcp   edge          None
+spring-boot-s2i   spring-boot-s2i-userXY.techlab.openshift.ch          spring-boot-s2i   8080-tcp   edge          None
 ```
 
-And finally check if you can reach your application within a browser by accessing the public route. [https://spring-boot-s2i-amm-userXY.ocp.aws.puzzle.ch](https://spring-boot-s2i-amm-userXY.ocp.aws.puzzle.ch)
+And finally check if you can reach your application within a browser by accessing the public route. [https://spring-boot-s2i-userXY.techlab.openshift.ch](https://spring-boot-s2i-userXY.techlab.openshift.ch)
 
 
 Do you not find a suitable S2I builder image for you application. [Create your own](https://www.openshift.com/blog/create-s2i-builder-image)

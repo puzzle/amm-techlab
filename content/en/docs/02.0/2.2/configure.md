@@ -155,7 +155,7 @@ Changing the environment of a deployment triggers a rollout of the application p
 After the container has started successfully, the application should be reachable again.
 
 Check if the changes were applied correct. Open your browser and navigate to your application:  
-<https://data-producer-amm-userXY.ocp.aws.puzzle.ch/data>
+<https://data-producer-userXY.techlab.openshift.ch/data>
 
 {{% alert  color="primary" %}}Replace **userXY** with your username!{{% /alert %}}
 
