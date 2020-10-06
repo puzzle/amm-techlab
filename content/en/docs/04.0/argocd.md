@@ -124,7 +124,13 @@ apps   Deployment  <username>           example-php-docker-helloworld  Synced  H
        Service     <username>           example-php-docker-helloworld  Synced  Healthy
 ```
 
-So the application is synced now and a Kubernetes Deployment and a Kubernetes Service was created. You can check this with:
+So the application is synced now and a Kubernetes Deployment and a Kubernetes Service was created. Make sure to switch back to your main project.
+
+```bash
+oc project <user>
+```
+
+You can check whether the synch worked with the following command:
 
 ```bash
 oc get all
