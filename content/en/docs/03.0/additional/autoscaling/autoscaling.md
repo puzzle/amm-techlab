@@ -20,9 +20,17 @@ oc new-app openshift/ruby:2.5~https://github.com/chrira/ruby-ex.git#load
 oc create route edge --insecure-policy=Allow --service=ruby-ex
 ```
 
-Wait until the application is built and ready and the first metrics appear. You can follow the build as well as the existing pods.
+{{% alert  color="primary" %}} Since [OpenShift 4.5](https://docs.openshift.com/container-platform/4.5/release_notes/ocp-4-5-release-notes.html#ocp-4-5-developer-experience) `oc new-app` creates a Deployment not a DeploymentConfig. {{% /alert %}}
 
-It will take a while until the first metrics appear, then the autoscaler will be able to work properly.
+Wait until the application is built and ready and the first metrics appear. You can follow the build as well as the existing pods. It will take a while until the first metrics appear, then the autoscaler will be able to work properly.
+
+To see the metrics, go with the web-console to your OpenShift project (Developer view) and select the *Monitoring* menu item. Then change to the Metcis tab and select *CPU Usage* from the dropdown. If the metric has no datapoints, click the *Show PromQL* button and add following query:
+
+```s
+sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{namespace='autoscale-userXY'}) by (pod)
+```
+
+{{% alert  color="primary" %}}Replace **userXY** with your username!{{% /alert %}}
 
 Now we define a set of limits for our application that are valid for a single Pod:
 
@@ -51,8 +59,7 @@ oc autoscale deploy ruby-ex --min 1 --max 3 --cpu-percent=25
 
 Now we can generate load on the service.
 
-**Note** Use this command to get the Hostname of the route
-`oc get route -o custom-columns=NAME:.metadata.name,HOSTNAME:.spec.host`
+{{% alert  color="primary" %}} Use this command to get the Hostname of the route `oc get route -o custom-columns=NAME:.metadata.name,HOSTNAME:.spec.host` {{% /alert %}}
 
 ```bash
 for i in {1..500}; do curl -s https://[HOSTNAME]/load ; done;

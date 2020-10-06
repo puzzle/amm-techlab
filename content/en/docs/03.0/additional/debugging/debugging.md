@@ -31,6 +31,8 @@ Create a new application from this image:
 oc new-app -e ACCESS_KEY_ID=something -e SECRET_ACCESS_KEY=x mastertinner/s3manager
 ```
 
+{{% alert  color="primary" %}} Since [OpenShift 4.5](https://docs.openshift.com/container-platform/4.5/release_notes/ocp-4-5-release-notes.html#ocp-4-5-developer-experience) `oc new-app` creates a Deployment not a DeploymentConfig. {{% /alert %}}
+
 
 ## Task {{% param sectionnumber %}}.2: Debugging with the oc tool
 

@@ -18,7 +18,11 @@ This adds additional requirements to the container images that will be deployed 
 
 ## Task {{% param sectionnumber %}}.2: Demo application
 
-We use a Go application similar to the one from Lab 2. It is extended it with a log file. Every request is logged with the actual time and the client IP address. The log file is placed under `/home/golang/hello-go.log`
+We use a Go application running a HTTP server listening on port 8080. Every request is logged with the actual time and the client IP address. The log file is placed under `/home/golang/hello-go.log`.
+
+This writing to a file helps us testing file access and write permissions inside a container.
+
+{{% alert  color="primary" %}} Writing logs to a file is not a good thing in the container world. Logs have to be treated as streams and written to standard out. {{% /alert %}}
 
 
 ### Go source
@@ -81,7 +85,10 @@ func appendToFile(remoteAddr string) {
 
 ### Dockerfile
 
-The dockerfile is the same as in chapter 2.
+The Dockerfile defines a [multi-stage build](https://docs.docker.com/develop/develop-images/multistage-build/). The build is done in several stages using different containers.
+
+1. use a Go container to build the Go application
+2. copy the go binary from the build to a minimal alpine image
 
 ``` dockerfile
 FROM golang:1.14-alpine as builder
@@ -92,7 +99,6 @@ FROM alpine
 COPY --from=builder /opt/app-root/src/go-hello-world-app /home/golang/
 EXPOSE 8080
 ENTRYPOINT /home/golang/go-hello-world-app
-
 ```
 
 [source](https://raw.githubusercontent.com/chrira/container-openshift-ifie/master/Dockerfile)

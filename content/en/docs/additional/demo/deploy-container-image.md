@@ -14,8 +14,12 @@ As you know from other techlabs, an easy way to create applications in OpenShift
 Let's create an application for the go-hello-world image that we built before.
 
 ```bash
-oc new-app appuio/go-hello-world
+oc new-app appuio/go-hello-world --as-deployment-config
 ```
+
+{{% alert  color="primary" %}}
+Since [OpenShift 4.5](https://docs.openshift.com/container-platform/4.5/release_notes/ocp-4-5-release-notes.html#ocp-4-5-developer-experience) `oc new-app` creates a Deployment not a DeploymentConfig. We let it create a DeploymentConfig by adding the `--as-deployment-config` flag.
+{{% /alert %}}
 
 ```
 --> Found container image 5779c56 (11 days old) from  for "appuio/go-hello-world:latest"
