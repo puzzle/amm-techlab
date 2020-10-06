@@ -27,7 +27,7 @@ It will take a while until the first metrics appear, then the autoscaler will be
 Now we define a set of limits for our application that are valid for a single Pod:
 
 ```bash
-oc edit dc ruby-ex
+oc edit deploy ruby-ex
 ```
 
 We add the following resource limits to the container:
@@ -46,7 +46,7 @@ This will roll out our deployment again and enforce the limits.
 As soon as our new container is running we can now configure the autoscaler:
 
 ```bash
-oc autoscale dc ruby-ex --min 1 --max 3 --cpu-percent=25
+oc autoscale deploy ruby-ex --min 1 --max 3 --cpu-percent=25
 ```
 
 Now we can generate load on the service.
