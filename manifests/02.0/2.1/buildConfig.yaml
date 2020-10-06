@@ -1,8 +1,6 @@
 apiVersion: build.openshift.io/v1
 kind: BuildConfig
 metadata:
-  annotations:
-    openshift.io/generated-by: OpenShiftNewBuild
   labels:
     build: data-producer
     application: amm-techlab
@@ -12,7 +10,6 @@ spec:
     to:
       kind: ImageStreamTag
       name: data-producer:rest
-  postCommit: {}
   resources:
     limits:
       cpu: "500m"
@@ -30,9 +27,6 @@ spec:
       dockerfilePath: src/main/docker/Dockerfile.binary
     type: Docker
   triggers:
-  - github:
-      secret: PPMUkybOXqfoY_bJd-ou
-    type: GitHub
   - generic:
       secret: f31PWzHXBGI9iYw-fTli
     type: Generic

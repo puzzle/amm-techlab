@@ -102,17 +102,10 @@ Prepare a file inside your workspace `<workspace>/imageStream.yaml` and add the 
 apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
-  annotations:
-    openshift.io/generated-by: OpenShiftNewBuild
   labels:
     build: data-producer
     application: amm-techlab
   name: data-producer
-spec:
-  lookupPolicy:
-    local: false
-status:
-  dockerImageRepository: ""
 ```
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/imageStream.yaml)
@@ -122,6 +115,8 @@ Let's create the ImageStream
 ```BASH
 oc apply -f imageStream.yaml
 ```
+
+Expected output:
 
 ```
 imagestream.image.openshift.io/data-producer created
@@ -141,8 +136,6 @@ Prepare a file inside your workspace `<workspace>/buildConfig.yaml` and add the 
 apiVersion: build.openshift.io/v1
 kind: BuildConfig
 metadata:
-  annotations:
-    openshift.io/generated-by: OpenShiftNewBuild
   labels:
     build: data-producer
     application: amm-techlab
@@ -152,7 +145,6 @@ spec:
     to:
       kind: ImageStreamTag
       name: data-producer:rest
-  postCommit: {}
   resources:
     limits:
       cpu: "500m"
@@ -170,9 +162,6 @@ spec:
       dockerfilePath: src/main/docker/Dockerfile.binary
     type: Docker
   triggers:
-  - github:
-      secret: PPMUkybOXqfoY_bJd-ou
-    type: GitHub
   - generic:
       secret: f31PWzHXBGI9iYw-fTli
     type: Generic
@@ -183,11 +172,17 @@ spec:
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/buildConfig.yaml)
 
-Create the build config.
+Create the build config by applying the content of your `buildConfig.yaml` file.
+
+<details><summary>command hint</summary>
 
 ```BASH
 oc apply -f buildConfig.yaml
 ```
+
+</details><br/>
+
+Expected output:
 
 ```
 buildconfig.build.openshift.io/data-producer created
@@ -278,11 +273,17 @@ spec:
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/deploymentConfig.yaml)
 
-Let's create the deployment with following command
+Let's create the deployment
+
+<details><summary>command hint</summary>
 
 ```BASH
 oc apply -f deploymentConfig.yaml
 ```
+
+</details><br/>
+
+Expected output:
 
 ```
 deploymentconfig.apps.openshift.io/data-producer created
@@ -323,9 +324,15 @@ spec:
 
 Create the Service in OpenShift
 
-```bash
+<details><summary>command hint</summary>
+
+```BASH
 oc apply -f svc.yaml
 ```
+
+</details><br/>
+
+Expected output:
 
 ```
 service/data-producer created
@@ -364,9 +371,15 @@ spec:
 
 Create the Route in OpenShift
 
-```bash
+<details><summary>command hint</summary>
+
+```BASH
 oc apply -f route.yaml
 ```
+
+</details><br/>
+
+Expected output:
 
 ```
 route.route.openshift.io/data-producer created
@@ -443,12 +456,17 @@ curl https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/
 
 This should have created the file `<workspace>/consumer.yaml` containing all resource definitions. Open it with your IDE to see the resource definitions.
 
-Use following command to deploy the data-consumer application:
+Use the file `consumer.yaml` to create the consumer application inside OpenShift.
 
+<details><summary>command hint</summary>
 
 ```BASH
-oc apply -f  consumer.yaml
+oc apply -f consumer.yaml
 ```
+
+</details><br/>
+
+Expected output:
 
 ```
 deployment.apps/data-consumer created
@@ -456,12 +474,17 @@ service/data-consumer created
 route.route.openshift.io/data-consumer created
 ```
 
-Let's verify if everything was deployed and is up running.
+Let's verify if everything was deployed and is up running. Show again all resources.
+
+<details><summary>command hint</summary>
 
 ```BASH
 oc get all
 ```
 
+</details><br/>
+
+Expected resources in the output:
 
 ```
 NAME                                 READY   STATUS             RESTARTS   AGE

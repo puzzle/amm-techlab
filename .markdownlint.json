@@ -13,6 +13,13 @@
   "MD022": {
     "lines_above": 2
   },
+  "MD033": {
+    "allowed_elements": [
+      "br",
+      "details",
+      "summary"
+    ]
+  },
   "MD035": {
     "style": "---"
   },

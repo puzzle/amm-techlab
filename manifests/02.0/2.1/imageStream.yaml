@@ -1,14 +1,7 @@
 apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
-  annotations:
-    openshift.io/generated-by: OpenShiftNewBuild
   labels:
     build: data-producer
     application: amm-techlab
   name: data-producer
-spec:
-  lookupPolicy:
-    local: false
-status:
-  dockerImageRepository: ""
