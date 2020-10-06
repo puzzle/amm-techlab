@@ -7,7 +7,7 @@ description: >
   Build and deployment automation with Tekton on OpenShift.
 ---
 
-It is time to automate the deployment of our application to OpenShift by using OpenShift Pipelines. OpenShift Pipelines are based on [Tekton](https://tekton.dev/).
+It is time to automate the deployment of our Quarkus application to OpenShift by using OpenShift Pipelines. OpenShift Pipelines are based on [Tekton](https://tekton.dev/).
 
 
 ## Task {{% param sectionnumber %}}.1: Basic Concepts

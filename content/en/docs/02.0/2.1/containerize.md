@@ -431,13 +431,15 @@ If you just see `Your new Cloud-Native application is ready!`, then you forget t
 
 Now it's time to deploy the counterpart. The consumer application consists of three resource definitions. First we create a deployment, pointing to the consumer Docker Image on docker Hub. Next the service which exposes the application inside our cluster and last the route to access the app from outside the cluster.
 
+Consumer and producer are of different kind of deployment resources. The producer is a DeploymentConfig (OpenShift) and the consumer a Deployment (Kubernetes). The producer needs to be a DeploymentConfig to make full use of the build process with ImageStreams. Because the consumer uses an external image and doesn't need these features we can follow the best practices and use the Kubernetes-native Deployment.
+
 We get the needed [consumer.yaml](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/consumer.yaml) by curl. Execute the following command inside your workspace:
 
 ```BASH
 curl https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/consumer.yaml --output consumer.yaml
 ```
 
-This should have created the file `<workspace>/consumer.yaml`.
+This should have created the file `<workspace>/consumer.yaml` containing all resource definitions. Open it with your IDE to see the resource definitions.
 
 Use following command to deploy the data-consumer application:
 
@@ -511,7 +513,7 @@ When you open the URL you should see the consumers data that he received from th
 
 The needed resource files are available inside the folder *manifests/02.0/2.1/*.
 
-When you were not successful, you can update your project with the solution by executing this command:
+To apply the solution execute this command:
 
 ```BASH
 oc apply -f manifests/02.0/2.1/
