@@ -74,6 +74,6 @@ Alongside the Lab Cluster, we also deployed a couple of additional Tools and Ser
 
 checkout the Deployed resources and then Login into the services. (URLs are provided by the trainer)
 
-* Git Server `pitc-infra-gitea`, this will contain the source code (Login with your username and password)
+* Git Server `pitc-infra-gitea`, this will contain the source code (Register and login with your username and password)
 * Prometheus and Grafana in the project `pitc-infra-monitoring` (Login using Oauth OpenShift)
 * ArgoCD in the project `pitc-infra-argocd` (Login via OpenShift)
