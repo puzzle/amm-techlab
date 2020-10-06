@@ -196,8 +196,10 @@ buildconfig.build.openshift.io/data-producer created
 The build starts automatically after creating the buildConfig. See the actual build logs:
 
 ```BASH
-oc logs data-producer-1-build
+oc logs -f data-producer-1-build
 ```
+
+{{% alert title="Note" color="primary" %}} The `-f` option streams the log output during the whole build. Exit stream before the build is done by pressing `Ctrl+C`. {{% /alert %}}
 
 
 ## Task {{% param sectionnumber %}}.4: Deploy Application
