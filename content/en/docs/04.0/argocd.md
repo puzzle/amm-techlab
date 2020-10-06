@@ -252,7 +252,7 @@ example-php-docker-helloworld   1/1     1            1           22m
 You now learnt the basic functionality of argocd, as an additional lab you can now:
 
 * Fork the git repository with the k8s manifests <https://github.com/puzzle/amm-argocd-example.git>
-   * Use the Gitea Server (URL provided by trainer, register and login with your username and password) or your personal Github Account
+  * Use the Gitea Server (URL provided by trainer, register and login with your username and password) or your personal Github Account
 * create a new argocd app using the new git repository
 * create a route resource yaml which exposes the example application
 * push it to your git repository
