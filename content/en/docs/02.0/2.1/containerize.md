@@ -513,9 +513,9 @@ When you open the URL you should see the consumers data that he received from th
 
 ## Solution
 
-The needed resource files are available inside the folder *manifests/02.0/2.1/*.
+The needed resource files are available inside the folder [manifests/02.0/2.1/](https://github.com/puzzle/amm-techlab/tree/master/manifests/02.0/2.1) of the techlab [github repository](https://github.com/puzzle/amm-techlab).
 
-To apply the solution execute this command:
+When you were not successful, you can update your project with the solution by cloning the Techlab Repository `git clone https://github.com/puzzle/amm-techlab.git` and executing this command:
 
 ```BASH
 oc apply -f manifests/02.0/2.1/
