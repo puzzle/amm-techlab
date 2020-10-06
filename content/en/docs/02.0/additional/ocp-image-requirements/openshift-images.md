@@ -109,6 +109,23 @@ apiVersion: v1
 kind: List
 metadata: {}
 items:
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    labels:
+      app: container-openshift-ifie
+    name: container-openshift-ifie
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - from:
+        kind: DockerImage
+        name: chrira/container-openshift-ifie
+      importPolicy: {}
+      name: latest
+      referencePolicy:
+        type: Source
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   metadata:
@@ -158,7 +175,6 @@ items:
       targetPort: 8080
     selector:
       deploymentconfig: container-openshift-ifie
-  status:
 ```
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/additional/ocp-image-requirements/application-infrastructure.yaml)
