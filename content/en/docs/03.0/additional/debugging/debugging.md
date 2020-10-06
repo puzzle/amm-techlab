@@ -37,7 +37,7 @@ oc new-app -e ACCESS_KEY_ID=something -e SECRET_ACCESS_KEY=x mastertinner/s3mana
 Try to open a remote shell in the container:
 
 ```bash
-oc rsh dc/s3manager
+oc rsh deploy/s3manager
 ```
 
 Error message:
@@ -53,7 +53,7 @@ That didn't work because there is no shell in the container.
 Can we at least spend the environment?
 
 ```bash
-oc exec dc/s3manager env
+oc exec deploy/s3manager env
 ```
 
 Error message:
@@ -126,15 +126,15 @@ Instead you can patch the controller (deployment, deploymentconfig, daemonset, .
 ```
 
 This attempt also fails because the tools cannot be copied into the container without tar. However, we have received information from the debug box that we should do the installation via deployment.
-The deployment configuration is expanded with an init container. The init container copies the tools into a volume, which can then be used by the s3manager container.
+The deployment is expanded with an init container. The init container copies the tools into a volume, which can then be used by the s3manager container.
 
-Patching the deployment configuration:
+Patching the deployment:
 
 ```bash
-k8s-debugbox dc s3manager
+k8s-debugbox deploy s3manager
 ```
 
-Here is the init container extract from the patched deployment configuration:
+Here is the init container extract from the patched deployment:
 
 ```yaml
 spec:
@@ -159,8 +159,8 @@ Where are the debugging tools located?
 
 **Tip** By entering `exit` we end the debug box.
 
-How can we undo the changes to the DeploymentConfiguration?
+How can we undo the changes to the Deployment?
 
 ```bash
-k8s-debugbox dc s3manager --remove
+k8s-debugbox deploy s3manager --remove
 ```
