@@ -16,7 +16,7 @@ oc new-project autoscale-userXY
 On the branch load there is a CPU intensive endpoint which we will use for our tests. Therefore we start the app on this branch:
 
 ```bash
-oc new-app openshift/ruby:2.5~https://git.apps.cluster-centris-0c77.centris-0c77.example.opentlc.com/training/ruby-ex.git#load
+oc new-app openshift/ruby:2.5~https://github.com/chrira/ruby-ex.git#load
 oc create route edge --insecure-policy=Allow --service=ruby-ex
 ```
 
