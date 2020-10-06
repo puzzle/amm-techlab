@@ -170,7 +170,7 @@ For changing stages and productive environments we propose updating the YAML rep
 
 ## Solution
 
-The needed resource files are available inside the folder *manifests/02.0/2.2/*.
+The needed resource files are available inside the folder [manifests/02.0/2.2/](https://github.com/puzzle/amm-techlab/tree/master/manifests/02.0/2.2) of the techlab [github repository](https://github.com/puzzle/amm-techlab).
 
 When you were not successful, you can update your project with the solution by executing this command:
 
