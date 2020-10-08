@@ -53,11 +53,6 @@ weight = 1
 # navigation
 [Languages.en.menu]
 
-[[Languages.en.menu.main]]
-weight = 3
-name = "Puzzle ITC GmbH"
-url = "https://www.puzzle.ch"
-
 [markup]
   [markup.goldmark]
     [markup.goldmark.renderer]

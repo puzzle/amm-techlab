@@ -7,10 +7,20 @@ menu:
     weight: 1
 ---
 
-{{< blocks/section type="section" color="light">}}
+{{< blocks/section color="light">}}
 
-{{% blocks/feature icon="fa-chalkboard-teacher" url="introduction.pdf" title="Slides" %}}
-Get the slides for this lab
+{{% blocks/feature icon="fa-chalkboard-teacher" url="01_amm_intro_2.0.pdf" title="Intro to AMM" %}}
+{{% /blocks/feature %}}
+
+{{% blocks/feature icon="fa-chalkboard-teacher" url="02_recap_container_K8S_2.0.pdf" title="Container OpenShift Recap" %}}
+
+{{% /blocks/feature %}}
+{{% blocks/feature icon="fa-chalkboard-teacher" url="03_Build_and_Deploy_2.0.pdf" title="Application Build and Deployment on OpenShift" %}}
+
+{{% /blocks/feature %}}
+{{% blocks/feature icon="fa-chalkboard-teacher" url="04_CICD_on_OpenShift_2.0.pdf" title="CICD on OpenShift" %}}
+
 {{% /blocks/feature %}}
 
 {{< /blocks/section >}}
+
