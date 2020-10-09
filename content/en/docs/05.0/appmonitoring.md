@@ -109,12 +109,19 @@ But as part of this lab, we want to use Grafana to interact with prometheus.
 Open Grafana (URL provided by the trainer) and switch to the explore tab, then execute the following query to check whether your target is configured or not:
 
 {{% alert title="Note" color="primary" %}}
-Make sure to replace `<userXY>` with your current namespace
+Make sure to replace `<userxy>` with your current namespace
 {{% /alert %}}
 
 
 ```s
-prometheus_sd_discovered_targets{config="<userXY>/amm-techlab-monitor/0"}
+prometheus_sd_discovered_targets{config="<userxy>/amm-techlab-monitor/0"}
+```
+
+Expected result: two targets (Consumer and provider) similar to:
+
+```
+prometheus_sd_discovered_targets{cluster="cluster",config="<userxy>/amm-techlab-monitor/0",endpoint="metrics",instance="10.129.2.229:9091",job="prometheus-user-workload",name="scrape",namespace="openshift-user-workload-monitoring",pod="prometheus-user-workload-1",prometheus="openshift-monitoring/k8s",service="prometheus-user-workload"}
+prometheus_sd_discovered_targets{cluster="cluster",config="<userxy>/amm-techlab-monitor/0",endpoint="metrics",instance="10.129.2.255:9091",job="prometheus-user-workload",name="scrape",namespace="openshift-user-workload-monitoring",pod="prometheus-user-workload-0",prometheus="openshift-monitoring/k8s",service="prometheus-user-workload"}
 ```
 
 
@@ -154,7 +161,7 @@ In our case Prometheus will scrape:
 * look for a port with the name `http` (this must match the name in the Service resource)
 * it will srcape the path `/metrics` using `http`
 
-This means now: since both Services `data-producer` and `data-consumer` have the matching label `application: amm-techlab`, a port with the name `http` is configured and the matching pods provide metrics on `http://[Pod]/metrics`, Prometheus will scrape data from these endpoints.
+This means now: since both Services `data-producer` and `data-consumer` have the matching label `application: amm-techlab`, a port with the name `http` is configured and the matching pods provide metrics on `http://[Pod]/metrics`, Prometheus will scrape data from these pods.
 
 
 ## Task {{% param sectionnumber %}}.4: Query Application Metrics
