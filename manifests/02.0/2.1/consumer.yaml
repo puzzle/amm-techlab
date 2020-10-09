@@ -62,7 +62,7 @@ metadata:
   name: data-consumer
 spec:
   ports:
-    - name: data-consumer-http
+    - name: http
       port: 8080
       protocol: TCP
       targetPort: 8080

@@ -52,7 +52,7 @@ oc project
 ```
 
 ```
-Using project "userXY" on server "https://api.techlab.openshift.ch:6443".
+Using project "userXY" on server "https://<theClusterAPIURL>".
 ```
 
 The returned project should be your user name.

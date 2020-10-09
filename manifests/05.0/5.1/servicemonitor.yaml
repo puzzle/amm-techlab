@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    k8s-app: amm-techlab
+  name: amm-techlab-monitor
+spec:
+  endpoints:
+  - interval: 30s
+    port: http
+    scheme: http
+    path: /metrics
+  selector:
+    matchLabels:
+      application: amm-techlab

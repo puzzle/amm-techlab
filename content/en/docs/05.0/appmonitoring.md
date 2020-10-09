@@ -66,38 +66,35 @@ Let's now create our first ServiceMonitor, switch back to the project of lab 3
 oc project <userXY>
 ```
 
-Create the following ServiceMonitor resource as local file `<workspace>/servicemonitor-consumer.yaml` and make sure to replace the `<userXY>` with your project name.
+Create the following ServiceMonitor resource as local file `<workspace>/servicemonitor.yaml`.
 
 ```yaml
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   labels:
-    k8s-app: quarkus-techlab-monitor
-  name: consumer-monitor
+    k8s-app: amm-techlab
+  name: amm-techlab-monitor
 spec:
   endpoints:
   - interval: 30s
-    port: data-consumer-http
+    port: http
     scheme: http
     path: /metrics
-  namespaceSelector:
-    matchNames:
-      - <userXY>
   selector:
     matchLabels:
       application: amm-techlab
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/05.0/5.1/servicemonitor-consumer.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/05.0/5.1/servicemonitor.yaml)
 
 Create the ServiceMonitor.
 
 ```BASH
-oc apply -f servicemonitor-consumer.yaml
+oc apply -f servicemonitor.yaml
 ```
 
-Expected result: `servicemonitor.monitoring.coreos.com/consumer-monitor created`
+Expected result: `servicemonitor.monitoring.coreos.com/amm-techlab-monitor created`
 
 {{% alert title="Warning" color="secondary" %}}
 Your current user must have the following rights in the current namespace: `oc policy add-role-to-user monitoring-edit <user> -n <userXY>`
@@ -117,13 +114,47 @@ Make sure to replace `<userXY>` with your current namespace
 
 
 ```s
-prometheus_sd_discovered_targets{config="<userXY>/consumer-monitor/0"}
+prometheus_sd_discovered_targets{config="<userXY>/amm-techlab-monitor/0"}
 ```
 
 
-## Task {{% param sectionnumber %}}.3: Create Service Monitor for the Producer Service
+## How does it work
 
-Similar to Task {{% param sectionnumber %}}.1 create a ServiceMonitor or alter the current one to add metrics from the producer Service
+The Prometheus Operator "scans" namespaces for ServiceMonitor CustomResources. It then updates the ServiceDiscovery configuration accordingly.
+
+The selector part in the Service Monitor defines in our case which services will be auto discovered.
+
+```yaml
+# servicemonitor.yaml
+...
+  selector:
+    matchLabels:
+      application: amm-techlab
+...
+```
+
+And the corresponding Service
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: data-producer
+  labels:
+    application: amm-techlab
+...
+```
+
+This means Prometheus scrapes all Endpoints where the `application: amm-techlab` label is set.
+
+The `spec` section in the ServiceMonitor resource allows us now to further configure the targets Prometheus will scrape.
+In our case Prometheus will scrape:
+
+* every 30 seconds
+* look for a port with the name `http` (this must match the name in the Service resource)
+* it will srcape the path `/metrics` using `http`
+
+This means now: since both Services `data-producer` and `data-consumer` have the matching label `application: amm-techlab`, a port with the name `http` is configured and the matching pods provide metrics on `http://[Pod]/metrics`, Prometheus will scrape data from these endpoints.
 
 
 ## Task {{% param sectionnumber %}}.4: Query Application Metrics
