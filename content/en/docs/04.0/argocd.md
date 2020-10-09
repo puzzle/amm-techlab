@@ -11,7 +11,7 @@ description: >
 ## Introduction to GitOps
 
 {{% alert  color="primary" %}}
-[GitOps](https://www.weave.works/technologies/gitops/) is a way to do Kubernetes cluster management and application delivery.  It works by using Git as a single source of truth for declarative infrastructure and applications. With GitOps, the use of software agents can alert on any divergence between Git with what's running in a cluster, and if there's a difference, Kubernetes reconcilers automatically update or rollback the cluster depending on the case. With Git at the center of your delivery pipelines, developers use familiar tools to make pull requests to accelerate and simplify both application deployments and operations tasks to Kubernetes.
+[GitOps](https://www.weave.works/technologies/gitops/) is a way to do Kubernetes cluster management and application delivery. It works by using Git as a single source of truth for declarative infrastructure and applications. With GitOps, the use of software agents can alert on any divergence between Git with what's running in a cluster, and if there's a difference, Kubernetes reconcilers automatically update or rollback the cluster depending on the case. With Git at the center of your delivery pipelines, developers use familiar tools to make pull requests to accelerate and simplify both application deployments and operations tasks to Kubernetes.
 {{% /alert %}}
 
 Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes.
@@ -59,7 +59,7 @@ argocd app create argo-example-<username> --repo https://github.com/puzzle/amm-a
 
 {{% alert title="Note" color="primary" %}}If you want to deploy it in a different namespace, make sure the namespaces exists before synching the app{{% /alert %}}
 
-Once the application is created, you can now view its status:
+Once the application is created, you can view its status:
 
 ```bash
 argocd app get argo-example-<username>
@@ -84,7 +84,7 @@ GROUP  KIND        NAMESPACE    NAME                           STATUS     HEALTH
 apps   Deployment  hannelore15  example-php-docker-helloworld  OutOfSync  Missing
 ```
 
-The application status is initially in OutOfSync state since the application has yet to be deployed and no Kubernetes resources have been created. To sync (deploy) the application, run:
+The application status is initially in 'OutOfSync' state since the application has yet to be deployed and no Kubernetes resources have been created. To sync (deploy) the application, run:
 
 ```bash
 argocd app sync argo-example-<username>
@@ -124,13 +124,13 @@ apps   Deployment  <username>           example-php-docker-helloworld  Synced  H
        Service     <username>           example-php-docker-helloworld  Synced  Healthy
 ```
 
-So the application is synced now and a Kubernetes Deployment and a Kubernetes Service was created. Make sure to switch back to your main project.
+So now, the application is synced and a Kubernetes Deployment and a Kubernetes Service have been created. Make sure to switch back to your main project.
 
 ```bash
 oc project <user>
 ```
 
-You can check whether the synch worked with the following command:
+With the following command, you can check, if the sync has worked
 
 ```bash
 oc get all
@@ -153,7 +153,7 @@ replicaset.apps/example-php-docker-helloworld-85c9c5f9cb   1         1         1
 
 ## Task {{% param sectionnumber %}}.3: Automated Sync Policy and Diff
 
-When there is a new commit in your Git Repository, the Argo CD Application becomes OutOfSync again. To simulate a change (because we don't have control over the Argo CD repository) in your application, lets manually change our Deployment, e.g. scale your `example-php-docker-helloworld` Deployment to 2:
+When there is a new commit in your Git Repository, the Argo CD Application becomes 'OutOfSync' again. To simulate a change (because we don't have control over the Argo CD repository) in your application lets manually change our Deployment, e.g. scale your `example-php-docker-helloworld` Deployment to 2:
 
 ```bash
 oc scale deployment example-php-docker-helloworld --replicas=2
@@ -163,7 +163,7 @@ Check the application status with:
 
 ![Application Out-of-Sync](../argo-outofsynch.png)
 
-which should show that the application is OutOfSync. This means you live state is not the same as the target state from the Git repository. the `argocd app get argo-example-<username>`
+which should show that the application is 'OutOfSync'. This means your 'live state' is not the same as the 'target state' from the Git repository. the `argocd app get argo-example-<username>`
 
 ```bash
 Name:               argo-example-<username>
@@ -184,7 +184,7 @@ GROUP  KIND        NAMESPACE    NAME                           STATUS     HEALTH
 apps   Deployment  <username>   example-php-docker-helloworld  OutOfSync  Healthy        deployment.apps/example-php-docker-helloworld created
 ```
 
-As you see, your `example-php-docker-helloworld` Deployment resource is OutOfSync. You can perform a diff against the target and live state using:
+As you see, your `example-php-docker-helloworld` Deployment resource is 'OutOfSync'. You can perform a diff against the target and live state using:
 
 ```bash
 argocd app diff argo-example-<username>
@@ -210,9 +210,9 @@ argocd app sync argo-example-<username>
 
 you can sync your application again against the target state.
 
-Argo CD has the ability to automatically sync an application when it detects differences between the desired manifests in Git, and the live state in the cluster. A benefit of automatic sync is that CI/CD pipelines no longer need direct access to the Argo CD API server to perform the deployment. Instead, the pipeline makes a commit and push to the Git repository with the changes to the manifests in the tracking Git repo.
+Argo CD can automatically sync an application when it detects differences between the desired manifests in Git, and the live state in the cluster. A benefit of automatic sync is that CI/CD pipelines no longer need direct access to the Argo CD API server to perform the deployment. Instead, the pipeline makes a commit and push to the Git repository with the changes to the manifests in the tracking Git repo.
 
-To configure automated sync run (or use the UI):
+To configure automatic sync run (or use the UI):
 
 ```bash
 argocd app set argo-example-<username> --sync-policy automated
@@ -223,7 +223,7 @@ and now everytime you create a new commit in your Git Repository, Argo CD will a
 
 ## Task {{% param sectionnumber %}}.3: Automatic Self-Healing
 
-By default, changes that are made to the live cluster will not trigger automated sync. To enable automatic sync when the live cluster's state deviates from the state defined in Git, run:
+By default, changes made to the live cluster will not trigger automatic sync. To enable automatic sync when the live cluster's state deviates from the state defined in Git, run:
 
 ```bash
 argocd app set argo-example-<username> --self-heal
@@ -249,11 +249,11 @@ example-php-docker-helloworld   1/1     1            1           22m
 
 ## Task {{% param sectionnumber %}}.4: Additional Task
 
-You now learnt the basic functionality of argocd, as an additional lab you can now:
+You've now learned the basic functionality of argocd, as an additional lab you can now:
 
 * Fork the git repository with the k8s manifests <https://github.com/puzzle/amm-argocd-example.git>
   * Use the Gitea Server (URL provided by trainer, register and login with your username and password) or your personal Github Account
 * create a new argocd app using the new git repository
-* create a route resource yaml which exposes the example application
+* create a route resource YAML which exposes the example application
 * push it to your git repository
 * and let the magic happen
