@@ -9,7 +9,7 @@ description: >
 
 ## Collecting Application Metrics
 
-When running application in production a fast feedback loop is absolute key. The following reasons show why it's essential to gather and combine all sorts of metrics, when running an application in production:
+When running applications in production, a fast feedback loop is a key factor. The following reasons show why it's essential to gather and combine all sorts of metrics when running an application in production:
 
 * To make sure that an application runs smoothly
 * To be able to see production issues and send alerts
@@ -23,18 +23,18 @@ Those Metrics (e.g. Request Count on a specific URL) are collected within the ap
 
 [Prometheus](https://prometheus.io/) is a monitoring system and timeseries database which integrates great with all sorts of applications and platforms.
 
-The basic principle behind Prometheus is to collect metrics using a polling mechanism. There are a lot of different so called [exporters](https://prometheus.io/docs/instrumenting/exporters/#exporters-and-integrations), where metrics can be collected from.
+The basic principle behind Prometheus is to collect metrics using a polling mechanism. There are a lot of different so-called [exporters](https://prometheus.io/docs/instrumenting/exporters/#exporters-and-integrations), where metrics can be collected from.
 
-In our case the metrics will be collected from a specific path provided by the application (`/metrics`)
+In our case, the metrics will be collected from a specific path provided by the application (`/metrics`)
 
 
 ## Architecture
 
-On our lab cluster a Prometheus / Grafana stack is already deployed. Using the service discovery capability of the prometheus - kubernetes integration the running Prometheus server will be able locate our application almost out of the box.
+On our lab cluster, a Prometheus / Grafana stack is already deployed. Using the service discovery capability of the Prometheus - Kubernetes integration the running Prometheus server will be able to locate our application almost out of the box.
 
 * Prometheus running in the namespace `pitc-infra-monitoring`
 * Prometheus must be able to collect Metrics from the running application, by sending GET Requests (Network Policy)
-* Prometheus must know where to go an collect the metrics from
+* Prometheus must know where to go and where to collect the metrics from
 
 
 ## Annotation vs. Service Monitor
@@ -49,7 +49,7 @@ metadata:
     prometheus.io/port: "8080"
 ```
 
-The current OpenShift - Prometheus integration works differently and is a lot more flexible. It is based on the ServiceMonitor CustomResource.
+The current OpenShift - Prometheus integration works differently and is way more flexible. It bases on the ServiceMonitor CustomResource.
 
 ```bash
 oc explain ServiceMonitor
@@ -130,7 +130,7 @@ Similar to Task {{% param sectionnumber %}}.1 create a ServiceMonitor or alter t
 
 Since the Metrics are now collected from both services, let's execute a query and visualise the data.
 
-for example the total seconds the Garbage Collector ran
+for example, the total seconds the Garbage Collector ran
 
 ```
 sum(base_gc_time_total_seconds{namespace="<userXY>"})
