@@ -7,7 +7,7 @@ menu:
 ---
 
 {{% blocks/cover title="About" height="auto" %}}
-Im Application "Migration and Modernization Techlab" lernen die Teilnehmenden anhand Präsentationen und Hands-on Labs, wie Applikationen in ihrer Systemlandschaft auf die neue Container Plattform gebracht werden können und welche architektonischen Grundprinzipien beachtet werden müssen, damit die Flexiblität und das Featureset der Container Plattform wirklich ausgereizt werden können. Die Teilnehmenden lernen moderne Konzepte kennen, wie Cloud Native Applikationen entwickelt und betrieben werden können.
+Im Application “Migration and Modernization Techlab” lernen die Teilnehmenden anhand Präsentationen und Hands-on Labs, wie sie Applikationen in ihrer Systemlandschaft auf die neue Container-Plattform bringen. Es wird aufgezeigt, welche architektonischen Grundprinzipien beachtet werden müssen, damit die Flexibilität und das Featureset der Container-Plattform wirklich ausgereizt werden können. Die Teilnehmenden lernen zudem moderne Konzepte kennen, wie Cloud Native Applikationen entwickelt und betrieben werden.
 {{% /blocks/cover %}}
 
 {{% blocks/section type="section" color="white" %}}
@@ -15,22 +15,22 @@ Im Application "Migration and Modernization Techlab" lernen die Teilnehmenden an
 
 ### Lernziele
 
-* Kennen die grundlegenden Kriterien, die zu beachten sind um eine Applikation auf eine Container Plattform zu migrieren und zu deployen.
-* Lernen erweiterte Kubernetes resp. OpenShift Konzepte, welche zum Betrieb von Applikationen auf OpenShift nötig sind, kennen
-* Architektonische Bestpractices für containerisierte Applikationen
+* Kennen die grundlegenden Kriterien, die zu beachten sind, um eine Applikation auf eine Container-Plattform zu migrieren und zu deployen.
+* Lernen erweiterte Kubernetes resp. OpenShift Konzepte kennen, welche zum Betrieb von Applikationen auf OpenShift nötig sind.
+* Architektonische Bestpractices für containerisierte Applikationen werden vermittelt.
 
 
 ### Inhalte
 
-Gemeinsam mit dem Teacher wird, anhand einer Mischung aus Präsentation und Hands-on Labs, folgender Stoff behandelt.
+Gemeinsam mit dem Trainer wird, anhand einer Mischung aus Präsentation und Hands-on Labs, folgender Stoff behandelt.
 
 
 #### Präsentation
 
-* Einführung ins Thema Application Migration and Modernization
+* Einführung in das Thema Application Migration and Modernization
 * Recap Container Technologie und OpenShift
-* 12 Factor Apps und Bestpractices für moderne Applikationen
-* Was muss besonders beachtet werden, wenn man Workload auf eine Container Plattform migriert.
+* 12 Factor Apps und Best Practices für moderne Applikationen
+* Was muss besonders beachtet werden, wenn Workload auf eine Container-Plattform migriert wird?
 * Build und Deplyoments auf OpenShift
 * Continuous Integration und Delivery auf OpenShift
 
@@ -39,7 +39,7 @@ Gemeinsam mit dem Teacher wird, anhand einer Mischung aus Präsentation und Hand
 
 * Containerisierung einer Applikation Best Practices
 * Builden und deployen von Applikation OpenShift
-* Deployment einer Microservices Applikation Schritt für Schritt
+* Schrittweise deployen einer Microservices Applikation
   * Quarkus Microservices die mittels Rest resp. Kafka Topics kommunizieren
   * Kafka Server
 * Automatisierung mit CI/CD Pipelines
@@ -47,8 +47,8 @@ Gemeinsam mit dem Teacher wird, anhand einer Mischung aus Präsentation und Hand
   * Tekton Pipelines
   * GitOps mit ArgoCD
 * Observability
-  * Monitoring und Application Metrics mit Prometheus.
-  * Tracing.
+  * Monitoring und Application Metrics mit Prometheus
+  * Tracing
 * Weitere Themen
   * Requests and Limits
   * Jobs und Cronjobs
@@ -60,17 +60,17 @@ Gemeinsam mit dem Teacher wird, anhand einer Mischung aus Präsentation und Hand
 
 ### Zielpublikum
 
-Das Techlab richtet sich an OpenShift und Kubernetes Engineers mit Entwickler Fokus. Grundlegende Kenntnisse im Bereich Container Plattform, Cloud sollten vorhanden sein. Dieses Techlab baut auf dem [APPUiO Techlab](https://appuio.ch/techlabs.html) auf.
+Das Techlab richtet sich an OpenShift und Kubernetes Engineers mit Entwickler-Fokus. Grundlegende Kenntnisse im Bereich Container-Plattform und Cloud sollten vorhanden sein. Dieses Techlab baut auf dem [APPUiO Techlab](https://appuio.ch/techlabs.html) auf.
 
 
 ### Voraussetzungen
 
-Alle Teilnehmenden benötigen für die Schulung einen Laptop (Dual-Core Prozessor, mind. 2GB RAM) mit Internetzugriff une einem Vorinstallierten WebBrowser. Die komplette Entwicklungsumgebung für das Lab wird webbasiert zur Verfügung gestellt. Für einzelne optionale Labs müssen gewissen Komponenten(argocd Client) local installiert werden.
+Alle Teilnehmenden benötigen für die Schulung einen Laptop (Dual-Core Prozessor, mind. 2GB RAM) mit Internetzugriff und einem vorinstallierten WebBrowser. Die komplette Entwicklungsumgebung für das Lab wird webbasiert zur Verfügung gestellt. Für einzelne optionale Labs müssen gewissen Komponenten (argocd Client) lokal installiert werden.
 
 
 ### Sprache
 
-Das Techlab findet in Deutsch oder Englisch statt, die Unterlagen stehen auf Englisch zur Verfügung
+Das Techlab findet in Deutsch oder Englisch statt. Die Unterlagen stehen auf Englisch zur Verfügung.
 
 
 ### Links
