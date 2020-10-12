@@ -16,11 +16,11 @@ Tekton makes use of several Kubernetes [custom resources (CRD)](https://kubernet
 
 These CRDs are:
 
-* *[Task](https://github.com/tektoncd/pipeline/blob/master/docs/tasks.md)*: a collection of steps that perform a specific task.
-* *[Pipeline](https://github.com/tektoncd/pipeline/blob/master/docs/pipelines.md)*: is a series of tasks, combined to work together in a defined (structured) way
-* *[PipelineResource](https://github.com/tektoncd/pipeline/blob/master/docs/resources.md)*: inputs (e.g. git repository) and outputs (e.g. image registry) to and out of a pipeline or task
-* *[TaskRun](https://github.com/tektoncd/pipeline/blob/master/docs/taskruns.md)*: the execution and result of running an instance of a task
-* *[PipelineRun](https://github.com/tektoncd/pipeline/blob/master/docs/pipelineruns.md)*: is the actual execution of a whole Pipeline, containing the results of the pipeline (success, failed...)
+* *[Task](https://github.com/tektoncd/pipeline/blob/master/docs/tasks.md)*: A collection of steps that perform a specific task.
+* *[Pipeline](https://github.com/tektoncd/pipeline/blob/master/docs/pipelines.md)*: A series of tasks, combined to work together in a defined (structured) way
+* *[PipelineResource](https://github.com/tektoncd/pipeline/blob/master/docs/resources.md)*: Inputs (e.g. git repository) and outputs (e.g. image registry) to and out of a pipeline or task
+* *[TaskRun](https://github.com/tektoncd/pipeline/blob/master/docs/taskruns.md)*: The execution and result of running an instance of a task
+* *[PipelineRun](https://github.com/tektoncd/pipeline/blob/master/docs/pipelineruns.md)*: The actual execution of a whole Pipeline, containing the results of the pipeline (success, failed...)
 
 Pipelines and tasks should be generic and must never define possible variables - such as 'input git repository' - directly in their definition. Therefore, the concept of PipelineResources has been created. It defines and selects the parameters, that are being used during a PipelineRun.
 
@@ -40,7 +40,7 @@ oc new-project <userXY>-pipelines
 
 {{% alert  color="primary" %}}Replace **userXY** with your username.{{% /alert %}}
 
-The OpenShift Pipeline operator will automatically create a pipeline serviceaccount with all required permissions to build and push an image. This serviceaccount is used by PipelineRuns:
+The OpenShift Pipeline operator will automatically create a pipeline service account with all required permissions to build and push an image. This service account is used by PipelineRuns:
 
 ```bash
 oc get sa
@@ -74,7 +74,7 @@ Triggers version: unknown
 
 ## Task {{% param sectionnumber %}}.3: Create Pipeline tasks
 
-A Task is the smallest block of a Pipeline which by itself can contain one or more steps. These steps are executed to process a specific element. For each task, a pod is allocated and each step is running in a container inside this pod. Tasks are reusable by other Pipelines. _Input_ and _Output_ specifications can be used to interact with other Tasks.
+A Task is the smallest block of a Pipeline, which by itself can contain one or more steps. These steps are executed to process a specific element. For each task, a pod is allocated and each step is running in a container inside this pod. Tasks are reusable by other Pipelines. _Input_ and _Output_ specifications can be used to interact with other tasks.
 
 {{% alert title="Note" color="primary" %}}
 You can find more examples of reusable tasks in the [Tekton Catalog](https://github.com/tektoncd/catalog) and [OpenShift Catalog](https://github.com/openshift/pipelines-catalog) repositories.
@@ -138,10 +138,10 @@ The example Pipeline below uses two resources:
 * git-repo: defines the Git-Source
 * image: Defines the target at a repository
 
-It first uses the Task *buildah*, which is a default task the OpenShift operator created automatically. This task will build the image. The resulted image is pushed to an image registry, defined in the *output* parameter. After that, the created tasks *apply-manifest* is executed. The execution order of these tasks is defined with the *runAfter* Parameter in the yaml definition.
+It first uses the Task *buildah*, which is a default task the OpenShift operator created automatically. This task will build the image. The resulted image is pushed to an image registry, defined in the *output* parameter. After that, the created tasks *apply-manifest* is executed. The execution order of these tasks is defined with the *runAfter* Parameter in the YAML definition.
 
 {{% alert title="Note" color="primary" %}}
-The Pipeline should be re-usable across multiple projects or environments, that's why the resources (git-repo and image) are not defined here. When a Pipeline is executed, these resources will get defined.
+The Pipeline should be reusable across multiple projects or environments, that's why the resources (git-repo and image) are not defined here. When a Pipeline is executed, these resources will get defined.
 {{% /alert %}}
 
 Create the following pipeline `<workspace>/deploy-pipeline.yaml`:
@@ -216,12 +216,12 @@ build-and-deploy   19 seconds ago   ---        ---       ---        ---
 
 ## Task {{% param sectionnumber %}}.5: Trigger Pipeline
 
-After the Pipeline has been created, it can be triggered to execute the Tasks.
+After the Pipeline has been created, it can be triggered to execute the tasks.
 
 
 ### Create PipelineResources
 
-Since the Pipeline is generic, we first need to define 2 *PipelineResources*, to execute a Pipeline.
+Since the Pipeline is generic, we first need to define 2 *PipelineResources* to execute a Pipeline.
 We are going to automate the deployment of our sample application we used in previous examples. There will be two microservices deployed, a data producer and a data consumer.
 
 Quick overview:
@@ -386,7 +386,7 @@ Get the routes of your components and open the URLs in the browser. Add the `/da
 
 This was just an example for a pipeline, that builds and deploys a container image to OpenShift. There are lots of security features missing.
 
-Checkout the Puzzle [delivery pipeline concept](https://github.com/puzzle/delivery-pipeline-concept) for further infos.
+Check out the Puzzle [delivery pipeline concept](https://github.com/puzzle/delivery-pipeline-concept) for further information.
 
 
 ## Links and Sources
