@@ -8,6 +8,7 @@ description: >
 ---
 
 ## Tracing
+
 When it comes to large distributed cloud native system with many different components involved, debugging production issues or even finding a way to display how components interact with each other becomes quite hard and tricky.
 
 This is where tracing comes into the picture. Tracing allows us to collect all sorts of requests in a group of requests, which somehow belong together to a single business transaction.
