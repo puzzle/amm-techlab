@@ -19,7 +19,7 @@ When running application in production a fast feedback loop is absolute key. The
 
 Application Metrics provide insights into what is happening inside our Quarkus Applications using the [MicroProfile Metrics](https://github.com/eclipse/microprofile-metrics) specification.
 
-Those Metrics (e.g. Request Count on a specific URL) are collected within the application and then can be processed with tools like Prometheus for further analysis and visualisation.
+Those Metrics (e.g. Request Count on a specific URL) are collected within the application and then can be processed with tools like Prometheus for further analysis and visualization.
 
 [Prometheus](https://prometheus.io/) is a monitoring system and timeseries database which integrates great with all sorts of applications and platforms.
 
