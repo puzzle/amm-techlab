@@ -99,6 +99,15 @@ Both images containing our sample Go application. But the difference in size is 
 It is also possible to make use of multi-stage builds in OpenShift.
 
 
+### Further reading
+
+Blog posts with image best practices:
+
+* [reducing image size](https://www.ardanlabs.com/blog/2020/02/docker-images-part1-reducing-image-size.html)
+* [language examples](https://www.ardanlabs.com/blog/2020/02/docker-images-part2-details-specific-to-different-languages.html)
+* [farther reduce image size](https://www.ardanlabs.com/blog/2020/04/docker-images-part3-going-farther-reduce-image-size.html)
+
+
 ## Best practices for creating OpenShift containers
 
 [OpenShift Container Platform-specific guidelines](https://docs.openshift.com/container-platform/4.5/openshift_images/create-images.html#images-create-guide-openshift_create-images)
