@@ -39,7 +39,7 @@ On our lab cluster, a Prometheus / Grafana stack is already deployed. Using the 
 
 ## Annotation vs. Service Monitor
 
-Earlier Prometheus - Kubernetes integrations worked by annotating Kubernetes Resources with specific information configured. Which helped the Prometheus Server to find the endpoints to collect Metrics from.
+In an early stage of Prometheus - Kubernetes integration, the configuration has been done by annotations. The Prometheus - Kubernetes integration worked by reading specific configured annotations from Kubernetes resources. The informations form those annotations helped the Prometheus Server to find the endpoints to collect Metrics from.
 
 ```yaml
 metadata:
