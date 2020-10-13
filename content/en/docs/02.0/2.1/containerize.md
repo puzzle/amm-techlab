@@ -444,7 +444,16 @@ If you only see `Your new Cloud-Native application is ready!`, then you forget t
 
 ## Task {{% param sectionnumber %}}.10: Deploy consumer application
 
-Now it's time to deploy the counterpart. The consumer application consists of three resource definitions. First we create a deployment, pointing to the consumer Docker Image on docker Hub. Next the service which exposes the application inside our cluster and last the route to access the app from outside the cluster.
+Now it's time to deploy the counterpart. The consumer application consists of three resource definitions:
+
+the deployment
+: pointing to the consumer Container Image on docker Hub
+
+the service
+: which exposes the application inside our cluster
+
+the route
+: to access the application from outside the cluster
 
 Consumer and producer are of different kind of deployment resources. The producer is a DeploymentConfig (OpenShift) and the consumer a Deployment (Kubernetes). The producer needs to be a DeploymentConfig to make full use of the build process with ImageStreams. Because the consumer uses an external image and doesn't need these features we can follow the best practices and use the Kubernetes-native Deployment.
 

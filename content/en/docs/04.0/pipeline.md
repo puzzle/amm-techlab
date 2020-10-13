@@ -40,7 +40,7 @@ oc new-project <userXY>-pipelines
 
 {{% alert  color="primary" %}}Replace **userXY** with your username.{{% /alert %}}
 
-The OpenShift Pipeline operator will automatically create a pipeline service account with all required permissions to build and push an image. This service account is used by PipelineRuns:
+The OpenShift Pipeline operator will automatically create a pipeline ServiceAccount with all required permissions to build and push an image. This service account is used by PipelineRuns:
 
 ```bash
 oc get sa
