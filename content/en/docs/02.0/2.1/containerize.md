@@ -36,7 +36,7 @@ The source code of our Quarkus applications is available on Github:
 First, we need a Dockerfile that defines the application transformation from source code to a container image.
 
 To build the producer, we make use of the Docker Multistage build feature. In the first stage, we use the [centOS Quarkus image](https://quay.io/repository/quarkus/centos-quarkus-maven?tag=20.1.0-java11) and perform a Quarkus native build. The resulting binary will be used in the second build stage. For the second stage, we use the UBI minimal image.
-(see [best practices](../../additional/container-best-practices/bestpractise/#use-multistage-build) for more information on Multistage builds)
+(see [best practices](../../additional/container-best-practices/bestpractice/#use-multistage-build) for more information on Multistage builds)
 
 ```Dockerfile
 ## Stage 1 : build with maven builder image with native capabilities
