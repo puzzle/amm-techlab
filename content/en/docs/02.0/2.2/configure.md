@@ -47,7 +47,7 @@ spec:
               scheme: HTTP
             initialDelaySeconds: 3
             periodSeconds: 20
-            successThreshhold: 1
+            successThreshold: 1
             timeoutSeconds: 15
           readinessProbe:
             failureThreshold: 5
@@ -60,14 +60,14 @@ spec:
             successThreshold: 1
             timeoutSeconds: 15
           name: data-producer
-          port:
+          ports:
             - containerPort: 8081
               name: http
               protocol: TCP
           resources:
             limits:
-              cpu: "1"
-              memory: 200Mi
+              cpu: '1'
+              memory: 500Mi
             requests:
               cpu: 50m
               memory: 100Mi
