@@ -406,3 +406,11 @@ Now the ImageStream was successfully deleted by Argo CD.
 ## Task {{% param sectionnumber %}}.8: Additional Task
 
 Setup a new Argo CD application which deployes the Tekton pipelines from the previous lab. You can do it on the web console or by cli.
+
+<details><summary>solution with cli</summary>
+
+```bash
+argocd app create argo-$LAB_USER-pipelines --repo https://gitea.techlab.openshift.ch/$LAB_USER/gitops-resources.git --path $LAB_USER-pipelines --dest-server https://kubernetes.default.svc --dest-namespace $LAB_USER-pipelines
+```
+
+</details><br/>

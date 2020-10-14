@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
   name: deploymentconfig-s2i-template
@@ -45,4 +45,3 @@ objects:
 parameters:
 - description: OpenShift Project Name
   name: PROJECT_NAME
-  mandatory: true

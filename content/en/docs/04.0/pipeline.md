@@ -236,7 +236,7 @@ We use a template to adapt the image registry URL to match to your project.
 Create the following openshift template `<workspace>/pipeline-resources-template.yaml`:
 
 ```yaml
-apiVersion: v1
+apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
   name: pipeline-resources-template
@@ -266,7 +266,6 @@ objects:
 parameters:
 - description: OpenShift Project Name
   name: PROJECT_NAME
-  mandatory: true
 ```
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.1/pipeline-resources-template.yaml)
