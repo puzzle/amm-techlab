@@ -125,6 +125,7 @@ To https://gitea.techlab.openshift.ch/<username>/gitops-resources.git
  * [new branch]      master -> master
 ```
 
+
 ## Task {{% param sectionnumber %}}.3: Deploying the resources with Argo CD
 
 Now we want to deploy the resources of the previous labs with Argo CD to demonstrate how Argo CD works.
@@ -158,7 +159,7 @@ Server:             https://kubernetes.default.svc
 Namespace:          hannelore15
 URL:                https://argocd.techlab.openshift.ch/applications/argo-hannelore15
 Repo:               https://gitea.techlab.openshift.ch/hannelore15/gitops-resources.git
-Target:             
+Target:
 Path:               hannelore15
 SyncWindow:         Sync Allowed
 Sync Policy:        <none>
@@ -166,16 +167,16 @@ Sync Status:        OutOfSync from  (3da0af3)
 Health Status:      Missing
 
 GROUP               KIND              NAMESPACE    NAME           STATUS     HEALTH   HOOK  MESSAGE
-                    DeploymentConfig  hannelore15  data-producer  OutOfSync  Missing        
-                    Route             hannelore15  data-consumer  OutOfSync  Missing        
-                    Service           hannelore15  data-consumer  OutOfSync  Healthy        
-                    Service           hannelore15  data-producer  OutOfSync  Healthy        
-apps                Deployment        hannelore15  data-consumer  OutOfSync  Healthy        
-build.openshift.io  BuildConfig       hannelore15  data-producer  OutOfSync                 
-image.openshift.io  ImageStream       hannelore15  data-producer  OutOfSync                 
-kafka.strimzi.io    Kafka             hannelore15  amm-techlab    OutOfSync                 
-kafka.strimzi.io    KafkaTopic        hannelore15  manual         OutOfSync                 
-route.openshift.io  Route             hannelore15  data-producer  OutOfSync                 
+                    DeploymentConfig  hannelore15  data-producer  OutOfSync  Missing
+                    Route             hannelore15  data-consumer  OutOfSync  Missing
+                    Service           hannelore15  data-consumer  OutOfSync  Healthy
+                    Service           hannelore15  data-producer  OutOfSync  Healthy
+apps                Deployment        hannelore15  data-consumer  OutOfSync  Healthy
+build.openshift.io  BuildConfig       hannelore15  data-producer  OutOfSync
+image.openshift.io  ImageStream       hannelore15  data-producer  OutOfSync
+kafka.strimzi.io    Kafka             hannelore15  amm-techlab    OutOfSync
+kafka.strimzi.io    KafkaTopic        hannelore15  manual         OutOfSync
+route.openshift.io  Route             hannelore15  data-producer  OutOfSync
 ```
 
 The application status is initially in 'OutOfSync' state since the application has yet to be deployed and no Kubernetes resources have been created. To sync (deploy) the application, run:
@@ -207,7 +208,7 @@ Server:             https://kubernetes.default.svc
 Namespace:          hannelore15
 URL:                https://argocd.techlab.openshift.ch/applications/argo-hannelore15
 Repo:               https://gitea.techlab.openshift.ch/hannelore15/gitops-resources.git
-Target:             
+Target:
 Path:               hannelore15
 SyncWindow:         Sync Allowed
 Sync Policy:        <none>
