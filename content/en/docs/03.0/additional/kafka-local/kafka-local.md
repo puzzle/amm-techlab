@@ -57,7 +57,7 @@ services:
 First we need to have the docker-compose file on your machine. Get it like this:
 
 ```s
-curl https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/3.2/docker-compose.yml -sO docker-compose.yml
+curl https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/additional/kafka-local/docker-compose.yml -sO docker-compose.yml
 ```
 
 Start this kafka cluster with:

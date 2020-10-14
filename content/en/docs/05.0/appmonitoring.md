@@ -53,7 +53,11 @@ The current OpenShift - Prometheus integration works differently and is way more
 
 ```bash
 oc explain ServiceMonitor
-# Or
+```
+
+Or
+
+```bash
 oc describe crd ServiceMonitor
 ```
 
@@ -88,11 +92,15 @@ spec:
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/05.0/5.1/servicemonitor.yaml)
 
-Create the ServiceMonitor.
+Create the ServiceMonitor using your new file.
+
+<details><summary>command hint</summary>
 
 ```BASH
 oc apply -f servicemonitor.yaml
 ```
+
+</details><br/>
 
 Expected result: `servicemonitor.monitoring.coreos.com/amm-techlab-monitor created`
 
