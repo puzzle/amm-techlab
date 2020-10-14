@@ -46,6 +46,7 @@ argocd login <ARGOCD_SERVER> --sso --grpc-web
 
 {{% alert title="Note" color="primary" %}}Follow the sso login steps in the new browser window. The `--grpc-web` parameter is necessary due to missing http 2.0 router.{{% /alert %}}
 
+
 ## Task {{% param sectionnumber %}}.2: Add Resources to a Git Repository
 
 As we are proceeding from now on according to the GitOps principle we need to push all existing Resources located in `<workspace>/*.yaml`  into a new Git Repository.
