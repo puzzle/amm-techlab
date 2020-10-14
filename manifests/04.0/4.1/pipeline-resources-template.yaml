@@ -8,43 +8,23 @@ objects:
 - apiVersion: tekton.dev/v1alpha1
   kind: PipelineResource
   metadata:
-    name: consumer-repo
+    name: transformer-repo
   spec:
     type: git
     params:
     - name: url
-      value: https://github.com/puzzle/quarkus-techlab-data-consumer.git
+      value: https://github.com/puzzle/quarkus-techlab-data-transformer.git
     - name: revision
-      value: rest
+      value: master
 - apiVersion: tekton.dev/v1alpha1
   kind: PipelineResource
   metadata:
-    name: consumer-image
+    name: transformer-image
   spec:
     type: image
     params:
     - name: url
-      value: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAME}/data-consumer:latest
-- apiVersion: tekton.dev/v1alpha1
-  kind: PipelineResource
-  metadata:
-    name: producer-repo
-  spec:
-    type: git
-    params:
-    - name: url
-      value: https://github.com/puzzle/quarkus-techlab-data-producer.git
-    - name: revision
-      value: rest
-- apiVersion: tekton.dev/v1alpha1
-  kind: PipelineResource
-  metadata:
-    name: producer-image
-  spec:
-    type: image
-    params:
-    - name: url
-      value: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAME}/data-producer:latest
+      value: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAME}/data-transformer:latest
 parameters:
 - description: OpenShift Project Name
   name: PROJECT_NAME

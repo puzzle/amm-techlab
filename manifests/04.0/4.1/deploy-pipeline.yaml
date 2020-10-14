@@ -16,13 +16,6 @@ spec:
     description: Path to the Dockerfile
     default: src/main/docker/Dockerfile.multistage.jvm
   tasks:
-  - name: apply-manifests
-    taskRef:
-      name: apply-manifests
-    resources:
-      inputs:
-      - name: source
-        resource: git-repo
   - name: build-image
     taskRef:
       name: buildah
@@ -39,5 +32,12 @@ spec:
       value: "false"
     - name: DOCKERFILE
       value: $(params.docker-file)
+  - name: apply-manifests
+    taskRef:
+      name: apply-manifests
+    resources:
+      inputs:
+      - name: source
+        resource: git-repo
     runAfter:
-    - apply-manifests
+    - build-image

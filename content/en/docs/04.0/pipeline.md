@@ -7,7 +7,7 @@ description: >
   Build and deployment automation with Tekton on OpenShift.
 ---
 
-It is time to automate the deployment of our Quarkus application to OpenShift by using OpenShift Pipelines. OpenShift Pipelines are based on [Tekton](https://tekton.dev/).
+It is time to automate the deployment of our Quarkus application to OpenShift by using OpenShift Pipelines. OpenShift Pipelines are based on [Tekton](https://tekton.dev/). In this example we will use the namespace to follow along the previous chapters. If you don't have your Kafka cluster, data-producer and data-consumer up and running please repeat the previous chapter to be ready to continue! We will create another microservice which consumes the same stream of data and transform the data to calculate a simple average count.
 
 
 ## Task {{% param sectionnumber %}}.1: Basic Concepts
@@ -165,13 +165,6 @@ spec:
     description: Path to the Dockerfile
     default: src/main/docker/Dockerfile.multistage.jvm
   tasks:
-  - name: apply-manifests
-    taskRef:
-      name: apply-manifests
-    resources:
-      inputs:
-      - name: source
-        resource: git-repo
   - name: build-image
     taskRef:
       name: buildah
@@ -188,8 +181,15 @@ spec:
       value: "false"
     - name: DOCKERFILE
       value: $(params.docker-file)
+  - name: apply-manifests
+    taskRef:
+      name: apply-manifests
+    resources:
+      inputs:
+      - name: source
+        resource: git-repo
     runAfter:
-    - apply-manifests
+    - build-image
 ```
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.1/deploy-pipeline.yaml)
@@ -222,14 +222,12 @@ After the Pipeline has been created, it can be triggered to execute the tasks.
 ### Create PipelineResources
 
 Since the Pipeline is generic, we first need to define 2 *PipelineResources* to execute a Pipeline.
-We are going to automate the deployment of our sample application we used in previous examples. There will be two microservices deployed, a data producer and a data consumer.
+We are going to automate the deployment of our sample application we used in previous examples. There will be one microservices deployed, the data-transformer.
 
 Quick overview:
 
-* consumer-repo: will be used as _git_repo_ in the Pipeline for the data consumer
-* consumer-image: will be used as _image_ in the Pipeline for the data consumer
-* producer-repo: will be used as _git_repo_ in the Pipeline for the data producer
-* producer-image: will be used as _image_ in the Pipeline for the data producer
+* transformer-repo: will be used as _git_repo_ in the Pipeline for the data consumer
+* transformer-image: will be used as _image_ in the Pipeline for the data consumer
 
 {{% alert title="Note" color="primary" %}}
 We use a template to adapt the image registry URL to match to your project.
@@ -248,43 +246,23 @@ objects:
 - apiVersion: tekton.dev/v1alpha1
   kind: PipelineResource
   metadata:
-    name: consumer-repo
+    name: transformer-repo
   spec:
     type: git
     params:
     - name: url
-      value: https://github.com/puzzle/quarkus-techlab-data-consumer.git
+      value: https://github.com/puzzle/quarkus-techlab-data-transformer.git
     - name: revision
-      value: rest
+      value: master
 - apiVersion: tekton.dev/v1alpha1
   kind: PipelineResource
   metadata:
-    name: consumer-image
+    name: transformer-image
   spec:
     type: image
     params:
     - name: url
-      value: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAME}/data-consumer:latest
-- apiVersion: tekton.dev/v1alpha1
-  kind: PipelineResource
-  metadata:
-    name: producer-repo
-  spec:
-    type: git
-    params:
-    - name: url
-      value: https://github.com/puzzle/quarkus-techlab-data-producer.git
-    - name: revision
-      value: rest
-- apiVersion: tekton.dev/v1alpha1
-  kind: PipelineResource
-  metadata:
-    name: producer-image
-  spec:
-    type: image
-    params:
-    - name: url
-      value: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAME}/data-producer:latest
+      value: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAME}/data-transformer:latest
 parameters:
 - description: OpenShift Project Name
   name: PROJECT_NAME
@@ -304,10 +282,8 @@ oc process -f pipeline-resources-template.yaml \
 will result in:
 
 ```bash
-pipelineresource.tekton.dev/consumer-repo created
-pipelineresource.tekton.dev/consumer-image created
-pipelineresource.tekton.dev/producer-repo created
-pipelineresource.tekton.dev/producer-image created
+pipelineresource.tekton.dev/transformer-repo created
+pipelineresource.tekton.dev/transformer-image created
 ```
 
 The resources can be listed with:
@@ -318,36 +294,25 @@ tkn resource ls
 
 ```
 NAME             TYPE    DETAILS
-consumer-repo    git     url: https://github.com/puzzle/quarkus-techlab-data-consumer.git
-producer-repo    git     url: https://github.com/puzzle/quarkus-techlab-data-producer.git
-consumer-image   image   url: image-registry.openshift-image-registry.svc:5000/<userXY>-pipelines/data-consumer:latest
-producer-image   image   url: image-registry.openshift-image-registry.svc:5000/<userXY>-pipelines/data-producer:latest
+transformer-repo    git     url: https://github.com/puzzle/quarkus-techlab-data-transformer.git
+transformer-image   image   url: image-registry.openshift-image-registry.svc:5000/<userXY>-pipelines/data-transformer:latest
+
 ```
 
 
 ### Execute Pipelines using tkn
 
-Start the Pipeline for the data-consumer:
+Start the Pipeline for the data-transformer:
 
 ```bash
 tkn pipeline start build-and-deploy \
--r git-repo=consumer-repo \
--r image=consumer-image \
--p deployment-name=data-consumer \
+-r git-repo=transformer-repo \
+-r image=transformer-image \
+-p deployment-name=data-transformer \
 -s pipeline
 ```
 
 This will create and execute a PipelineRun. Use the command `tkn pipelinerun logs build-and-deploy-run-<pod> -f -n <userXY>-pipelines` to display the logs
-
-Now start the same Pipeline with the producer resources:
-
-```bash
-tkn pipeline start build-and-deploy \
--r git-repo=producer-repo \
--r image=producer-image \
--p deployment-name=data-producer \
--s pipeline
-```
 
 The PipelineRuns can be listed with:
 
@@ -358,7 +323,6 @@ tkn pipelinerun ls
 ```
 NAME                         STARTED          DURATION    STATUS
 build-and-deploy-run-5r2ln   8 minutes ago    1 minute    Succeeded
-build-and-deploy-run-9w67k   10 minutes ago   1 minute    Succeeded
 ```
 
 Moreover, the logs can be viewed with the following command and selecting the appropriate Pipeline and PipelineRun:
@@ -379,7 +343,7 @@ With the OpenShift Pipeline operator, a new menu item is introduced to the WebUI
 
 ### Checking your application
 
-Get the routes of your components and open the URLs in the browser. Add the `/data` path to the consumer to see if the application works.
+Check the logs of your data-transformer microservice. You will see that he will start to log average data consumed from the data stream.
 
 
 ## High quality and secure Pipeline
