@@ -128,7 +128,7 @@ imagestream.image.openshift.io/data-producer created
 In this section, we create a OpenShift build that uses our Dockerfile to build the image for the producer.
 
 The [BuildConfig](https://docs.openshift.com/container-platform/4.5/builds/understanding-buildconfigs.html) describes how a single build task is performed. The BuildConfig is primarily characterized by the Build strategy and its resources. For our build, we use the Docker strategy which invokes the Docker build command. Furthermore, it expects a `Dockerfile` in the source repository. If the Dockerfile is not in the root directory, then you can specify the location with the `dockerfilePath`.
-Beside we configure the source and the triggers as well. For the source, we can specify any Git repository. This is where the application sources reside. The triggers describe how to trigger the build. In this example, we provide four different triggers. (Generic webhook, GitHub webhook, ConfigMap change, Image change)
+Beside we configure the source and the triggers as well. For the source, we can specify any Git repository. This is where the application sources reside. The triggers describe how to trigger the build. In this example, we provide two different triggers. (Generic webhook, ConfigMap change)
 
 Prepare a file inside your workspace `<workspace>/buildConfig.yaml` and add the following resource configuration:
 
@@ -166,8 +166,6 @@ spec:
       secret: f31PWzHXBGI9iYw-fTli
     type: Generic
   - type: ConfigChange
-  - imageChange: {}
-    type: ImageChange
 ```
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/buildConfig.yaml)
@@ -204,7 +202,7 @@ After the ImageStream and BuildConfig definition, we can set up our DeploymentCo
 Prepare a file inside your workspace `<workspace>/producer.yaml` and add the following resource configuration:
 
 ```YAML
-apiVersion: v1
+apiVersion: apps.openshift.io/v1
 kind: DeploymentConfig
 metadata:
   annotations:
@@ -236,7 +234,6 @@ spec:
               scheme: HTTP
             initialDelaySeconds: 3
             periodSeconds: 20
-            successThreshold: 1
             timeoutSeconds: 15
           readinessProbe:
             failureThreshold: 5
@@ -246,7 +243,6 @@ spec:
               scheme: HTTP
             initialDelaySeconds: 3
             periodSeconds: 20
-            successThreshold: 1
             timeoutSeconds: 15
           name: data-producer
           ports:

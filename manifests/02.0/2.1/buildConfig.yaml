@@ -31,5 +31,3 @@ spec:
       secret: f31PWzHXBGI9iYw-fTli
     type: Generic
   - type: ConfigChange
-  - imageChange: {}
-    type: ImageChange

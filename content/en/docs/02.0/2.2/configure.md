@@ -16,7 +16,7 @@ For this lab the application of the previous lab is used.
 We will change the port of the application. With this change we need to adapt the deployment first. There are three ports to change. The container port itself, and the ports for the liveness/readiness probes.
 
 {{< highlight YAML "hl_lines=28 38 46" >}}
-apiVersion: v1
+apiVersion: apps.openshift.io/v1
 kind: DeploymentConfig
 metadata:
   annotations:
@@ -48,7 +48,6 @@ spec:
               scheme: HTTP
             initialDelaySeconds: 3
             periodSeconds: 20
-            successThreshold: 1
             timeoutSeconds: 15
           readinessProbe:
             failureThreshold: 5
@@ -58,7 +57,6 @@ spec:
               scheme: HTTP
             initialDelaySeconds: 3
             periodSeconds: 20
-            successThreshold: 1
             timeoutSeconds: 15
           name: data-producer
           ports:
