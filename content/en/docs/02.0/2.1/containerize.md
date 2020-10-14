@@ -201,7 +201,7 @@ oc logs -f data-producer-1-build
 
 After the ImageStream and BuildConfig definition, we can set up our DeploymentConfig. The DeploymentConfig defines how our image is run inside OpenShift. The image is referenced by our ImageStream `data-producer` with the `rest` tag.
 
-Prepare a file inside your workspace `<workspace>/deploymentConfig.yaml` and add the following resource configuration:
+Prepare a file inside your workspace `<workspace>/producer.yaml` and add the following resource configuration:
 
 ```YAML
 apiVersion: v1
@@ -271,14 +271,14 @@ spec:
     - type: ConfigChange
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/deploymentConfig.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/producer.yaml)
 
 Let's create the deployment
 
 <details><summary>command hint</summary>
 
 ```BASH
-oc apply -f deploymentConfig.yaml
+oc apply -f producer.yaml
 ```
 
 </details><br/>

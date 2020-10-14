@@ -83,7 +83,7 @@ spec:
     - type: ConfigChange
 {{< / highlight >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.2/deploymentConfig.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.2/producer.yaml)
 
 Update the application port from 8080 to 8081 using `oc patch`:
 
@@ -108,7 +108,7 @@ oc patch dc/data-producer --type "json" -p '[{"op":"replace","path":"/spec/templ
 
 </details><br/>
 
-{{% alert title="Note" color="primary" %}} The changed DeploymentConfig should now represent the [solution](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.2/deploymentConfig.yaml) {{% /alert %}}
+{{% alert title="Note" color="primary" %}} The changed DeploymentConfig should now represent the [solution](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.2/producer.yaml) {{% /alert %}}
 
 Verify the changed port of the pod by describing the DeploymentConfig using `oc describe`.
 
