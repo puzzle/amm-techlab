@@ -144,7 +144,7 @@ Let's check the created pods for the Kafka cluster:
 oc get pods
 ```
 
-Expected Kafka pods after all pods have been started:
+Expected Kafka pods after all pods have been started (This may take a few minutes):
 
 ```
 NAME                                           READY   STATUS    RESTARTS   AGE
