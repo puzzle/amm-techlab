@@ -4,6 +4,7 @@ metadata:
   annotations:
     image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"data-producer:rest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"data-producer\")].image"}]'
   labels:
+    app: data-producer
     application: amm-techlab
   name: data-producer
 spec:

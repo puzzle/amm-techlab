@@ -68,7 +68,7 @@ During the lab, you'll be using local files (eg. YAML resources) which will be a
 Create your local lab workspace directory `<workspace>` for example`~/amm-techlab/`
 
 
-### Task {{% param sectionnumber %}}.1.4: explore other namespaces
+### Task {{% param sectionnumber %}}.1.4: Explore other namespaces
 
 Alongside the Lab Cluster, we also deployed a couple of additional tools and services we're going to use during the lab.
 
@@ -77,3 +77,18 @@ checkout the deployed resources and then login to the services. (URLs are provid
 * Prometheus and Grafana in the project `pitc-infra-monitoring` (Login using Oauth OpenShift)
 * ArgoCD in the project `pitc-infra-argocd` (Login via OpenShift)
 * Git Server `pitc-infra-gitea`, this will be used for lab 4 (You don't need to do anything yet.)
+
+
+### Task {{% param sectionnumber %}}.1.5: Lab Setup
+
+Most of the labs will be done inside the OpenShift project with your username. Verify that your oc tool is configured to point to the right project:
+
+```s
+oc project
+```
+
+```
+Using project "userXY" on server "https://<theClusterAPIURL>".
+```
+
+The returned project name should correspond to your username.

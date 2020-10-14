@@ -43,24 +43,7 @@ There are four important parts of any Kafka system:
 If you want to dive deeper into the Kafka world take a look at the official [documentation](https://kafka.apache.org/documentation/).
 
 
-## Task {{% param sectionnumber %}}.2: Lap Setup
-
-This lab bases on [lab 2](../../../02.0). Make sure that you are in the same OpenShift project.
-
-```s
-oc project
-```
-
-```
-Using project "userXY" on server "https://<theClusterAPIURL>".
-```
-
-The returned project should be your user name.
-
-{{% alert  color="primary" %}}When the application does not run correctly, see the solution section of lab 2 or ask for assistance.{{% /alert %}}
-
-
-## Task {{% param sectionnumber %}}.3: Deploy and configure Kafka on OpenShift
+## Task {{% param sectionnumber %}}.2: Deploy and configure Kafka on OpenShift
 
 Let's get our Kafka instance up and running in the cloud and configure it for the event-driven application.
 
@@ -126,11 +109,15 @@ spec:
 
 With the [Strimzi Operator](https://strimzi.io/) we can manage our Kafka cluster with custom resource definitions. The operator is already installed in our techlab cluster. It will set up your broker tailored to your needs and configuration. We will also manage our topics with the Strimzi operator.
 
-Create the cluster by creating the crd resource inside your project:
+Create the cluster by creating the crd resource inside your project. To do so, apply the content of your `kafka-cluster.yaml` file.
+
+<details><summary>command hint</summary>
 
 ```s
 oc apply -f kafka-cluster.yaml
 ```
+
+</details><br/>
 
 Expected output:
 
@@ -173,11 +160,17 @@ spec:
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/manual-topic.yaml)
 
-This will create the 'manual' topic, which allows our microservices to communicate.
+This file defines the 'manual' topic, which allows our microservices to communicate.
+
+Create the Kafka topic by applying this file.
+
+<details><summary>command hint</summary>
 
 ```s
 oc apply -f manual-topic.yaml
 ```
+
+</details><br/>
 
 Expected output:
 
@@ -217,75 +210,148 @@ This listing should also show the `manual` topic.
 {{% alert  color="primary" %}}Press `Ctrl+D` to leave the container.{{% /alert %}}
 
 
-## Task {{% param sectionnumber %}}.4: Change your application to event driven
+## Task {{% param sectionnumber %}}.3: Change your application to event driven
 
 Now it's time to change your producer-consumer application from REST to event-driven. The Kafka cluster is up and running.
 
 
-### Task {{% param sectionnumber %}}.4.1: Update the producer
+### Task {{% param sectionnumber %}}.3.1: Update the producer
 
-We do not rebuild our producer. Instead, we use a prepared container image. Do two changes inside your file `<workspace>/deploymentConfig.yaml`. Change the image to `puzzle/quarkus-techlab-data-producer:kafka` and remove the ImageChange trigger.
+To update the producer we use a prepared container image. If you're interested in the code changes needed to connect to the kafka server, check the [kafka branch of the producer](https://github.com/puzzle/quarkus-techlab-data-producer/tree/kafka).
 
-If you're interested in the code changes needed to connect to the kafka server, checkout the [kafka branch of the producer](https://github.com/puzzle/quarkus-techlab-data-producer/tree/kafka).
+Because that we do not rebuild the producer, the usage of an OpenShift DeploymentConfig is not necessary any more. We change te producer to use a Kubernetes-native Deployment. The consumer already uses a Deployment. You could check the resource definition file `<workspace>/consumer.yaml` for the needed adaptations.
+
+Do following changes inside your file `<workspace>/producer.yaml`. Change the type to Deployment, remove the annotations, update the selector, change the image to `puzzle/quarkus-techlab-data-producer:kafka` and remove the triggers.
 
 ```
-{{< highlight YAML "hl_lines=22 27-28" >}}
-apiVersion: v1
-kind: DeploymentConfig
+{{< highlight YAML "hl_lines=1-2 11-12 23" >}}
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   labels:
+    app: data-producer
     application: amm-techlab
   name: data-producer
 spec:
   replicas: 1
   selector:
-    deploymentConfig: data-producer
+    matchLabels:
+      deployment: data-producer
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
+        deployment: data-producer
+        app: data-producer
         application: amm-techlab
-        deploymentConfig: data-producer
     spec:
       containers:
         - image: puzzle/quarkus-techlab-data-producer:kafka
           imagePullPolicy: Always
-
-          ...
-
-  triggers:
-    - type: ConfigChange
+          livenessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 15
+          readinessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 15
+          name: data-producer
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          resources:
+            limits:
+              cpu: '1'
+              memory: 500Mi
+            requests:
+              cpu: 50m
+              memory: 100Mi
 {{< / highlight >}}
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/deploymentConfig.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/producer.yaml)
 
-Apply the updated content of the YAML file to let OpenShift rollout your freshly created deployment of the producer.
+First we have to delete the DeploymentConfig of the producer.
+
+<details><summary>command hint</summary>
 
 ```s
-oc apply -f deploymentConfig.yaml --overwrite=true --force=true
+oc delete DeploymentConfig data-producer
 ```
 
-{{% alert  color="primary" %}}We need the additional flags to reset the port changes from the previous lab.{{% /alert %}}
+</details><br/>
 
 Expected output:
 
 ```
-deploymentconfig.apps.openshift.io/data-producer configured
+deploymentconfig.apps.openshift.io "data-producer" deleted
+```
+
+Apply the updated content of the YAML file to let OpenShift rollout your freshly created Deployment of the producer.
+
+<details><summary>command hint</summary>
+
+```s
+oc apply -f producer.yaml
+```
+
+</details><br/>
+
+Expected output:
+
+```
+deployment.apps/data-producer created
 ```
 
 
-### Task {{% param sectionnumber %}}.4.2: Update the consumer
+### Task {{% param sectionnumber %}}.3.2: Verify the events on the kafka topic
 
-Also, the consumer has a prepared container image. We only have to change the image to `puzzle/quarkus-techlab-data-consumer:kafka`.
+To verify the produced events end up in the `manual` topic, we can once again rsh into the kafka pod and use the helper scripts.
 
-The file from lab 2 `<workspace>/consumer.yaml` defines all needed resources as a list.
-Instead of the OpenShift DeploymentConfig of the producer, the consumer uses a Kubernetes-native Deployment. There you change the used container image.
+```bash
+oc rsh amm-techlab-kafka-0
+```
 
-Checkout the [Consumer Sourcecode (kafka branch)](https://github.com/puzzle/quarkus-techlab-data-consumer/tree/kafka) to see what changed in the consumer service.
+Then execute the following command to read events from the topic
 
-./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic manual --from-beginning
+```bash
+./bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic manual
+```
+
+Expected result, something similar to:
+
+```bash
+{"data":0.14970117407591477}
+{"data":0.3119723463354409}
+...
+{"data":0.48397732353720324}
+```
+
+{{% alert title="Note" color="primary" %}} Use the `--from-beginning` param to read the whole topic {{% /alert %}}
+
+{{% alert title="Note" color="primary" %}}Stop this consumer inside the container by pressing `Ctrl+C` and `Ctrl+D` to leave the container.{{% /alert %}}
+
+
+### Task {{% param sectionnumber %}}.3.3: Update the consumer
+
+Also, the consumer has a prepared container image. Check the [Consumer Sourcecode (kafka branch)](https://github.com/puzzle/quarkus-techlab-data-consumer/tree/kafka) to see what changed in the consumer service.
+
+The file from lab 2 `<workspace>/consumer.yaml` defines all needed resources as a list. We only have to change the image to `puzzle/quarkus-techlab-data-consumer:kafka`.
 
 ```
 {{< highlight YAML "hl_lines=21" >}}
@@ -318,11 +384,15 @@ spec:
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/consumer.yaml)
 
 
-Also apply the updated resource definition and let OpenShift deploy the consumer:
+Also apply the updated resource definition and let OpenShift deploy the consumer.
+
+<details><summary>command hint</summary>
 
 ```s
 oc apply -f consumer.yaml
 ```
+
+</details><br/>
 
 Expected output:
 
@@ -335,34 +405,6 @@ route.route.openshift.io/data-consumer unchanged
 Go with the web-console to your OpenShift project (Developer view). There you see the Kafka cluster and the two microservices.
 
 Log into your OpenShift project and check the logs of the data-consumer pod. You can see that he will consume data from the Kafka manual topic produced by the data-producer microservice!
-
-
-### Task {{% param sectionnumber %}}.4.3: Verify the events on the kafka topic
-
-To verify the produced events end up in the `manual` topic, we can once again rsh into the kafka pod and use the helper scripts.
-
-```bash
-oc rsh amm-techlab-kafka-0
-```
-
-Then execute the following command to read events from the topic
-
-```bash
-./bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic manual
-```
-
-Expected result, something similar to:
-
-```bash
-{"data":0.14970117407591477}
-{"data":0.3119723463354409}
-...
-{"data":0.48397732353720324}
-```
-
-{{% alert title="Note" color="primary" %}} Use the `--from-beginning` param to read the whole topic {{% /alert %}}
-
-{{% alert title="Note" color="primary" %}}Stop this consumer inside the container by pressing `Ctrl+C` and `Ctrl+D` to leave the container.{{% /alert %}}
 
 
 ## Solution
