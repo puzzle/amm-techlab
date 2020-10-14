@@ -400,6 +400,7 @@ Recheck the status again
 ```bash
 argocd app get argo-$LAB_USER --refresh
 ```
+
 Now the ImageStream was successfully deleted by Argo CD.
 
 
