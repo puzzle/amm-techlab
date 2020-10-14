@@ -59,13 +59,13 @@ oc -n pitc-infra-gitea get route gitea -ojsonpath='{.spec.host}'
 
 Enter the Hostname in your browser and register a new account with your personal username and a password that you can remember ;)
 
-![Register new User in Gitea](./gitea-register.png)
+![Register new User in Gitea](../gitea-register.png)
 
 Login with the new user and create a new Git Repository with the Name `gitops-resources`.
 
 The URL of the newly created Git Repository will look like `https://gitea.techlab.openshift.ch/<username>/gitops-resources.git`
 
-![Git repository created](./gitea-repo-created.png)
+![Git repository created](../gitea-repo-created.png)
 
 Change directory to the workspace where the yaml resources of the previous labs are located: `cd <workspace>`
 
@@ -190,9 +190,9 @@ This command retrieves the manifests from the repository and performs a `kubectl
 
 Check the Argo CD UI to browse the application and their components:
 
-![Argo CD App overview](./argo-app.png)
+![Argo CD App overview](../argo-app.png)
 
-![Application Tree](./argo-tree.png)
+![Application Tree](../argo-tree.png)
 
 Or use the CLI:
 
