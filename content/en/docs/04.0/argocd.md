@@ -375,7 +375,32 @@ data-producer   3         3         3         1         51m
 
 ## Task {{% param sectionnumber %}}.7: Pruning
 
-TODO
+You probably asked yourself how can I delete deployed resources on the container platform? Argo CD can be configured to delete resources that no longer exist in the Git repository.
+
+First delete the `imageStream.yaml`
+
+```bash
+git add --all && git commit -m'Removes ImageStream' && git push
+```
+
+Check the status of the application with
+
+```bash
+argocd app get argo-$LAB_USER --refresh
+```
+
+You will see that even with auto-sync and self-healing enabled the status is still 'OutOfSync'. You have to enable auto pruning explicitly:
+
+```bash
+argocd app set argo-$LAB_USER --auto-prune
+```
+
+Recheck the status again
+
+```bash
+argocd app get argo-$LAB_USER --refresh
+```
+Now the ImageStream was successfully deleted by Argo CD.
 
 
 ## Task {{% param sectionnumber %}}.8: Additional Task
