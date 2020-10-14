@@ -291,7 +291,7 @@ argocd app diff argo-$LAB_USER
 
 which should give you an output similar to:
 
-```bash
+```
 ===== apps/Deployment hannelore15/data-producer ======
 155c155
 <   replicas: 1
@@ -303,7 +303,7 @@ Now open the web console of Argo CD and go to your application. The deployment `
 
 ![Application Out-of-Sync](../argo-outofsynch.png)
 
-With a click on Deployment -> Diff you will see the differences:
+With a click on Deployment > Diff you will see the differences:
 
 ![Application Differences](../argo-diff.png)
 
@@ -377,7 +377,7 @@ data-producer   3         3         3         1         51m
 
 You probably asked yourself how can I delete deployed resources on the container platform? Argo CD can be configured to delete resources that no longer exist in the Git repository.
 
-First delete the `imageStream.yaml`
+First delete the file `imageStream.yaml` from Git repository
 
 ```bash
 git add --all && git commit -m'Removes ImageStream' && git push
@@ -389,7 +389,7 @@ Check the status of the application with
 argocd app get argo-$LAB_USER --refresh
 ```
 
-You will see that even with auto-sync and self-healing enabled the status is still 'OutOfSync'. You have to enable auto pruning explicitly:
+You will see that even with auto-sync and self-healing enabled the status is still OutOfSync. You have to enable auto pruning explicitly:
 
 ```bash
 argocd app set argo-$LAB_USER --auto-prune
