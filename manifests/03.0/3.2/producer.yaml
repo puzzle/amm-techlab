@@ -1,20 +1,23 @@
-apiVersion: apps.openshift.io/v1
-kind: DeploymentConfig
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   labels:
+    app: data-producer
     application: amm-techlab
   name: data-producer
 spec:
   replicas: 1
   selector:
-    deploymentConfig: data-producer
+    matchLabels:
+      deployment: data-producer
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
+        deployment: data-producer
+        app: data-producer
         application: amm-techlab
-        deploymentConfig: data-producer
     spec:
       containers:
         - image: puzzle/quarkus-techlab-data-producer:kafka
@@ -39,15 +42,13 @@ spec:
             timeoutSeconds: 15
           name: data-producer
           ports:
-          - containerPort: 8080
-            name: http
-            protocol: TCP
+            - containerPort: 8080
+              name: http
+              protocol: TCP
           resources:
             limits:
-              cpu: "1"
-              memory: 200Mi
+              cpu: '1'
+              memory: 500Mi
             requests:
               cpu: 50m
               memory: 100Mi
-  triggers:
-    - type: ConfigChange

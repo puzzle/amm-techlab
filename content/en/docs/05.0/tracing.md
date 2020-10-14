@@ -41,16 +41,19 @@ metadata:
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/05.0/5.2/jaeger.yaml)
 
-And then execute the following command:
+And then deploy the Jaeger instance.
+
+<details><summary>command hint</summary>
 
 ```bash
 oc apply -f jaeger.yaml
-
 ```
+
+</details><br/>
 
 Expected result:
 
-```bash
+```
 jaeger.jaegertracing.io/jaeger-all-in-one-inmemory created
 ```
 
@@ -60,40 +63,51 @@ Verify the deployment
 oc get pod -w
 ```
 
+{{% alert  color="primary" %}}Press `Ctrl+C` to stop the watching of the pods.{{% /alert %}}
+
 The newly deployed Jaeger instance is also available over a route.
 
 ```bash
-oc get route jaeger-all-in-one-inmemory
+oc get route jaeger-all-in-one-inmemory --template={{.spec.host}}
 ```
 
-```bash
-NAME                         HOST/PORT                                                                 PATH   SERVICES                           PORT    TERMINATION   WILDCARD
-jaeger-all-in-one-inmemory   jaeger-all-in-one-inmemory-<namespace>.techlab.openshift.ch                      jaeger-all-in-one-inmemory-query   <all>   reencrypt     None
+```
+jaeger-all-in-one-inmemory-<userXY>.techlab.openshift.ch
 ```
 
-Open the Jaeger web console in a Browserwindow and login with your credentials
+Use this URL with https protocol to open the Jaeger web console in a Browser window. Use your techlab user credentials to log in. Ensure to allow the proposed permissions.
 
 
 ## Task {{% param sectionnumber %}}.2: Send Traces to Jaeger
 
 Now let's make sure the traces that are collected within our microservices are also been sent to the running Jaeger services.
 
-To achieve that, we need to deploy a different version of our microservices. Update the deployment config (`consumer.yaml` and `deploymentConfig.yaml`) to use the new images:
+To achieve that, we need to deploy a different version of our microservices. Update the deployment config (`consumer.yaml` and `producer.yaml`) to use the new images:
 
 ```
-puzzle/quarkus-techlab-data-consumer:jaegerkafka
 puzzle/quarkus-techlab-data-producer:jaegerkafka
+puzzle/quarkus-techlab-data-consumer:jaegerkafka
 ```
 
+Update your resources and apply the changes.
 
-Update your resources and apply the changes running the following command
+<details><summary>command hint</summary>
+
+```bash
+oc apply -f producer.yaml
+```
+
+Expected result: `deployment.apps/data-producer configured`
 
 ```bash
 oc apply -f consumer.yaml
-oc apply -f deploymentConfig.yaml
 ```
+
+Expected result: `deployment.apps/data-producer configured`
+
+</details><br/>
 
 
 ## Task {{% param sectionnumber %}}.3: Explore the Traces
 
-Explore the Traces in the Jaeger Console once again.
+Explore the Traces in the Jaeger Console once again. You should see the data-producer and data-consumer as services.
