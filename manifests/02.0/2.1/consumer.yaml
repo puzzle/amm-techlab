@@ -30,7 +30,6 @@ spec:
               scheme: HTTP
             initialDelaySeconds: 3
             periodSeconds: 20
-            successThreshold: 1
             timeoutSeconds: 15
           readinessProbe:
             failureThreshold: 5
@@ -40,7 +39,6 @@ spec:
               scheme: HTTP
             initialDelaySeconds: 3
             periodSeconds: 20
-            successThreshold: 1
             timeoutSeconds: 15
           name: data-consumer
           ports:
@@ -73,7 +71,7 @@ spec:
   sessionAffinity: None
   type: ClusterIP
 ---
-apiVersion: v1
+apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   labels:

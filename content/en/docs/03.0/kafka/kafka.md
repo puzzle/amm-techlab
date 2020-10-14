@@ -230,7 +230,7 @@ If you're interested in the code changes needed to connect to the kafka server, 
 
 ```
 {{< highlight YAML "hl_lines=22 27-28" >}}
-apiVersion: v1
+apiVersion: apps.openshift.io/v1
 kind: DeploymentConfig
 metadata:
   labels:
@@ -285,7 +285,9 @@ Instead of the OpenShift DeploymentConfig of the producer, the consumer uses a K
 
 Checkout the [Consumer Sourcecode (kafka branch)](https://github.com/puzzle/quarkus-techlab-data-consumer/tree/kafka) to see what changed in the consumer service.
 
+```bash
 ./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic manual --from-beginning
+```
 
 ```
 {{< highlight YAML "hl_lines=21" >}}
