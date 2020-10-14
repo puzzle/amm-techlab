@@ -47,11 +47,11 @@ argocd login <ARGOCD_SERVER> --sso --grpc-web
 {{% alert title="Note" color="primary" %}}Follow the sso login steps in the new browser window. The `--grpc-web` parameter is necessary due to missing http 2.0 router.{{% /alert %}}
 
 
-## Task {{% param sectionnumber %}}.2: Add Resources to a Git Repository
+## Task {{% param sectionnumber %}}.2: Add Resources to a Git repository
 
-As we are proceeding from now on according to the GitOps principle we need to push all existing Resources located in `<workspace>/*.yaml`  into a new Git Repository.
+As we are proceeding from now on according to the GitOps principle we need to push all existing resources located in `<workspace>/*.yaml`  into a new Git repository.
 
-Create an empty Git Repository in Gitea. You will find the exposed hostname of the Gitea repository by inspecting the OpenShift Route:
+Create an empty Git repository in Gitea. You will find the exposed hostname of the Gitea repository by inspecting the OpenShift Route:
 
 ```bash
 oc -n pitc-infra-gitea get route gitea -ojsonpath='{.spec.host}'
@@ -61,9 +61,9 @@ Enter the Hostname in your browser and register a new account with your personal
 
 ![Register new User in Gitea](../gitea-register.png)
 
-Login with the new user and create a new Git Repository with the Name `gitops-resources`.
+Login with the new user and create a new Git repository with the Name `gitops-resources`.
 
-The URL of the newly created Git Repository will look like `https://gitea.techlab.openshift.ch/<username>/gitops-resources.git`
+The URL of the newly created Git repository will look like `https://gitea.techlab.openshift.ch/<username>/gitops-resources.git`
 
 ![Git repository created](../gitea-repo-created.png)
 
@@ -131,18 +131,16 @@ To https://gitea.techlab.openshift.ch/<username>/gitops-resources.git
 
 Now we want to deploy the resources of the previous labs with Argo CD to demonstrate how Argo CD works.
 
-Ensure that the USERNAME environment variable is still present
+Ensure that the `USERNAME` environment variable is still present. Set it again if not.
 
 ```bash
-USERNAME=<username>
+echo $USERNAME
 ```
 
 To deploy the resources using the Argo CD CLI use the following command:
 
 ```bash
 argocd app create argo-$LAB_USER --repo https://gitea.techlab.openshift.ch/$LAB_USER/gitops-resources.git --path $LAB_USER --dest-server https://kubernetes.default.svc --dest-namespace $LAB_USER
-
-argocd app create argo-$LAB_USER-pipelines --repo https://gitea.techlab.openshift.ch/$LAB_USER/gitops-resources.git --path $LAB_USER-pipelines --dest-server https://kubernetes.default.svc --dest-namespace $LAB_USER-pipelines
 ```
 
 {{% alert title="Note" color="primary" %}}If you want to deploy it in a different namespace, make sure the namespaces exists before synching the app{{% /alert %}}
@@ -234,107 +232,152 @@ So now, all resources are in-sync and managed by Argo CD. If the deployed resour
 
 ## Task {{% param sectionnumber %}}.4: Automated Sync Policy and Diff
 
-When there is a new commit in your Git Repository, the Argo CD Application becomes 'OutOfSync' again. To simulate a change (because we don't have control over the Argo CD repository) in your application lets manually change our Deployment, e.g. scale your `example-php-docker-helloworld` Deployment to 2:
+When there is a new commit in your Git repository, the Argo CD application becomes 'OutOfSync'. Let's assume we want to scale up our producer of the previous lab from 1 to 3 replicas. We will change this in the Deployment.
 
-```bash
-oc scale deployment example-php-docker-helloworld --replicas=2
+
+Do following changes inside your file `<workspace>/producer.yaml`. Change the type to Deployment, remove the annotations, update the selector, change the image to `puzzle/quarkus-techlab-data-producer:kafka` and remove the triggers.
+
+```
+{{< highlight YAML "hl_lines=9" >}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: data-producer
+    application: amm-techlab
+  name: data-producer
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      deployment: data-producer
+  strategy:
+    type: Recreate
+...
+{{< / highlight >}}
 ```
 
-Check the application status with:
-
-![Application Out-of-Sync](../argo-outofsynch.png)
-
-which should show that the application is 'OutOfSync'. This means your 'live state' is not the same as the 'target state' from the Git repository. the `argocd app get argo-example-<username>`
+Commit the changes and push them to the remote:
 
 ```bash
-Name:               argo-example-<username>
-Project:            default
-Server:             https://kubernetes.default.svc
-Namespace:          <username>
-URL:                https://argo.techlab.openshift.ch/applications/argo-example-hannelore15
-Repo:               https://github.com/puzzle/amm-argocd-example.git
-Target:
-Path:               example-app
-SyncWindow:         Sync Allowed
-Sync Policy:        <none>
-Sync Status:        OutOfSync from  (eb54f2e)
-Health Status:      Healthy
-
-GROUP  KIND        NAMESPACE    NAME                           STATUS     HEALTH   HOOK  MESSAGE
-       Service     <username>   example-php-docker-helloworld  Synced     Healthy        service/example-php-docker-helloworld created
-apps   Deployment  <username>   example-php-docker-helloworld  OutOfSync  Healthy        deployment.apps/example-php-docker-helloworld created
+git add . && git commit -m'Scaled up to 3 replicas' && git push
 ```
 
-As you see, your `example-php-docker-helloworld` Deployment resource is 'OutOfSync'. You can perform a diff against the target and live state using:
+Check the state of the resources by cli:
 
 ```bash
-argocd app diff argo-example-<username>
+argocd app get argo-$LAB_USER --refresh
+```
+
+The parameter `--refresh` triggers an update against the Git repository. Out of the box Git will be polled by Argo CD. To use a synchronous workflow you can use webhooks in Git. These will trigger a synchronization in Argo CD on every push to the repository.
+
+You will see that the data-producer is OutOfSync:
+
+```
+...
+GROUP               KIND         NAMESPACE    NAME           STATUS     HEALTH   HOOK  MESSAGE
+                    Service      hannelore15  data-producer  Synced     Healthy        service/data-producer unchanged
+                    Service      hannelore15  data-consumer  Synced     Healthy        service/data-consumer unchanged
+apps                Deployment   hannelore15  data-producer  OutOfSync  Healthy        deployment.apps/data-producer configured
+apps                Deployment   hannelore15  data-consumer  Synced     Healthy        deployment.apps/data-consumer unchanged
+...
+```
+
+When an application is 'OutOfSync' then your deployed 'live state' is no longer the same as the 'target state' which is represented by the resources in the Git repository. You can show the differences between live and target state:
+
+```bash
+argocd app diff argo-$LAB_USER
 ```
 
 which should give you an output similar to:
 
 ```bash
-===== apps/Deployment argo-example-<username>/example-php-docker-helloworld ======
-8c8
-<   replicas: 2
+===== apps/Deployment hannelore15/data-producer ======
+155c155
+<   replicas: 1
 ---
->   replicas: 1
+>   replicas: 3
 ```
 
-Which is the change we simulated by scaling our Deployment.
+Now open the web console of Argo CD and go to your application. The deployment `data-producer` is marked as 'OutOfSync':
 
-With:
+![Application Out-of-Sync](../argo-outofsynch.png)
+
+With a click on Deployment -> Diff you will see the differences:
+
+![Application Differences](../argo-diff.png)
+
+
+Now click `Sync` on the top left and let the magic happens ;) The producer will be scaled up to 3 replicas and the resources are in Sync again.
+
+Double-check the status by cli
 
 ```bash
-argocd app sync argo-example-<username>
+argocd app get argo-$LAB_USER
 ```
 
-you can sync your application again against the target state.
+```
+...
+GROUP               KIND         NAMESPACE    NAME           STATUS  HEALTH       HOOK  MESSAGE
+                    Service      hannelore15  data-consumer  Synced  Healthy            service/data-consumer unchanged
+                    Service      hannelore15  data-producer  Synced  Healthy            service/data-producer unchanged
+apps                Deployment   hannelore15  data-consumer  Synced  Healthy            deployment.apps/data-consumer unchanged
+apps                Deployment   hannelore15  data-producer  Synced  Progressing        deployment.apps/data-producer configured
+kafka.strimzi.io    Kafka        hannelore15  amm-techlab    Synced                     kafka.kafka.strimzi.io/amm-techlab unchanged
+...
+```
 
 Argo CD can automatically sync an application when it detects differences between the desired manifests in Git, and the live state in the cluster. A benefit of automatic sync is that CI/CD pipelines no longer need direct access to the Argo CD API server to perform the deployment. Instead, the pipeline makes a commit and push to the Git repository with the changes to the manifests in the tracking Git repo.
 
 To configure automatic sync run (or use the UI):
 
 ```bash
-argocd app set argo-example-<username> --sync-policy automated
+argocd app set argo-$LAB_USER --sync-policy automated
 ```
 
-and now everytime you create a new commit in your Git Repository, Argo CD will automaticly perform a sync of your application.
+From now on Argo CD will automatically synchronize resources every time you commit to the Git repository.
 
 
-## Task {{% param sectionnumber %}}.3: Automatic Self-Healing
+## Task {{% param sectionnumber %}}.5: Automatic Self-Healing
 
 By default, changes made to the live cluster will not trigger automatic sync. To enable automatic sync when the live cluster's state deviates from the state defined in Git, run:
 
 ```bash
-argocd app set argo-example-<username> --self-heal
+argocd app set argo-$LAB_USER --self-heal
 ```
 
-Let's scale our `example-php-docker-helloworld` Deployment and observe whats happening:
+Watch the deployment `data-producer` in a separate terminal
 
 ```bash
-oc scale deployment example-php-docker-helloworld --replicas=2
+oc get deployment data-producer -w
 ```
 
-Argo CD will immediatly scale back the `example-php-docker-helloworld` Deployment to `1` replica. You can verify this with:
+Let's scale our `data-producer` Deployment and observe whats happening:
 
 ```bash
-oc get deployment example-php-docker-helloworld
+oc scale deployment data-producer --replicas=1
 ```
 
+Argo CD will immediately scale back the `data-producer` Deployment to `3` replicas. You will see the desired replicas count in the watched Deployment.
+
 ```
-NAME                            READY   UP-TO-DATE   AVAILABLE   AGE
-example-php-docker-helloworld   1/1     1            1           22m
+NAME            DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+data-producer   3         3         3         3         51m
+data-producer   1         3         3         3         51m
+data-producer   1         3         3         3         51m
+data-producer   1         1         1         1         51m
+data-producer   3         1         1         1         51m
+data-producer   3         1         1         1         51m
+data-producer   3         1         1         1         51m
+data-producer   3         3         3         1         51m
 ```
 
 
-## Task {{% param sectionnumber %}}.4: Additional Task
+## Task {{% param sectionnumber %}}.7: Pruning
 
-You've now learned the basic functionality of argocd, as an additional lab you can now:
+TODO
 
-* Fork the git repository with the k8s manifests <https://github.com/puzzle/amm-argocd-example.git>
-  * Use the Gitea Server (URL provided by trainer, register and login with your username and password) or your personal Github Account
-* create a new argocd app using the new git repository
-* create a route resource YAML which exposes the example application
-* push it to your git repository
-* and let the magic happen
+
+## Task {{% param sectionnumber %}}.8: Additional Task
+
+Setup a new Argo CD application which deployes the Tekton pipelines from the previous lab. You can do it on the web console or by cli.
