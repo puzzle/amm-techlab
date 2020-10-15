@@ -424,9 +424,9 @@ You will see that even with auto-sync and self-healing enabled the status is sti
 ```
 GROUP               KIND         NAMESPACE    NAME           STATUS     HEALTH   HOOK  MESSAGE
 ...
-build.openshift.io  BuildConfig  hannelore15  data-producer  Synced                    
-image.openshift.io  ImageStream  hannelore15  data-producer  OutOfSync                 
-kafka.strimzi.io    Kafka        hannelore15  amm-techlab    Synced                    
+build.openshift.io  BuildConfig  hannelore15  data-producer  Synced
+image.openshift.io  ImageStream  hannelore15  data-producer  OutOfSync
+kafka.strimzi.io    Kafka        hannelore15  amm-techlab    Synced
 ...
 ```
 
@@ -458,7 +458,8 @@ apps                Deployment   hannelore15  data-producer  Synced     Healthy 
 
 <!---
 
-TODO: Berechtiungs Issues mit Argo CD ServiceAccount: dem SA system:serviceaccount:pitc-infra-argocd:argocd-application-controller fehlen die Berechtigungen auf <username>-pipeline zu schreiben. Der Rest für das additional Lab ist vorbereitet. 
+TODO: Berechtiungs Issues mit Argo CD ServiceAccount: dem SA argocd-application-controller fehlen die
+Berechtigungen auf $LAB_USER-pipeline zu schreiben. Der Rest für das additional Lab ist vorbereitet.
 
 
 ## Task {{% param sectionnumber %}}.8: Additional Task
