@@ -207,6 +207,11 @@ The helper scripts within the bin directory allow you to query your kafka server
 
 This listing should also show the `manual` topic.
 
+```
+Topic: manual   PartitionCount: 1       ReplicationFactor: 1    Configs: segment.bytes=1073741824,retention.ms=7200000,message.format.version=2.5-IV0
+        Topic: manual   Partition: 0    Leader: 0       Replicas: 0     Isr: 0
+```
+
 {{% alert  color="primary" %}}Press `Ctrl+D` to leave the container.{{% /alert %}}
 
 
@@ -221,10 +226,10 @@ To update the producer we use a prepared container image. If you're interested i
 
 Because that we do not rebuild the producer, the usage of an OpenShift DeploymentConfig is not necessary any more. We change te producer to use a Kubernetes-native Deployment. The consumer already uses a Deployment. You could check the resource definition file `<workspace>/consumer.yaml` for the needed adaptations.
 
-Do following changes inside your file `<workspace>/producer.yaml`. Change the type to Deployment, remove the annotations, update the selector, change the image to `puzzle/quarkus-techlab-data-producer:kafka` and remove the triggers.
+Do following changes inside your file `<workspace>/producer.yaml`. Change the type to Deployment, remove the annotations, update the selector, add label `app`, rename label `deploymentConfig` to `deployment`, change the image to `puzzle/quarkus-techlab-data-producer:kafka` and remove the triggers.
 
 ```
-{{< highlight YAML "hl_lines=1-2 11-12 23" >}}
+{{< highlight YAML "hl_lines=1-2 11-12 19-20 23" >}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -242,9 +247,9 @@ spec:
   template:
     metadata:
       labels:
+        application: amm-techlab
         deployment: data-producer
         app: data-producer
-        application: amm-techlab
     spec:
       containers:
         - image: puzzle/quarkus-techlab-data-producer:kafka
@@ -316,6 +321,45 @@ Expected output:
 
 ```
 deployment.apps/data-producer created
+```
+
+Do the following changes inside your file `<workspace>/svc.yaml`. Update the label selector from `deploymentConfig: data-producer` to `deployment: data-producer`. Otherwise the Service will not find any Pods to route the traffic into.
+
+```
+{{< highlight YAML "hl_lines=14" >}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: data-producer
+  labels:
+    application: amm-techlab
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: http
+  selector:
+    deployment: data-producer
+  sessionAffinity: None
+  type: ClusterIP
+{{< / highlight >}}
+```
+
+Apply the updated Service manifest.
+
+<details><summary>command hint</summary>
+
+```s
+oc apply -f svc.yaml
+```
+
+</details><br/>
+
+Expected output:
+
+```
+service/data-producer configured
 ```
 
 
