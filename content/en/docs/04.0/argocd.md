@@ -49,7 +49,7 @@ argocd login <ARGOCD_SERVER> --sso --grpc-web
 
 ## Task {{% param sectionnumber %}}.2: Add Resources to a Git repository
 
-As we are proceeding from now on according to the GitOps principle we need to push all existing resources located in `<workspace>/*.yaml`  into a new Git repository.
+As we are proceeding from now on according to the GitOps principle we need to push all existing resources located in `<workspace>/*.yaml`  into a new Git repository. All the cli commands in this chapter must be executed in the terminal of the provided Web IDE.
 
 Create an empty Git repository in Gitea. You will find the exposed hostname of the Gitea repository by inspecting the OpenShift Route:
 
@@ -126,15 +126,25 @@ To https://gitea.techlab.openshift.ch/<username>/gitops-resources.git
  * [new branch]      master -> master
 ```
 
+Go back to the webinterface of Gitea and inspect the structure and files in your personal Git repository: `https://gitea.techlab.openshift.ch/<username>/gitops-resources`
+
 
 ## Task {{% param sectionnumber %}}.3: Deploying the resources with Argo CD
 
 Now we want to deploy the resources of the previous labs with Argo CD to demonstrate how Argo CD works.
 
-Ensure that the `USERNAME` environment variable is still present. Set it again if not.
+{{% alert title="Warning" color="secondary" %}}All steps which includes the argocd cli tool, must be executed on the local machine. This is due to the sso login in the web ide does not work at the moment. {{% /alert %}}
+
+Ensure that the `LAB_USER` environment variable is still present. Set it again if not.
 
 ```bash
-echo $USERNAME
+echo $LAB_USER
+```
+
+Change to your main Project.
+
+```bash
+oc project $LAB_USER
 ```
 
 To deploy the resources using the Argo CD CLI use the following command:
@@ -142,6 +152,8 @@ To deploy the resources using the Argo CD CLI use the following command:
 ```bash
 argocd app create argo-$LAB_USER --repo https://gitea.techlab.openshift.ch/$LAB_USER/gitops-resources.git --path $LAB_USER --dest-server https://kubernetes.default.svc --dest-namespace $LAB_USER
 ```
+
+{{% alert title="Note" color="primary" %}}We don't need to provide Git credentials because the repository is readable for non-authenticated users as well{{% /alert %}}
 
 {{% alert title="Note" color="primary" %}}If you want to deploy it in a different namespace, make sure the namespaces exists before synching the app{{% /alert %}}
 
@@ -162,37 +174,39 @@ Target:
 Path:               hannelore15
 SyncWindow:         Sync Allowed
 Sync Policy:        <none>
-Sync Status:        OutOfSync from  (3da0af3)
-Health Status:      Missing
+Sync Status:        OutOfSync from  (fe4e2b6)
+Health Status:      Healthy
 
-GROUP               KIND              NAMESPACE    NAME           STATUS     HEALTH   HOOK  MESSAGE
-                    DeploymentConfig  hannelore15  data-producer  OutOfSync  Missing
-                    Route             hannelore15  data-consumer  OutOfSync  Missing
-                    Service           hannelore15  data-consumer  OutOfSync  Healthy
-                    Service           hannelore15  data-producer  OutOfSync  Healthy
-apps                Deployment        hannelore15  data-consumer  OutOfSync  Healthy
-build.openshift.io  BuildConfig       hannelore15  data-producer  OutOfSync
-image.openshift.io  ImageStream       hannelore15  data-producer  OutOfSync
-kafka.strimzi.io    Kafka             hannelore15  amm-techlab    OutOfSync
-kafka.strimzi.io    KafkaTopic        hannelore15  manual         OutOfSync
-route.openshift.io  Route             hannelore15  data-producer  OutOfSync
+GROUP               KIND         NAMESPACE    NAME           STATUS     HEALTH   HOOK  MESSAGE
+                    Service      hannelore15  data-consumer  OutOfSync  Healthy
+                    Service      hannelore15  data-producer  OutOfSync  Healthy
+apps                Deployment   hannelore15  data-consumer  OutOfSync  Healthy
+apps                Deployment   hannelore15  data-producer  OutOfSync  Healthy
+build.openshift.io  BuildConfig  hannelore15  data-producer  OutOfSync
+image.openshift.io  ImageStream  hannelore15  data-producer  OutOfSync
+kafka.strimzi.io    Kafka        hannelore15  amm-techlab    OutOfSync
+kafka.strimzi.io    KafkaTopic   hannelore15  manual         OutOfSync
+route.openshift.io  Route        hannelore15  data-consumer  OutOfSync
+route.openshift.io  Route        hannelore15  data-producer  OutOfSync
 ```
 
-The application status is initially in 'OutOfSync' state since the application has yet to be deployed and no Kubernetes resources have been created. To sync (deploy) the application, run:
+The application status is initially in OutOfSync state. To sync (deploy) the resource manifests, run:
 
 ```bash
 argocd app sync argo-$LAB_USER
 ```
 
-This command retrieves the manifests from the repository and performs a `kubectl apply` of the manifests. The example app is now running and you can now view its resource components, logs, events, and assessed health status.
+This command retrieves the manifests from the git repository and performs a `kubectl apply` on them. Because all our manifests has been deployed manually before, no new rollout of them will be triggered on OpenShift. But form now on, all resources are managed by Argo CD. Congrats, the first step in direction GitOps! :)
 
-Check the Argo CD UI to browse the application and their components:
+
+Check the Argo CD UI to browse the application and their components. The URL of the Argo CD webinterface will be provided by the teacher.
 
 ![Argo CD App overview](../argo-app.png)
 
 ![Application Tree](../argo-tree.png)
 
-Or use the CLI:
+
+Or use the CLI to check the state of the Argo CD application:
 
 ```bash
 argocd app get argo-$LAB_USER
@@ -211,31 +225,28 @@ Target:
 Path:               hannelore15
 SyncWindow:         Sync Allowed
 Sync Policy:        <none>
-Sync Status:        Synced to  (d3d16b3)
+Sync Status:        Synced to  (fe4e2b6)
 Health Status:      Healthy
 
-GROUP               KIND              NAMESPACE    NAME           STATUS  HEALTH   HOOK  MESSAGE
-                    Service           hannelore15  data-consumer  Synced  Healthy        service/data-consumer created
-                    Service           hannelore15  data-producer  Synced  Healthy        service/data-producer created
-apps                Deployment        hannelore15  data-consumer  Synced  Healthy        deployment.apps/data-consumer created
-kafka.strimzi.io    Kafka             hannelore15  amm-techlab    Synced                 kafka.kafka.strimzi.io/amm-techlab created
-route.openshift.io  Route             hannelore15  data-consumer  Synced                 route.route.openshift.io/data-consumer created
-image.openshift.io  ImageStream       hannelore15  data-producer  Synced                 imagestream.image.openshift.io/data-producer created
-route.openshift.io  Route             hannelore15  data-producer  Synced                 route.route.openshift.io/data-producer created
-build.openshift.io  BuildConfig       hannelore15  data-producer  Synced                 buildconfig.build.openshift.io/data-producer created
-apps.openshift.io   DeploymentConfig  hannelore15  data-producer  Synced                 deploymentconfig.apps.openshift.io/data-producer created
-kafka.strimzi.io    KafkaTopic        hannelore15  manual         Synced                 kafkatopic.kafka.strimzi.io/manual created
+GROUP               KIND         NAMESPACE    NAME           STATUS  HEALTH   HOOK  MESSAGE
+                    Service      hannelore15  data-producer  Synced  Healthy        service/data-producer configured
+                    Service      hannelore15  data-consumer  Synced  Healthy        service/data-consumer configured
+apps                Deployment   hannelore15  data-consumer  Synced  Healthy        deployment.apps/data-consumer configured
+apps                Deployment   hannelore15  data-producer  Synced  Healthy        deployment.apps/data-producer configured
+kafka.strimzi.io    Kafka        hannelore15  amm-techlab    Synced                 kafka.kafka.strimzi.io/amm-techlab configured
+route.openshift.io  Route        hannelore15  data-consumer  Synced                 route.route.openshift.io/data-consumer configured
+route.openshift.io  Route        hannelore15  data-producer  Synced                 route.route.openshift.io/data-producer configured
+image.openshift.io  ImageStream  hannelore15  data-producer  Synced                 imagestream.image.openshift.io/data-producer configured
+build.openshift.io  BuildConfig  hannelore15  data-producer  Synced                 buildconfig.build.openshift.io/data-producer configured
+kafka.strimzi.io    KafkaTopic   hannelore15  manual         Synced                 kafkatopic.kafka.strimzi.io/manual configured
 ```
-
-So now, all resources are in-sync and managed by Argo CD. If the deployed resources had the same state as the resources pushed to git, no new version of them has been deployed.
 
 
 ## Task {{% param sectionnumber %}}.4: Automated Sync Policy and Diff
 
-When there is a new commit in your Git repository, the Argo CD application becomes 'OutOfSync'. Let's assume we want to scale up our producer of the previous lab from 1 to 3 replicas. We will change this in the Deployment.
+When there is a new commit in your Git repository, the Argo CD application becomes OutOfSync. Let's assume we want to scale up our producer of the previous lab from 1 to 3 replicas. We will change this in the Deployment.
 
-
-Do following changes inside your file `<workspace>/producer.yaml`. Change the type to Deployment, remove the annotations, update the selector, change the image to `puzzle/quarkus-techlab-data-producer:kafka` and remove the triggers.
+Change the number of replicas in your file `<workspace>/producer.yaml`.
 
 ```
 {{< highlight YAML "hl_lines=9" >}}
@@ -263,6 +274,24 @@ Commit the changes and push them to the remote:
 git add . && git commit -m'Scaled up to 3 replicas' && git push
 ```
 
+Don't forget to interactively provide your personal Git password. After a successful push you should see a message similar to the following lines:
+
+```
+[master 18daed3] Scaled up to 3 replicas
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+Enumerating objects: 7, done.
+Counting objects: 100% (7/7), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (4/4), 372 bytes | 372.00 KiB/s, done.
+Total 4 (delta 2), reused 0 (delta 0)
+remote: . Processing 1 references
+remote: Processed 1 references in total
+To https://gitea.techlab.openshift.ch/hannelore15/gitops-resources.git
+   fe4e2b6..18daed3  master -> master
+```
+
+
 Check the state of the resources by cli:
 
 ```bash
@@ -283,7 +312,7 @@ apps                Deployment   hannelore15  data-consumer  Synced     Healthy 
 ...
 ```
 
-When an application is 'OutOfSync' then your deployed 'live state' is no longer the same as the 'target state' which is represented by the resources in the Git repository. You can show the differences between live and target state:
+When an application is OutOfSync then your deployed 'live state' is no longer the same as the 'target state' which is represented by the resource manifests in the Git repository. You can inspect the differences between live and target state by cli:
 
 ```bash
 argocd app diff argo-$LAB_USER
@@ -377,9 +406,10 @@ data-producer   3         3         3         1         51m
 
 You probably asked yourself how can I delete deployed resources on the container platform? Argo CD can be configured to delete resources that no longer exist in the Git repository.
 
-First delete the file `imageStream.yaml` from Git repository
+First delete the file `imageStream.yaml` from Git repository and push the changes
 
 ```bash
+git rm $LAB_USER/imageStream.yaml
 git add --all && git commit -m'Removes ImageStream' && git push
 ```
 
@@ -389,7 +419,18 @@ Check the status of the application with
 argocd app get argo-$LAB_USER --refresh
 ```
 
-You will see that even with auto-sync and self-healing enabled the status is still OutOfSync. You have to enable auto pruning explicitly:
+You will see that even with auto-sync and self-healing enabled the status is still OutOfSync
+
+```
+GROUP               KIND         NAMESPACE    NAME           STATUS     HEALTH   HOOK  MESSAGE
+...
+build.openshift.io  BuildConfig  hannelore15  data-producer  Synced                    
+image.openshift.io  ImageStream  hannelore15  data-producer  OutOfSync                 
+kafka.strimzi.io    Kafka        hannelore15  amm-techlab    Synced                    
+...
+```
+
+Now enable the auto pruning explicitly:
 
 ```bash
 argocd app set argo-$LAB_USER --auto-prune
@@ -403,6 +444,22 @@ argocd app get argo-$LAB_USER --refresh
 
 Now the ImageStream was successfully deleted by Argo CD.
 
+```
+GROUP               KIND         NAMESPACE    NAME           STATUS     HEALTH   HOOK  MESSAGE
+...
+image.openshift.io  ImageStream  hannelore15  data-producer  Succeeded  Pruned         pruned
+                    Service      hannelore15  data-producer  Synced     Healthy        service/data-producer unchanged
+                    Service      hannelore15  data-consumer  Synced     Healthy        service/data-consumer unchanged
+apps                Deployment   hannelore15  data-producer  Synced     Healthy        deployment.apps/data-producer unchanged
+...
+
+```
+
+
+<!---
+
+TODO: Berechtiungs Issues mit Argo CD ServiceAccount: dem SA system:serviceaccount:pitc-infra-argocd:argocd-application-controller fehlen die Berechtigungen auf <username>-pipeline zu schreiben. Der Rest für das additional Lab ist vorbereitet. 
+
 
 ## Task {{% param sectionnumber %}}.8: Additional Task
 
@@ -415,3 +472,5 @@ argocd app create argo-$LAB_USER-pipelines --repo https://gitea.techlab.openshif
 ```
 
 </details><br/>
+
+--->
