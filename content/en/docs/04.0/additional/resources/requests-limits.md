@@ -4,7 +4,7 @@ linkTitle: "4.3.2 Requests and Limits"
 weight: 432
 sectionnumber: 4.3.2
 description: >
-  Requests and Limits.
+  Understanding Requests and Limits and how to use them.
 ---
 
 In this lab, we are going to look at ResourceQuotas and LimitRanges. As OpenShift users, we are most certainly going to encounter the limiting effects that ResourceQuotas and LimitRanges impose.

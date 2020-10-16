@@ -4,7 +4,7 @@ linkTitle: "2.1 Containerize an application"
 weight: 21
 sectionnumber: 2.1
 description: >
-  Containerize an application.
+  Containerize a Quarkus based Java application.
 ---
 
 The main goal of this lab is to show you how to containerize a Java application. Including deployment on OpenShift and exposing the service with a route. In this example, we want to build a microservice-based on [Quarkus](https://quarkus.io/), which produces random data when it’s REST interface is called. Another Quarkus microservice consumes then the data and exposes it to its endpoint.

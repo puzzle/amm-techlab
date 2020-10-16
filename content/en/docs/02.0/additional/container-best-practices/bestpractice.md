@@ -4,7 +4,7 @@ linkTitle: "2.3.2 Best practices"
 weight: 232
 sectionnumber: 2.3.2
 description: >
-  Best practices for creating OpenShift containers.
+  Best practices for creating Images for OpenShift.
 ---
 
 {{% alert  color="primary" %}}Here you find best practices. It is not a lab to play through.{{% /alert %}}

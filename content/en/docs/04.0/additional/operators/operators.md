@@ -4,7 +4,7 @@ linkTitle: "4.3.1 Operators"
 weight: 431
 sectionnumber: 4.3.1
 description: >
-  Operators.
+  How to install and operate Operators.
 ---
 
 Operators are a way to package, deploy and manage Kubernetes-native applications. Kubernetes-native applications are applications that are deployed in Kubernetes/OpenShift and managed via the Kubernetes/OpenShift API (kubectl/oc). Since the introduction of OpenShift 4, OpenShift itself uses several operators to manage the OpenShift cluster.
