@@ -66,3 +66,9 @@ Instead of only notifying about events, this approach sends a payload as a messa
 ### {{% param sectionnumber %}}.1.3: Event-sourcing
 
 The goal of event-sourcing is to represent every change in a system's state as an emitted event in chronological order. The event stream becomes the principal source of truth about the application's state. Changes in state, as sequences of events, are persisted in the event stream and can be 'replayed'.
+
+
+### {{% param sectionnumber %}}.1.4: Additional Links
+
+* [What do you mean by “Event-Driven”? (Martin Fowler)](https://martinfowler.com/articles/201701-event-driven.html)
+* [Event-Driven Architecture (Mark Richards)](https://www.oreilly.com/library/view/software-architecture-patterns/9781491971437/ch02.html)
