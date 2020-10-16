@@ -83,19 +83,19 @@ You can find more examples of reusable tasks in the [Tekton Catalog](https://git
 Let's examine two tasks that do a deployment. Create the local file `<workspace>/deploy-tasks.yaml` with the following content:
 
 ```yaml
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: apply-manifests
 spec:
-  inputs:
-    resources:
+  resources:
+    inputs:
       - {type: git, name: source}
-    params:
-      - name: manifest_dir
-        description: The directory in source that contains yaml manifests
-        type: string
-        default: "src/main/openshift/templates"
+  params:
+    - name: manifest_dir
+      description: The directory in source that contains yaml manifests
+      type: string
+      default: "src/main/openshift/templates"
   steps:
     - name: apply
       image: appuio/oc:v4.3
@@ -147,7 +147,7 @@ The Pipeline should be reusable across multiple projects or environments, that's
 Create the following pipeline `<workspace>/deploy-pipeline.yaml`:
 
 ```yaml
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: build-and-deploy
