@@ -32,19 +32,39 @@ For each task, a pod will be allocated and for each step inside this task, a con
 ![Pipeline Runtime View](../pipeline-runtime-view.png)
 *Runtime view of a Pipeline showing mapping to pods and containers*
 
-We start by creating a new project:
+Ensure that the `LAB_USER` environment variable is still present. Set it again if not.
 
 ```bash
-oc new-project <userXY>-pipelines
+echo $LAB_USER
 ```
 
-{{% alert  color="primary" %}}Replace **userXY** with your username.{{% /alert %}}
+Change to your main Project.
 
-The OpenShift Pipeline operator will automatically create a pipeline ServiceAccount with all required permissions to build and push an image. This service account is used by PipelineRuns:
+<details><summary>command hint</summary>
+
+```bash
+oc project $LAB_USER
+```
+
+</details><br/>
+
+The OpenShift Pipeline operator automatically creates a pipeline ServiceAccount with all required permissions to build and push an image. This service account is used by PipelineRuns. List the service accounts of your project.
+
+<details><summary>command hint</summary>
+
+```bash
+oc get ServiceAccount
+```
+
+Or use the abbreviation:
 
 ```bash
 oc get sa
 ```
+
+</details><br/>
+
+Expected output listing the pipeline service account:
 
 ```
 NAME       SECRETS   AGE
