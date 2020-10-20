@@ -89,8 +89,8 @@ There should be two directories, one per namespace:
 ```bash
 n8vr6:~/techlab/workspace$ ls -l
 total 8
-drwxr-sr-x. 2 1000600000 1000600000 4096 Oct 14 12:14 hannelore15
-drwxr-sr-x. 2 1000600000 1000600000 4096 Oct 14 12:14 hannelore15-pipelines
+drwxr-sr-x. 2 1000600000 1000600000 4096 Oct 14 12:14 <username>
+drwxr-sr-x. 2 1000600000 1000600000 4096 Oct 14 12:14 <username>-pipelines
 ```
 
 Configure the Git Client and verify the output
@@ -107,7 +107,7 @@ Now add the resource definitions to your personal Git repository and push them t
 git init
 git add --all
 git commit -m "Initial commit of resource definitions"
-git remote add origin https://$LAB_USER@gitea.techlab.openshift.ch/hannelore15/gitops-resources.git
+git remote add origin https://$LAB_USER@gitea.techlab.openshift.ch/<username>/gitops-resources.git
 git push -u origin master
 ```
 
@@ -164,30 +164,30 @@ argocd app get argo-$LAB_USER
 ```
 
 ```
-Name:               argo-hannelore15
+Name:               argo-<username>
 Project:            default
 Server:             https://kubernetes.default.svc
-Namespace:          hannelore15
-URL:                https://argocd.techlab.openshift.ch/applications/argo-hannelore15
-Repo:               https://gitea.techlab.openshift.ch/hannelore15/gitops-resources.git
+Namespace:          <username>
+URL:                https://argocd.techlab.openshift.ch/applications/argo-<username>
+Repo:               https://gitea.techlab.openshift.ch/<username>/gitops-resources.git
 Target:
-Path:               hannelore15
+Path:               <username>
 SyncWindow:         Sync Allowed
 Sync Policy:        <none>
 Sync Status:        OutOfSync from  (fe4e2b6)
 Health Status:      Healthy
 
 GROUP               KIND         NAMESPACE    NAME           STATUS     HEALTH   HOOK  MESSAGE
-                    Service      hannelore15  data-consumer  OutOfSync  Healthy
-                    Service      hannelore15  data-producer  OutOfSync  Healthy
-apps                Deployment   hannelore15  data-consumer  OutOfSync  Healthy
-apps                Deployment   hannelore15  data-producer  OutOfSync  Healthy
-build.openshift.io  BuildConfig  hannelore15  data-producer  OutOfSync
-image.openshift.io  ImageStream  hannelore15  data-producer  OutOfSync
-kafka.strimzi.io    Kafka        hannelore15  amm-techlab    OutOfSync
-kafka.strimzi.io    KafkaTopic   hannelore15  manual         OutOfSync
-route.openshift.io  Route        hannelore15  data-consumer  OutOfSync
-route.openshift.io  Route        hannelore15  data-producer  OutOfSync
+                    Service      <username>  data-consumer  OutOfSync  Healthy
+                    Service      <username>  data-producer  OutOfSync  Healthy
+apps                Deployment   <username>  data-consumer  OutOfSync  Healthy
+apps                Deployment   <username>  data-producer  OutOfSync  Healthy
+build.openshift.io  BuildConfig  <username>  data-producer  OutOfSync
+image.openshift.io  ImageStream  <username>  data-producer  OutOfSync
+kafka.strimzi.io    Kafka        <username>  amm-techlab    OutOfSync
+kafka.strimzi.io    KafkaTopic   <username>  manual         OutOfSync
+route.openshift.io  Route        <username>  data-consumer  OutOfSync
+route.openshift.io  Route        <username>  data-producer  OutOfSync
 ```
 
 The application status is initially in OutOfSync state. To sync (deploy) the resource manifests, run:
@@ -215,30 +215,30 @@ argocd app get argo-$LAB_USER
 which gives you an output similar to this:
 
 ```
-Name:               argo-hannelore15
+Name:               argo-<username>
 Project:            default
 Server:             https://kubernetes.default.svc
-Namespace:          hannelore15
-URL:                https://argocd.techlab.openshift.ch/applications/argo-hannelore15
-Repo:               https://gitea.techlab.openshift.ch/hannelore15/gitops-resources.git
+Namespace:          <username>
+URL:                https://argocd.techlab.openshift.ch/applications/argo-<username>
+Repo:               https://gitea.techlab.openshift.ch/<username>/gitops-resources.git
 Target:
-Path:               hannelore15
+Path:               <username>
 SyncWindow:         Sync Allowed
 Sync Policy:        <none>
 Sync Status:        Synced to  (fe4e2b6)
 Health Status:      Healthy
 
 GROUP               KIND         NAMESPACE    NAME           STATUS  HEALTH   HOOK  MESSAGE
-                    Service      hannelore15  data-producer  Synced  Healthy        service/data-producer configured
-                    Service      hannelore15  data-consumer  Synced  Healthy        service/data-consumer configured
-apps                Deployment   hannelore15  data-consumer  Synced  Healthy        deployment.apps/data-consumer configured
-apps                Deployment   hannelore15  data-producer  Synced  Healthy        deployment.apps/data-producer configured
-kafka.strimzi.io    Kafka        hannelore15  amm-techlab    Synced                 kafka.kafka.strimzi.io/amm-techlab configured
-route.openshift.io  Route        hannelore15  data-consumer  Synced                 route.route.openshift.io/data-consumer configured
-route.openshift.io  Route        hannelore15  data-producer  Synced                 route.route.openshift.io/data-producer configured
-image.openshift.io  ImageStream  hannelore15  data-producer  Synced                 imagestream.image.openshift.io/data-producer configured
-build.openshift.io  BuildConfig  hannelore15  data-producer  Synced                 buildconfig.build.openshift.io/data-producer configured
-kafka.strimzi.io    KafkaTopic   hannelore15  manual         Synced                 kafkatopic.kafka.strimzi.io/manual configured
+                    Service      <username>  data-producer  Synced  Healthy        service/data-producer configured
+                    Service      <username>  data-consumer  Synced  Healthy        service/data-consumer configured
+apps                Deployment   <username>  data-consumer  Synced  Healthy        deployment.apps/data-consumer configured
+apps                Deployment   <username>  data-producer  Synced  Healthy        deployment.apps/data-producer configured
+kafka.strimzi.io    Kafka        <username>  amm-techlab    Synced                 kafka.kafka.strimzi.io/amm-techlab configured
+route.openshift.io  Route        <username>  data-consumer  Synced                 route.route.openshift.io/data-consumer configured
+route.openshift.io  Route        <username>  data-producer  Synced                 route.route.openshift.io/data-producer configured
+image.openshift.io  ImageStream  <username>  data-producer  Synced                 imagestream.image.openshift.io/data-producer configured
+build.openshift.io  BuildConfig  <username>  data-producer  Synced                 buildconfig.build.openshift.io/data-producer configured
+kafka.strimzi.io    KafkaTopic   <username>  manual         Synced                 kafkatopic.kafka.strimzi.io/manual configured
 ```
 
 
@@ -287,7 +287,7 @@ Writing objects: 100% (4/4), 372 bytes | 372.00 KiB/s, done.
 Total 4 (delta 2), reused 0 (delta 0)
 remote: . Processing 1 references
 remote: Processed 1 references in total
-To https://gitea.techlab.openshift.ch/hannelore15/gitops-resources.git
+To https://gitea.techlab.openshift.ch/<username>/gitops-resources.git
    fe4e2b6..18daed3  master -> master
 ```
 
@@ -305,10 +305,10 @@ You will see that the data-producer is OutOfSync:
 ```
 ...
 GROUP               KIND         NAMESPACE    NAME           STATUS     HEALTH   HOOK  MESSAGE
-                    Service      hannelore15  data-producer  Synced     Healthy        service/data-producer unchanged
-                    Service      hannelore15  data-consumer  Synced     Healthy        service/data-consumer unchanged
-apps                Deployment   hannelore15  data-producer  OutOfSync  Healthy        deployment.apps/data-producer configured
-apps                Deployment   hannelore15  data-consumer  Synced     Healthy        deployment.apps/data-consumer unchanged
+                    Service      <username>  data-producer  Synced     Healthy        service/data-producer unchanged
+                    Service      <username>  data-consumer  Synced     Healthy        service/data-consumer unchanged
+apps                Deployment   <username>  data-producer  OutOfSync  Healthy        deployment.apps/data-producer configured
+apps                Deployment   <username>  data-consumer  Synced     Healthy        deployment.apps/data-consumer unchanged
 ...
 ```
 
@@ -321,7 +321,7 @@ argocd app diff argo-$LAB_USER
 which should give you an output similar to:
 
 ```
-===== apps/Deployment hannelore15/data-producer ======
+===== apps/Deployment <username>/data-producer ======
 155c155
 <   replicas: 1
 ---
@@ -348,11 +348,11 @@ argocd app get argo-$LAB_USER
 ```
 ...
 GROUP               KIND         NAMESPACE    NAME           STATUS  HEALTH       HOOK  MESSAGE
-                    Service      hannelore15  data-consumer  Synced  Healthy            service/data-consumer unchanged
-                    Service      hannelore15  data-producer  Synced  Healthy            service/data-producer unchanged
-apps                Deployment   hannelore15  data-consumer  Synced  Healthy            deployment.apps/data-consumer unchanged
-apps                Deployment   hannelore15  data-producer  Synced  Progressing        deployment.apps/data-producer configured
-kafka.strimzi.io    Kafka        hannelore15  amm-techlab    Synced                     kafka.kafka.strimzi.io/amm-techlab unchanged
+                    Service      <username>  data-consumer  Synced  Healthy            service/data-consumer unchanged
+                    Service      <username>  data-producer  Synced  Healthy            service/data-producer unchanged
+apps                Deployment   <username>  data-consumer  Synced  Healthy            deployment.apps/data-consumer unchanged
+apps                Deployment   <username>  data-producer  Synced  Progressing        deployment.apps/data-producer configured
+kafka.strimzi.io    Kafka        <username>  amm-techlab    Synced                     kafka.kafka.strimzi.io/amm-techlab unchanged
 ...
 ```
 
@@ -424,9 +424,9 @@ You will see that even with auto-sync and self-healing enabled the status is sti
 ```
 GROUP               KIND         NAMESPACE    NAME           STATUS     HEALTH   HOOK  MESSAGE
 ...
-build.openshift.io  BuildConfig  hannelore15  data-producer  Synced
-image.openshift.io  ImageStream  hannelore15  data-producer  OutOfSync
-kafka.strimzi.io    Kafka        hannelore15  amm-techlab    Synced
+build.openshift.io  BuildConfig  <username>  data-producer  Synced
+image.openshift.io  ImageStream  <username>  data-producer  OutOfSync
+kafka.strimzi.io    Kafka        <username>  amm-techlab    Synced
 ...
 ```
 
@@ -447,10 +447,10 @@ Now the ImageStream was successfully deleted by Argo CD.
 ```
 GROUP               KIND         NAMESPACE    NAME           STATUS     HEALTH   HOOK  MESSAGE
 ...
-image.openshift.io  ImageStream  hannelore15  data-producer  Succeeded  Pruned         pruned
-                    Service      hannelore15  data-producer  Synced     Healthy        service/data-producer unchanged
-                    Service      hannelore15  data-consumer  Synced     Healthy        service/data-consumer unchanged
-apps                Deployment   hannelore15  data-producer  Synced     Healthy        deployment.apps/data-producer unchanged
+image.openshift.io  ImageStream  <username>  data-producer  Succeeded  Pruned         pruned
+                    Service      <username>  data-producer  Synced     Healthy        service/data-producer unchanged
+                    Service      <username>  data-consumer  Synced     Healthy        service/data-consumer unchanged
+apps                Deployment   <username>  data-producer  Synced     Healthy        deployment.apps/data-producer unchanged
 ...
 
 ```
