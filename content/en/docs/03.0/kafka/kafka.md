@@ -419,8 +419,8 @@ spec:
         app: data-consumer
     spec:
       containers:
-      - image: puzzle/quarkus-techlab-data-consumer:kafka
-        imagePullPolicy: Always
+        - image: puzzle/quarkus-techlab-data-consumer:kafka
+          imagePullPolicy: Always
         ...
 {{< / highlight >}}
 ```

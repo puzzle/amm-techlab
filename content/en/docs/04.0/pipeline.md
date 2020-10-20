@@ -32,11 +32,22 @@ For each task, a pod will be allocated and for each step inside this task, a con
 ![Pipeline Runtime View](../pipeline-runtime-view.png)
 *Runtime view of a Pipeline showing mapping to pods and containers*
 
-Ensure that the `LAB_USER` environment variable is still present. Set it again if not.
+Ensure that the `LAB_USER` environment variable is still present.
 
 ```bash
 echo $LAB_USER
 ```
+
+If the result is empty, set the `LAB_USER` environment variable.
+
+<details><summary>command hint</summary>
+
+```bash
+export LAB_USER=<username>
+```
+
+</details><br/>
+
 
 Change to your main Project.
 
@@ -64,7 +75,7 @@ oc get sa
 
 </details><br/>
 
-Expected output listing the pipeline service account:
+Output listing the pipeline service account:
 
 ```
 NAME       SECRETS   AGE
@@ -72,6 +83,7 @@ builder    2         11s
 default    2         11s
 deployer   2         11s
 pipeline   2         11s
+...
 ```
 
 
@@ -131,11 +143,15 @@ spec:
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.1/deploy-tasks.yaml)
 
-Let's create the tasks:
+Let's create the tasks.
+
+<details><summary>command hint</summary>
 
 ```bash
 oc apply -f deploy-tasks.yaml
 ```
+
+</details><br/>
 
 Verify that the two tasks have been created using the Tekton CLI:
 
@@ -214,11 +230,15 @@ spec:
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.1/deploy-pipeline.yaml)
 
-Create the Pipeline:
+Create the Pipeline.
+
+<details><summary>command hint</summary>
 
 ```bash
 oc apply -f deploy-pipeline.yaml
 ```
+
+</details><br/>
 
 which will result in: `pipeline.tekton.dev/build-and-deploy created`
 
@@ -300,7 +320,7 @@ oc process -f pipeline-resources-template.yaml \
 
 will result in:
 
-```bash
+```
 pipelineresource.tekton.dev/transformer-repo created
 pipelineresource.tekton.dev/transformer-image created
 ```
@@ -314,8 +334,7 @@ tkn resource ls
 ```
 NAME             TYPE    DETAILS
 transformer-repo    git     url: https://github.com/puzzle/quarkus-techlab-data-transformer.git
-transformer-image   image   url: image-registry.openshift-image-registry.svc:5000/<userXY>-pipelines/data-transformer:latest
-
+transformer-image   image   url: image-registry.openshift-image-registry.svc:5000/<userXY>/data-transformer:latest
 ```
 
 

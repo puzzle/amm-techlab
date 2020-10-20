@@ -82,6 +82,7 @@ mkdir $LAB_USER
 mkdir $LAB_USER-pipelines
 mv deploy-pipeline.yaml deploy-tasks.yaml pipeline-resources-template.yaml $LAB_USER-pipelines
 mv *.yaml $LAB_USER
+
 ```
 
 There should be two directories, one per namespace:
@@ -99,6 +100,7 @@ Configure the Git Client and verify the output
 git config --global user.name "$LAB_USER"
 git config --global user.email "foo@bar.org"
 git config --global --list
+
 ```
 
 Now add the resource definitions to your personal Git repository and push them to remote. Use the password you entered when creating your Gitea user.
@@ -107,8 +109,9 @@ Now add the resource definitions to your personal Git repository and push them t
 git init
 git add --all
 git commit -m "Initial commit of resource definitions"
-git remote add origin https://$LAB_USER@gitea.techlab.openshift.ch/<username>/gitops-resources.git
+git remote add origin https://$LAB_USER@gitea.techlab.openshift.ch/$LAB_USER/gitops-resources.git
 git push -u origin master
+
 ```
 
 After a successful push you should see the following output
@@ -133,13 +136,15 @@ Go back to the webinterface of Gitea and inspect the structure and files in your
 
 Now we want to deploy the resources of the previous labs with Argo CD to demonstrate how Argo CD works.
 
-{{% alert title="Warning" color="secondary" %}}All steps which includes the argocd cli tool, must be executed on the local machine. This is due to the sso login in the web ide does not work at the moment. {{% /alert %}}
+{{% alert title="Warning" color="secondary" %}} All steps which includes the argocd cli tool, must be executed on the local machine. This is due to the sso login in the web ide does not work at the moment. {{% /alert %}}
 
 Ensure that the `LAB_USER` environment variable is still present. Set it again if not.
 
 ```bash
 echo $LAB_USER
 ```
+
+{{% alert title="Warning" color="secondary" %}} The oc tool is also needed on your local machine. Do also login to the techlab cluster. {{% /alert %}}
 
 Change to your main Project.
 
@@ -246,7 +251,8 @@ kafka.strimzi.io    KafkaTopic   <username>  manual         Synced              
 
 When there is a new commit in your Git repository, the Argo CD application becomes OutOfSync. Let's assume we want to scale up our producer of the previous lab from 1 to 3 replicas. We will change this in the Deployment.
 
-Change the number of replicas in your file `<workspace>/producer.yaml`.
+
+Change the number of replicas in your file `<workspace>/<username>/producer.yaml`.
 
 ```
 {{< highlight YAML "hl_lines=9" >}}
@@ -271,7 +277,7 @@ spec:
 Commit the changes and push them to the remote:
 
 ```bash
-git add . && git commit -m'Scaled up to 3 replicas' && git push
+git add . && git commit -m 'Scaled up to 3 replicas' && git push
 ```
 
 Don't forget to interactively provide your personal Git password. After a successful push you should see a message similar to the following lines:
@@ -410,7 +416,8 @@ First delete the file `imageStream.yaml` from Git repository and push the change
 
 ```bash
 git rm $LAB_USER/imageStream.yaml
-git add --all && git commit -m'Removes ImageStream' && git push
+git add --all && git commit -m 'Removes ImageStream' && git push
+
 ```
 
 Check the status of the application with

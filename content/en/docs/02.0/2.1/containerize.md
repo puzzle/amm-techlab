@@ -535,7 +535,7 @@ Now you can visit the consumer the URL provided from the Route: <https://data-co
 
 When you open the URL you should see the consumers data that he received from the producer
 
-```json
+```
 {"data":0.6681209742895893}
 ```
 
