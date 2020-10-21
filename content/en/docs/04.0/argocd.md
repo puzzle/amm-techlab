@@ -138,11 +138,21 @@ Now we want to deploy the resources of the previous labs with Argo CD to demonst
 
 {{% alert title="Warning" color="secondary" %}} All steps which includes the argocd cli tool, must be executed on the local machine. This is due to the sso login in the web ide does not work at the moment. {{% /alert %}}
 
-Ensure that the `LAB_USER` environment variable is still present. Set it again if not.
+Ensure that the `LAB_USER` environment variable is set.
 
 ```bash
 echo $LAB_USER
 ```
+
+If the result is empty, set the `LAB_USER` environment variable.
+
+<details><summary>command hint</summary>
+
+```bash
+export LAB_USER=<username>
+```
+
+</details><br/>
 
 {{% alert title="Warning" color="secondary" %}} The oc tool is also needed on your local machine. Do also login to the techlab cluster. {{% /alert %}}
 
