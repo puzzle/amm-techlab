@@ -10,16 +10,12 @@ description: >
 
 ## {{% param sectionnumber %}}.1 Lab
 
-
 <!--
 ## TODO Lab
 
 * [ ] Proxy Setzen beschreiben
 
-
 -->
-
-
 
 Source-to-Image (S2I) builds are a special way to inject application source code into a builder image and assembling a new runnable image. There are several builder image available, each for its own framework or language.
 
