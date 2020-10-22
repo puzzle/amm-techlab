@@ -32,7 +32,12 @@ For each task, a pod will be allocated and for each step inside this task, a con
 ![Pipeline Runtime View](../pipeline-runtime-view.png)
 *Runtime view of a Pipeline showing mapping to pods and containers*
 
-Ensure that the `LAB_USER` environment variable is still present.
+
+## Task {{% param sectionnumber %}}.2: Check project setup
+
+We first check that the project is ready for the lab.
+
+Ensure that the `LAB_USER` environment variable is set.
 
 ```bash
 echo $LAB_USER
@@ -87,7 +92,7 @@ pipeline   2         11s
 ```
 
 
-## Task {{% param sectionnumber %}}.2: Tekton CLI tkn
+## Task {{% param sectionnumber %}}.3: Tekton CLI tkn
 
 For additional features, we are going to add another CLI that eases access to the Tekton resources and gives you more direct access to the OpenShift Pipeline semantics:
 
@@ -104,7 +109,7 @@ Triggers version: unknown
 ```
 
 
-## Task {{% param sectionnumber %}}.3: Create Pipeline tasks
+## Task {{% param sectionnumber %}}.4: Create Pipeline tasks
 
 A Task is the smallest block of a Pipeline, which by itself can contain one or more steps. These steps are executed to process a specific element. For each task, a pod is allocated and each step is running in a container inside this pod. Tasks are reusable by other Pipelines. _Input_ and _Output_ specifications can be used to interact with other tasks.
 
@@ -112,7 +117,7 @@ A Task is the smallest block of a Pipeline, which by itself can contain one or m
 You can find more examples of reusable tasks in the [Tekton Catalog](https://github.com/tektoncd/catalog) and [OpenShift Catalog](https://github.com/openshift/pipelines-catalog) repositories.
 {{% /alert %}}
 
-Let's examine two tasks that do a deployment. Create the local file `<workspace>/deploy-tasks.yaml` with the following content:
+Let's examine the task that does a deployment. Create the local file `<workspace>/deploy-tasks.yaml` with the following content:
 
 ```yaml
 apiVersion: tekton.dev/v1beta1
@@ -165,7 +170,7 @@ apply-manifests                 19 seconds ago
 ```
 
 
-## Task {{% param sectionnumber %}}.4: Create a Pipeline
+## Task {{% param sectionnumber %}}.5: Create a Pipeline
 
 A pipeline is a set of tasks, which should be executed in a defined way to achieve a specific goal.
 
@@ -199,7 +204,7 @@ spec:
     description: name of the deployment to be patched
   - name: docker-file
     description: Path to the Dockerfile
-    default: src/main/docker/Dockerfile.multistage.jvm
+    default: src/main/docker/Dockerfile.binary
   tasks:
   - name: build-image
     taskRef:
@@ -254,7 +259,7 @@ build-and-deploy   19 seconds ago   ---        ---       ---        ---
 ```
 
 
-## Task {{% param sectionnumber %}}.5: Trigger Pipeline
+## Task {{% param sectionnumber %}}.6: Trigger Pipeline
 
 After the Pipeline has been created, it can be triggered to execute the tasks.
 
@@ -370,7 +375,7 @@ tkn pipeline logs
 ```
 
 
-## Task {{% param sectionnumber %}}.6: OpenShift WebUI
+## Task {{% param sectionnumber %}}.7: OpenShift WebUI
 
 Go tho the developer view of the WebUI of OpenShift and select your pipeline project.
 

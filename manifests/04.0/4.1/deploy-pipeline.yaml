@@ -14,7 +14,7 @@ spec:
     description: name of the deployment to be patched
   - name: docker-file
     description: Path to the Dockerfile
-    default: src/main/docker/Dockerfile.multistage.jvm
+    default: src/main/docker/Dockerfile.binary
   tasks:
   - name: build-image
     taskRef:
