@@ -11,23 +11,14 @@ description: >
 ## {{% param sectionnumber %}}.1 Lab
 
 
+<!--
 ## TODO Lab
 
-S2I: Die Teilnehmer werden an den Source 2 Image Workflow geführt in dem sie:
-
-* [ ] Build Config als YAML erstellen, ihr Gitrepo (private Repo) angeben, dort liegt die Source
-* [ ] oc apply der Build Config YAML auf ihrem Namespace ausführen und den Build anschauen
-* [ ] Git Secret erstellen und in der build Config angeben und erneut oc apply und build erneut triggern -> build geht
-* [ ] DeploymentConfig, Service, Route auch noch via oc apply erstellen und dann entsprechend die App aufrufen
-* [ ] Additional teil: Repo Forken und in der BC anpassen, danach ein S2I script überschreiben und einen echo Befehl integrieren um zu zeigen wie das funktionieren kann.
 * [ ] Proxy Setzen beschreiben
-* [ ] Welches repository als Source für Si2 verwenden?
 
 
-## TODO Vorbereitung
+-->
 
-* [ ] privates Git Repo mit Sourcen und Deploy Key erstellen
-  * Deploy Key zur Verfügung stellen
 
 
 Source-to-Image (S2I) builds are a special way to inject application source code into a builder image and assembling a new runnable image. There are several builder image available, each for its own framework or language.
@@ -54,6 +45,8 @@ export USER_NAME=userXY
 export PROJECT_NAME=$(oc project -q)
 ```
 
+>**Note:** If you already have a project called "example-spring-boot-helloworld" under your Gitea user, you don't need to re-create it. Proceed with adding the  `.s2i/bin/assemble` file.
+
 Next we clone the sample repository into our private git repo. Navigate to your Gitea instance
 [https://gitea.techlab.openshift.ch/userXY](https://gitea.techlab.openshift.ch/userXY) and click on create in the top right menu and select "New Migration". Use following parameters to clone the sample repository as a private repository:
 
@@ -62,7 +55,7 @@ Next we clone the sample repository into our private git repo. Navigate to your 
 * **Repository Name** example-spring-boot-helloworld
 * **Visibility**  [x] Make Repository Private
 
-Click Migrate Repository
+Click "Migrate Repository"
 
 After the migration is finished, create a new file `.s2i/bin/assemble` with following content in it
 
@@ -241,7 +234,11 @@ Under the section Log Tail we can see that fetching our private repository faile
 ## Fix config
 
 In this step we're going to create a secret for our Git credentials. There are a few different authentication methods [3.4.2. Source Clone Secrets](https://access.redhat.com/documentation/en-us/openshift_container_platform/4.5/html/builds/creating-build-inputs#source-code_creating-build-inputs). For this example we use the Basic Authentication. But instead of a user and password combination we use a username and token credentials.  
-**//TODO: Add how to generate access tokens / or how to get deploy key in GitHub**
+
+To generate a token in the gitea Application, click on the user picture in the top right and then click on "Settings". On the settings page, go to "Applications". It should look like the picture below. Enter a name for your new login token and click "Generate Token". Follow the instruction and copy out the token. It will not be displayed again.
+
+![Generate Application Token in Gitea](../gitea-generate-application-token.png)
+
 
 Next we create a secret containing our Git credentials. Your username and password will be Base64 encoded and moved from the `stringData` to the `data` section.
 
@@ -273,7 +270,7 @@ parameters:
 [Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/secret.yaml)
 
 Then we can create the secret
->Replace the password parameter with your personal Gitea password!
+>Replace the password parameter with your newly generated Gitea application token!
 
 ```BASH
 oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/secret.yaml -p USERNAME=$USER_NAME -p PASSWORD=youPassword | oc apply -f -
@@ -367,7 +364,7 @@ oc get builds spring-boot-s2i-2 -w
 Until now we just created the build resources. Up next is the creation of the DeploymentConfig, Service and the Route.
 
 
-### DeplyomentConfig
+### DeploymentConfig
 
 ```YAML
 
