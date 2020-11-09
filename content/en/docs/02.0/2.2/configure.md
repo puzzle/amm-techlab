@@ -15,7 +15,7 @@ For this lab the application of the previous lab is used.
 
 We will change the port of the application. With this change we need to adapt the deployment first. There are three ports to change. The container port itself, and the ports for the liveness/readiness probes.
 
-{{< highlight YAML "hl_lines=28 38 46" >}}
+{{< highlight YAML "hl_lines=29 38 45" >}}
 apiVersion: apps.openshift.io/v1
 kind: DeploymentConfig
 metadata:
@@ -43,7 +43,7 @@ spec:
           livenessProbe:
             failureThreshold: 5
             httpGet:
-              path: /health
+              path: /health/live
               port: 8081
               scheme: HTTP
             initialDelaySeconds: 3
@@ -52,7 +52,7 @@ spec:
           readinessProbe:
             failureThreshold: 5
             httpGet:
-              path: /health
+              path: /health/ready
               port: 8081
               scheme: HTTP
             initialDelaySeconds: 3
