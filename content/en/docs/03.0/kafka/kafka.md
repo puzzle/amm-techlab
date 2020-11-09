@@ -346,6 +346,8 @@ spec:
 {{< / highlight >}}
 ```
 
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/svc.yaml)
+
 Apply the updated Service manifest.
 
 <details><summary>command hint</summary>
