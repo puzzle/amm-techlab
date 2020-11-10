@@ -226,7 +226,15 @@ To update the producer we use a prepared container image. If you're interested i
 
 Because that we do not rebuild the producer, the usage of an OpenShift DeploymentConfig is not necessary any more. We change te producer to use a Kubernetes-native Deployment. The consumer already uses a Deployment. You could check the resource definition file `<workspace>/consumer.yaml` for the needed adaptations.
 
-Do following changes inside your file `<workspace>/producer.yaml`. Change the type to Deployment, remove the annotations, update the selector, add label `app`, rename label `deploymentConfig` to `deployment`, change the image to `puzzle/quarkus-techlab-data-producer:kafka` and remove the triggers.
+Do following changes inside your file `<workspace>/producer.yaml`:
+
+* Change the type to Deployment (including api version),
+* remove the annotations,
+* update the selector,
+* add label `app`,
+* rename label `deploymentConfig` to `deployment`,
+* change the image to `puzzle/quarkus-techlab-data-producer:kafka`
+* and remove the triggers.
 
 ```
 {{< highlight YAML "hl_lines=1-2 11-12 19-20 23" >}}
@@ -257,7 +265,7 @@ spec:
           livenessProbe:
             failureThreshold: 5
             httpGet:
-              path: /health
+              path: /health/live
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 3
@@ -267,7 +275,7 @@ spec:
           readinessProbe:
             failureThreshold: 5
             httpGet:
-              path: /health
+              path: /health/ready
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 3
@@ -395,12 +403,49 @@ Expected result, something similar to:
 
 ### Task {{% param sectionnumber %}}.3.3: Update the consumer
 
-Also, the consumer has a prepared container image. Check the [Consumer Sourcecode (kafka branch)](https://github.com/puzzle/quarkus-techlab-data-consumer/tree/kafka) to see what changed in the consumer service.
+The customer container image has kafka capabilities.
 
-The file from lab 2 `<workspace>/consumer.yaml` defines all needed resources as a list. We only have to change the image to `puzzle/quarkus-techlab-data-consumer:kafka`.
+We need to configure the consumer by it's environment to use kafka. This we do with a [ConfigMap](https://kubernetes.io/docs/concepts/configuration/configmap/).
+Prepare a file inside your workspace `<workspace>/consumerConfigMap.yaml` and add the following resource configuration:
+
+```YAML
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: consumer-config
+data:
+  # Configure the SmallRye Kafka connector
+  kafka.bootstrap.servers: 'amm-techlab-kafka-bootstrap:9092'
+
+  # Configure the Kafka sink
+  mp.messaging.incoming.data.connector: smallrye-kafka
+  mp.messaging.incoming.data.topic: manual
+  mp.messaging.incoming.data.value.deserializer: ch.puzzle.quarkustechlab.reactiveconsumer.control.SensorMeasurementDeserializer
+```
+
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/consumerConfigMap.yaml)
+
+Let's create the ConfigMap
+
+<details><summary>command hint</summary>
+
+```BASH
+oc apply -f consumerConfigMap.yaml
+```
+
+</details><br/>
+
+Expected output:
 
 ```
-{{< highlight YAML "hl_lines=21" >}}
+configmap/consumer-config created
+```
+
+Next step is to include the ConfigMap to the consumer pod to define the environment.
+The file from lab 2 `<workspace>/consumer.yaml` defines all needed resources as a list. We only have to integrate the `consumer-config` ConfigMap to the Deployment.
+
+```
+{{< highlight YAML "hl_lines=24-26" >}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -413,15 +458,20 @@ spec:
   selector:
     matchLabels:
       deployment: data-consumer
-  strategy: {}
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
         deployment: data-consumer
         app: data-consumer
+        application: amm-techlab
     spec:
       containers:
-        - image: puzzle/quarkus-techlab-data-consumer:kafka
+        - image: puzzle/quarkus-techlab-data-consumer:latest
+          envFrom:
+            - configMapRef:
+                name: consumer-config
           imagePullPolicy: Always
         ...
 {{< / highlight >}}

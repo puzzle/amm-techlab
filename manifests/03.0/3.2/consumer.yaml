@@ -20,27 +20,28 @@ spec:
         application: amm-techlab
     spec:
       containers:
-        - image: puzzle/quarkus-techlab-data-consumer:kafka
+        - image: puzzle/quarkus-techlab-data-consumer:latest
+          envFrom:
+            - configMapRef:
+                name: consumer-config
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 5
             httpGet:
-              path: /health
+              path: /health/live
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 3
             periodSeconds: 20
-            successThreshold: 1
             timeoutSeconds: 15
           readinessProbe:
             failureThreshold: 5
             httpGet:
-              path: /health
+              path: /health/ready
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 3
             periodSeconds: 20
-            successThreshold: 1
             timeoutSeconds: 15
           name: data-consumer
           ports:
