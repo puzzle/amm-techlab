@@ -18,11 +18,12 @@ These CRDs are:
 
 * *[Task](https://github.com/tektoncd/pipeline/blob/master/docs/tasks.md)*: A collection of steps that perform a specific task.
 * *[Pipeline](https://github.com/tektoncd/pipeline/blob/master/docs/pipelines.md)*: A series of tasks, combined to work together in a defined (structured) way
-* *[PipelineResource](https://github.com/tektoncd/pipeline/blob/master/docs/resources.md)*: Inputs (e.g. git repository) and outputs (e.g. image registry) to and out of a pipeline or task
 * *[TaskRun](https://github.com/tektoncd/pipeline/blob/master/docs/taskruns.md)*: The execution and result of running an instance of a task
 * *[PipelineRun](https://github.com/tektoncd/pipeline/blob/master/docs/pipelineruns.md)*: The actual execution of a whole Pipeline, containing the results of the pipeline (success, failed...)
 
-Pipelines and tasks should be generic and must never define possible variables - such as 'input git repository' - directly in their definition. Therefore, the concept of PipelineResources has been created. It defines and selects the parameters, that are being used during a PipelineRun.
+Pipelines and tasks should be generic and must never define possible variables - such as 'input git repository' - directly in their definition. The concrete PipelineRun will get the parameters, that are being used inside the pipeline.
+
+[Workspaces](https://redhat-scholars.github.io/tekton-tutorial/tekton-tutorial/workspaces.html) are used to share the data between Tasks and Steps.
 
 ![Static Pipeline Definition](../pipeline-static-definition.png)
 *Static definition of a Pipeline*
@@ -125,25 +126,23 @@ kind: Task
 metadata:
   name: apply-manifests
 spec:
-  resources:
-    inputs:
-      - {type: git, name: source}
+  workspaces:
+  - name: source
   params:
-    - name: manifest_dir
+    - name: manifest-dir
       description: The directory in source that contains yaml manifests
       type: string
-      default: "src/main/openshift/templates"
+      default: 'openshift/templates'
   steps:
     - name: apply
-      image: appuio/oc:v4.3
-      workingDir: /workspace/source
+      image: appuio/oc:v4.5
+      workingDir: $(workspaces.source.path)
       command: ["/bin/bash", "-c"]
       args:
         - |-
-          echo Applying manifests in $(inputs.params.manifest_dir) directory
-          oc apply -f $(inputs.params.manifest_dir)
+          echo Applying manifests in $(inputs.params.manifest-dir) directory
+          oc apply -f $(inputs.params.manifest-dir)
           echo -----------------------------------
-
 ```
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.1/deploy-tasks.yaml)
@@ -174,15 +173,10 @@ apply-manifests                 19 seconds ago
 
 A pipeline is a set of tasks, which should be executed in a defined way to achieve a specific goal.
 
-The example Pipeline below uses two resources:
-
-* git-repo: defines the Git-Source
-* image: Defines the target at a repository
-
-It first uses the Task *buildah*, which is a default task the OpenShift operator created automatically. This task will build the image. The resulted image is pushed to an image registry, defined in the *output* parameter. After that, the created tasks *apply-manifest* is executed. The execution order of these tasks is defined with the *runAfter* Parameter in the YAML definition.
+It first uses the Task *git-clone*, which is a default task the OpenShift operator created automatically. This task will check out the defined git repository with the needed Dockerfile. The next task *buildah* will build the image. The resulted image is pushed to an image registry, defined by the *image-name* parameter. After that, the created tasks *apply-manifest* is executed. The execution order of these tasks is defined with the *runAfter* Parameter in the YAML definition.
 
 {{% alert title="Note" color="primary" %}}
-The Pipeline should be reusable across multiple projects or environments, that's why the resources (git-repo and image) are not defined here. When a Pipeline is executed, these resources will get defined.
+The Pipeline should be reusable across multiple projects or environments, that's why the resources (git-repo and image) are not defined here. When a Pipeline is executed, these resources will get defined by the parameters.
 {{% /alert %}}
 
 Create the following pipeline `<workspace>/deploy-pipeline.yaml`:
@@ -193,44 +187,65 @@ kind: Pipeline
 metadata:
   name: build-and-deploy
 spec:
-  resources:
-  - name: git-repo
-    type: git
-  - name: image
-    type: image
   params:
-  - name: deployment-name
-    type: string
-    description: name of the deployment to be patched
-  - name: docker-file
-    description: Path to the Dockerfile
-    default: src/main/docker/Dockerfile.binary
+    - name: git-url
+      type: string
+      description: git repo url
+    - name: git-revision
+      type: string
+      description: git repo revision
+    - name: deployment-name
+      type: string
+      description: name of the deployment to be patched
+    - name: docker-file
+      description: Path to the Dockerfile
+      default: 'src/main/docker/Dockerfile.binary'
+    - name: image-name
+      description: name of the resulting image (inclusive registry)
+    - name: manifest-dir
+      description: location of the OpenShift templates
+      default: 'src/main/openshift/templates'
   tasks:
-  - name: build-image
-    taskRef:
-      name: buildah
-      kind: ClusterTask
-    resources:
-      inputs:
-      - name: source
-        resource: git-repo
-      outputs:
-      - name: image
-        resource: image
-    params:
-    - name: TLSVERIFY
-      value: "false"
-    - name: DOCKERFILE
-      value: $(params.docker-file)
-  - name: apply-manifests
-    taskRef:
-      name: apply-manifests
-    resources:
-      inputs:
-      - name: source
-        resource: git-repo
-    runAfter:
-    - build-image
+    - name: git-checkout
+      params:
+        - name: deleteExisting
+          value: 'true'
+        - name: url
+          value: $(params.git-url)
+        - name: revision
+          value: $(params.git-revision)
+      taskRef:
+        kind: ClusterTask
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: source-workspace
+    - name: build-image
+      taskRef:
+        name: buildah
+        kind: ClusterTask
+      params:
+        - name: TLSVERIFY
+          value: 'false'
+        - name: DOCKERFILE
+          value: $(params.docker-file)
+        - name: IMAGE
+          value: $(params.image-name)
+      runAfter:
+      - git-checkout
+      workspaces:
+        - name: source
+          workspace: source-workspace
+    - name: apply-manifests
+      taskRef:
+        name: apply-manifests
+      params:
+        - name: manifest-dir
+          value: $(params.manifest-dir)
+      runAfter:
+      - build-image
+  workspaces:
+    - name: source-workspace
 ```
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.1/deploy-pipeline.yaml)
@@ -259,88 +274,56 @@ build-and-deploy   19 seconds ago   ---        ---       ---        ---
 ```
 
 
-## Task {{% param sectionnumber %}}.6: Trigger Pipeline
+## Task {{% param sectionnumber %}}.6: Prepare persistent workspace
 
-After the Pipeline has been created, it can be triggered to execute the tasks.
+The data for the tasks is shared by a common workspace. We use a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/), short PV, to back our workspace and make it persistent. The PV is requested by a [Persistent Volume Claim](https://kubernetes.io/docs/concepts/storage/volumes/#persistentvolumeclaim), short PVC.
 
-
-### Create PipelineResources
-
-Since the Pipeline is generic, we first need to define 2 *PipelineResources* to execute a Pipeline.
-We are going to automate the deployment of our sample application we used in previous examples. There will be one microservices deployed, the data-transformer.
-
-Quick overview:
-
-* transformer-repo: will be used as _git_repo_ in the Pipeline for the data consumer
-* transformer-image: will be used as _image_ in the Pipeline for the data consumer
-
-{{% alert title="Note" color="primary" %}}
-We use a template to adapt the image registry URL to match to your project.
-{{% /alert %}}
-
-Create the following openshift template `<workspace>/pipeline-resources-template.yaml`:
+Create the following resource definition for a PVC inside `<workspace>/workspaces-pvc.yaml`:
 
 ```yaml
-apiVersion: template.openshift.io/v1
-kind: Template
+apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
-  name: pipeline-resources-template
-  annotations:
-    description: 'Template to create project specific Pipeline resources.'
-objects:
-- apiVersion: tekton.dev/v1alpha1
-  kind: PipelineResource
-  metadata:
-    name: transformer-repo
-  spec:
-    type: git
-    params:
-    - name: url
-      value: https://github.com/puzzle/quarkus-techlab-data-transformer.git
-    - name: revision
-      value: master
-- apiVersion: tekton.dev/v1alpha1
-  kind: PipelineResource
-  metadata:
-    name: transformer-image
-  spec:
-    type: image
-    params:
-    - name: url
-      value: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAME}/data-transformer:latest
-parameters:
-- description: OpenShift Project Name
-  name: PROJECT_NAME
+  name: pipeline-workspace
+spec:
+  resources:
+    requests:
+      storage: 2Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.1/pipeline-resources-template.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.1/workspaces-pvc.yaml)
 
-Create the Pipeline resources by processing the template and creating the generated resources:
+Create the PVC.
+
+<details><summary>command hint</summary>
 
 ```bash
-oc process -f pipeline-resources-template.yaml \
-  --param=PROJECT_NAME=$(oc project -q) \
-| oc apply -f-
+oc apply -f workspaces-pvc.yaml
 ```
 
-will result in:
+</details><br/>
 
-```
-pipelineresource.tekton.dev/transformer-repo created
-pipelineresource.tekton.dev/transformer-image created
-```
+which will result in: `persistentvolumeclaim/pipeline-workspace created`
 
-The resources can be listed with:
+Now we are ready to build and deploy our new microservice using a Tekton pipeline.
 
-```bash
-tkn resource ls
-```
 
-```
-NAME             TYPE    DETAILS
-transformer-repo    git     url: https://github.com/puzzle/quarkus-techlab-data-transformer.git
-transformer-image   image   url: image-registry.openshift-image-registry.svc:5000/<userXY>/data-transformer:latest
-```
+## Task {{% param sectionnumber %}}.7: Trigger Pipeline
+
+After the Pipeline has been created, it can be triggered to execute the tasks.
+Since the Pipeline is generic, we have to provide the concrete values.
+
+Following parameters are needed to configure the pipeline to deploy the data-transformer component:
+
+* git-url: Git repository of the transformer
+* git-revision: revision (branch/tag) of the repository
+* docker-file: path to the Dockerfile inside the repository
+* image-name: image name (incl. registry) of the resulting image
+* manifest-dir: path to directory inside the repository that contains the yaml manifests
 
 
 ### Execute Pipelines using tkn
@@ -349,10 +332,14 @@ Start the Pipeline for the data-transformer:
 
 ```bash
 tkn pipeline start build-and-deploy \
--r git-repo=transformer-repo \
--r image=transformer-image \
--p deployment-name=data-transformer \
--s pipeline
+  -p git-url='https://github.com/puzzle/quarkus-techlab-data-transformer.git' \
+  -p git-revision='master' \
+  -p docker-file='src/main/docker/Dockerfile.binary' \
+  -p image-name="image-registry.openshift-image-registry.svc:5000/$(oc project -q)/data-transformer:latest" \
+  -p manifest-dir='src/main/openshift/templates' \
+  -p deployment-name=data-transformer \
+  -s pipeline \
+  -w name=source-workspace,claimName=pipeline-workspace
 ```
 
 This will create and execute a PipelineRun. Use the command `tkn pipelinerun logs build-and-deploy-run-<pod> -f -n <userXY>-pipelines` to display the logs
@@ -375,7 +362,7 @@ tkn pipeline logs
 ```
 
 
-## Task {{% param sectionnumber %}}.7: OpenShift WebUI
+## Task {{% param sectionnumber %}}.8: OpenShift WebUI
 
 Go tho the developer view of the WebUI of OpenShift and select your pipeline project.
 

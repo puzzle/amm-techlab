@@ -59,7 +59,7 @@ To develop locally we don't want to rebuild the entire container image every tim
 We simply mount the working directory into a running container, where hugo is started in the server mode.
 
 ```bash
-export HUGO_VERSION=<version-in-dockerfile>
+export HUGO_VERSION=$(grep "ARG HUGO_VERSION" Dockerfile | sed 's/ARG HUGO_VERSION=//g')
 docker run \
   --rm --interactive \
   --publish 8080:8080 \
