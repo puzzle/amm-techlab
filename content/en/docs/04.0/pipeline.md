@@ -302,6 +302,16 @@ With the OpenShift Pipeline operator, a new menu item is introduced to the WebUI
 Check the logs of your data-transformer microservice. You will see that he will start to log average data consumed from the data stream.
 
 
+Example log output:
+
+```bash
+16:05:03 INFO  traceId=, spanId=, sampled= [ch.pu.qu.re.bo.ReactiveDataTransformer] (vert.x-eventloop-thread-1) Message received
+16:05:03 INFO  traceId=, spanId=, sampled= [ch.pu.qu.re.bo.ReactiveDataTransformer] (vert.x-eventloop-thread-1) Current average: 0.5402286381615338
+16:05:05 INFO  traceId=, spanId=, sampled= [ch.pu.qu.re.bo.ReactiveDataTransformer] (vert.x-eventloop-thread-1) Message received
+16:05:05 INFO  traceId=, spanId=, sampled= [ch.pu.qu.re.bo.ReactiveDataTransformer] (vert.x-eventloop-thread-1) Current average: 0.5443646390092566
+```
+
+
 ## High quality and secure Pipeline
 
 This was just an example for a pipeline, that builds and deploys a container image to OpenShift. There are lots of security features missing.
@@ -320,7 +330,7 @@ Check out the Puzzle [delivery pipeline concept](https://github.com/puzzle/deliv
 
 ## Solution
 
-The needed resource files are available inside the folder [manifests/04.0/4.1/](https://github.com/puzzle/amm-techlab/tree/master/manifests/04.0/4.1) of the techlab [github repository](https://github.com/puzzle/amm-techlab).
+The needed resource files are available inside the folder [manifests/04.0/4.1/](https://github.com/puzzle/amm-techlab/tree/master/manifests/04.0/4.1/) of the techlab [github repository](https://github.com/puzzle/amm-techlab).
 
 If you weren't successful, you can update your project with the solution by cloning the Techlab Repository `git clone https://github.com/puzzle/amm-techlab.git` and executing this command:
 

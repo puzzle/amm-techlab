@@ -193,7 +193,7 @@ For changing stages and productive environments, we propose updating the YAML re
 
 ## Solution
 
-The needed resource files are available inside the folder [manifests/02.0/2.2/](https://github.com/puzzle/amm-techlab/tree/master/manifests/02.0/2.2) of the techlab [github repository](https://github.com/puzzle/amm-techlab).
+The needed resource files are available inside the folder [manifests/02.0/2.2/](https://github.com/puzzle/amm-techlab/tree/master/manifests/02.0/2.2/) of the techlab [github repository](https://github.com/puzzle/amm-techlab).
 
 If you weren't successful, you can update your project with the solution by cloning the Techlab Repository `git clone https://github.com/puzzle/amm-techlab.git` and executing this command:
 
