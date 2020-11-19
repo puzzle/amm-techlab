@@ -500,7 +500,17 @@ route.route.openshift.io/data-consumer unchanged
 
 Go with the web-console to your OpenShift project (Developer view). There you see the Kafka cluster and the two microservices.
 
-Log into your OpenShift project and check the logs of the data-consumer pod. You can see that he will consume data from the Kafka manual topic produced by the data-producer microservice!
+Check the logs of the data-consumer pod. You can see that he will consume data from the Kafka manual topic produced by the data-producer microservice!
+
+Example log output:
+
+```bash
+2020-11-19 14:35:59,009 INFO  [ch.puz.qua.rea.bou.ReactiveDataConsumer] (vert.x-eventloop-thread-0) Received reactive message: {"data":0.30638741165836225}
+2020-11-19 14:36:01,009 INFO  [ch.puz.qua.rea.bou.ReactiveDataConsumer] (vert.x-eventloop-thread-0) Received reactive message: {"data":0.08769436937761332}
+2020-11-19 14:36:03,008 INFO  [ch.puz.qua.rea.bou.ReactiveDataConsumer] (vert.x-eventloop-thread-0) Received reactive message: {"data":0.9658464575333938}
+2020-11-19 14:36:05,009 INFO  [ch.puz.qua.rea.bou.ReactiveDataConsumer] (vert.x-eventloop-thread-0) Received reactive message: {"data":0.6341857869189937}
+2020-11-19 14:36:07,009 INFO  [ch.puz.qua.rea.bou.ReactiveDataConsumer] (vert.x-eventloop-thread-0) Received reactive message: {"data":0.27750984724271843}
+```
 
 
 ## Solution
