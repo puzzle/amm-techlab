@@ -418,7 +418,7 @@ NAME                                           IMAGE REPOSITORY                 
 imagestream.image.openshift.io/data-producer   image-registry.openshift-image-registry.svc:5000/hanelore15/data-producer   rest   2 minutes ago
 
 NAME                                     HOST/PORT                                                         PATH   SERVICES        PORT       TERMINATION   WILDCARD
-route.route.openshift.io/data-producer   data-producer-hanelore15.techlab.openshift.ch          data-producer   8080-tcp   edge          None
+route.route.openshift.io/data-producer   data-producer-hanelore15.{{% param techlabClusterDomainName %}}          data-producer   8080-tcp   edge          None
 
 {{< / highlight >}}
 ```
@@ -426,7 +426,7 @@ route.route.openshift.io/data-producer   data-producer-hanelore15.techlab.opensh
 
 ## Task {{% param sectionnumber %}}.9: Access application by browser
 
-Finally, you can visit your application with the URL provided from the Route: <https://data-producer-userXY.techlab.openshift.ch/data>
+Finally, you can visit your application with the URL provided from the Route: `https://data-producer-userXY.{{% param techlabClusterDomainName %}}/data`
 
 {{% alert  color="primary" %}}Replace **userXY** with your username or get the URL from your route.{{% /alert %}}
 
@@ -525,11 +525,11 @@ NAME                                           IMAGE REPOSITORY                 
 imagestream.image.openshift.io/data-producer   image-registry.openshift-image-registry.svc:5000/hanelore15/data-producer   rest   9 minutes ago
 
 NAME                                     HOST/PORT                                                         PATH   SERVICES        PORT       TERMINATION   WILDCARD
-route.route.openshift.io/data-consumer   data-consumer-hanelore15.techlab.openshift.ch   /      data-consumer   <all>      edge/Allow    None
-route.route.openshift.io/data-producer   data-producer-hanelore15.techlab.openshift.ch          data-producer   8080-tcp   edge          None
+route.route.openshift.io/data-consumer   data-consumer-hanelore15.{{% param techlabClusterDomainName %}}   /      data-consumer   <all>      edge/Allow    None
+route.route.openshift.io/data-producer   data-producer-hanelore15.{{% param techlabClusterDomainName %}}          data-producer   8080-tcp   edge          None
 ```
 
-Now you can visit the consumer the URL provided from the Route: <https://data-consumer-userXY.techlab.openshift.ch/data>
+Now you can visit the consumer the URL provided from the Route: `https://data-consumer-userXY.{{% param techlabClusterDomainName %}}/data`
 
 {{% alert  color="primary" %}}Replace **userXY** with your username or get the URL from your route.{{% /alert %}}
 

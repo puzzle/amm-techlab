@@ -43,8 +43,7 @@ export PROJECT_NAME=$(oc project -q)
 
 >**Note:** If you already have a project called "example-spring-boot-helloworld" under your Gitea user, you don't need to re-create it. Proceed with adding the  `.s2i/bin/assemble` file.
 
-Next we clone the sample repository into our private git repo. Navigate to your Gitea instance
-[https://gitea.techlab.openshift.ch/userXY](https://gitea.techlab.openshift.ch/userXY) and click on create in the top right menu and select "New Migration". Use following parameters to clone the sample repository as a private repository:
+Next we clone the sample repository into our private git repo. Navigate to your Gitea instance `https://gitea.{{% param techlabClusterDomainName %}}/userXY` and click on create in the top right menu and select "New Migration". Use following parameters to clone the sample repository as a private repository:
 
 * **Migrate / Clone From URL** [https://github.com/appuio/example-spring-boot-helloworld](https://github.com/appuio/example-spring-boot-helloworld)
 * **Owner** userXY
@@ -101,7 +100,7 @@ objects:
     runPolicy: Serial
     source:
       git:
-        uri: https://gitea.techlab.openshift.ch/${USERNAME}/example-spring-boot-helloworld
+        uri: https://gitea.{{% param techlabClusterDomainName %}}/${USERNAME}/example-spring-boot-helloworld
       type: Git
     strategy:
       sourceStrategy:
@@ -474,7 +473,7 @@ objects:
       app: spring-boot-s2i
     name: spring-boot-s2i
   spec:
-    host: spring-boot-s2i-${USERNAME}.techlab.openshift.ch
+    host: spring-boot-s2i-${USERNAME}.{{% param techlabClusterDomainName %}}
     port:
       targetPort: 8080-tcp
     tls:
@@ -507,10 +506,10 @@ oc get route spring-boot-s2i
 
 ```
 NAME              HOST/PORT                                          PATH   SERVICES          PORT       TERMINATION   WILDCARD
-spring-boot-s2i   spring-boot-s2i-userXY.techlab.openshift.ch          spring-boot-s2i   8080-tcp   edge          None
+spring-boot-s2i   spring-boot-s2i-userXY.{{% param techlabClusterDomainName %}}          spring-boot-s2i   8080-tcp   edge          None
 ```
 
-And finally check if you can reach your application within a browser by accessing the public route. [https://spring-boot-s2i-userXY.techlab.openshift.ch](https://spring-boot-s2i-userXY.techlab.openshift.ch)
+And finally check if you can reach your application within a browser by accessing the public route. `https://spring-boot-s2i-userXY.{{% param techlabClusterDomainName %}}`
 
 
 Do you not find a suitable S2I builder image for you application. [Create your own](https://www.openshift.com/blog/create-s2i-builder-image)
