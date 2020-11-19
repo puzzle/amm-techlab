@@ -10,7 +10,7 @@ objects:
       app: spring-boot-s2i
     name: spring-boot-s2i
   spec:
-    host: spring-boot-s2i-${USERNAME}.techlab.openshift.ch
+    host: spring-boot-s2i-${USERNAME}.amm-techlab.openshift.ch
     port:
       targetPort: 8080-tcp
     tls:

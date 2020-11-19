@@ -21,7 +21,7 @@ objects:
     runPolicy: Serial
     source:
       git:
-        uri: https://gitea.techlab.openshift.ch/${USERNAME}/example-spring-boot-helloworld
+        uri: https://gitea.amm-techlab.openshift.ch/${USERNAME}/example-spring-boot-helloworld
       type: Git
     strategy:
       sourceStrategy:

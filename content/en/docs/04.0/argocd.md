@@ -63,7 +63,7 @@ Enter the Hostname in your browser and register a new account with your personal
 
 Login with the new user and create a new Git repository with the Name `gitops-resources`.
 
-The URL of the newly created Git repository will look like `https://gitea.techlab.openshift.ch/<username>/gitops-resources.git`
+The URL of the newly created Git repository will look like `https://gitea.{{% param techlabClusterDomainName %}}/<username>/gitops-resources.git`
 
 ![Git repository created](../gitea-repo-created.png)
 
@@ -109,7 +109,7 @@ Now add the resource definitions to your personal Git repository and push them t
 git init
 git add --all
 git commit -m "Initial commit of resource definitions"
-git remote add origin https://$LAB_USER@gitea.techlab.openshift.ch/$LAB_USER/gitops-resources.git
+git remote add origin https://$LAB_USER@gitea.{{% param techlabClusterDomainName %}}/$LAB_USER/gitops-resources.git
 git push -u origin master
 
 ```
@@ -125,11 +125,11 @@ Writing objects: 100% (15/15), 4.02 KiB | 4.02 MiB/s, done.
 Total 15 (delta 1), reused 0 (delta 0)
 remote: . Processing 1 references
 remote: Processed 1 references in total
-To https://gitea.techlab.openshift.ch/<username>/gitops-resources.git
+To https://gitea.{{% param techlabClusterDomainName %}}/<username>/gitops-resources.git
  * [new branch]      master -> master
 ```
 
-Go back to the webinterface of Gitea and inspect the structure and files in your personal Git repository: `https://gitea.techlab.openshift.ch/<username>/gitops-resources`
+Go back to the webinterface of Gitea and inspect the structure and files in your personal Git repository: `https://gitea.{{% param techlabClusterDomainName %}}/<username>/gitops-resources`
 
 
 ## Task {{% param sectionnumber %}}.3: Deploying the resources with Argo CD
@@ -165,7 +165,7 @@ oc project $LAB_USER
 To deploy the resources using the Argo CD CLI use the following command:
 
 ```bash
-argocd app create argo-$LAB_USER --repo https://gitea.techlab.openshift.ch/$LAB_USER/gitops-resources.git --path $LAB_USER --dest-server https://kubernetes.default.svc --dest-namespace $LAB_USER
+argocd app create argo-$LAB_USER --repo https://gitea.{{% param techlabClusterDomainName %}}/$LAB_USER/gitops-resources.git --path $LAB_USER --dest-server https://kubernetes.default.svc --dest-namespace $LAB_USER
 ```
 
 {{% alert title="Note" color="primary" %}}We don't need to provide Git credentials because the repository is readable for non-authenticated users as well{{% /alert %}}
@@ -183,8 +183,8 @@ Name:               argo-<username>
 Project:            default
 Server:             https://kubernetes.default.svc
 Namespace:          <username>
-URL:                https://argocd.techlab.openshift.ch/applications/argo-<username>
-Repo:               https://gitea.techlab.openshift.ch/<username>/gitops-resources.git
+URL:                https://argocd.{{% param techlabClusterDomainName %}}/applications/argo-<username>
+Repo:               https://gitea.{{% param techlabClusterDomainName %}}/<username>/gitops-resources.git
 Target:
 Path:               <username>
 SyncWindow:         Sync Allowed
@@ -234,8 +234,8 @@ Name:               argo-<username>
 Project:            default
 Server:             https://kubernetes.default.svc
 Namespace:          <username>
-URL:                https://argocd.techlab.openshift.ch/applications/argo-<username>
-Repo:               https://gitea.techlab.openshift.ch/<username>/gitops-resources.git
+URL:                https://argocd.{{% param techlabClusterDomainName %}}/applications/argo-<username>
+Repo:               https://gitea.{{% param techlabClusterDomainName %}}/<username>/gitops-resources.git
 Target:
 Path:               <username>
 SyncWindow:         Sync Allowed
@@ -303,7 +303,7 @@ Writing objects: 100% (4/4), 372 bytes | 372.00 KiB/s, done.
 Total 4 (delta 2), reused 0 (delta 0)
 remote: . Processing 1 references
 remote: Processed 1 references in total
-To https://gitea.techlab.openshift.ch/<username>/gitops-resources.git
+To https://gitea.{{% param techlabClusterDomainName %}}/<username>/gitops-resources.git
    fe4e2b6..18daed3  master -> master
 ```
 
@@ -486,7 +486,7 @@ Setup a new Argo CD application which deployes the Tekton pipelines from the pre
 <details><summary>solution with cli</summary>
 
 ```bash
-argocd app create argo-$LAB_USER-pipelines --repo https://gitea.techlab.openshift.ch/$LAB_USER/gitops-resources.git --path $LAB_USER-pipelines --dest-server https://kubernetes.default.svc --dest-namespace $LAB_USER-pipelines
+argocd app create argo-$LAB_USER-pipelines --repo https://gitea.{{% param techlabClusterDomainName %}}/$LAB_USER/gitops-resources.git --path $LAB_USER-pipelines --dest-server https://kubernetes.default.svc --dest-namespace $LAB_USER-pipelines
 ```
 
 </details><br/>
