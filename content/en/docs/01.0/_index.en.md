@@ -11,9 +11,11 @@ description: >
 
 The first thing we're going to do is to explore our lab environment and get in touch with the different components.
 
-Login to the web console of the Lab Cluster with the provided Username and Password.
+Login to the web console of the Lab Cluster with the provided Username and Password:
 
-{{% alert title="Note" color="primary" %}} Ask your trainer if you don't have your Cluster-URL or Username and Password {{% /alert %}}
+<https://{{% param techlabClusterWebConsolePrefix %}}.{{% param techlabClusterDomainName %}}>
+
+{{% alert title="Note" color="primary" %}} Ask your trainer if you don't have your Username and Password {{% /alert %}}
 
 The project with your username is going to be used for all the hands-on labs.
 
