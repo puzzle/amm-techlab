@@ -49,6 +49,8 @@ And then deploy the Jaeger instance.
 oc apply -f jaeger.yaml
 ```
 
+Or let argoCD manage the resources (`git add . && git commit -m "Message" && git push`)
+
 </details><br/>
 
 Expected result:
@@ -82,7 +84,7 @@ Use this URL with https protocol to open the Jaeger web console in a Browser win
 
 Now let's make sure the traces that are collected within our microservices are also been sent to the running Jaeger services.
 
-To achieve that, we need to deploy a different version of our microservices. Update the deployment config (`consumer.yaml` and `producer.yaml`) to use the new images:
+To achieve that, we need to deploy a different version of our microservices. Update the deployment config (`consumer.yaml`and `producer.yaml`) to use the new images:
 
 ```
 puzzle/quarkus-techlab-data-producer:jaegerkafka
@@ -104,6 +106,28 @@ oc apply -f consumer.yaml
 ```
 
 Expected result: `deployment.apps/data-producer configured`
+
+Or let argoCD manage the resources (`git add . && git commit -m "Message" && git push`)
+
+</details><br/>
+
+And also reconfigure (change the `quarkus.jaeger.enabled` env to `true`) the data-transformer (`data-transformer.yaml`) to enable Jaeger
+
+```yaml
+...
+env:
+...
+- name: quarkus.jaeger.enabled
+  value: 'true'
+```
+
+<details><summary>command hint</summary>
+
+```bash
+oc apply -f data-transformer.yaml
+```
+
+Or let argoCD manage the resources (`git add . && git commit -m "Message" && git push`)
 
 </details><br/>
 
