@@ -10,7 +10,7 @@ objects:
       app: spring-boot-s2i
     name: spring-boot-s2i
   spec:
-    host: spring-boot-s2i-${USERNAME}.amm-techlab.openshift.ch
+    host: ${HOSTNAME}
     port:
       targetPort: 8080-tcp
     tls:
@@ -21,6 +21,6 @@ objects:
       weight: 100
     wildcardPolicy: None
 parameters:
-- description: AMM techlab participant username
-  name: USERNAME
+- description: The public Hostname spring-boot-s2i-${HOSTNAME}.amm-techlab.openshift.ch
+  name: HOSTNAME
   mandatory: true
