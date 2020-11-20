@@ -412,7 +412,7 @@ oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content
 
 {{< highlight yaml >}}{{< readfile file="content/en/docs/additional/build-types/s2i/route.yaml" >}}{{< /highlight >}}
 
-[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/route.yaml 
+[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/route.yaml)
 
 Then we can create the route
 
