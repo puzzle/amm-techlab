@@ -169,15 +169,15 @@ In our case Prometheus will scrape:
 * look for a port with the name `http` (this must match the name in the Service resource)
 * it will srcape the path `/metrics` using `http`
 
-This means now: since both Services `data-producer` and `data-consumer` have the matching label `application: amm-techlab`, a port with the name `http` is configured and the matching pods provide metrics on `http://[Pod]/metrics`, Prometheus will scrape data from these pods.
+This means now: since all three Services `data-producer`, `data-consumer` and `data-transformer` have the matching label `application: amm-techlab`, a port with the name `http` is configured and the matching pods provide metrics on `http://[Pod]/metrics`, Prometheus will scrape data from these pods.
 
 
 ## Task {{% param sectionnumber %}}.4: Query Application Metrics
 
-Since the Metrics are now collected from both services, let's execute a query and visualise the data.
+Since the Metrics are now collected from all three services, let's execute a query and visualise the data.
 
-for example, the total seconds the Garbage Collector ran
+for example, the total amount of Transformed Messages
 
 ```
-sum(base_gc_time_total_seconds{namespace="<userXY>"})
+sum(application_ch_puzzle_quarkustechlab_reactivetransformer_boundary_ReactiveDataTransformer_messagesTransformed_total{namespace="<userXY>"})
 ```
