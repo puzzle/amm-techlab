@@ -344,6 +344,10 @@ tkn pipeline start build-and-deploy \
 
 This will create and execute a PipelineRun. Use the command `tkn pipelinerun logs build-and-deploy-run-<pod> -f -n <userXY>-pipelines` to display the logs
 
+Alternatively we can also create a PipelineRun Resource directly (`oc apply -f pipeline-run.yaml`), without using the tkn cli:
+
+{{< highlight yaml >}}{{< readfile file="manifests/04.0/4.1/pipeline-run.yaml" >}}{{< /highlight >}}
+
 The PipelineRuns can be listed with:
 
 ```bash
@@ -390,3 +394,14 @@ Check out the Puzzle [delivery pipeline concept](https://github.com/puzzle/deliv
 * [Creating CI/CD solutions for applications using OpenShift Pipelines](https://docs.openshift.com/container-platform/latest/pipelines/creating-applications-with-cicd-pipelines.html)
 * [Pipeline-Tutorial](https://github.com/openshift/pipelines-tutorial/)
 * [Interactive OpenShift Pipelines tutorial](https://learn.openshift.com/middleware/pipelines/)on [learn.openshift.com](https://learn.openshift.com/)
+
+
+## Solution
+
+The needed resource files are available inside the folder [manifests/04.0/4.1/](https://github.com/puzzle/amm-techlab/tree/master/manifests/04.0/4.1) of the techlab [github repository](https://github.com/puzzle/amm-techlab).
+
+If you weren't successful, you can update your project with the solution by cloning the Techlab Repository `git clone https://github.com/puzzle/amm-techlab.git` and executing this command:
+
+```s
+oc apply -f manifests/04.0/4.1/
+```
