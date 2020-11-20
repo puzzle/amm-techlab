@@ -1,0 +1,100 @@
+apiVersion: v1
+kind: List
+metadata:
+  labels:
+    application: quarkus-techlab
+items:
+  - apiVersion: v1
+    kind: ImageStream
+    metadata:
+      labels:
+        application: quarkus-techlab
+      name: data-transformer
+    spec:
+      lookupPolicy:
+        local: true
+
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        application: quarkus-techlab
+      name: data-transformer
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          deployment: data-transformer
+      strategy:
+        type: Recreate
+      template:
+        metadata:
+          labels:
+            application: quarkus-techlab
+            deployment: data-transformer
+        spec:
+          containers:
+            - image: data-transformer:latest
+              imagePullPolicy: Always
+              livenessProbe:
+                failureThreshold: 5
+                httpGet:
+                  path: /health
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 3
+                periodSeconds: 20
+                successThreshold: 1
+                timeoutSeconds: 15
+              readinessProbe:
+                failureThreshold: 5
+                httpGet:
+                  path: /health
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 3
+                periodSeconds: 20
+                successThreshold: 1
+                timeoutSeconds: 15
+              name: data-transformer
+              env:
+                - name: kafka.bootstrap.servers
+                  value: 'amm-techlab-kafka-bootstrap:9092'
+                - name: mp.messaging.incoming.data.connector
+                  value: smallrye-kafka
+                - name: mp.messaging.incoming.data.topic
+                  value: manual
+                - name: mp.messaging.incoming.data.value.deserializer
+                  value: >-
+                    ch.puzzle.quarkustechlab.reactivetransformer.control.SensorMeasurementDeserializer
+                - name: quarkus.jaeger.enabled
+                  value: 'false'
+              port:
+                - containerPort: 8080
+                  name: http
+                  protocol: TCP
+              resources:
+                limits:
+                  cpu: '1'
+                  memory: 500Mi
+                requests:
+                  cpu: 50m
+                  memory: 100Mi
+
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        application: quarkus-techlab
+      name: data-transformer
+    spec:
+      ports:
+        - name: data-transformer-http
+          port: 8080
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        deployment: data-transformer
+      sessionAffinity: None
+      type: ClusterIP
+          
