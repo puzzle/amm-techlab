@@ -21,7 +21,7 @@ objects:
     runPolicy: Serial
     source:
       git:
-        uri: https://gitea.amm-techlab.openshift.ch/${USERNAME}/example-spring-boot-helloworld
+        uri: ${GITREPOSITORY}
       type: Git
       sourceSecret:
         name: git-credentials
@@ -46,6 +46,6 @@ objects:
     - imageChange:
       type: ImageChange
 parameters:
-- description: AMM techlab participant username
-  name: USERNAME
+- description: The source git repository
+  name: GITREPOSITORY
   mandatory: true

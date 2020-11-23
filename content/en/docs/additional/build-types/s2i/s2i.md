@@ -76,62 +76,13 @@ First let's create a BuildConfig. The important part in this specification are t
 * We already discussed the strategy section in the beginning of this chapter. For this example we set the strategy to sourceStrategy (know as Source-to-Image / S2I)
 * The last part is the output section. In our example we reference a ImageStreamTag as an output. This means the resulting image will be pushed into the internal registry and will be consumable as ImageStream.
 
-```YAML
-apiVersion: v1
-kind: Template
-metadata:
-  name: buildconfig-s2i-template
-objects:
-- apiVersion: build.openshift.io/v1
-  kind: BuildConfig
-  metadata:
-    labels:
-      app: spring-boot-s2i
-    name: spring-boot-s2i
-  spec:
-    failedBuildsHistoryLimit: 5
-    nodeSelector: null
-    output:
-      to:
-        kind: ImageStreamTag
-        name: spring-boot-s2i:latest
-    postCommit: {}
-    resources: {}
-    runPolicy: Serial
-    source:
-      git:
-        uri: https://gitea.{{% param techlabClusterDomainName %}}/${USERNAME}/example-spring-boot-helloworld
-      type: Git
-    strategy:
-      sourceStrategy:
-        env:
-        - name: JAVA_APP_JAR
-          value: /tmp/src/build/libs/springboots2idemo-0.1.1-SNAPSHOT.jar
-        from:
-          kind: ImageStreamTag
-          name: openjdk11:latest
-      type: Source
-    successfulBuildsHistoryLimit: 5
-    triggers:
-    - github:
-        secret: 122hfrCzIb9Ls4q-PLEC
-      type: GitHub
-    - generic:
-        secret: ALAzMOOHHdneC_2cdvV6
-      type: Generic
-    - type: ConfigChange
-    - imageChange:
-      type: ImageChange
-parameters:
-- description: AMM techlab participant username
-  name: USERNAME
-  mandatory: true
-```
+{{< highlight yaml >}}{{< readfile file="content/en/docs/additional/build-types/s2i/buildConfig.yaml" >}}{{< /highlight >}}
+
 
 [Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/buildConfig.yaml)
 
 ```BASH
-oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/buildConfig.yaml -p USERNAME=$USER_NAME | oc apply -f -
+oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/buildConfig.yaml -p GITREPOSITORY=https://gitea.{{% param techlabClusterDomainName %}}/$USER_NAME/example-spring-boot-helloworld | oc apply -f -
 ```
 
 Next we need the definitions for our two ImageStreamTag references.
@@ -459,42 +410,14 @@ oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content
 
 ### Route
 
-
-```YAML
-apiVersion: v1
-kind: Template
-metadata:
-  name: route-s2i-template
-objects:
-- apiVersion: route.openshift.io/v1
-  kind: Route
-  metadata:
-    labels:
-      app: spring-boot-s2i
-    name: spring-boot-s2i
-  spec:
-    host: spring-boot-s2i-${USERNAME}.{{% param techlabClusterDomainName %}}
-    port:
-      targetPort: 8080-tcp
-    tls:
-      termination: edge
-    to:
-      kind: Service
-      name: spring-boot-s2i
-      weight: 100
-    wildcardPolicy: None
-parameters:
-- description: AMM techlab participant username
-  name: USERNAME
-  mandatory: true
-```
+{{< highlight yaml >}}{{< readfile file="content/en/docs/additional/build-types/s2i/route.yaml" >}}{{< /highlight >}}
 
 [Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/route.yaml)
 
 Then we can create the route
 
-```BASH
-oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/route.yaml -p USERNAME=$USER_NAME | oc apply -f -
+```bash
+oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/route.yaml -p HOSTNAME=spring-boot-s2i-$USER_NAME.{{% param techlabClusterDomainName %}} | oc apply -f -
 ```
 
 Check if the route was created successfully
