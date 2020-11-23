@@ -4,7 +4,7 @@ metadata:
   labels:
     application: amm-techlab
 items:
-  - apiVersion: v1
+  - apiVersion: image.openshift.io/v1
     kind: ImageStream
     metadata:
       labels:
@@ -37,7 +37,7 @@ items:
             deployment: data-transformer
         spec:
           containers:
-            - image: data-transformer:latest
+            - image: image-registry.openshift-image-registry.svc:5000/<username>/data-transformer:latest
               imagePullPolicy: Always
               livenessProbe:
                 failureThreshold: 5

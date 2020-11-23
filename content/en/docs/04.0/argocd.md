@@ -474,9 +474,11 @@ apps                Deployment   <username>  data-producer  Synced     Healthy  
 In the previous Lab we've created our first tekton pipeline. The `apply-manifests` task applies a set of [manifests](https://github.com/puzzle/quarkus-techlab-data-transformer/blob/master/src/main/openshift/templates/data-transformer.yml) to the namespace, within a pipeline run.
 Since we don't want our manifests been managed via two different ways (tekton and argocd) for simplicity reasons, we copy the tekton managed manifests to our workspace and push them to our git repository.
 
-Let's create the `data-transformer.yaml` resource within our workspace and push it to the git repository.
+Let's create the `<workspace>/data-transformer.yaml` resource within our workspace and push it to the git repository.
 
-{{< highlight yaml >}}{{< readfile file="manifests/04.0/4.2/data-transformer.yaml" >}}{{< /highlight >}}
+{{< highlight yaml "hl_lines=40" >}}{{< readfile file="manifests/04.0/4.2/data-transformer.yaml" >}}{{< /highlight >}}
+
+{{% alert  color="primary" %}} Replace **\<username>** with your username! {{% /alert %}}
 
 ```bash
 git add data-transformer.yaml && git commit -m 'Add Transformer Manifest' && git push
