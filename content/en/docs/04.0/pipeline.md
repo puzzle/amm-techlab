@@ -326,7 +326,51 @@ Following parameters are needed to configure the pipeline to deploy the data-tra
 * manifest-dir: path to directory inside the repository that contains the yaml manifests
 
 
+### Create PipelineRun Resources
+
+Creating PipelineRun Resources will trigger the pipeline.
+
+{{% alert title="Note" color="primary" %}}
+We use a template to adapt the image registry URL to match to your project.
+{{% /alert %}}
+
+Create the following openshift template `<workspace>/pipeline-run-template.yaml`:
+
+{{< highlight yaml >}}{{< readfile file="manifests/04.0/4.1/pipeline-run-template.yaml" >}}{{< /highlight >}}
+
+Create the PipelineRun by processing the template and creating the generated resources:
+
+```bash
+oc process -f pipeline-run-template.yaml \
+  --param=PROJECT_NAME=$(oc project -q) \
+| oc apply -f-
+```
+
+which will result in: `pipelinerun.tekton.dev/build-and-deploy-run-1 created`
+
+This will create and execute a PipelineRun. Use the command `tkn pipelinerun logs build-and-deploy-run-1 -f -n hannelore20` to display the logs.
+
+The PipelineRuns can be listed with:
+
+```bash
+tkn pipelinerun ls
+```
+
+```
+NAME                     STARTED          DURATION    STATUS
+build-and-deploy-run-1   3 minutes ago    1 minute    Succeeded
+```
+
+Moreover, the logs can be viewed with the following command and selecting the appropriate Pipeline and PipelineRun:
+
+```bash
+tkn pipeline logs
+```
+
+
 ### Execute Pipelines using tkn
+
+Alternatively we can also trigger a Pipeline using the tkn cli.
 
 Start the Pipeline for the data-transformer:
 
@@ -342,28 +386,7 @@ tkn pipeline start build-and-deploy \
   -w name=source-workspace,claimName=pipeline-workspace
 ```
 
-This will create and execute a PipelineRun. Use the command `tkn pipelinerun logs build-and-deploy-run-<pod> -f -n <userXY>-pipelines` to display the logs
-
-Alternatively we can also create a PipelineRun Resource directly (`oc apply -f pipeline-run.yaml`), without using the tkn cli:
-
-{{< highlight yaml >}}{{< readfile file="manifests/04.0/4.1/pipeline-run.yaml" >}}{{< /highlight >}}
-
-The PipelineRuns can be listed with:
-
-```bash
-tkn pipelinerun ls
-```
-
-```
-NAME                         STARTED          DURATION    STATUS
-build-and-deploy-run-5r2ln   8 minutes ago    1 minute    Succeeded
-```
-
-Moreover, the logs can be viewed with the following command and selecting the appropriate Pipeline and PipelineRun:
-
-```bash
-tkn pipeline logs
-```
+This will create and execute a PipelineRun. Use the same commands as listed above to check the progress of the run.
 
 
 ## Task {{% param sectionnumber %}}.8: OpenShift WebUI
