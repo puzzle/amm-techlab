@@ -34,17 +34,31 @@ For a quick 10 minute overview of Argo CD, check out the demo presented to the S
 
 ## Task {{% param sectionnumber %}}.1: Getting started
 
-Let's start by downloading the latest Argo CD version from <https://github.com/argoproj/argo-cd/releases/latest>. More detailed installation instructions can be found via the [CLI installation documentation](https://argoproj.github.io/argo-cd/cli_installation/). The cli is already installed in the Web IDE.
+
+### Login within the Web IDE
+
+You can access Argo CD via Web UI (URL is provided by your teacher) or using the CLI. The Argo CD CLI Tool is already installed on the web IDE.
+
+Since the sso login does not work inside the Web IDE for various reasons, your teacher will provide a generic local Argo CD account `hannelore` without any number.
+
+```bash
+argocd login <ARGOCD_SERVER> --grpc-web --username hannelore
+```
+
+{{% alert title="Note" color="primary" %}}Make sure to pass the `<ARGOCD_SERVER>` without protocol e.g. `argocd.domain.com`. The `--grpc-web` parameter is necessary due to missing http 2.0 router.{{% /alert %}}
+
+
+### Login on your local computer
+
+Let's start by downloading the latest Argo CD version from <https://github.com/argoproj/argo-cd/releases/latest>. More detailed installation instructions can be found via the [CLI installation documentation](https://argoproj.github.io/argo-cd/cli_installation/).
 
 You can access Argo CD via UI or using the CLI. For CLI usage use the following command to login (credentials are given by your teacher):
-
-{{% alert title="Warning" color="secondary" %}}The login with sso does not work in the web ide at the moment. Download the cli locally and process this way.{{% /alert %}}
 
 ```bash
 argocd login <ARGOCD_SERVER> --sso --grpc-web
 ```
 
-{{% alert title="Note" color="primary" %}}Follow the sso login steps in the new browser window. The `--grpc-web` parameter is necessary due to missing http 2.0 router.{{% /alert %}}
+{{% alert title="Note" color="primary" %}}Make sure to pass the `<ARGOCD_SERVER>` without protocol e.g. `argocd.domain.com`. Follow the sso login steps in the new browser window. The `--grpc-web` parameter is necessary due to missing http 2.0 router.{{% /alert %}}
 
 
 ## Task {{% param sectionnumber %}}.2: Add Resources to a Git repository
@@ -122,8 +136,6 @@ Go back to the webinterface of Gitea and inspect the structure and files in your
 
 Now we want to deploy the resources of the previous labs with Argo CD to demonstrate how Argo CD works.
 
-{{% alert title="Warning" color="secondary" %}} All steps which includes the argocd cli tool, must be executed on the local machine. This is due to the sso login in the web ide does not work at the moment. {{% /alert %}}
-
 Ensure that the `LAB_USER` environment variable is set.
 
 ```bash
@@ -139,8 +151,6 @@ export LAB_USER=<username>
 ```
 
 </details><br/>
-
-{{% alert title="Warning" color="secondary" %}} The oc tool is also needed on your local machine. Do also login to the techlab cluster. {{% /alert %}}
 
 Change to your main Project.
 
