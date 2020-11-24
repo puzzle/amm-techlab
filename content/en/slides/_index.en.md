@@ -18,9 +18,14 @@ menu:
 {{% blocks/feature icon="fa-chalkboard-teacher" url="03_Build_and_Deploy_2.0.pdf" title="Application Build and Deployment on OpenShift" %}}
 
 {{% /blocks/feature %}}
-{{% blocks/feature icon="fa-chalkboard-teacher" url="04_CICD_on_OpenShift_2.0.pdf" title="CICD on OpenShift" %}}
+{{% blocks/feature icon="fa-chalkboard-teacher" url="04_CICD_on_OpenShift_3.0.pdf" title="CICD on OpenShift" %}}
 
 {{% /blocks/feature %}}
+
+{{% blocks/feature icon="fa-chalkboard-teacher" url="05_GitOps.pdf" title="GitOps" %}}
+
+{{% /blocks/feature %}}
+
 
 {{< /blocks/section >}}
 
