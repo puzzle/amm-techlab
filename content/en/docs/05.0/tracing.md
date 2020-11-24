@@ -15,13 +15,39 @@ This is where tracing comes into the picture. Tracing allows us to collect all s
 In our Quarkus applications, we use [Eclipse MicroProfile OpenTracing](https://github.com/eclipse/microprofile-opentracing/blob/master/spec/src/main/asciidoc/microprofile-opentracing.asciidoc) to collect the tracing data and [Jaeger](https://www.jaegertracing.io/) as a component where those traces are sent to and been visualised for further analysis.
 
 
-## Task {{% param sectionnumber %}}.1: Deploy Jaeger instance
+## Task {{% param sectionnumber %}}.1: Check project setup
 
-Make sure to currently be in your main project (lab 3) where your application and other services are deployed:
+We first check that the project is ready for the lab.
+
+Ensure that the `LAB_USER` environment variable is set.
 
 ```bash
-oc project <userXY>
+echo $LAB_USER
 ```
+
+If the result is empty, set the `LAB_USER` environment variable.
+
+<details><summary>command hint</summary>
+
+```bash
+export LAB_USER=<username>
+```
+
+</details><br/>
+
+
+Change to your main Project.
+
+<details><summary>command hint</summary>
+
+```bash
+oc project $LAB_USER
+```
+
+</details><br/>
+
+
+## Task {{% param sectionnumber %}}.2: Deploy Jaeger instance
 
 Then let's quickly deploy a Jaeger instance.
 
@@ -32,16 +58,22 @@ This Jaeger deployment is not meant for production use! Data is only stored in m
 
 Create the local file `<workspace>/jaeger.yaml` with the following content:
 
-```yaml
-apiVersion: jaegertracing.io/v1
-kind: Jaeger
-metadata:
-  name: jaeger-all-in-one-inmemory
-```
+{{< highlight yaml >}}{{< readfile file="manifests/05.0/5.2/jaeger.yaml" >}}{{< /highlight >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/05.0/5.2/jaeger.yaml)
 
-And then deploy the Jaeger instance.
+
+Let ArgoCD manage the resources by adding the file to git and push it.
+
+<details><summary>command hint</summary>
+
+```bash
+git add jaeger.yaml && git commit -m "Add Jaeger Manifest" && git push
+```
+
+</details><br/>
+
+Wait for ArgoCD to deploy the Jaeger instance or do it manually by applying the file.
 
 <details><summary>command hint</summary>
 
@@ -49,15 +81,13 @@ And then deploy the Jaeger instance.
 oc apply -f jaeger.yaml
 ```
 
-Or let argoCD manage the resources (`git add . && git commit -m "Message" && git push`)
-
-</details><br/>
-
 Expected result:
 
 ```
 jaeger.jaegertracing.io/jaeger-all-in-one-inmemory created
 ```
+
+</details><br/>
 
 Verify the deployment
 
@@ -80,7 +110,7 @@ jaeger-all-in-one-inmemory-<userXY>.{{% param techlabClusterDomainName %}}
 Use this URL with https protocol to open the Jaeger web console in a Browser window. Use your techlab user credentials to log in. Ensure to allow the proposed permissions.
 
 
-## Task {{% param sectionnumber %}}.2: Send Traces to Jaeger
+## Task {{% param sectionnumber %}}.3: Send Traces to Jaeger
 
 Now let's make sure the traces that are collected within our microservices are also been sent to the running Jaeger services.
 
@@ -111,7 +141,7 @@ Or let argoCD manage the resources (`git add . && git commit -m "Message" && git
 
 </details><br/>
 
-And also reconfigure (change the `quarkus.jaeger.enabled` env to `true`) the data-transformer (`data-transformer.yaml`) to enable Jaeger
+And also reconfigure the environment of the data-transformer (`<workspace>/data-transformer.yaml`) to enable Jaeger by changing the `quarkus.jaeger.enabled` env to `true`
 
 ```yaml
 ...
@@ -132,6 +162,6 @@ Or let argoCD manage the resources (`git add . && git commit -m "Message" && git
 </details><br/>
 
 
-## Task {{% param sectionnumber %}}.3: Explore the Traces
+## Task {{% param sectionnumber %}}.4: Explore the Traces
 
 Explore the Traces in the Jaeger Console once again. You should see the data-producer and data-consumer as services.
