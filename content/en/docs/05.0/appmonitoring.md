@@ -62,33 +62,45 @@ oc describe crd ServiceMonitor
 ```
 
 
-## Task {{% param sectionnumber %}}.1: Create Service Monitor
+## Task {{% param sectionnumber %}}.1: Check project setup
 
-Let's now create our first ServiceMonitor, switch back to the project of lab 3
+We first check that the project is ready for the lab.
+
+Ensure that the `LAB_USER` environment variable is set.
 
 ```bash
-oc project <userXY>
+echo $LAB_USER
 ```
+
+If the result is empty, set the `LAB_USER` environment variable.
+
+<details><summary>command hint</summary>
+
+```bash
+export LAB_USER=<username>
+```
+
+</details><br/>
+
+
+Change to your main Project.
+
+<details><summary>command hint</summary>
+
+```bash
+oc project $LAB_USER
+```
+
+</details><br/>
+
+
+## Task {{% param sectionnumber %}}.2: Create Service Monitor
+
+Let's now create our first ServiceMonitor.
 
 Create the following ServiceMonitor resource as local file `<workspace>/servicemonitor.yaml`.
 
-```yaml
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  labels:
-    k8s-app: amm-techlab
-  name: amm-techlab-monitor
-spec:
-  endpoints:
-  - interval: 30s
-    port: http
-    scheme: http
-    path: /metrics
-  selector:
-    matchLabels:
-      application: amm-techlab
-```
+{{< highlight yaml >}}{{< readfile file="manifests/05.0/5.1/servicemonitor.yaml" >}}{{< /highlight >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/05.0/5.1/servicemonitor.yaml)
 
@@ -110,7 +122,7 @@ Tell your trainer if you get a permission error while creating the ServiceMonito
 {{% /alert %}}
 
 
-## Task {{% param sectionnumber %}}.2: Verify whether the Prometheus Targets gets scraped or not
+## Task {{% param sectionnumber %}}.3: Verify whether the Prometheus Targets gets scraped or not
 
 Prometheus is integrated into the OpenShift Console under the Menu Item Monitoring.
 But as part of this lab, we want to use Grafana to interact with prometheus.
@@ -133,7 +145,7 @@ prometheus_sd_discovered_targets{cluster="cluster",config="<userxy>/amm-techlab-
 ```
 
 
-## How does it work
+## Task {{% param sectionnumber %}}.4: How does it work
 
 The Prometheus Operator "scans" namespaces for ServiceMonitor CustomResources. It then updates the ServiceDiscovery configuration accordingly.
 
@@ -169,15 +181,30 @@ In our case Prometheus will scrape:
 * look for a port with the name `http` (this must match the name in the Service resource)
 * it will srcape the path `/metrics` using `http`
 
-This means now: since both Services `data-producer` and `data-consumer` have the matching label `application: amm-techlab`, a port with the name `http` is configured and the matching pods provide metrics on `http://[Pod]/metrics`, Prometheus will scrape data from these pods.
+This means now: since all three Services `data-producer`, `data-consumer` and `data-transformer` have the matching label `application: amm-techlab`, a port with the name `http` is configured and the matching pods provide metrics on `http://[Pod]/metrics`, Prometheus will scrape data from these pods.
 
 
-## Task {{% param sectionnumber %}}.4: Query Application Metrics
+## Task {{% param sectionnumber %}}.5: Query Application Metrics
 
-Since the Metrics are now collected from both services, let's execute a query and visualise the data.
+Since the Metrics are now collected from all three services, let's execute a query and visualise the data.
 
-for example, the total seconds the Garbage Collector ran
+for example, the total amount of Transformed Messages
 
+```s
+sum(application_ch_puzzle_quarkustechlab_reactivetransformer_boundary_ReactiveDataTransformer_messagesTransformed_total{namespace="<userXY>"})
 ```
-sum(base_gc_time_total_seconds{namespace="<userXY>"})
+
+{{% alert title="Note" color="primary" %}}
+Make sure to replace `<userxy>` with your current namespace
+{{% /alert %}}
+
+
+## Solution
+
+The needed resource files are available inside the folder [manifests/05.0/5.1/](https://github.com/puzzle/amm-techlab/tree/master/manifests/05.0/5.1/) of the techlab [github repository](https://github.com/puzzle/amm-techlab).
+
+If you weren't successful, you can update your project with the solution by cloning the Techlab Repository `git clone https://github.com/puzzle/amm-techlab.git` and executing this command:
+
+```s
+oc apply -f manifests/05.0/5.1/
 ```

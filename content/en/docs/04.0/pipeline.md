@@ -120,30 +120,7 @@ You can find more examples of reusable tasks in the [Tekton Catalog](https://git
 
 Let's examine the task that does a deployment. Create the local file `<workspace>/deploy-tasks.yaml` with the following content:
 
-```yaml
-apiVersion: tekton.dev/v1beta1
-kind: Task
-metadata:
-  name: apply-manifests
-spec:
-  workspaces:
-  - name: source
-  params:
-    - name: manifest-dir
-      description: The directory in source that contains yaml manifests
-      type: string
-      default: 'openshift/templates'
-  steps:
-    - name: apply
-      image: appuio/oc:v4.5
-      workingDir: $(workspaces.source.path)
-      command: ["/bin/bash", "-c"]
-      args:
-        - |-
-          echo Applying manifests in $(inputs.params.manifest-dir) directory
-          oc apply -f $(inputs.params.manifest-dir)
-          echo -----------------------------------
-```
+{{< highlight yaml >}}{{< readfile file="manifests/04.0/4.1/deploy-tasks.yaml" >}}{{< /highlight >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.1/deploy-tasks.yaml)
 
@@ -181,72 +158,7 @@ The Pipeline should be reusable across multiple projects or environments, that's
 
 Create the following pipeline `<workspace>/deploy-pipeline.yaml`:
 
-```yaml
-apiVersion: tekton.dev/v1beta1
-kind: Pipeline
-metadata:
-  name: build-and-deploy
-spec:
-  params:
-    - name: git-url
-      type: string
-      description: git repo url
-    - name: git-revision
-      type: string
-      description: git repo revision
-    - name: deployment-name
-      type: string
-      description: name of the deployment to be patched
-    - name: docker-file
-      description: Path to the Dockerfile
-      default: 'src/main/docker/Dockerfile.binary'
-    - name: image-name
-      description: name of the resulting image (inclusive registry)
-    - name: manifest-dir
-      description: location of the OpenShift templates
-      default: 'src/main/openshift/templates'
-  tasks:
-    - name: git-checkout
-      params:
-        - name: deleteExisting
-          value: 'true'
-        - name: url
-          value: $(params.git-url)
-        - name: revision
-          value: $(params.git-revision)
-      taskRef:
-        kind: ClusterTask
-        name: git-clone
-      workspaces:
-        - name: output
-          workspace: source-workspace
-    - name: build-image
-      taskRef:
-        name: buildah
-        kind: ClusterTask
-      params:
-        - name: TLSVERIFY
-          value: 'false'
-        - name: DOCKERFILE
-          value: $(params.docker-file)
-        - name: IMAGE
-          value: $(params.image-name)
-      runAfter:
-      - git-checkout
-      workspaces:
-        - name: source
-          workspace: source-workspace
-    - name: apply-manifests
-      taskRef:
-        name: apply-manifests
-      params:
-        - name: manifest-dir
-          value: $(params.manifest-dir)
-      runAfter:
-      - build-image
-  workspaces:
-    - name: source-workspace
-```
+{{< highlight yaml >}}{{< readfile file="manifests/04.0/4.1/deploy-pipeline.yaml" >}}{{< /highlight >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.1/deploy-pipeline.yaml)
 
@@ -280,20 +192,7 @@ The data for the tasks is shared by a common workspace. We use a [Persistent Vol
 
 Create the following resource definition for a PVC inside `<workspace>/workspaces-pvc.yaml`:
 
-```yaml
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: pipeline-workspace
-spec:
-  resources:
-    requests:
-      storage: 2Gi
-  volumeMode: Filesystem
-  accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-```
+{{< highlight yaml >}}{{< readfile file="manifests/04.0/4.1/workspaces-pvc.yaml" >}}{{< /highlight >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.1/workspaces-pvc.yaml)
 
@@ -326,7 +225,51 @@ Following parameters are needed to configure the pipeline to deploy the data-tra
 * manifest-dir: path to directory inside the repository that contains the yaml manifests
 
 
+### Create PipelineRun Resources
+
+Creating PipelineRun Resources will trigger the pipeline.
+
+{{% alert title="Note" color="primary" %}}
+We use a template to adapt the image registry URL to match to your project.
+{{% /alert %}}
+
+Create the following openshift template `<workspace>/pipeline-run-template.yaml`:
+
+{{< highlight yaml >}}{{< readfile file="manifests/04.0/4.1/pipeline-run-template.yaml" >}}{{< /highlight >}}
+
+Create the PipelineRun by processing the template and creating the generated resources:
+
+```bash
+oc process -f pipeline-run-template.yaml \
+  --param=PROJECT_NAME=$(oc project -q) \
+| oc apply -f-
+```
+
+which will result in: `pipelinerun.tekton.dev/build-and-deploy-run-1 created`
+
+This will create and execute a PipelineRun. Use the command `tkn pipelinerun logs build-and-deploy-run-1 -f -n hannelore20` to display the logs.
+
+The PipelineRuns can be listed with:
+
+```bash
+tkn pipelinerun ls
+```
+
+```
+NAME                     STARTED          DURATION    STATUS
+build-and-deploy-run-1   3 minutes ago    1 minute    Succeeded
+```
+
+Moreover, the logs can be viewed with the following command and selecting the appropriate Pipeline and PipelineRun:
+
+```bash
+tkn pipeline logs
+```
+
+
 ### Execute Pipelines using tkn
+
+Alternatively we can also trigger a Pipeline using the tkn cli.
 
 Start the Pipeline for the data-transformer:
 
@@ -342,28 +285,7 @@ tkn pipeline start build-and-deploy \
   -w name=source-workspace,claimName=pipeline-workspace
 ```
 
-This will create and execute a PipelineRun. Use the command `tkn pipelinerun logs build-and-deploy-run-<pod> -f -n <userXY>-pipelines` to display the logs
-
-Alternatively we can also create a PipelineRun Resource directly (`oc apply -f pipeline-run.yaml`), without using the tkn cli:
-
-{{< highlight yaml >}}{{< readfile file="manifests/04.0/4.1/pipeline-run.yaml" >}}{{< /highlight >}}
-
-The PipelineRuns can be listed with:
-
-```bash
-tkn pipelinerun ls
-```
-
-```
-NAME                         STARTED          DURATION    STATUS
-build-and-deploy-run-5r2ln   8 minutes ago    1 minute    Succeeded
-```
-
-Moreover, the logs can be viewed with the following command and selecting the appropriate Pipeline and PipelineRun:
-
-```bash
-tkn pipeline logs
-```
+This will create and execute a PipelineRun. Use the same commands as listed above to check the progress of the run.
 
 
 ## Task {{% param sectionnumber %}}.8: OpenShift WebUI

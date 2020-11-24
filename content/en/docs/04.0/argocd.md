@@ -34,17 +34,31 @@ For a quick 10 minute overview of Argo CD, check out the demo presented to the S
 
 ## Task {{% param sectionnumber %}}.1: Getting started
 
-Let's start by downloading the latest Argo CD version from <https://github.com/argoproj/argo-cd/releases/latest>. More detailed installation instructions can be found via the [CLI installation documentation](https://argoproj.github.io/argo-cd/cli_installation/). The cli is already installed in the Web IDE.
+
+### Login within the Web IDE
+
+You can access Argo CD via Web UI (URL is provided by your teacher) or using the CLI. The Argo CD CLI Tool is already installed on the web IDE.
+
+Since the sso login does not work inside the Web IDE for various reasons, your teacher will provide a generic local Argo CD account `hannelore` without any number.
+
+```bash
+argocd login <ARGOCD_SERVER> --grpc-web --username hannelore
+```
+
+{{% alert title="Note" color="primary" %}}Make sure to pass the `<ARGOCD_SERVER>` without protocol e.g. `argocd.domain.com`. The `--grpc-web` parameter is necessary due to missing http 2.0 router.{{% /alert %}}
+
+
+### Login on your local computer
+
+Let's start by downloading the latest Argo CD version from <https://github.com/argoproj/argo-cd/releases/latest>. More detailed installation instructions can be found via the [CLI installation documentation](https://argoproj.github.io/argo-cd/cli_installation/).
 
 You can access Argo CD via UI or using the CLI. For CLI usage use the following command to login (credentials are given by your teacher):
-
-{{% alert title="Warning" color="secondary" %}}The login with sso does not work in the web ide at the moment. Download the cli locally and process this way.{{% /alert %}}
 
 ```bash
 argocd login <ARGOCD_SERVER> --sso --grpc-web
 ```
 
-{{% alert title="Note" color="primary" %}}Follow the sso login steps in the new browser window. The `--grpc-web` parameter is necessary due to missing http 2.0 router.{{% /alert %}}
+{{% alert title="Note" color="primary" %}}Make sure to pass the `<ARGOCD_SERVER>` without protocol e.g. `argocd.domain.com`. Follow the sso login steps in the new browser window. The `--grpc-web` parameter is necessary due to missing http 2.0 router.{{% /alert %}}
 
 
 ## Task {{% param sectionnumber %}}.2: Add Resources to a Git repository
@@ -72,41 +86,27 @@ Change directory to the workspace where the yaml resources of the previous labs 
 Set your username as an environment variable:
 
 ```bash
-LAB_USER=<username>
+export LAB_USER=<username>
 ```
 
-Separate the yaml resources by Namespace where they will be deployed to:
+Configure your folder to be a Git repository
 
 ```bash
-mkdir $LAB_USER
-mkdir $LAB_USER-pipelines
-mv deploy-pipeline.yaml deploy-tasks.yaml pipeline-resources-template.yaml $LAB_USER-pipelines
-mv *.yaml $LAB_USER
-
-```
-
-There should be two directories, one per namespace:
-
-```bash
-n8vr6:~/techlab/workspace$ ls -l
-total 8
-drwxr-sr-x. 2 1000600000 1000600000 4096 Oct 14 12:14 <username>
-drwxr-sr-x. 2 1000600000 1000600000 4096 Oct 14 12:14 <username>-pipelines
+git init
 ```
 
 Configure the Git Client and verify the output
 
 ```bash
-git config --global user.name "$LAB_USER"
-git config --global user.email "foo@bar.org"
-git config --global --list
+git config user.name "$LAB_USER"
+git config user.email "foo@bar.org"
+git config --local --list
 
 ```
 
 Now add the resource definitions to your personal Git repository and push them to remote. Use the password you entered when creating your Gitea user.
 
 ```bash
-git init
 git add --all
 git commit -m "Initial commit of resource definitions"
 git remote add origin https://$LAB_USER@gitea.{{% param techlabClusterDomainName %}}/$LAB_USER/gitops-resources.git
@@ -136,8 +136,6 @@ Go back to the webinterface of Gitea and inspect the structure and files in your
 
 Now we want to deploy the resources of the previous labs with Argo CD to demonstrate how Argo CD works.
 
-{{% alert title="Warning" color="secondary" %}} All steps which includes the argocd cli tool, must be executed on the local machine. This is due to the sso login in the web ide does not work at the moment. {{% /alert %}}
-
 Ensure that the `LAB_USER` environment variable is set.
 
 ```bash
@@ -154,8 +152,6 @@ export LAB_USER=<username>
 
 </details><br/>
 
-{{% alert title="Warning" color="secondary" %}} The oc tool is also needed on your local machine. Do also login to the techlab cluster. {{% /alert %}}
-
 Change to your main Project.
 
 ```bash
@@ -165,8 +161,10 @@ oc project $LAB_USER
 To deploy the resources using the Argo CD CLI use the following command:
 
 ```bash
-argocd app create argo-$LAB_USER --repo https://gitea.{{% param techlabClusterDomainName %}}/$LAB_USER/gitops-resources.git --path $LAB_USER --dest-server https://kubernetes.default.svc --dest-namespace $LAB_USER
+argocd app create argo-$LAB_USER --repo https://gitea.{{% param techlabClusterDomainName %}}/$LAB_USER/gitops-resources.git --path '.' --dest-server https://kubernetes.default.svc --dest-namespace $LAB_USER
 ```
+
+Expected output: `application 'argo-<username>' created`
 
 {{% alert title="Note" color="primary" %}}We don't need to provide Git credentials because the repository is readable for non-authenticated users as well{{% /alert %}}
 
@@ -186,23 +184,26 @@ Namespace:          <username>
 URL:                https://argocd.{{% param techlabClusterDomainName %}}/applications/argo-<username>
 Repo:               https://gitea.{{% param techlabClusterDomainName %}}/<username>/gitops-resources.git
 Target:
-Path:               <username>
+Path:               .
 SyncWindow:         Sync Allowed
 Sync Policy:        <none>
 Sync Status:        OutOfSync from  (fe4e2b6)
 Health Status:      Healthy
 
-GROUP               KIND         NAMESPACE    NAME           STATUS     HEALTH   HOOK  MESSAGE
-                    Service      <username>  data-consumer  OutOfSync  Healthy
-                    Service      <username>  data-producer  OutOfSync  Healthy
-apps                Deployment   <username>  data-consumer  OutOfSync  Healthy
-apps                Deployment   <username>  data-producer  OutOfSync  Healthy
-build.openshift.io  BuildConfig  <username>  data-producer  OutOfSync
-image.openshift.io  ImageStream  <username>  data-producer  OutOfSync
-kafka.strimzi.io    Kafka        <username>  amm-techlab    OutOfSync
-kafka.strimzi.io    KafkaTopic   <username>  manual         OutOfSync
-route.openshift.io  Route        <username>  data-consumer  OutOfSync
-route.openshift.io  Route        <username>  data-producer  OutOfSync
+GROUP                  KIND         NAMESPACE    NAME                 STATUS     HEALTH   HOOK  MESSAGE
+                       Service      <username>  data-consumer         OutOfSync  Healthy
+                       Service      <username>  data-producer         OutOfSync  Healthy
+apps                   Deployment   <username>  data-consumer         OutOfSync  Healthy
+apps                   Deployment   <username>  data-producer         OutOfSync  Healthy
+build.openshift.io     BuildConfig  <username>  data-producer         OutOfSync
+image.openshift.io     ImageStream  <username>  data-producer         OutOfSync
+kafka.strimzi.io       Kafka        <username>  amm-techlab           OutOfSync
+kafka.strimzi.io       KafkaTopic   <username>  manual                OutOfSync
+route.openshift.io     Route        <username>  data-consumer         OutOfSync
+route.openshift.io     Route        <username>  data-producer         OutOfSync
+tekton.dev             Pipeline     <username>  build-and-deploy      OutOfSync
+tekton.dev             Task         <username>  apply-manifests       OutOfSync
+template.openshift.io  Template     <username>  pipeline-run-template OutOfSync Missing  
 ```
 
 The application status is initially in OutOfSync state. To sync (deploy) the resource manifests, run:
@@ -237,23 +238,28 @@ Namespace:          <username>
 URL:                https://argocd.{{% param techlabClusterDomainName %}}/applications/argo-<username>
 Repo:               https://gitea.{{% param techlabClusterDomainName %}}/<username>/gitops-resources.git
 Target:
-Path:               <username>
+Path:               .
 SyncWindow:         Sync Allowed
 Sync Policy:        <none>
-Sync Status:        Synced to  (fe4e2b6)
+Sync Status:        Synced to  (4ec1e13)
 Health Status:      Healthy
 
-GROUP               KIND         NAMESPACE    NAME           STATUS  HEALTH   HOOK  MESSAGE
-                    Service      <username>  data-producer  Synced  Healthy        service/data-producer configured
-                    Service      <username>  data-consumer  Synced  Healthy        service/data-consumer configured
-apps                Deployment   <username>  data-consumer  Synced  Healthy        deployment.apps/data-consumer configured
-apps                Deployment   <username>  data-producer  Synced  Healthy        deployment.apps/data-producer configured
-kafka.strimzi.io    Kafka        <username>  amm-techlab    Synced                 kafka.kafka.strimzi.io/amm-techlab configured
-route.openshift.io  Route        <username>  data-consumer  Synced                 route.route.openshift.io/data-consumer configured
-route.openshift.io  Route        <username>  data-producer  Synced                 route.route.openshift.io/data-producer configured
-image.openshift.io  ImageStream  <username>  data-producer  Synced                 imagestream.image.openshift.io/data-producer configured
-build.openshift.io  BuildConfig  <username>  data-producer  Synced                 buildconfig.build.openshift.io/data-producer configured
-kafka.strimzi.io    KafkaTopic   <username>  manual         Synced                 kafkatopic.kafka.strimzi.io/manual configured
+GROUP                  KIND                   NAMESPACE    NAME                   STATUS  HEALTH   HOOK  MESSAGE
+                       ConfigMap              <username>  consumer-config        Synced                 configmap/consumer-config configured
+                       PersistentVolumeClaim  <username>  pipeline-workspace     Synced  Healthy        persistentvolumeclaim/pipeline-workspace configured
+                       Service                <username>  data-consumer          Synced  Healthy        service/data-consumer configured
+                       Service                <username>  data-producer          Synced  Healthy        service/data-producer configured
+apps                   Deployment             <username>  data-producer          Synced  Healthy        deployment.apps/data-producer configured
+apps                   Deployment             <username>  data-consumer          Synced  Healthy        deployment.apps/data-consumer configured
+kafka.strimzi.io       Kafka                  <username>  amm-techlab            Synced                 kafka.kafka.strimzi.io/amm-techlab configured
+tekton.dev             Task                   <username>  apply-manifests        Synced                 task.tekton.dev/apply-manifests configured
+tekton.dev             Pipeline               <username>  build-and-deploy       Synced                 pipeline.tekton.dev/build-and-deploy configured
+route.openshift.io     Route                  <username>  data-producer          Synced                 route.route.openshift.io/data-producer configured
+route.openshift.io     Route                  <username>  data-consumer          Synced                 route.route.openshift.io/data-consumer configured
+build.openshift.io     BuildConfig            <username>  data-producer          Synced                 buildconfig.build.openshift.io/data-producer configured
+image.openshift.io     ImageStream            <username>  data-producer          Synced                 imagestream.image.openshift.io/data-producer configured
+kafka.strimzi.io       KafkaTopic             <username>  manual                 Synced                 kafkatopic.kafka.strimzi.io/manual configured
+template.openshift.io  Template               <username>  pipeline-run-template  Synced                 template.template.openshift.io/pipeline-run-template created
 ```
 
 
@@ -262,7 +268,7 @@ kafka.strimzi.io    KafkaTopic   <username>  manual         Synced              
 When there is a new commit in your Git repository, the Argo CD application becomes OutOfSync. Let's assume we want to scale up our producer of the previous lab from 1 to 3 replicas. We will change this in the Deployment.
 
 
-Change the number of replicas in your file `<workspace>/<username>/producer.yaml`.
+Change the number of replicas in your file `<workspace>/producer.yaml`.
 
 ```
 {{< highlight YAML "hl_lines=9" >}}
@@ -425,7 +431,7 @@ You probably asked yourself how can I delete deployed resources on the container
 First delete the file `imageStream.yaml` from Git repository and push the changes
 
 ```bash
-git rm $LAB_USER/imageStream.yaml
+git rm imageStream.yaml
 git add --all && git commit -m 'Removes ImageStream' && git push
 
 ```
@@ -473,22 +479,17 @@ apps                Deployment   <username>  data-producer  Synced     Healthy  
 ```
 
 
-<!---
+## Task {{% param sectionnumber %}}.8: Manage Tekton managed manifest with ArgoCD
 
-TODO: Berechtiungs Issues mit Argo CD ServiceAccount: dem SA argocd-application-controller fehlen die
-Berechtigungen auf $LAB_USER-pipeline zu schreiben. Der Rest für das additional Lab ist vorbereitet.
+In the previous Lab we've created our first tekton pipeline. The `apply-manifests` task applies a set of [manifests](https://github.com/puzzle/quarkus-techlab-data-transformer/blob/master/src/main/openshift/templates/data-transformer.yml) to the namespace, within a pipeline run.
+Since we don't want our manifests been managed via two different ways (tekton and argocd) for simplicity reasons, we copy the tekton managed manifests to our workspace and push them to our git repository.
 
+Let's create the `<workspace>/data-transformer.yaml` resource within our workspace and push it to the git repository.
 
-## Task {{% param sectionnumber %}}.8: Additional Task
+{{< highlight yaml "hl_lines=40" >}}{{< readfile file="manifests/04.0/4.2/data-transformer.yaml" >}}{{< /highlight >}}
 
-Setup a new Argo CD application which deployes the Tekton pipelines from the previous lab. You can do it on the web console or by cli.
-
-<details><summary>solution with cli</summary>
+{{% alert  color="primary" %}} Replace **\<username>** with your username! {{% /alert %}}
 
 ```bash
-argocd app create argo-$LAB_USER-pipelines --repo https://gitea.{{% param techlabClusterDomainName %}}/$LAB_USER/gitops-resources.git --path $LAB_USER-pipelines --dest-server https://kubernetes.default.svc --dest-namespace $LAB_USER-pipelines
+git add data-transformer.yaml && git commit -m 'Add Transformer Manifest' && git push
 ```
-
-</details><br/>
-
---->
