@@ -136,7 +136,7 @@ Expected Kafka pods after all pods have been started (This may take a few minute
 ```
 NAME                                           READY   STATUS    RESTARTS   AGE
 amm-techlab-entity-operator-68c79cc6f8-59kn7   3/3     Running   0          108s
-amm-techlab-kafka-0                            2/2     Running   0          2m24s
+amm-techlab-kafka-0                            1/1     Running   0          2m24s
 amm-techlab-zookeeper-0                        1/1     Running   0          2m56s
 ```
 
