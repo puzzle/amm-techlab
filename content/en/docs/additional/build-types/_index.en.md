@@ -8,9 +8,9 @@ description: >
 ---
 
 
-{{% alert title="Warning" color="secondary" %}}Lab noch in Alpha!{{% /alert %}}
+{{% alert title="Warning" color="secondary" %}}Lab in alpha state!{{% /alert %}}
 
-
+<!--
 ## TODO Lab
 
 * [ ] Private GitHub repo / Deploy keys / Token?
@@ -18,6 +18,4 @@ description: >
 * [ ] Image registry per user? Or add username to image name for distinct images?
 * [ ] Test binary build (sometimes a timeout occurs)
 * [ ] Add resource files with link
-
-
-## Task {{% param sectionnumber %}}.1: Build Type Overview
+-->
