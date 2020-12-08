@@ -1,7 +1,7 @@
-FROM codercom/code-server:3.4.1
+FROM codercom/code-server:3.7.4
 
 ARG ARGOCD_CLI=https://github.com/argoproj/argo-cd/releases/download/v1.7.3/argocd-linux-amd64
-ARG HELM_CLI=https://mirror.openshift.com/pub/openshift-v4/clients/helm/latest/helm-linux-amd64
+ARG HELM_CLI=https://get.helm.sh/helm-v3.4.1-linux-amd64.tar.gz
 ARG K8S_DEBUGBOX=https://github.com/puzzle/k8s-debugbox/releases/download/v1.0.5/k8s-debugbox-v1.0.5.tar.gz
 ARG KUBECTL=https://storage.googleapis.com/kubernetes-release/release/
 ARG KUBECTL_STABLE=https://storage.googleapis.com/kubernetes-release/release/stable.txt
@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install bash-completion wget
 
 RUN mkdir -p ~/.local/bin \
     && curl -L ${ARGOCD_CLI} -o /usr/local/bin/argocd \
-    && curl ${HELM_CLI} -o /usr/local/bin/helm \
+    && curl ${HELM_CLI} -o /tmp/helm.tar.gz && tar xvfz /tmp/helm.tar.gz -C /tmp && cp -a /tmp/linux-amd64/helm  /usr/local/bin/helm  && rm -rf /tmp/helm.tar.gz && rm -rf /tmp/linux-amd64 \
     && curl -L ${K8S_DEBUGBOX} -o /tmp/k8s-debugbox.tar.gz && tar xvfz /tmp/k8s-debugbox.tar.gz -C /tmp && cd /tmp/k8s-debugbox-v1.0.5/ && ./install.sh && cd - && rm -rf /tmp/k8s-debugbox* \
     && curl -L ${KUBECTL}`curl -s ${KUBECTL_STABLE}`/bin/linux/amd64/kubectl -o /usr/local/bin/kubectl \
     && curl ${KUBECTX} -o /usr/local/bin/kubectx \
