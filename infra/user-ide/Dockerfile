@@ -31,7 +31,8 @@ RUN mkdir -p ~/.local/bin \
 
 USER coder
 
-RUN echo "source <(kubectl completion bash)" >> .bashrc \
-    && echo "source <(oc completion bash)" >> .bashrc
+RUN oc completion bash | sudo tee /etc/bash_completion.d/oc_bash_completion \
+    && kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl_bash_completion
+
 
 RUN mkdir -p /tmp/coder && cp -a ~/.bashrc /tmp/coder/ && cp -a ~/.bash_logout /tmp/coder/ && cp -a ~/.profile /tmp/coder/
