@@ -15,11 +15,32 @@ The main part are the labs, which can be found at [content/en/docs](content/en/d
 This site is built using the static page generator [Hugo](https://gohugo.io/).
 
 The page uses the [docsy theme](https://github.com/google/docsy) which is included as a Git Submodule.
+Docsy is being enhanced using [docsy-plus](https://github.com/puzzle/docsy-plus/) as well as
+[docsy-acend](https://github.com/puzzle/docsy-acend/) and [docsy-puzzle](https://github.com/puzzle/docsy-puzzle/)
+for brand specific settings.
 
 After cloning the main repo, you need to initialize the submodule like this:
 
 ```bash
 git submodule update --init --recursive
+```
+
+The default configuration uses the puzzle setup from [config/_default](config/_default/config.toml).
+Further, specialized environments can be added in the `config` directory.
+
+
+### Docsy theme usage
+
+* [Official docsy documentation](https://www.docsy.dev/docs/)
+* [Docsy Plus](https://github.com/puzzle/docsy-plus/)
+
+
+### Update submodules for theme updates
+
+Run the following command to update all submodules with their newest upstream version:
+
+```bash
+git submodule update --remote
 ```
 
 
@@ -59,13 +80,13 @@ To develop locally we don't want to rebuild the entire container image every tim
 We simply mount the working directory into a running container, where hugo is started in the server mode.
 
 ```bash
-export HUGO_VERSION=$(grep "ARG HUGO_VERSION" Dockerfile | sed 's/ARG HUGO_VERSION=//g')
+export HUGO_VERSION=$(grep "FROM klakegg/hugo" Dockerfile | sed 's/FROM klakegg\/hugo://g' | sed 's/ AS builder//g')
 docker run \
   --rm --interactive \
   --publish 8080:8080 \
-  -v $(pwd):/opt/app/src \
-  -w /opt/app/src acend/hugo:${HUGO_VERSION} \
-  hugo server -p 8080 --bind 0.0.0.0
+  -v $(pwd):/src \
+  klakegg/hugo:${HUGO_VERSION} \
+  server -p 8080 --bind 0.0.0.0
 ```
 
 
