@@ -3,7 +3,7 @@ title = "AMM Techlab"
 
 enableGitInfo = true
 
-theme = "docsy"
+theme = ["docsy-puzzle", "docsy-plus", "docsy"]
 
 languageCode = "en-us"
 
