@@ -27,10 +27,10 @@ The main reasons to use this build strategy are.
 
 ## Setup
 
-Create a new project, replace \<userXY> with your username.
+Create a new project, replace \<username> with your username.
 
 ```BASH
-oc new-project amm-<userXY>
+oc new-project amm-<username>
 ```
 
 

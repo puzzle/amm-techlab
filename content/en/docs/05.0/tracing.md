@@ -104,7 +104,7 @@ oc get route jaeger-all-in-one-inmemory --template={{.spec.host}}
 ```
 
 ```
-jaeger-all-in-one-inmemory-<userXY>.{{% param techlabClusterDomainName %}}
+jaeger-all-in-one-inmemory-<username>.{{% param techlabClusterDomainName %}}
 ```
 
 Use this URL with https protocol to open the Jaeger web console in a Browser window. Use your techlab user credentials to log in. Ensure to allow the proposed permissions.

@@ -117,7 +117,7 @@ oc apply -f servicemonitor.yaml
 Expected result: `servicemonitor.monitoring.coreos.com/amm-techlab-monitor created`
 
 {{% alert title="Warning" color="secondary" %}}
-Your current user must have the following rights in the current namespace: `oc policy add-role-to-user monitoring-edit <user> -n <userXY>`
+Your current user must have the following rights in the current namespace: `oc policy add-role-to-user monitoring-edit <user> -n <username>`
 Tell your trainer if you get a permission error while creating the ServiceMonitor
 {{% /alert %}}
 
@@ -129,19 +129,19 @@ But as part of this lab, we want to use Grafana to interact with prometheus.
 Open Grafana (URL provided by the trainer) and switch to the explore tab, then execute the following query to check whether your target is configured or not:
 
 {{% alert title="Note" color="primary" %}}
-Make sure to replace `<userxy>` with your current namespace
+Make sure to replace `<username>` with your current namespace
 {{% /alert %}}
 
 
 ```s
-prometheus_sd_discovered_targets{config="<userxy>/amm-techlab-monitor/0"}
+prometheus_sd_discovered_targets{config="<username>/amm-techlab-monitor/0"}
 ```
 
 Expected result: two targets (Consumer and provider) similar to:
 
 ```
-prometheus_sd_discovered_targets{cluster="cluster",config="<userxy>/amm-techlab-monitor/0",endpoint="metrics",instance="10.129.2.229:9091",job="prometheus-user-workload",name="scrape",namespace="openshift-user-workload-monitoring",pod="prometheus-user-workload-1",prometheus="openshift-monitoring/k8s",service="prometheus-user-workload"}
-prometheus_sd_discovered_targets{cluster="cluster",config="<userxy>/amm-techlab-monitor/0",endpoint="metrics",instance="10.129.2.255:9091",job="prometheus-user-workload",name="scrape",namespace="openshift-user-workload-monitoring",pod="prometheus-user-workload-0",prometheus="openshift-monitoring/k8s",service="prometheus-user-workload"}
+prometheus_sd_discovered_targets{cluster="cluster",config="<username>/amm-techlab-monitor/0",endpoint="metrics",instance="10.129.2.229:9091",job="prometheus-user-workload",name="scrape",namespace="openshift-user-workload-monitoring",pod="prometheus-user-workload-1",prometheus="openshift-monitoring/k8s",service="prometheus-user-workload"}
+prometheus_sd_discovered_targets{cluster="cluster",config="<username>/amm-techlab-monitor/0",endpoint="metrics",instance="10.129.2.255:9091",job="prometheus-user-workload",name="scrape",namespace="openshift-user-workload-monitoring",pod="prometheus-user-workload-0",prometheus="openshift-monitoring/k8s",service="prometheus-user-workload"}
 ```
 
 
@@ -191,11 +191,11 @@ Since the Metrics are now collected from all three services, let's execute a que
 for example, the total amount of Transformed Messages
 
 ```s
-sum(application_ch_puzzle_quarkustechlab_reactivetransformer_boundary_ReactiveDataTransformer_messagesTransformed_total{namespace="<userXY>"})
+sum(application_ch_puzzle_quarkustechlab_reactivetransformer_boundary_ReactiveDataTransformer_messagesTransformed_total{namespace="<username>"})
 ```
 
 {{% alert title="Note" color="primary" %}}
-Make sure to replace `<userxy>` with your current namespace
+Make sure to replace `<username>` with your current namespace
 {{% /alert %}}
 
 
