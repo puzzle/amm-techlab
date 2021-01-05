@@ -117,8 +117,8 @@ Now let's make sure the traces that are collected within our microservices are a
 To achieve that, we need to deploy a different version of our microservices. Update the deployment config (`consumer.yaml`and `producer.yaml`) to use the new images:
 
 ```
-puzzle/quarkus-techlab-data-producer:jaegerkafka
-puzzle/quarkus-techlab-data-consumer:jaegerkafka
+quay.io/puzzle/quarkus-techlab-data-producer:jaegerkafka
+quay.io/puzzle/quarkus-techlab-data-consumer:jaegerkafka
 ```
 
 Update your resources and apply the changes.

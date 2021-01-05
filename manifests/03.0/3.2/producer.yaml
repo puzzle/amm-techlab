@@ -20,7 +20,7 @@ spec:
         app: data-producer
     spec:
       containers:
-        - image: puzzle/quarkus-techlab-data-producer:kafka
+        - image: quay.io/puzzle/quarkus-techlab-data-producer:kafka
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 5

@@ -20,7 +20,7 @@ spec:
         application: amm-techlab
     spec:
       containers:
-        - image: puzzle/quarkus-techlab-data-producer:jaegerkafka
+        - image: quay.io/puzzle/quarkus-techlab-data-producer:jaegerkafka
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 5
