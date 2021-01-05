@@ -58,6 +58,8 @@ The easiest way to login to the lab cluster using the oc tool is, by copying the
 
 Paste this login command in the Terminal and verify the output `Logged into...`.
 
+> If you are using Firefox, you can paste the command with `shift + insert`
+
 Switch to your project with `oc project <username>`
 
 If you want to use your local `oc` tool, make sure to get the appropriate version.
