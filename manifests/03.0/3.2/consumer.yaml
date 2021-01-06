@@ -20,7 +20,7 @@ spec:
         application: amm-techlab
     spec:
       containers:
-        - image: puzzle/qquay.io/puzzle/quarkus-techlab-data-producer:
+        - image: quay.io/puzzle/quarkus-techlab-data-producer:latest
           envFrom:
             - configMapRef:
                 name: consumer-config
