@@ -37,16 +37,16 @@ oc new-project amm-<username>
 First we define the username and project name as environment variables. We're going to use them later for the Template parameters.
 
 ```BASH
-export USER_NAME=userXY
+export USER_NAME=username
 export PROJECT_NAME=$(oc project -q)
 ```
 
 >**Note:** If you already have a project called "example-spring-boot-helloworld" under your Gitea user, you don't need to re-create it. Proceed with adding the  `.s2i/bin/assemble` file.
 
-Next we clone the sample repository into our private git repo. Navigate to your Gitea instance `https://gitea.{{% param techlabClusterDomainName %}}/userXY` and click on create in the top right menu and select "New Migration". Use following parameters to clone the sample repository as a private repository:
+Next we clone the sample repository into our private git repo. Navigate to your Gitea instance `https://gitea.{{% param techlabClusterDomainName %}}/username` and click on create in the top right menu and select "New Migration". Use following parameters to clone the sample repository as a private repository:
 
 * **Migrate / Clone From URL** [https://github.com/appuio/example-spring-boot-helloworld](https://github.com/appuio/example-spring-boot-helloworld)
-* **Owner** userXY
+* **Owner** username
 * **Repository Name** example-spring-boot-helloworld
 * **Visibility**  [x] Make Repository Private
 
@@ -162,8 +162,8 @@ oc describe build spring-boot-s2i-1
 We can see the following output (example is truncated)
 ......
 
-Log Tail:  Cloning "https://github.com/userXY/spring-boot-private" ...
-    error: failed to fetch requested repository "https://github.com/userXY/spring-boot-private" with provided credentials
+Log Tail:  Cloning "https://github.com/username/spring-boot-private" ...
+    error: failed to fetch requested repository "https://github.com/username/spring-boot-private" with provided credentials
 Events:
   Type    Reason    Age      From                Message
   ----    ------    ----      ----                -------
@@ -263,7 +263,7 @@ spec:
   runPolicy: Serial
   source:
     git:
-      uri: https://github.com/userXY/spring-boot-private
+      uri: https://github.com/username/spring-boot-private
     type: Git
     sourceSecret:
       name: git-credentials
@@ -429,10 +429,10 @@ oc get route spring-boot-s2i
 
 ```
 NAME              HOST/PORT                                          PATH   SERVICES          PORT       TERMINATION   WILDCARD
-spring-boot-s2i   spring-boot-s2i-userXY.{{% param techlabClusterDomainName %}}          spring-boot-s2i   8080-tcp   edge          None
+spring-boot-s2i   spring-boot-s2i-username.{{% param techlabClusterDomainName %}}          spring-boot-s2i   8080-tcp   edge          None
 ```
 
-And finally check if you can reach your application within a browser by accessing the public route. `https://spring-boot-s2i-userXY.{{% param techlabClusterDomainName %}}`
+And finally check if you can reach your application within a browser by accessing the public route. `https://spring-boot-s2i-username.{{% param techlabClusterDomainName %}}`
 
 
 Do you not find a suitable S2I builder image for you application. [Create your own](https://www.openshift.com/blog/create-s2i-builder-image)

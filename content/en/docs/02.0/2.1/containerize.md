@@ -426,9 +426,9 @@ route.route.openshift.io/data-producer   data-producer-hanelore15.{{% param tech
 
 ## Task {{% param sectionnumber %}}.9: Access application by browser
 
-Finally, you can visit your application with the URL provided from the Route: `https://data-producer-userXY.{{% param techlabClusterDomainName %}}/data`
+Finally, you can visit your application with the URL provided from the Route: `https://data-producer-username.{{% param techlabClusterDomainName %}}/data`
 
-{{% alert  color="primary" %}}Replace **userXY** with your username or get the URL from your route.{{% /alert %}}
+{{% alert  color="primary" %}}Replace **username** with your username or get the URL from your route.{{% /alert %}}
 
 When you open the URL you should see the producers data
 
@@ -529,9 +529,9 @@ route.route.openshift.io/data-consumer   data-consumer-hanelore15.{{% param tech
 route.route.openshift.io/data-producer   data-producer-hanelore15.{{% param techlabClusterDomainName %}}          data-producer   8080-tcp   edge          None
 ```
 
-Now you can visit the consumer the URL provided from the Route: `https://data-consumer-userXY.{{% param techlabClusterDomainName %}}/data`
+Now you can visit the consumer the URL provided from the Route: `https://data-consumer-username.{{% param techlabClusterDomainName %}}/data`
 
-{{% alert  color="primary" %}}Replace **userXY** with your username or get the URL from your route.{{% /alert %}}
+{{% alert  color="primary" %}}Replace **username** with your username or get the URL from your route.{{% /alert %}}
 
 When you open the URL you should see the consumers data that he received from the producer
 

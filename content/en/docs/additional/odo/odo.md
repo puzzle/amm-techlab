@@ -38,7 +38,7 @@ Prepare a project and configure the development of a Go application.
 Create project:
 
 ```bash
-oc new-project odo-userXY
+oc new-project odo-username
 ```
 
 Use a new folder to store the odo configuration and the application files. Create the folder with name `odo-application` and go into it:
@@ -66,7 +66,7 @@ COMPONENT SETTINGS
 PARAMETER         CURRENT_VALUE
 Type              golang
 Application       app
-Project           odo-userXY
+Project           odo-username
 SourceType        local
 Ref
 SourceLocation    ./
@@ -140,7 +140,7 @@ Configuration changes
  ✓  Applying configuration [336ms]
 
 Applying URL changes
- ✓  URL go-app: https://go-app-app-odo-userXY.appuio.ch created
+ ✓  URL go-app: https://go-app-app-odo-username.appuio.ch created
 
 Pushing to component golang-odo-applicat-asqd of type local
  ✓  Checking file changes for pushing [958674ns]

@@ -92,7 +92,7 @@ oc project
 ```
 
 ```
-Using project "userXY" on server "https://<theClusterAPIURL>".
+Using project "username" on server "https://<theClusterAPIURL>".
 ```
 
 The returned project name should correspond to your username.

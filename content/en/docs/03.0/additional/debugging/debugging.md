@@ -9,10 +9,10 @@ description: >
 
 ## Task {{% param sectionnumber %}}.1: Prepare Test Application
 
-First create a project called "debugbox-userXY".
+First create a project called "debugbox-username".
 
 ```bash
-oc new-project debugbox-userXY
+oc new-project debugbox-username
 ```
 
 
