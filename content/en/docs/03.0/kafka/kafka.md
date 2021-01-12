@@ -237,7 +237,7 @@ Do following changes inside your file `<workspace>/producer.yaml`:
 * and remove the triggers.
 
 ```
-{{< highlight YAML "hl_lines=1-2 11-12 19-20 23" >}}
+{{< highlight YAML "hl_lines=1-2 11-12 19-20 23 57 58" >}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -294,6 +294,8 @@ spec:
             requests:
               cpu: 50m
               memory: 100Mi
+      # Remove triggers from deployment config!
+ 
 {{< / highlight >}}
 ```
 
