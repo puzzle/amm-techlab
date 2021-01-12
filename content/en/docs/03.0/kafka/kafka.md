@@ -233,7 +233,7 @@ Do following changes inside your file `<workspace>/producer.yaml`:
 * update the selector,
 * add label `app`,
 * rename label `deploymentConfig` to `deployment`,
-* change the image to `quay.io/puzzle/quarkus-techlab-data-producer:kafka`
+* change the image to `quay.io/puzzle/quarkus-techlab-data-producer:jaegerkafka`
 * and remove the triggers.
 
 ```
@@ -260,7 +260,7 @@ spec:
         app: data-producer
     spec:
       containers:
-        - image: quay.io/puzzle/quarkus-techlab-data-producer:kafka
+        - image: quay.io/puzzle/quarkus-techlab-data-producer:jaegerkafka
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 5
