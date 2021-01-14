@@ -295,7 +295,6 @@ spec:
               cpu: 50m
               memory: 100Mi
       # Remove triggers from deployment config!
- 
 {{< / highlight >}}
 ```
 
