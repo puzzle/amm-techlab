@@ -9,11 +9,13 @@ description: >
 
 ## Task {{% param sectionnumber %}}.1: Prepare Test Application
 
-First create a project called "debugbox-username".
+First create a project called "debugbox-\<username>".
 
 ```bash
-oc new-project debugbox-username
+oc new-project debugbox-<username>
 ```
+
+{{% alert  color="primary" %}}Replace **\<username>** with your username!{{% /alert %}}
 
 
 ### Deploy test application

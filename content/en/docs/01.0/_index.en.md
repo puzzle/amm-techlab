@@ -17,7 +17,7 @@ Login to the web console of the Lab Cluster with the provided Username and Passw
 
 {{% alert title="Note" color="primary" %}} Ask your trainer if you don't have your Username and Password {{% /alert %}}
 
-The project with your username is going to be used for all the hands-on labs.
+The project with the name corresponding to your username is going to be used for all the hands-on labs.
 
 
 ### Task {{% param sectionnumber %}}.1.1: Web IDE
@@ -69,7 +69,7 @@ If you want to use your local `oc` tool, make sure to get the appropriate versio
 
 During the lab, you’ll be using local files (eg. YAML resources) which will be applied in your lab project.
 
-Create a new folder for your `<workspace>` in your Web IDE  (for example ./amm-techlab/). Either you can create it with `right-mouse-click -> New Folder` or in the Web IDE terminal `mkdir amm-techlab`
+Create a new folder for your \<workspace> in your Web IDE  (for example ./amm-techlab/). Either you can create it with `right-mouse-click -> New Folder` or in the Web IDE terminal `mkdir amm-techlab`
 
 
 ### Task {{% param sectionnumber %}}.1.4: Explore other namespaces
@@ -92,7 +92,7 @@ oc project
 ```
 
 ```
-Using project "username" on server "https://<theClusterAPIURL>".
+Using project "<username>" on server "https://<theClusterAPIURL>".
 ```
 
 The returned project name should correspond to your username.

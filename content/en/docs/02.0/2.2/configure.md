@@ -178,9 +178,9 @@ Changing the environment of a deployment triggers a rollout of the application p
 After the container has started successfully, the application should be reachable again.
 
 Check if the changes were applied correctly. Open your browser and navigate to your application:  
-`https://data-producer-username.{{% param techlabClusterDomainName %}}/data`
+`https://data-producer-<username>.{{% param techlabClusterDomainName %}}/data`
 
-{{% alert  color="primary" %}}Replace `username` with your username!{{% /alert %}}
+{{% alert  color="primary" %}}Replace **\<username>** with your username!{{% /alert %}}
 
 
 ## Important notes

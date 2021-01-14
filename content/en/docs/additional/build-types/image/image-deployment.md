@@ -101,7 +101,7 @@ oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content
 In this section we create a docker secret to access the private registry and pull the docker image.
 
 ```BASH
-oc create secret docker-registry regcred --docker-server=<registry_server> --docker-username=<user_name> --docker-password=<password> --docker-email=<email>
+oc create secret docker-registry regcred --docker-server=<registry_server> --docker-username=<username> --docker-password=<password> --docker-email=<email>
 ```
 
 Next we link the secret with our default service account.
