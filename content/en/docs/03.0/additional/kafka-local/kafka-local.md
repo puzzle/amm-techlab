@@ -86,7 +86,7 @@ docker exec -it amm-kafka-cluster /bin/bash
 When logged into your docker container you can start to consume data:
 
 ```s
-[kafka@b6061841d63c kafka]$ ./bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic manual --from-beginning
+./bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic manual --from-beginning
 ```
 
 Stop this consumer inside the container by pressing `Ctrl+C` and `Ctrl+D` to leave the container.

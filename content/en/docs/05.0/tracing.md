@@ -46,6 +46,7 @@ oc project $LAB_USER
 
 </details><br/>
 
+> Don't forget to deploy/update your resources with the git instead of the oc command for this lab
 
 ## Task {{% param sectionnumber %}}.2: Deploy Jaeger instance
 
@@ -114,11 +115,19 @@ Use this URL with https protocol to open the Jaeger web console in a Browser win
 
 Now let's make sure the traces that are collected within our microservices are also been sent to the running Jaeger services.
 
-To achieve that, we need to deploy a different version of our microservices. Update the deployment config (`consumer.yaml`and `producer.yaml`) to use the new images:
+
+To achieve that, we need to deploy a different version of our microservices. Update the deployment config (`producer.yaml`) to use the jaeger feature:
 
 ```
-quay.io/puzzle/quarkus-techlab-data-producer:jaegerkafka
-quay.io/puzzle/quarkus-techlab-data-consumer:jaegerkafka
+    spec:
+      containers:
+        - image: quay.io/puzzle/quarkus-techlab-data-producer:jaegerkafka
+          imagePullPolicy: Always
+          env:
+            - name: QUARKUS_JAEGER_ENABLED
+              value: 'true'
+          livenessProbe:
+            failureThreshold: 5
 ```
 
 Update your resources and apply the changes.
@@ -126,20 +135,43 @@ Update your resources and apply the changes.
 <details><summary>command hint</summary>
 
 ```bash
-oc apply -f producer.yaml
+git add . && git commit -m "Enable jaeger feature on producer" && git push
 ```
-
-Expected result: `deployment.apps/data-producer configured`
-
-```bash
-oc apply -f consumer.yaml
-```
-
-Expected result: `deployment.apps/data-producer configured`
-
-Or let argoCD manage the resources (`git add . && git commit -m "Message" && git push`)
 
 </details><br/>
+
+Next we configure the consumer to use the jaeger feature. To enable jaeger, open `<workspace>/consumerConfigMap.yaml` and change the `quarkus.jaeger.enabled` property.
+
+```
+{{< highlight YAML "hl_lines=10" >}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: consumer-config
+data:
+  # Configure the SmallRye Kafka connector
+  kafka.bootstrap.servers: 'amm-techlab-kafka-bootstrap:9092'
+
+  #Toggle jaeger trace feature
+  quarkus.jaeger.enabled: 'true'
+  
+  # Configure the Kafka sink
+  mp.messaging.incoming.data.connector: smallrye-kafka
+  mp.messaging.incoming.data.topic: manual
+  mp.messaging.incoming.data.value.deserializer: ch.puzzle.quarkustechlab.reactiveconsumer.control.SensorMeasurementDeserializer
+{{< / highlight >}}
+```
+
+Update your resources and apply the changes.
+
+<details><summary>command hint</summary>
+
+```bash
+git add . && git commit -m "Enable jaeger feature on consumer" && git push
+```
+
+</details><br/>
+
 
 And also reconfigure the environment of the data-transformer (`<workspace>/data-transformer.yaml`) to enable Jaeger by changing the `quarkus.jaeger.enabled` env to `true`
 
@@ -154,10 +186,8 @@ env:
 <details><summary>command hint</summary>
 
 ```bash
-oc apply -f data-transformer.yaml
+`git add . && git commit -m "Enable jaeger feature on transformer" && git push`
 ```
-
-Or let argoCD manage the resources (`git add . && git commit -m "Message" && git push`)
 
 </details><br/>
 

@@ -18,17 +18,17 @@ oc new-project debugbox-username
 
 ### Deploy test application
 
-A minimal container image is suitable for testing, e.g. a Go application in an empty file system (From scratch): [s3manager](https://hub.docker.com/r/mastertinner/s3manager)
+A minimal container image is suitable for testing, e.g. a Go application in an empty file system (From scratch): [s3manager](https://quay.io/puzzle/s3manager:latest)
 
 Create a new application from this image:
 
-* Image: mastertinner/s3manager
+* Image: quay.io/puzzle/s3manager:latest
 * Environment:
   * ACCESS_KEY_ID=something
   * SECRET_ACCESS_KEY=x
 
 ```bash
-oc new-app -e ACCESS_KEY_ID=something -e SECRET_ACCESS_KEY=x mastertinner/s3manager
+oc new-app -e ACCESS_KEY_ID=something -e SECRET_ACCESS_KEY=x quay.io/puzzle/s3manager:latest  --allow-missing-images
 ```
 
 {{% alert  color="primary" %}} Since [OpenShift 4.5](https://docs.openshift.com/container-platform/4.5/release_notes/ocp-4-5-release-notes.html#ocp-4-5-developer-experience) `oc new-app` creates a Deployment not a DeploymentConfig. {{% /alert %}}

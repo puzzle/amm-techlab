@@ -15,32 +15,33 @@ spec:
   template:
     metadata:
       labels:
+        application: amm-techlab
         deployment: data-producer
         app: data-producer
-        application: amm-techlab
     spec:
       containers:
         - image: quay.io/puzzle/quarkus-techlab-data-producer:jaegerkafka
           imagePullPolicy: Always
+          env:
+            - name: QUARKUS_JAEGER_ENABLED
+              value: 'true'
           livenessProbe:
             failureThreshold: 5
             httpGet:
-              path: /health
+              path: /health/live
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 3
             periodSeconds: 20
-            successThreshold: 1
             timeoutSeconds: 15
           readinessProbe:
             failureThreshold: 5
             httpGet:
-              path: /health
+              path: /health/ready
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 3
             periodSeconds: 20
-            successThreshold: 1
             timeoutSeconds: 15
           name: data-producer
           ports:

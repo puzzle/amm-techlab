@@ -6,6 +6,9 @@ data:
   # Configure the SmallRye Kafka connector
   kafka.bootstrap.servers: 'amm-techlab-kafka-bootstrap:9092'
 
+  #Toggle jaeger trace feature
+  quarkus.jaeger.enabled: 'false'
+
   # Configure the Kafka sink
   mp.messaging.incoming.data.connector: smallrye-kafka
   mp.messaging.incoming.data.topic: manual

@@ -419,6 +419,9 @@ data:
   # Configure the SmallRye Kafka connector
   kafka.bootstrap.servers: 'amm-techlab-kafka-bootstrap:9092'
 
+  #Toggle jaeger trace feature
+  quarkus.jaeger.enabled: 'false'
+  
   # Configure the Kafka sink
   mp.messaging.incoming.data.connector: smallrye-kafka
   mp.messaging.incoming.data.topic: manual
@@ -444,10 +447,10 @@ configmap/consumer-config created
 ```
 
 Next step is to include the ConfigMap to the consumer pod to define the environment.
-The file from lab 2 `<workspace>/consumer.yaml` defines all needed resources as a list. We only have to integrate the `consumer-config` ConfigMap to the Deployment.
+The file from lab 2 `<workspace>/consumer.yaml` defines all needed resources as a list. We only have to integrate the `consumer-config` ConfigMap to the Deployment and change the Docker image tag to `:jaegerkafka`.
 
 ```
-{{< highlight YAML "hl_lines=24-26" >}}
+{{< highlight YAML "hl_lines=23-26" >}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -470,7 +473,7 @@ spec:
         application: amm-techlab
     spec:
       containers:
-        - image: quay.io/puzzle/quarkus-techlab-data-consumer:latest
+        - image: quay.io/puzzle/quarkus-techlab-data-consumer:jaegerkafka
           envFrom:
             - configMapRef:
                 name: consumer-config
