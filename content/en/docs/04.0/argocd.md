@@ -151,7 +151,7 @@ oc project $LAB_USER
 To deploy the resources using the Argo CD CLI use the following command:
 
 ```bash
-argocd app create argo-$LAB_USER --repo https://gitea.{{% param techlabClusterDomainName %}}/$LAB_USER/gitops-resources.git --path '.' --dest-server https://kubernetes.default.svc --dest-namespace $LAB_USER
+argocd app create argo-$LAB_USER --repo https://gitea.{{% param techlabClusterDomainName %}}/$LAB_USER/gitops-resources.git --path '.' --dest-server https://kubernetes.default.svc --dest-namespace $LAB_USER --directory-recurse=true
 ```
 
 Expected output: `application 'argo-<username>' created`
