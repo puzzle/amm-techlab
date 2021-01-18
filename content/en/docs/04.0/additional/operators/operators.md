@@ -99,6 +99,8 @@ Create project:
 oc new-project ${LAB_USER}-operator
 ```
 
+<!-- TODO: crd needs a namespace defined. Change to file, but do not add to default workspace -->
+
 Subscriptions to the etcd operator can be done by creating a subscription resource:
 
 {{< highlight yaml >}}{{< readfile file="manifests/04.0/4.3.1/etcd-subscription.yaml" >}}{{< /highlight >}}
@@ -159,10 +161,12 @@ Describing the configured CRD gives us more information about the deployment:
 oc describe EtcdCluster example-etcd-cluster --namespace ${LAB_USER}-operator
 ```
 
-We can also store something within our cluster:
+We can also store something within our cluster.
+Open a Terminal inside the web console for your example-etcd-cluster-XYZ pod or connect by `oc rsh example-etcd-cluster-XYZ`
+
+Store and retrieve some data:
 
 ```bash
-oc rsh example-etcd-cluster-XYZ
 export ETCDCTL_API=3
 etcdctl get foo
 etcdctl put foo bar
@@ -173,6 +177,8 @@ etcdctl get foo
 ### Recovery
 
 The operator is watching the deployed cluster and will recover it from failures. This is not a feature driven by a StatefulSet or a DeploymentConfig, rather the operator watches the deployed cluster and ensures it is kept in the desired overall state:
+
+<!-- TODO: Hannelore user has no rights to delete a pod. -->
 
 ```bash
 oc delete pod example-etcd-cluster-XYZ --namespace ${LAB_USER}-operator
