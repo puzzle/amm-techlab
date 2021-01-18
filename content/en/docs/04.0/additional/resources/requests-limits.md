@@ -14,6 +14,34 @@ Use the existing Namespace `<username>-resources` for this lab.
 {{% /alert %}}
 
 
+## Task {{% param sectionnumber %}}.1: Check project setup
+
+We first check that the project is ready for the lab.
+
+Ensure that the `LAB_USER` environment variable is set.
+
+```bash
+echo $LAB_USER
+```
+
+If the result is empty, set the `LAB_USER` environment variable.
+
+<details><summary>command hint</summary>
+
+```bash
+export LAB_USER=<username>
+```
+
+</details><br/>
+
+
+Change to your `<username>-resources` Project.
+
+```bash
+oc project ${LAB_USER}-resources
+```
+
+
 ## ResourceQuotas
 
 ResourceQuotas among other things limit the amount of resources Pods can use in a Namespace. They can also be used to limit the total number of a certain resource type in a Project. In more detail, there are these kinds of quotas:
@@ -27,13 +55,13 @@ Defining ResourceQuotas makes sense when the cluster administrators want to have
 In order to check for defined quotas in your Namespace, simply see if there are any of type ResourceQuota:
 
 ```
-oc get resourcequota --namespace <namespace>
+oc get resourcequota --namespace ${LAB_USER}-resources
 ```
 
 To show in detail what kinds of limits the quota imposes:
 
 ```
-oc describe resourcequota <quota-name> --namespace <namespace>
+oc describe resourcequota <quota-name> --namespace ${LAB_USER}-resources
 ```
 
 For more details, have look into [OpenShifts documentation about resource quotas](https://docs.openshift.com/container-platform/4.5/applications/quotas/quotas-setting-per-project.html).
@@ -120,37 +148,36 @@ If for example a container did not define any requests or limits and there was a
 The possibility of enforcing minimum and maximum resources and defining ResourceQuotas per Namespace allows for many combinations of resource control.
 
 
-## Task {{% param sectionnumber %}}.1: Namespace
+## Task {{% param sectionnumber %}}.2: Namespace
 
 Check whether your Namespace contains a LimitRange:
 
 ```bash
-oc describe limitrange --namespace <namespace>
+oc describe limitrange --namespace ${LAB_USER}-resources
 ```
 
 Above command should output this (name and Namespace will vary):
 
 ```
-Name:       ce01a1b6-a162-479d-847c-4821255cc6db
-Namespace:  eltony-quota-lab
+Name:       limits
+Namespace:  <username>-resources
 Type        Resource  Min  Max  Default Request  Default Limit  Max Limit/Request Ratio
 ----        --------  ---  ---  ---------------  -------------  -----------------------
 Container   memory    -    -    16Mi             32Mi           -
 Container   cpu       -    -    10m              100m           -
 ```
 
-
 Check whether a ResourceQuota exists in your Namespace:
 
 ```bash
-oc describe quota --namespace <namespace>
+oc describe quota --namespace ${LAB_USER}-resources
 ```
 
 Above command could (must not) output this (name and Namespace will vary):
 
 ```
-Name:            lab-quota
-Namespace:       eltony-quota-lab
+Name:            compute-quota
+Namespace:       <username>-resources
 Resource         Used  Hard
 --------         ----  ----
 requests.cpu     0     100m
@@ -158,12 +185,12 @@ requests.memory  0     100Mi
 ```
 
 
-## Task {{% param sectionnumber %}}.2: Default memory limit
+## Task {{% param sectionnumber %}}.3: Default memory limit
 
 Create a Pod using the polinux/stress image:
 
 ```bash
-oc run stress2much --image=polinux/stress --namespace <namespace> --command -- stress --vm 1 --vm-bytes 85M --vm-hang 1
+oc run stress2much --image=polinux/stress --namespace ${LAB_USER}-resources --command -- stress --vm 1 --vm-bytes 85M --vm-hang 1
 ```
 
 {{% alert title="Note" color="primary" %}}
@@ -173,7 +200,7 @@ You have to actively terminate the following command pressing `CTRL+c` on your k
 Watch the Pod's creation with:
 
 ```bash
-oc get pods --watch --namespace <namespace>
+oc get pods --watch --namespace ${LAB_USER}-resources
 ```
 
 You should see something like the following:
@@ -191,7 +218,7 @@ stress2much   0/1     CrashLoopBackOff    1          20s
 The `stress2much` Pod was OOM (out of memory) killed. We can see this in the `STATUS` field. Another way to find out why a Pod was killed is by checking its status. Output the Pod's YAML definition:
 
 ```bash
-oc get pod stress2much --output yaml --namespace <namespace>
+oc get pod stress2much --output yaml --namespace ${LAB_USER}-resources
 ```
 
 Near the end of the output you can find the relevant status part:
@@ -210,7 +237,7 @@ Near the end of the output you can find the relevant status part:
 So let's look at the numbers to verify the container really had too little memory. We started the `stress` command using parameter `--vm-bytes 85M` which means the process wants to allocate 85 megabytes of memory. Again looking at the Pod's YAML definition with:
 
 ```bash
-oc get pod stress2much --output yaml --namespace <namespace>
+oc get pod stress2much --output yaml --namespace ${LAB_USER}-resources
 ```
 
 reveals the following values:
@@ -233,8 +260,8 @@ Let's fix this by recreating the Pod and explicitly setting the memory request t
 
 
 ```bash
-oc delete pod stress2much --namespace <namespace>
-oc run stress --image=polinux/stress --limits=memory=100Mi --requests=memory=85Mi --namespace <namespace> --command -- stress --vm 1 --vm-bytes 85M --vm-hang 1
+oc delete pod stress2much --namespace ${LAB_USER}-resources
+oc run stress --image=polinux/stress --limits=memory=100Mi --requests=memory=85Mi --namespace ${LAB_USER}-resources --command -- stress --vm 1 --vm-bytes 85M --vm-hang 1
 ```
 
 {{% alert title="Note" color="primary" %}}
@@ -249,12 +276,12 @@ stress   1/1     Running   0          25s
 ```
 
 
-## Task {{% param sectionnumber %}}.3: Hitting the quota
+## Task {{% param sectionnumber %}}.4: Hitting the quota
 
 Create another Pod, again using the `polinux/stress` image. This time our application is less demanding and only needs 10 MB of memory (`--vm-bytes 10M`):
 
 ```bash
-oc run overbooked --image=polinux/stress --namespace <namespace> --command -- stress --vm 1 --vm-bytes 10M --vm-hang 1
+oc run overbooked --image=polinux/stress --namespace ${LAB_USER}-resources --command -- stress --vm 1 --vm-bytes 10M --vm-hang 1
 ```
 
 We are immediately confronted with an error message:
@@ -268,7 +295,7 @@ The default request value of 16 MiB of memory that was automatically set on the 
 Let's have a closer look at the quota with:
 
 ```bash
-oc get quota --output yaml --namespace <namespace>
+oc get quota --output yaml --namespace ${LAB_USER}-resources
 ```
 
 which should output the following YAML definition:
@@ -291,7 +318,7 @@ Fortunately our application can live with less memory than what the LimitRange s
 
 
 ```bash
-oc run overbooked --image=polinux/stress --limits=memory=16Mi --requests=memory=10Mi --namespace <namespace> --command -- stress --vm 1 --vm-bytes 10M --vm-hang 1
+oc run overbooked --image=polinux/stress --limits=memory=16Mi --requests=memory=10Mi --namespace ${LAB_USER}-resources --command -- stress --vm 1 --vm-bytes 10M --vm-hang 1
 ```
 
 Even though the limits of both Pods combined overstretch the quota, the requests do not and so the Pods are allowed to run.
