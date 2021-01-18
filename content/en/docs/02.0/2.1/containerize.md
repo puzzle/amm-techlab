@@ -529,11 +529,16 @@ route.route.openshift.io/data-consumer   data-consumer-hanelore15.{{% param tech
 route.route.openshift.io/data-producer   data-producer-hanelore15.{{% param techlabClusterDomainName %}}          data-producer   8080-tcp   edge          None
 ```
 
-Now you can visit the consumer the URL provided from the Route: `https://data-consumer-<username>.{{% param techlabClusterDomainName %}}/data`
+Now you can visit the consumer the URL provided from the Route.
+Get the URL of the data-consumer's route:
 
-{{% alert  color="primary" %}}Replace **\<username>** with your username or get the URL from your route.{{% /alert %}}
+```bash
+oc get route data-consumer -ojsonpath='{.spec.host}'
+```
 
-When you open the URL you should see the consumers data that he received from the producer
+{{% alert  color="primary" %}}Add **/data** at the end of the URL from your route.{{% /alert %}}
+
+When you open the URL you should see the consumers data that he received from the producer.
 
 ```
 {"data":0.6681209742895893}
