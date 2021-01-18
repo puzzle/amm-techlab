@@ -48,6 +48,7 @@ oc project $LAB_USER
 
 > Don't forget to deploy/update your resources with the git instead of the oc command for this lab
 
+
 ## Task {{% param sectionnumber %}}.2: Deploy Jaeger instance
 
 Then let's quickly deploy a Jaeger instance.
