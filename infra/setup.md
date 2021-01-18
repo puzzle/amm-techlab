@@ -19,7 +19,7 @@ If you want to pre-setup the Gitea users and repositories, follow these steps:
     - example-spring-boot-helloworld
     - Visibility: [x] Make Repository Private
 
-Steps 3 and 4 can be automated. See <https://gitea.{{% param techlabClusterDomainName %}}/api/swagger> for details on the API.
+Steps 3 and 4 can be automated. See <https://{{% param techlabGiteaUrl %}}/api/swagger> for details on the API.
 
 
 ## Project cleanup

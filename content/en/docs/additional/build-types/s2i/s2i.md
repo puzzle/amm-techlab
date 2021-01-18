@@ -43,7 +43,7 @@ export PROJECT_NAME=$(oc project -q)
 
 >**Note:** If you already have a project called "example-spring-boot-helloworld" under your Gitea user, you don't need to re-create it. Proceed with adding the  `.s2i/bin/assemble` file.
 
-Next we clone the sample repository into our private git repo. Navigate to your Gitea instance `https://gitea.{{% param techlabClusterDomainName %}}/<username>` and click on create in the top right menu and select "New Migration". Use following parameters to clone the sample repository as a private repository:
+Next we clone the sample repository into our private git repo. Navigate to your Gitea instance `https://{{% param techlabGiteaUrl %}}/<username>` and click on create in the top right menu and select "New Migration". Use following parameters to clone the sample repository as a private repository:
 
 * **Migrate / Clone From URL:** [https://github.com/appuio/example-spring-boot-helloworld](https://github.com/appuio/example-spring-boot-helloworld)
 * **Owner:** \<username>
@@ -82,7 +82,7 @@ First let's create a BuildConfig. The important part in this specification are t
 [Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/buildConfig.yaml)
 
 ```BASH
-oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/buildConfig.yaml -p GITREPOSITORY=https://gitea.{{% param techlabClusterDomainName %}}/$USER_NAME/example-spring-boot-helloworld | oc apply -f -
+oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/buildConfig.yaml -p GITREPOSITORY=https://{{% param techlabGiteaUrl %}}/$USER_NAME/example-spring-boot-helloworld | oc apply -f -
 ```
 
 Next we need the definitions for our two ImageStreamTag references.
