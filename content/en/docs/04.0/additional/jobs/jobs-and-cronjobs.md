@@ -12,6 +12,9 @@ description: >
 ## TODO
 
 * [ ] Testen und durchspielen, allenfalls auf maria
+* [ ] eigenes Projekt nehme
+* [ ] Lab / Project Setup analog anderer Labs
+* [ ] Ressourcen Files nicht in WS Folder ablegen!
 
 -->
 
