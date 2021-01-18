@@ -47,7 +47,7 @@ argocd login <ARGOCD_SERVER> --grpc-web --username hannelore
 
 {{% alert title="Note" color="primary" %}}Make sure to pass the `<ARGOCD_SERVER>` without protocol e.g. `argocd.domain.com`. The `--grpc-web` parameter is necessary due to missing http 2.0 router.{{% /alert %}}
 
-
+<!--
 ### Login on your local computer
 
 Let's start by downloading the latest Argo CD version from <https://github.com/argoproj/argo-cd/releases/latest>. More detailed installation instructions can be found via the [CLI installation documentation](https://argoproj.github.io/argo-cd/cli_installation/).
@@ -59,19 +59,15 @@ argocd login <ARGOCD_SERVER> --sso --grpc-web
 ```
 
 {{% alert title="Note" color="primary" %}}Make sure to pass the `<ARGOCD_SERVER>` without protocol e.g. `argocd.domain.com`. Follow the sso login steps in the new browser window. The `--grpc-web` parameter is necessary due to missing http 2.0 router.{{% /alert %}}
+-->
 
 
 ## Task {{% param sectionnumber %}}.2: Add Resources to a Git repository
 
 As we are proceeding from now on according to the GitOps principle we need to push all existing resources located in `<workspace>/*.yaml`  into a new Git repository. All the cli commands in this chapter must be executed in the terminal of the provided Web IDE.
 
-Create an empty Git repository in Gitea. You will find the exposed hostname of the Gitea repository by inspecting the OpenShift Route:
-
-```bash
-oc -n pitc-infra-gitea get route gitea -ojsonpath='{.spec.host}'
-```
-
-Enter the Hostname in your browser and register a new account with your personal username and a password that you can remember ;)
+Create an empty Git repository in Gitea.
+Visit `https://gitea.{{% param techlabClusterDomainName %}}/` with your browser and register a new account with your personal username and a password that you can remember ;)
 
 ![Register new User in Gitea](../gitea-register.png)
 
@@ -83,11 +79,21 @@ The URL of the newly created Git repository will look like `https://gitea.{{% pa
 
 Change directory to the workspace where the yaml resources of the previous labs are located: `cd <workspace>`
 
-Set your username as an environment variable:
+Ensure that the `LAB_USER` environment variable is set.
+
+```bash
+echo $LAB_USER
+```
+
+If the result is empty, set the `LAB_USER` environment variable.
+
+<details><summary>command hint</summary>
 
 ```bash
 export LAB_USER=<username>
 ```
+
+</details><br/>
 
 Configure your folder to be a Git repository
 
@@ -135,22 +141,6 @@ Go back to the webinterface of Gitea and inspect the structure and files in your
 ## Task {{% param sectionnumber %}}.3: Deploying the resources with Argo CD
 
 Now we want to deploy the resources of the previous labs with Argo CD to demonstrate how Argo CD works.
-
-Ensure that the `LAB_USER` environment variable is set.
-
-```bash
-echo $LAB_USER
-```
-
-If the result is empty, set the `LAB_USER` environment variable.
-
-<details><summary>command hint</summary>
-
-```bash
-export LAB_USER=<username>
-```
-
-</details><br/>
 
 Change to your main Project.
 
@@ -265,7 +255,7 @@ template.openshift.io  Template               <username>  pipeline-run-template 
 
 ## Task {{% param sectionnumber %}}.4: Automated Sync Policy and Diff
 
-When there is a new commit in your Git repository, the Argo CD application becomes OutOfSync. Let's assume we want to scale up our producer of the previous lab from 1 to 3 replicas. We will change this in the Deployment.
+When there is a new commit in your Git repository, the Argo CD application becomes OutOfSync. Let's assume we want to scale up our producer of the previous lab from 1 to 2 replicas. We will change this in the Deployment.
 
 
 Change the number of replicas in your file `<workspace>/producer.yaml`.
@@ -280,7 +270,7 @@ metadata:
     application: amm-techlab
   name: data-producer
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       deployment: data-producer
@@ -293,13 +283,13 @@ spec:
 Commit the changes and push them to the remote:
 
 ```bash
-git add . && git commit -m 'Scaled up to 3 replicas' && git push
+git add . && git commit -m 'Scaled up to 2 replicas' && git push
 ```
 
 Don't forget to interactively provide your personal Git password. After a successful push you should see a message similar to the following lines:
 
 ```
-[master 18daed3] Scaled up to 3 replicas
+[master 18daed3] Scaled up to 2 replicas
  1 file changed, 1 insertion(+), 1 deletion(-)
 Enumerating objects: 7, done.
 Counting objects: 100% (7/7), done.
@@ -347,7 +337,7 @@ which should give you an output similar to:
 155c155
 <   replicas: 1
 ---
->   replicas: 3
+>   replicas: 2
 ```
 
 Now open the web console of Argo CD and go to your application. The deployment `data-producer` is marked as 'OutOfSync':
@@ -359,7 +349,7 @@ With a click on Deployment > Diff you will see the differences:
 ![Application Differences](../argo-diff.png)
 
 
-Now click `Sync` on the top left and let the magic happens ;) The producer will be scaled up to 3 replicas and the resources are in Sync again.
+Now click `Sync` on the top left and let the magic happens ;) The producer will be scaled up to 2 replicas and the resources are in Sync again.
 
 Double-check the status by cli
 
@@ -409,18 +399,19 @@ Let's scale our `data-producer` Deployment and observe whats happening:
 oc scale deployment data-producer --replicas=1
 ```
 
-Argo CD will immediately scale back the `data-producer` Deployment to `3` replicas. You will see the desired replicas count in the watched Deployment.
+Argo CD will immediately scale back the `data-producer` Deployment to `2` replicas. You will see the desired replicas count in the watched Deployment.
 
 ```
-NAME            DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
-data-producer   3         3         3         3         51m
-data-producer   1         3         3         3         51m
-data-producer   1         3         3         3         51m
-data-producer   1         1         1         1         51m
-data-producer   3         1         1         1         51m
-data-producer   3         1         1         1         51m
-data-producer   3         1         1         1         51m
-data-producer   3         3         3         1         51m
+NAME            READY   UP-TO-DATE   AVAILABLE   AGE
+data-producer   2/2     2            2           78m
+data-producer   2/1     2            2           78m
+data-producer   2/1     2            2           78m
+data-producer   1/1     1            1           78m
+data-producer   1/2     1            1           78m
+data-producer   1/2     1            1           78m
+data-producer   1/2     1            1           78m
+data-producer   1/2     2            1           78m
+data-producer   2/2     2            2           78m
 ```
 
 
