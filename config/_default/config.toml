@@ -66,8 +66,9 @@ github_repo = "https://github.com/puzzle/amm-techlab"
 
 
 enabledModule = "base"
-techlabClusterDomainName = "techlab.openshift.ch"
 techlabClusterWebConsolePrefix = "console"
+techlabClusterDomainName = "techlab.openshift.ch"
+techlabArgoCdUrl = "argo.techlab.openshift.ch"
 
 # Enable Lunr.js offline search
 offlineSearch = true

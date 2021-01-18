@@ -42,7 +42,7 @@ You can access Argo CD via Web UI (URL is provided by your teacher) or using the
 Since the sso login does not work inside the Web IDE for various reasons, your teacher will provide a generic local Argo CD account `hannelore` without any number.
 
 ```bash
-argocd login <ARGOCD_SERVER> --grpc-web --username hannelore
+argocd login {{% param techlabArgoCdUrl %}} --grpc-web --username hannelore
 ```
 
 {{% alert title="Note" color="primary" %}}Make sure to pass the `<ARGOCD_SERVER>` without protocol e.g. `argocd.domain.com`. The `--grpc-web` parameter is necessary due to missing http 2.0 router.{{% /alert %}}
@@ -55,7 +55,7 @@ Let's start by downloading the latest Argo CD version from <https://github.com/a
 You can access Argo CD via UI or using the CLI. For CLI usage use the following command to login (credentials are given by your teacher):
 
 ```bash
-argocd login <ARGOCD_SERVER> --sso --grpc-web
+argocd login {{% param techlabArgoCdUrl %}} --sso --grpc-web
 ```
 
 {{% alert title="Note" color="primary" %}}Make sure to pass the `<ARGOCD_SERVER>` without protocol e.g. `argocd.domain.com`. Follow the sso login steps in the new browser window. The `--grpc-web` parameter is necessary due to missing http 2.0 router.{{% /alert %}}
@@ -171,7 +171,7 @@ Name:               argo-<username>
 Project:            default
 Server:             https://kubernetes.default.svc
 Namespace:          <username>
-URL:                https://argocd.{{% param techlabClusterDomainName %}}/applications/argo-<username>
+URL:                https://{{% param techlabArgoCdUrl %}}/applications/argo-<username>
 Repo:               https://gitea.{{% param techlabClusterDomainName %}}/<username>/gitops-resources.git
 Target:
 Path:               .
@@ -225,7 +225,7 @@ Name:               argo-<username>
 Project:            default
 Server:             https://kubernetes.default.svc
 Namespace:          <username>
-URL:                https://argocd.{{% param techlabClusterDomainName %}}/applications/argo-<username>
+URL:                https://{{% param techlabArgoCdUrl %}}/applications/argo-<username>
 Repo:               https://gitea.{{% param techlabClusterDomainName %}}/<username>/gitops-resources.git
 Target:
 Path:               .
