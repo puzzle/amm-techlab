@@ -43,7 +43,39 @@ There are four important parts of any Kafka system:
 If you want to dive deeper into the Kafka world take a look at the official [documentation](https://kafka.apache.org/documentation/).
 
 
-## Task {{% param sectionnumber %}}.2: Deploy and configure Kafka on OpenShift
+## Task {{% param sectionnumber %}}.2: Check project setup
+
+We first check that the project is ready for the lab.
+
+Ensure that the `LAB_USER` environment variable is set.
+
+```bash
+echo $LAB_USER
+```
+
+If the result is empty, set the `LAB_USER` environment variable.
+
+<details><summary>command hint</summary>
+
+```bash
+export LAB_USER=<username>
+```
+
+</details><br/>
+
+
+Change to your main Project.
+
+<details><summary>command hint</summary>
+
+```bash
+oc project $LAB_USER
+```
+
+</details><br/>
+
+
+## Task {{% param sectionnumber %}}.3: Deploy and configure Kafka on OpenShift
 
 Let's get our Kafka instance up and running in the cloud and configure it for the event-driven application.
 
@@ -53,57 +85,7 @@ The following Kubernetes-native [custom resource definitions, short crd](https:/
 
 Create a file called `<workspace>/kafka-cluster.yaml` with the following content:
 
-```yml
-apiVersion: kafka.strimzi.io/v1beta1
-kind: Kafka
-metadata:
-  name: amm-techlab
-  labels:
-    application: amm-techlab
-spec:
-  kafka:
-    version: 2.5.0
-    replicas: 1
-    listeners:
-      plain: {}
-      tls: {}
-    config:
-      auto.create.topics.enable: false
-      offsets.topic.replication.factor: 1
-      transaction.state.log.replication.factor: 1
-      transaction.state.log.min.isr: 1
-      log.message.format.version: "2.5"
-    resources:
-      requests:
-        memory: 128Mi
-        cpu: "50m"
-      limits:
-        memory: 4Gi
-        cpu: "2"
-    storage:
-      type: jbod
-      volumes:
-      - id: 0
-        type: persistent-claim
-        size: 10Gi
-        deleteClaim: false
-  zookeeper:
-    replicas: 1
-    resources:
-      requests:
-        memory: 128Mi
-        cpu: "50m"
-      limits:
-        memory: 4Gi
-        cpu: "2"
-    storage:
-      type: persistent-claim
-      size: 10Gi
-      deleteClaim: false
-  entityOperator:
-    topicOperator: {}
-    userOperator: {}
-```
+{{< highlight yaml >}}{{< readfile file="manifests/03.0/3.2/kafka-cluster.yaml" >}}{{< /highlight >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/kafka-cluster.yaml)
 
@@ -142,21 +124,7 @@ amm-techlab-zookeeper-0                        1/1     Running   0          2m56
 
 To create a new topic in our Kafka cluster we use another custom resource definition. Create a file called `<workspace>/manual-topic.yaml` with the following content:
 
-```yml
-apiVersion: kafka.strimzi.io/v1beta1
-kind: KafkaTopic
-metadata:
-  name: manual
-  labels:
-    application: amm-techlab
-    strimzi.io/cluster: amm-techlab
-spec:
-  partitions: 1
-  replicas: 1
-  config:
-    retention.ms: 7200000
-    segment.bytes: 1073741824
-```
+{{< highlight yaml >}}{{< readfile file="manifests/03.0/3.2/manual-topic.yaml" >}}{{< /highlight >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/manual-topic.yaml)
 
@@ -215,12 +183,12 @@ Topic: manual   PartitionCount: 1       ReplicationFactor: 1    Configs: segment
 {{% alert  color="primary" %}}Press `Ctrl+D` to leave the container.{{% /alert %}}
 
 
-## Task {{% param sectionnumber %}}.3: Change your application to event driven
+## Task {{% param sectionnumber %}}.4: Change your application to event driven
 
 Now it's time to change your producer-consumer application from REST to event-driven. The Kafka cluster is up and running.
 
 
-### Task {{% param sectionnumber %}}.3.1: Update the producer
+### Task {{% param sectionnumber %}}.4.1: Update the producer
 
 To update the producer we use a prepared container image. If you're interested in the code changes needed to connect to the kafka server, check the [kafka branch of the producer](https://github.com/puzzle/quarkus-techlab-data-producer/tree/kafka).
 
@@ -237,10 +205,11 @@ Do following changes inside your file `<workspace>/producer.yaml`:
 * and remove the triggers.
 
 ```
-{{< highlight YAML "hl_lines=1-2 11-12 19-20 23 57 58" >}}
+{{< highlight YAML "hl_lines=1-2 4 12-13 20-21 24 58" >}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  # Remove annotations from deployment config!
   labels:
     app: data-producer
     application: amm-techlab
@@ -334,26 +303,7 @@ deployment.apps/data-producer created
 
 Do the following changes inside your file `<workspace>/svc.yaml`. Update the label selector from `deploymentConfig: data-producer` to `deployment: data-producer`. Otherwise the Service will not find any Pods to route the traffic into.
 
-```
-{{< highlight YAML "hl_lines=14" >}}
-apiVersion: v1
-kind: Service
-metadata:
-  name: data-producer
-  labels:
-    application: amm-techlab
-spec:
-  ports:
-  - name: http
-    port: 8080
-    protocol: TCP
-    targetPort: http
-  selector:
-    deployment: data-producer
-  sessionAffinity: None
-  type: ClusterIP
-{{< / highlight >}}
-```
+{{< highlight yaml "hl_lines=14" >}}{{< readfile file="manifests/03.0/3.2/svc.yaml" >}}{{< /highlight >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/svc.yaml)
 
@@ -374,7 +324,7 @@ service/data-producer configured
 ```
 
 
-### Task {{% param sectionnumber %}}.3.2: Verify the events on the kafka topic
+### Task {{% param sectionnumber %}}.4.2: Verify the events on the kafka topic
 
 To verify the produced events end up in the `manual` topic, we can once again rsh into the kafka pod and use the helper scripts.
 
@@ -402,30 +352,14 @@ Expected result, something similar to:
 {{% alert title="Note" color="primary" %}}Stop this consumer inside the container by pressing `Ctrl+C` and `Ctrl+D` to leave the container.{{% /alert %}}
 
 
-### Task {{% param sectionnumber %}}.3.3: Update the consumer
+### Task {{% param sectionnumber %}}.4.3: Update the consumer
 
 The customer container image has kafka capabilities.
 
 We need to configure the consumer by it's environment to use kafka. This we do with a [ConfigMap](https://kubernetes.io/docs/concepts/configuration/configmap/).
 Prepare a file inside your workspace `<workspace>/consumerConfigMap.yaml` and add the following resource configuration:
 
-```YAML
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: consumer-config
-data:
-  # Configure the SmallRye Kafka connector
-  kafka.bootstrap.servers: 'amm-techlab-kafka-bootstrap:9092'
-
-  #Toggle jaeger trace feature
-  quarkus.jaeger.enabled: 'false'
-  
-  # Configure the Kafka sink
-  mp.messaging.incoming.data.connector: smallrye-kafka
-  mp.messaging.incoming.data.topic: manual
-  mp.messaging.incoming.data.value.deserializer: ch.puzzle.quarkustechlab.reactiveconsumer.control.SensorMeasurementDeserializer
-```
+{{< highlight yaml >}}{{< readfile file="manifests/03.0/3.2/consumerConfigMap.yaml" >}}{{< /highlight >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/consumerConfigMap.yaml)
 
