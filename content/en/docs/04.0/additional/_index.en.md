@@ -6,8 +6,12 @@ description: >
   Additional Labs
 ---
 
+<!--
+
 ## TODO
 
 * [ ] Ressourcen auch als Yaml im Git und verlinken
 * [ ] Source Links überprüfen
 * [ ] Java Spring Boot Example Repository forken oder als vorbereitetes / geklontes Repo im Pod?
+
+-->
