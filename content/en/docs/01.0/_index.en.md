@@ -56,7 +56,7 @@ The files in the home directory under `/home/coder` are stored in a persistence 
 
 The easiest way to login to the lab cluster using the oc tool is, by copying the login command from the web console (Click on the Username in the top right corner of your web console and then Copy Login Command, to get to the login command).
 
-Paste this login command in the Terminal and verify the output `Logged into...`.
+Paste this login command in the Terminal and verify the output `Logged into ...`
 
 > If you are using Firefox, you can paste the command with `shift + insert`
 
