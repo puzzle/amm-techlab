@@ -247,7 +247,7 @@ oc process -f pipeline-run-template.yaml \
 
 which will result in: `pipelinerun.tekton.dev/build-and-deploy-run-1 created`
 
-This will create and execute a PipelineRun. Use the command `tkn pipelinerun logs build-and-deploy-run-1 -f -n hannelore20` to display the logs.
+This will create and execute a PipelineRun. Use the command `tkn pipelinerun logs build-and-deploy-run-1 -f -n $LAB_USER` to display the logs.
 
 The PipelineRuns can be listed with:
 
