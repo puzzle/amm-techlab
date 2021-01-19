@@ -13,7 +13,7 @@ The first thing we're going to do is to explore our lab environment and get in t
 
 Login to the web console of the Lab Cluster with the provided Username and Password:
 
-`https://{{% param techlabClusterWebConsolePrefix %}}.{{% param techlabClusterDomainName %}}`
+[https://{{% param techlabClusterWebConsolePrefix %}}.{{% param techlabClusterDomainName %}}](https://{{% param techlabClusterWebConsolePrefix %}}.{{% param techlabClusterDomainName %}})
 
 {{% alert title="Note" color="primary" %}} Ask your trainer if you don't have your Username and Password {{% /alert %}}
 
@@ -77,6 +77,10 @@ Create a new folder for your \<workspace> in your Web IDE  (for example ./amm-te
 Alongside the Lab Cluster, we also deployed a couple of additional tools and services we're going to use during the lab.
 
 checkout the deployed resources and then login to the services. (URLs are provided by the trainer)
+
+```bash
+oc get project
+```
 
 * Prometheus and Grafana in the project `pitc-infra-monitoring` (Login using Oauth OpenShift)
 * ArgoCD in the project `pitc-infra-argocd` (Login via OpenShift)
