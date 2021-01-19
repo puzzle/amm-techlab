@@ -347,7 +347,7 @@ Expected result, something similar to:
 {"data":0.48397732353720324}
 ```
 
-{{% alert title="Note" color="primary" %}} Use the `--from-beginning` param to read the whole topic {{% /alert %}}
+{{% alert title="Note" color="primary" %}} Use the `\--from-beginning` param to read the whole topic {{% /alert %}}
 
 {{% alert title="Note" color="primary" %}}Stop this consumer inside the container by pressing `Ctrl+C` and `Ctrl+D` to leave the container.{{% /alert %}}
 
