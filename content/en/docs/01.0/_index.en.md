@@ -76,7 +76,7 @@ Create a new folder for your \<workspace> in your Web IDE  (for example ./amm-te
 
 Alongside the Lab Cluster, we also deployed a couple of additional tools and services we're going to use during the lab.
 
-checkout the deployed resources and then login to the services. (URLs are provided by the trainer)
+Checkout the deployed resources and then login to the services. (URLs are provided by the trainer)
 
 ```bash
 oc get project

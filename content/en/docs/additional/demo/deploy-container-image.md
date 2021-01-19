@@ -50,7 +50,7 @@ oc get routes.route.openshift.io go-hello-world -o template --template '{{.spec.
 ```
 
 ```
-go-hello-world-hanneloreXY.{{% param techlabClusterDomainName %}}
+go-hello-world-<username>.{{% param techlabClusterDomainName %}}
 ```
 
 Now you can test the go-hello-world application over the route.
