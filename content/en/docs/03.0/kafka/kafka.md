@@ -285,6 +285,15 @@ Expected output:
 deploymentconfig.apps.openshift.io "data-producer" deleted
 ```
 
+Now we check, that our resource definition has been modified correctly.
+This can be done with `oc apply` as *dry-run* (do not apply changes) in combination with *validate*:
+
+```s
+oc apply -f producer.yaml --validate --dry-run=client
+```
+
+The output must be `deploymentconfig.apps.openshift.io/data-producer configured (dry run)` before you can go on.
+
 Apply the updated content of the YAML file to let OpenShift rollout your freshly created Deployment of the producer.
 
 <details><summary>command hint</summary>
