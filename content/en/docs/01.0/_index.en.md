@@ -13,7 +13,9 @@ The first thing we're going to do is to explore our lab environment and get in t
 
 Login to the web console of the Lab Cluster with the provided Username and Password:
 
+<!-- markdownlint-disable MD034 -->
 [https://{{% param techlabClusterWebConsolePrefix %}}.{{% param techlabClusterDomainName %}}](https://{{% param techlabClusterWebConsolePrefix %}}.{{% param techlabClusterDomainName %}})
+<!-- markdownlint-enable MD034 -->
 
 {{% alert title="Note" color="primary" %}} Ask your trainer if you don't have your Username and Password {{% /alert %}}
 
