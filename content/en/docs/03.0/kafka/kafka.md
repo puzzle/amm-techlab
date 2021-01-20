@@ -363,7 +363,7 @@ Expected result, something similar to:
 
 ### Task {{% param sectionnumber %}}.4.3: Update the consumer
 
-The customer container image has kafka capabilities.
+The custom container image has kafka capabilities.
 
 We need to configure the consumer by it's environment to use kafka. This we do with a [ConfigMap](https://kubernetes.io/docs/concepts/configuration/configmap/).
 Prepare a file inside your workspace `<workspace>/consumerConfigMap.yaml` and add the following resource configuration:
