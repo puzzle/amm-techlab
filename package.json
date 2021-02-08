@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "husky": "4.3.8",
-    "markdownlint": "0.20.4"
+    "markdownlint": "0.23.0"
   },
   "scripts": {
     "mdlint": "markdownlint --config .markdownlint.json content *.md"
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/puzzle/amm-techlab#readme",
   "devDependencies": {
-    "markdownlint": "0.20.4",
+    "markdownlint": "0.23.0",
     "markdownlint-cli": "0.23.2"
   }
 }
