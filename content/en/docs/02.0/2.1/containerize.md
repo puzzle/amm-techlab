@@ -98,15 +98,7 @@ We configure an [ImageStream](https://docs.openshift.com/container-platform/4.5/
 
 Prepare a file inside your workspace `<workspace>/imageStream.yaml` and add the following resource configuration:
 
-```YAML
-apiVersion: image.openshift.io/v1
-kind: ImageStream
-metadata:
-  labels:
-    build: data-producer
-    application: amm-techlab
-  name: data-producer
-```
+{{< highlight yaml >}}{{< readfile file="manifests/02.0/2.1/imageStream.yaml" >}}{{< /highlight >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/imageStream.yaml)
 
@@ -132,41 +124,7 @@ Beside we configure the source and the triggers as well. For the source, we can 
 
 Prepare a file inside your workspace `<workspace>/buildConfig.yaml` and add the following resource configuration:
 
-```YAML
-apiVersion: build.openshift.io/v1
-kind: BuildConfig
-metadata:
-  labels:
-    build: data-producer
-    application: amm-techlab
-  name: data-producer
-spec:
-  output:
-    to:
-      kind: ImageStreamTag
-      name: data-producer:rest
-  resources:
-    limits:
-      cpu: "500m"
-      memory: "512Mi"
-    requests:
-      cpu: "250m"
-      memory: "512Mi"
-  source:
-    git:
-      uri: https://github.com/puzzle/quarkus-techlab-data-producer.git
-      ref: rest
-    type: Git
-  strategy:
-    dockerStrategy:
-      dockerfilePath: src/main/docker/Dockerfile.binary
-    type: Docker
-  triggers:
-  - generic:
-      secret: f31PWzHXBGI9iYw-fTli
-    type: Generic
-  - type: ConfigChange
-```
+{{< highlight yaml >}}{{< readfile file="manifests/02.0/2.1/buildConfig.yaml" >}}{{< /highlight >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/buildConfig.yaml)
 
@@ -201,72 +159,7 @@ After the ImageStream and BuildConfig definition, we can set up our DeploymentCo
 
 Prepare a file inside your workspace `<workspace>/producer.yaml` and add the following resource configuration:
 
-```YAML
-apiVersion: apps.openshift.io/v1
-kind: DeploymentConfig
-metadata:
-  annotations:
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"data-producer:rest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"data-producer\")].image"}]'
-  labels:
-    app: data-producer
-    application: amm-techlab
-  name: data-producer
-spec:
-  replicas: 1
-  selector:
-    deploymentConfig: data-producer
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      labels:
-        application: amm-techlab
-        deploymentConfig: data-producer
-    spec:
-      containers:
-        - image: data-producer
-          imagePullPolicy: Always
-          livenessProbe:
-            failureThreshold: 5
-            httpGet:
-              path: /health/live
-              port: 8080
-              scheme: HTTP
-            initialDelaySeconds: 3
-            periodSeconds: 20
-            timeoutSeconds: 15
-          readinessProbe:
-            failureThreshold: 5
-            httpGet:
-              path: /health/ready
-              port: 8080
-              scheme: HTTP
-            initialDelaySeconds: 3
-            periodSeconds: 20
-            timeoutSeconds: 15
-          name: data-producer
-          ports:
-            - containerPort: 8080
-              name: http
-              protocol: TCP
-          resources:
-            limits:
-              cpu: '1'
-              memory: 500Mi
-            requests:
-              cpu: 50m
-              memory: 100Mi
-  triggers:
-    - imageChangeParams:
-        automatic: true
-        containerNames:
-          - data-producer
-        from:
-          kind: ImageStreamTag
-          name: data-producer:rest
-      type: ImageChange
-    - type: ConfigChange
-```
+{{< highlight yaml >}}{{< readfile file="manifests/02.0/2.1/producer.yaml" >}}{{< /highlight >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/producer.yaml)
 
@@ -298,24 +191,7 @@ Expose the container ports to the cluster with a Service. For the Service, we co
 
 Prepare a file inside your workspace `<workspace>/svc.yaml` and add the following resource configuration:
 
-```YAML
-apiVersion: v1
-kind: Service
-metadata:
-  name: data-producer
-  labels:
-    application: amm-techlab
-spec:
-  ports:
-  - name: http
-    port: 8080
-    protocol: TCP
-    targetPort: http
-  selector:
-    deploymentConfig: data-producer
-  sessionAffinity: None
-  type: ClusterIP
-```
+{{< highlight yaml >}}{{< readfile file="manifests/02.0/2.1/svc.yaml" >}}{{< /highlight >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/svc.yaml)
 
@@ -344,24 +220,7 @@ The TLS type is set to Edge. That will configure the router to terminate the SSL
 
 Prepare a file inside your workspace `<workspace>/route.yaml` and add the following resource configuration:
 
-```YAML
-apiVersion: route.openshift.io/v1
-kind: Route
-metadata:
-  labels:
-     application: amm-techlab
-  name: data-producer
-spec:
-  port:
-    targetPort: http
-  to:
-    kind: Service
-    name: data-producer
-    weight: 100
-  tls:
-    termination: edge
-  wildcardPolicy: None
-```
+{{< highlight yaml >}}{{< readfile file="manifests/02.0/2.1/route.yaml" >}}{{< /highlight >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/route.yaml)
 
