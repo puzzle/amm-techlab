@@ -3,7 +3,7 @@ version: '2'
 services:
 
   zookeeper:
-    image: strimzi/kafka:0.14.0-kafka-2.1.0
+    image: strimzi/kafka:0.14.0-kafka-2.2.0
     command: [
       "sh", "-c",
       "bin/zookeeper-server-start.sh config/zookeeper.properties"
@@ -14,7 +14,7 @@ services:
       LOG_DIR: /tmp/logs
 
   kafka:
-    image: strimzi/kafka:0.14.0-kafka-2.1.0
+    image: strimzi/kafka:0.14.0-kafka-2.2.0
     container_name: amm-kafka-cluster
     command: [
       "sh", "-c",
