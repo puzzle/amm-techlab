@@ -95,7 +95,7 @@ export LAB_USER=<username>
 
 </details><br/>
 
-Configure your folder to be a Git repository
+Configure your **workspace** folder to be a Git repository
 
 ```bash
 git init
@@ -151,7 +151,7 @@ oc project $LAB_USER
 To deploy the resources using the Argo CD CLI use the following command:
 
 ```bash
-argocd app create argo-$LAB_USER --repo https://{{% param techlabGiteaUrl %}}/$LAB_USER/gitops-resources.git --path '.' --dest-server https://kubernetes.default.svc --dest-namespace $LAB_USER --directory-recurse=true
+argocd app create argo-$LAB_USER --repo https://{{% param techlabGiteaUrl %}}/$LAB_USER/gitops-resources.git --path '.' --dest-server https://kubernetes.default.svc --dest-namespace $LAB_USER
 ```
 
 Expected output: `application 'argo-<username>' created`
