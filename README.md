@@ -23,6 +23,7 @@ After cloning the main repo, you need to initialize the submodule like this:
 
 ```bash
 git submodule update --init --recursive
+git pull --recurse-submodules
 ```
 
 The default configuration uses the puzzle setup from [config/_default](config/_default/config.toml).
@@ -41,6 +42,7 @@ Run the following command to update all submodules with their newest upstream ve
 
 ```bash
 git submodule update --remote
+git pull --recurse-submodules
 ```
 
 

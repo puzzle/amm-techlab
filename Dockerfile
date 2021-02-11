@@ -1,4 +1,4 @@
-FROM klakegg/hugo:0.80.0-ext-ubuntu AS builder
+FROM klakegg/hugo:0.80.0-ext-pandoc AS builder
 
 ARG HUGO_ENV=default
 
