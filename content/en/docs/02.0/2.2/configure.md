@@ -15,74 +15,9 @@ For this lab the application of the previous lab is used.
 
 We will change the port of the application. With this change we need to adapt the deployment first. There are three ports to change. The container port itself, and the ports for the liveness/readiness probes.
 
-{{< highlight YAML "hl_lines=29 38 45" >}}
-apiVersion: apps.openshift.io/v1
-kind: DeploymentConfig
-metadata:
-  annotations:
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"data-producer:rest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"data-producer\")].image"}]'
-  labels:
-    app: data-producer
-    application: amm-techlab
-  name: data-producer
-spec:
-  replicas: 1
-  selector:
-    deploymentConfig: data-producer
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      labels:
-        application: amm-techlab
-        deploymentConfig: data-producer
-    spec:
-      containers:
-        - image: data-producer
-          imagePullPolicy: Always
-          livenessProbe:
-            failureThreshold: 5
-            httpGet:
-              path: /health/live
-              port: 8081
-              scheme: HTTP
-            initialDelaySeconds: 3
-            periodSeconds: 20
-            timeoutSeconds: 15
-          readinessProbe:
-            failureThreshold: 5
-            httpGet:
-              path: /health/ready
-              port: 8081
-              scheme: HTTP
-            initialDelaySeconds: 3
-            periodSeconds: 20
-            timeoutSeconds: 15
-          name: data-producer
-          ports:
-            - containerPort: 8081
-              name: http
-              protocol: TCP
-          resources:
-            limits:
-              cpu: '1'
-              memory: 500Mi
-            requests:
-              cpu: 50m
-              memory: 100Mi
-  triggers:
-    - imageChangeParams:
-        automatic: true
-        containerNames:
-          - data-producer
-        from:
-          kind: ImageStreamTag
-          name: data-producer:rest
-      type: ImageChange
-    - type: ConfigChange
-{{< / highlight >}}
+{{< highlight yaml "hl_lines=29 38 45" >}}{{< readfile file="manifests/02.0/2.1/producer.yaml" >}}{{< /highlight >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.2/producer.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/producer.yaml)
 
 Update the application port from 8080 to 8081 using `oc patch`:
 
