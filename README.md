@@ -89,6 +89,8 @@ docker run \
   server -p 8080 --bind 0.0.0.0
 ```
 
+This is available as bash script: `start_hugo.sh`
+
 
 ## Linting of Markdown content
 
