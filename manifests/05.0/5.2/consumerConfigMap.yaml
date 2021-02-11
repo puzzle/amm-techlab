@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: consumer-config
+data:
+  # Configure the SmallRye Kafka connector
+  kafka.bootstrap.servers: 'amm-techlab-kafka-bootstrap:9092'
+
+  #Toggle jaeger trace feature
+  consumer.jaeger.enabled: 'true'
+
+  # Configure the Kafka sink
+  mp.messaging.incoming.data.connector: smallrye-kafka
+  mp.messaging.incoming.data.topic: manual
+  mp.messaging.incoming.data.value.deserializer: ch.puzzle.quarkustechlab.reactiveconsumer.control.SensorMeasurementDeserializer
