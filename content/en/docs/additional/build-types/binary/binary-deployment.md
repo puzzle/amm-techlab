@@ -31,43 +31,7 @@ description: >
 
 Let's create the resources for our binary deployment. We start with the ImageStreams. There are two definitions, the first one represents our builder image. The second ImageStream is used for our build binary deployment.
 
-
-```YAML
-
-apiVersion: image.openshift.io/v1
-kind: ImageStream
-metadata:
-  annotations:
-    openshift.io/generated-by: OpenShiftNewBuild
-  labels:
-    build: spring-boot-bb
-  name: wildfly-160-centos7
-spec:
-  lookupPolicy:
-    local: false
-  tags:
-  - annotations:
-      openshift.io/imported-from: openshift/wildfly-160-centos7
-    from:
-      kind: DockerImage
-      name: openshift/wildfly-160-centos7
-    importPolicy: {}
-    name: latest
-    referencePolicy:
-      type: ""
----  
-apiVersion: image.openshift.io/v1
-kind: ImageStream
-metadata:
-  annotations:
-    openshift.io/generated-by: OpenShiftNewBuild
-  labels:
-    build: spring-boot-bb
-  name: spring-boot-bb
-spec:
-  lookupPolicy:
-    local: false
-```
+{{< highlight yaml >}}{{< readfile file="content/en/docs/additional/build-types/binary/imageStreams.yaml" >}}{{< /highlight >}}
 
 [Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/binary/imageStreams.yaml)
 
@@ -77,42 +41,7 @@ oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content
 
 Afterwards we can create the Build Config for the binary deployment.
 
-```YAML
-apiVersion: build.openshift.io/v1
-kind: BuildConfig
-metadata:
-  annotations:
-    openshift.io/generated-by: OpenShiftNewBuild
-  labels:
-    build: spring-boot-bb
-  name: spring-boot-bb
-spec:
-  output:
-    to:
-      kind: ImageStreamTag
-      name: spring-boot-bb:latest
-  postCommit: {}
-  resources: {}
-  source:
-    binary: {}
-    type: Binary
-  strategy:
-    sourceStrategy:
-      from:
-        kind: ImageStreamTag
-        name: wildfly-160-centos7:latest
-    type: Source
-  triggers:
-  - github:
-      secret: u7kQquuC1Hpap8pv82Xz
-    type: GitHub
-  - generic:
-      secret: MduzcwKRw37WrDWWSfCf
-    type: Generic
-status:
-  lastVersion: 0
-```
-
+{{< highlight yaml >}}{{< readfile file="content/en/docs/additional/build-types/binary/buildConfig.yaml" >}}{{< /highlight >}}
 
 [Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/binary/buildConfig.yaml)
 
