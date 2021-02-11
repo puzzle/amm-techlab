@@ -45,3 +45,4 @@ objects:
 parameters:
 - description: OpenShift Project Name
   name: PROJECT_NAME
+  required: true
