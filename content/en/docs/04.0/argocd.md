@@ -112,6 +112,8 @@ git config --local --list
 
 Now add the resource definitions to your personal Git repository and push them to remote. Use the password you entered when creating your Gitea user.
 
+> After the Git push command a password input field will apear at the top of the Web IDE. You need to enter your Gitea password there.
+
 ```bash
 git add --all
 git commit -m "Initial commit of resource definitions"
