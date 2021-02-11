@@ -77,7 +77,6 @@ func appendToFile(remoteAddr string) {
     log.Println(err)
   }
 }
-
 ```
 
 [source](https://raw.githubusercontent.com/chrira/container-openshift-ifie/master/main.go)
@@ -110,78 +109,7 @@ The application is available on Docker Hub: [chrira/container-openshift-ifie](ht
 
 This is a list with all needed OpenShift resources.
 
-```YAML
-apiVersion: v1
-kind: List
-metadata: {}
-items:
-- apiVersion: image.openshift.io/v1
-  kind: ImageStream
-  metadata:
-    labels:
-      app: container-openshift-ifie
-    name: container-openshift-ifie
-  spec:
-    lookupPolicy:
-      local: false
-    tags:
-    - from:
-        kind: DockerImage
-        name: chrira/container-openshift-ifie
-      importPolicy: {}
-      name: latest
-      referencePolicy:
-        type: Source
-- apiVersion: apps.openshift.io/v1
-  kind: DeploymentConfig
-  metadata:
-    creationTimestamp: null
-    labels:
-      app: container-openshift-ifie
-      app.kubernetes.io/component: container-openshift-ifie
-      app.kubernetes.io/instance: container-openshift-ifie
-    name: container-openshift-ifie
-  spec:
-    replicas: 1
-    selector:
-      deploymentconfig: container-openshift-ifie
-    strategy:
-      resources: {}
-    template:
-      metadata:
-        creationTimestamp: null
-        labels:
-          deploymentconfig: container-openshift-ifie
-      spec:
-        containers:
-        - image: chrira/container-openshift-ifie:latest
-          name: container-openshift-ifie
-          ports:
-          - containerPort: 8080
-            protocol: TCP
-          resources: {}
-    test: false
-    triggers:
-    - type: ConfigChange
-  status:
-- apiVersion: v1
-  kind: Service
-  metadata:
-    creationTimestamp: null
-    labels:
-      app: container-openshift-ifie
-      app.kubernetes.io/component: container-openshift-ifie
-      app.kubernetes.io/instance: container-openshift-ifie
-    name: container-openshift-ifie
-  spec:
-    ports:
-    - name: 8080-tcp
-      port: 8080
-      protocol: TCP
-      targetPort: 8080
-    selector:
-      deploymentconfig: container-openshift-ifie
-```
+{{< highlight yaml >}}{{< readfile file="content/en/docs/02.0/additional/ocp-image-requirements/application-infrastructure.yaml" >}}{{< /highlight >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/additional/ocp-image-requirements/application-infrastructure.yaml)
 
@@ -250,65 +178,7 @@ So let us extend the image with a specified user.
 
 For that we add a BuildConfiguration with a new Dockerfile extending the used image.
 
-
-```
-{{< highlight text "hl_lines=43-44" >}}
-apiVersion: v1
-kind: List
-metadata: {}
-items:
-- apiVersion: image.openshift.io/v1
-  kind: ImageStream
-  metadata:
-    creationTimestamp: null
-    labels:
-      app: container-openshift-ifie
-      build: container-openshift-ifie
-    name: container-openshift-ifie-original
-  spec:
-    lookupPolicy:
-      local: false
-    tags:
-    - from:
-        kind: DockerImage
-        name: chrira/container-openshift-ifie
-      importPolicy: {}
-      name: latest
-      referencePolicy:
-        type: Source
-  status:
-- apiVersion: build.openshift.io/v1
-  kind: BuildConfig
-  metadata:
-    creationTimestamp: null
-    labels:
-      app: container-openshift-ifie
-      build: container-openshift-ifie
-    name: container-openshift-ifie
-  spec:
-    nodeSelector: null
-    output:
-      to:
-        kind: ImageStreamTag
-        name: container-openshift-ifie:latest
-    postCommit: {}
-    resources: {}
-    source:
-      dockerfile: |-
-        FROM chrira/container-openshift-ifie:latest
-        USER golang
-      type: Dockerfile
-    strategy:
-      dockerStrategy:
-        from:
-          kind: ImageStreamTag
-          name: container-openshift-ifie-original:latest
-      type: Docker
-    triggers: []
-  status:
-    lastVersion: 0
-{{< / highlight >}}
-```
+{{< highlight yaml "hl_lines=47-49" >}}{{< readfile file="content/en/docs/02.0/additional/ocp-image-requirements/buildconfig.yaml" >}}{{< /highlight >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/additional/ocp-image-requirements/buildconfig.yaml)
 
@@ -359,7 +229,6 @@ RUN chgrp -R 0 /home/golang && \
 USER golang
 {{< / highlight >}}
 ```
-
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/additional/ocp-image-requirements/buildconfig-permissions.yaml)
 

@@ -36,7 +36,6 @@ items:
       to:
         kind: ImageStreamTag
         name: container-openshift-ifie:latest
-    postCommit: {}
     resources:
       limits:
         cpu: 100m
@@ -57,5 +56,3 @@ items:
           name: container-openshift-ifie-original:latest
       type: Docker
     triggers: []
-  status:
-    lastVersion: 0

@@ -50,7 +50,6 @@ items:
     test: false
     triggers:
     - type: ConfigChange
-      triggers:
     - type: ImageChange
       imageChangeParams:
         automatic: true
@@ -59,7 +58,6 @@ items:
         from:
           kind: ImageStreamTag
           name: 'container-openshift-ifie:latest'
-  status:
 - apiVersion: v1
   kind: Service
   metadata:
@@ -77,4 +75,3 @@ items:
       targetPort: 8080
     selector:
       deploymentconfig: container-openshift-ifie
-  status:
