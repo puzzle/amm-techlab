@@ -78,8 +78,7 @@ First let's create a BuildConfig. The important part in this specification are t
 
 {{< highlight yaml >}}{{< readfile file="content/en/docs/additional/build-types/s2i/buildConfig.yaml" >}}{{< /highlight >}}
 
-
-[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/buildConfig.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/buildConfig.yaml)
 
 ```BASH
 oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/buildConfig.yaml -p GITREPOSITORY=https://{{% param techlabGiteaUrl %}}/$USER_NAME/example-spring-boot-helloworld | oc apply -f -
@@ -87,48 +86,17 @@ oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/conten
 
 Next we need the definitions for our two ImageStreamTag references.
 
-The first file contains the definitions for the output image.
+The first resource configuration contains the definitions for the output image.
 
-```YAML
-apiVersion: image.openshift.io/v1
-kind: ImageStream
-metadata:
-  labels:
-    app: spring-boot-s2i
-  name: spring-boot-s2i
-spec:
-  lookupPolicy:
-    local: false
-```
+{{< highlight yaml "hl_lines=1-9" >}}{{< readfile file="content/en/docs/additional/build-types/s2i/imageStreams.yaml" >}}{{< /highlight >}}
 
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/imageStreams.yaml)
 
-In the second file we define S2I builder image. As builder Image we take the `ubi8/openjdk-11` image. This is already prepared for S2I builds.
+The second resource configuration references a S2I builder image. As builder Image we take the `ubi8/openjdk-11` image. This is already prepared for S2I builds.
 
-```YAML
-apiVersion: image.openshift.io/v1
-kind: ImageStream
-metadata:
-  labels:
-    app: spring-boot-s2i
-  name: openjdk11
-spec:
-  lookupPolicy:
-    local: false
-  tags:
-  - annotations:
-      openshift.io/imported-from: registry.redhat.io/ubi8/openjdk-11
-    from:
-      kind: DockerImage
-      name: registry.redhat.io/ubi8/openjdk-11
-    generation: 2
-    importPolicy: {}
-    name: latest
-    referencePolicy:
-      type: Source
-```
+{{< highlight yaml "hl_lines=11-30" >}}{{< readfile file="content/en/docs/additional/build-types/s2i/imageStreams.yaml" >}}{{< /highlight >}}
 
-
-[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/imageStreams.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/imageStreams.yaml)
 
 ```BASH
 oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/imageStreams.yaml
@@ -139,7 +107,6 @@ Let's check if the build is complete.
 ```BASH
 oc get builds
 ```
-
 
 ```
 NAME                TYPE     FROM          STATUS                        STARTED          DURATION
@@ -158,7 +125,6 @@ oc describe build spring-boot-s2i-1
 ```
 
 ```
-
 We can see the following output (example is truncated)
 ......
 
@@ -190,33 +156,13 @@ Next we create a secret containing our Git credentials. Your username and passwo
 
 {{% alert title="Note" color="primary" %}} Be sure that you replace your \<username> and use your personal access token. {{% /alert %}}
 
-```YAML
-apiVersion: v1
-kind: Template
-metadata:
-  name: secret-s2i-template
-objects:
-- apiVersion: v1
-  kind: Secret
-  metadata:
-    name: git-credentials
-  stringData:
-    username: ${USERNAME}
-    password: ${PASSWORD}
-  type: kubernetes.io/basic-auth
-parameters:
-- description: AMM techlab participant username
-  name: USERNAME
-  mandatory: true
-- description: AMM techlab participants password
-  name: PASSWORD
-  mandatory: true
-```
+{{< highlight yaml >}}{{< readfile file="content/en/docs/additional/build-types/s2i/secret.yaml" >}}{{< /highlight >}}
 
-[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/secret.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/secret.yaml)
 
 Then we can create the secret
->Replace the password parameter with your newly generated Gitea application token!
+
+> Replace the password parameter with your newly generated Gitea application token!
 
 ```BASH
 oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/secret.yaml -p USERNAME=$USER_NAME -p PASSWORD=youPassword | oc apply -f -
@@ -243,52 +189,9 @@ oc edit buildconfig spring-boot-s2i
 
 As soon the file is open, you can add the highlighted lines below.
 
-```
-{{< highlight yaml "hl_lines=21 22" >}}
-apiVersion: build.openshift.io/v1
-kind: BuildConfig
-metadata:
-  labels:
-    app: spring-boot-s2i
-  name: spring-boot-s2i
-spec:
-  failedBuildsHistoryLimit: 5
-  nodeSelector: null
-  output:
-    to:
-      kind: ImageStreamTag
-      name: spring-boot-s2i:latest
-  postCommit: {}
-  resources: {}
-  runPolicy: Serial
-  source:
-    git:
-      uri: https://github.com/<username>/spring-boot-private
-    type: Git
-    sourceSecret:
-      name: git-credentials
-  strategy:
-    sourceStrategy:
-      env:
-      - name: JAVA_APP_JAR
-        value: /tmp/src/build/libs/springboots2idemo-0.1.1-SNAPSHOT.jar
-      from:
-        kind: ImageStreamTag
-        name: openjdk11:latest
-    type: Source
-  successfulBuildsHistoryLimit: 5
-  triggers:
-  - github:
-      secret: 122hfrCzIb9Ls4q-PLEC
-    type: GitHub
-  - generic:
-      secret: ALAzMOOHHdneC_2cdvV6
-    type: Generic
-  - type: ConfigChange
-  - imageChange:
-    type: ImageChange
-{{< / highlight >}}
-```
+{{< highlight yaml "hl_lines=21 22" >}}{{< readfile file="content/en/docs/additional/build-types/s2i/buildConfigSecret.yaml" >}}{{< /highlight >}}
+
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/buildConfigSecret.yaml)
 
 You can save and close the file, the changes will applied automatically.
 
@@ -312,59 +215,9 @@ Until now we just created the build resources. Up next is the creation of the De
 
 ### DeploymentConfig
 
-```YAML
+{{< highlight yaml >}}{{< readfile file="content/en/docs/additional/build-types/s2i/deploymentConfig.yaml" >}}{{< /highlight >}}
 
-apiVersion: v1
-kind: Template
-metadata:
-  name: deploymentconfig-s2i-template
-objects:
-- apiVersion: apps.openshift.io/v1
-  kind: DeploymentConfig
-  metadata:
-    labels:
-      app: spring-boot-s2i
-    name: spring-boot-s2i
-  spec:
-    replicas: 1
-    selector:
-      deploymentconfig: spring-boot-s2i
-    strategy:
-      resources: {}
-    template:
-      metadata:
-        labels:
-          deploymentconfig: spring-boot-s2i
-      spec:
-        containers:
-        - image: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAME}/spring-boot-s2i:latest
-          name: spring-boot-s2i
-          ports:
-          - containerPort: 8080
-            protocol: TCP
-          - containerPort: 8443
-            protocol: TCP
-          - containerPort: 8778
-            protocol: TCP
-          resources: {}
-    test: false
-    triggers:
-    - type: ConfigChange
-    - imageChangeParams:
-        automatic: true
-        containerNames:
-        - spring-boot-s2i
-        from:
-          kind: ImageStreamTag
-          name: spring-boot-s2i:latest
-      type: ImageChange
-parameters:
-- description: OpenShift Project Name
-  name: PROJECT_NAME
-  mandatory: true
-```
-
-[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/deploymentConfig.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/deploymentConfig.yaml)
 
 ```BASH
 oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/deploymentConfig.yaml -p PROJECT_NAME=$PROJECT_NAME | oc apply -f -
@@ -373,35 +226,9 @@ oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/conten
 
 ### Service
 
-```YAML
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: spring-boot-s2i
-  name: spring-boot-s2i
-spec:
-  ports:
-  - name: 8080-tcp
-    port: 8080
-    protocol: TCP
-    targetPort: 8080
-  - name: 8443-tcp
-    port: 8443
-    protocol: TCP
-    targetPort: 8443
-  - name: 8778-tcp
-    port: 8778
-    protocol: TCP
-    targetPort: 8778
-  selector:
-    deploymentconfig: spring-boot-s2i
-  sessionAffinity: None
-  type: ClusterIP
-```
+{{< highlight yaml >}}{{< readfile file="content/en/docs/additional/build-types/s2i/service.yaml" >}}{{< /highlight >}}
 
-
-[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/service.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/service.yaml)
 
 ```BASH
 oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/service.yaml
@@ -412,7 +239,7 @@ oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/content
 
 {{< highlight yaml >}}{{< readfile file="content/en/docs/additional/build-types/s2i/route.yaml" >}}{{< /highlight >}}
 
-[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/route.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/build-types/s2i/route.yaml)
 
 Then we can create the route
 
