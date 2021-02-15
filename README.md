@@ -22,7 +22,7 @@ for brand specific settings.
 After cloning the main repo, you need to initialize the submodule like this:
 
 ```bash
-git submodule update --init --recursive
+git pull --recurse-submodules
 ```
 
 The default configuration uses the puzzle setup from [config/_default](config/_default/config.toml).
@@ -41,6 +41,7 @@ Run the following command to update all submodules with their newest upstream ve
 
 ```bash
 git submodule update --remote
+git pull --recurse-submodules
 ```
 
 
@@ -88,6 +89,8 @@ docker run \
   klakegg/hugo:${HUGO_VERSION} \
   server -p 8080 --bind 0.0.0.0
 ```
+
+This is available as bash script: `start_hugo.sh`
 
 
 ## Linting of Markdown content

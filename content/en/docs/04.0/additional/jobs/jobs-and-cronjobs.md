@@ -40,44 +40,9 @@ oc new-app mariadb-ephemeral \
 
 Let's first look at the Job resource that we want to create.
 
-```yaml
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: mysql-dump
-spec:
-  template:
-    spec:
-      containers:
-      - name: mysql
-        image: mysql:5.7
-        command:
-        - 'bash'
-        - '-eo'
-        - 'pipefail'
-        - '-c'
-        - >
-          trap "echo Backup failed; exit 0" ERR;
-          FILENAME=backup-${MYSQL_DATABASE}-`date +%Y-%m-%d_%H%M%S`.sql.gz;
-          mysqldump --user=${MYSQL_USER} --password=${MYSQL_PASSWORD} --host=${MYSQL_HOST} --port=${MYSQL_PORT} --skip-lock-tables --quick --add-drop-database --routines ${MYSQL_DATABASE} | gzip > /tmp/$FILENAME;
-          echo "";
-          echo "Backup successful"; du -h /tmp/$FILENAME;
-        env:
-        - name: MYSQL_DATABASE
-          value: appuio
-        - name: MYSQL_USER
-          value: appuio
-        - name: MYSQL_HOST
-          value: mariadb
-        - name: MYSQL_PORT
-          value: "3306"
-        - name: MYSQL_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              key: database-password
-              name: mariadb
-      restartPolicy: Never
-```
+{{< highlight yaml >}}{{< readfile file="manifests/04.0/4.3.3/job_mysql-dump.yaml" >}}{{< /highlight >}}
+
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.3.3/job_mysql-dump.yaml)
 
 The parameter `.spec.template.spec.containers[0].image` shows that we use the same image as the running database. In contrast to the database Pod, we don't start a database afterwards, but run a `mysqldump` command, specified with `.spec.template.spec.containers[0].command`. To perform the dump, we use the environment variables of the database deployment to set the hostname, user and password parameters of the `mysqldump` command. The `MYSQL_PASSWORD` variable refers to the value of the secret, which is already used for the database Pod. Like this we ensure that the dump is performed with the same credentials.
 
@@ -112,55 +77,9 @@ A Kubernetes CronJob is nothing else than a resource which creates a Job at a de
 
 Further information can be found at the [OpenShift CronJob Documentation](https://docs.openshift.com/container-platform/4.5/nodes/jobs/nodes-nodes-jobs.html#nodes-nodes-jobs-creating-cron_nodes-nodes-jobs).
 
-```yaml
-apiVersion: batch/v1beta1
-kind: CronJob
-metadata:
-  name: mysql-backup
-spec:
-  concurrencyPolicy: Forbid
-  jobTemplate:
-    spec:
-      template:
-        spec:
-          containers:
-            - name: mysql-backup
-              image: mysql:5.7
-              command:
-                - "bash"
-                - "-eo"
-                - "pipefail"
-                - "-c"
-                - >
-                  trap "echo Backup failed; exit 0" ERR;
-                  FILENAME=backup-${MYSQL_DATABASE}-`date +%Y-%m-%d_%H%M%S`.sql.gz;
-                  mysqldump --user=${MYSQL_USER} --password=${MYSQL_PASSWORD} --host=${MYSQL_HOST} --port=${MYSQL_PORT} --skip-lock-tables --quick --add-drop-database --routines ${MYSQL_DATABASE} | gzip > /tmp/$FILENAME;
-                  echo "";
-                  echo "Backup successful"; du -h /tmp/$FILENAME;
-              env:
-                - name: MYSQL_DATABASE
-                  valueFrom:
-                    secretKeyRef:
-                      key: database-name
-                      name: mysql
-                - name: MYSQL_USER
-                  valueFrom:
-                    secretKeyRef:
-                      key: database-user
-                      name: mariadb
-                - name: MYSQL_HOST
-                  value: mysql
-                - name: MYSQL_PORT
-                  value: "3306"
-                - name: MYSQL_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      key: database-password
-                      name: mariadb
-          restartPolicy: OnFailure
-          backoffLimit: 3
-  schedule: 12 23 * * *
-```
+{{< highlight yaml >}}{{< readfile file="manifests/04.0/4.3.3/cronjob_mysql-dump.yaml" >}}{{< /highlight >}}
+
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.3.3/cronjob_mysql-dump.yaml)
 
 Let's now create a CronJob that executes our Backup every day at the same time. Create a file `cronjob_mysql-dump.yaml` with the content above:
 

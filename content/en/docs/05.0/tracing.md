@@ -143,25 +143,9 @@ git add . && git commit -m "Enable jaeger feature on producer" && git push
 
 Next we configure the consumer to use the jaeger feature. To enable jaeger, open `<workspace>/consumerConfigMap.yaml` and change the `consumer.jaeger.enabled` property.
 
-```
-{{< highlight YAML "hl_lines=10" >}}
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: consumer-config
-data:
-  # Configure the SmallRye Kafka connector
-  kafka.bootstrap.servers: 'amm-techlab-kafka-bootstrap:9092'
+{{< highlight yaml "hl_lines=10" >}}{{< readfile file="manifests/05.0/5.2/consumerConfigMap.yaml" >}}{{< /highlight >}}
 
-  #Toggle jaeger trace feature
-  consumer.jaeger.enabled: 'true'
-  
-  # Configure the Kafka sink
-  mp.messaging.incoming.data.connector: smallrye-kafka
-  mp.messaging.incoming.data.topic: manual
-  mp.messaging.incoming.data.value.deserializer: ch.puzzle.quarkustechlab.reactiveconsumer.control.SensorMeasurementDeserializer
-{{< / highlight >}}
-```
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/05.0/5.2/consumerConfigMap.yaml)
 
 Update your resources and apply the changes.
 

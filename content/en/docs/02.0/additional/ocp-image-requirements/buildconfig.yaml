@@ -55,5 +55,3 @@ items:
           name: container-openshift-ifie-original:latest
       type: Docker
     triggers: []
-  status:
-    lastVersion: 0
