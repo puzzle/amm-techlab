@@ -177,7 +177,7 @@ After you need to rollout the deployment. This is neccessary for reloading the c
 
 ```bash
 oc rollout restart deployment data-consumer
-```yaml
+```
 
 
 And also reconfigure the environment of the data-transformer (`<workspace>/data-transformer.yaml`) to enable Jaeger by changing the `quarkus.jaeger.enabled` env to `true`
