@@ -46,7 +46,7 @@ oc project $LAB_USER
 
 </details><br/>
 
-> Don't forget to deploy/update your resources with the git instead of the oc command for this lab
+> Don't forget to deploy/update your resources with the git instead of the oc command for this lab.
 
 
 ## Task {{% param sectionnumber %}}.2: Deploy Jaeger instance
@@ -117,9 +117,10 @@ Use this URL with https protocol to open the Jaeger web console in a Browser win
 Now let's make sure the traces that are collected within our microservices are also been sent to the running Jaeger services.
 
 
-To achieve that, we need to deploy a different version of our microservices. Update the deployment config (`producer.yaml`) to use the jaeger feature:
+To achieve that, we need to configure the application by it's environment. Update the deployment config (`producer.yaml`) to use the jaeger feature:
 
 ```
+{{< highlight text "hl_lines=6-7" >}}
     spec:
       containers:
         - image: quay.io/puzzle/quarkus-techlab-data-producer:jaegerkafka
@@ -129,6 +130,7 @@ To achieve that, we need to deploy a different version of our microservices. Upd
               value: 'true'
           livenessProbe:
             failureThreshold: 5
+{{< / highlight >}}
 ```
 
 Update your resources and apply the changes.
@@ -157,12 +159,11 @@ git add . && git commit -m "Enable jaeger feature on consumer" && git push
 
 </details><br/>
 
-After you need to rollout the deployment. This is neccessary for reloading the config map.
+After you need to rollout the deployment. This is necessary for reloading the config map.
 
 ```bash
 oc rollout restart deployment data-consumer
 ```
-
 
 And also reconfigure the environment of the data-transformer (`<workspace>/data-transformer.yaml`) to enable Jaeger by changing the `quarkus.jaeger.enabled` env to `true`
 

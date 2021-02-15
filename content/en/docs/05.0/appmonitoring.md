@@ -93,6 +93,8 @@ oc project $LAB_USER
 
 </details><br/>
 
+> Don't forget to deploy/update your resources with the git instead of the oc command for this lab.
+
 
 ## Task {{% param sectionnumber %}}.2: Create Service Monitor
 
@@ -104,7 +106,17 @@ Create the following ServiceMonitor resource as local file `<workspace>/servicem
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/05.0/5.1/servicemonitor.yaml)
 
-Create the ServiceMonitor using your new file.
+Let ArgoCD create the ServiceMonitor by adding the file to git and push it.
+
+<details><summary>command hint</summary>
+
+```bash
+git add servicemonitor.yaml && git commit -m "Add ServiceMonitor Manifest" && git push
+```
+
+</details><br/>
+
+In hurry and do not want to wait for ArgoCD to sync? Do it manually by applying the file.
 
 <details><summary>command hint</summary>
 
