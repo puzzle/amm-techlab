@@ -125,7 +125,7 @@ To achieve that, we need to deploy a different version of our microservices. Upd
         - image: quay.io/puzzle/quarkus-techlab-data-producer:jaegerkafka
           imagePullPolicy: Always
           env:
-            - name: QUARKUS_JAEGER_ENABLED
+            - name: PRODUCER_JAEGER_ENABLED
               value: 'true'
           livenessProbe:
             failureThreshold: 5
@@ -141,7 +141,7 @@ git add . && git commit -m "Enable jaeger feature on producer" && git push
 
 </details><br/>
 
-Next we configure the consumer to use the jaeger feature. To enable jaeger, open `<workspace>/consumerConfigMap.yaml` and change the `quarkus.jaeger.enabled` property.
+Next we configure the consumer to use the jaeger feature. To enable jaeger, open `<workspace>/consumerConfigMap.yaml` and change the `consumer.jaeger.enabled` property.
 
 ```
 {{< highlight YAML "hl_lines=10" >}}
@@ -154,7 +154,7 @@ data:
   kafka.bootstrap.servers: 'amm-techlab-kafka-bootstrap:9092'
 
   #Toggle jaeger trace feature
-  quarkus.jaeger.enabled: 'true'
+  consumer.jaeger.enabled: 'true'
   
   # Configure the Kafka sink
   mp.messaging.incoming.data.connector: smallrye-kafka

@@ -23,7 +23,7 @@ spec:
         - image: quay.io/puzzle/quarkus-techlab-data-producer:jaegerkafka
           imagePullPolicy: Always
           env:
-            - name: QUARKUS_JAEGER_ENABLED
+            - name: PRODUCER_JAEGER_ENABLED
               value: 'true'
           livenessProbe:
             failureThreshold: 5
