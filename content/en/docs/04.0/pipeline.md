@@ -118,9 +118,9 @@ A Task is the smallest block of a Pipeline, which by itself can contain one or m
 You can find more examples of reusable tasks in the [Tekton Catalog](https://github.com/tektoncd/catalog) and [OpenShift Catalog](https://github.com/openshift/pipelines-catalog) repositories.
 {{% /alert %}}
 
-Let's examine the task that does a deployment. Create the local file `<workspace>/deploy-tasks.yaml` with the following content:
+Let's examine the task that does a deployment. Create the local file `<workspace>/deploy-task.yaml` with the following content:
 
-{{< highlight yaml >}}{{< readfile file="manifests/04.0/4.1/deploy-tasks.yaml" >}}{{< /highlight >}}
+{{< highlight yaml >}}{{< readfile file="manifests/04.0/4.1/deploy-task.yaml" >}}{{< /highlight >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.1/deploy-task.yaml)
 
