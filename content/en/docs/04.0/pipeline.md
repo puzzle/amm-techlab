@@ -122,14 +122,14 @@ Let's examine the task that does a deployment. Create the local file `<workspace
 
 {{< highlight yaml >}}{{< readfile file="manifests/04.0/4.1/deploy-tasks.yaml" >}}{{< /highlight >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.1/deploy-tasks.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.1/deploy-task.yaml)
 
-Let's create the tasks.
+Let's create the task.
 
 <details><summary>command hint</summary>
 
 ```bash
-oc apply -f deploy-tasks.yaml
+oc apply -f deploy-task.yaml
 ```
 
 </details><br/>
