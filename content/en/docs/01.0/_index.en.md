@@ -85,7 +85,6 @@ oc get project
 ```
 
 * Prometheus and Grafana in the project `pitc-infra-monitoring` (Login using Oauth OpenShift)
-* ArgoCD in the project `pitc-infra-argocd` (Login via OpenShift)
 * Git Server `pitc-infra-gitea`, this will be used for lab 4 (You don't need to do anything yet.)
 
 
