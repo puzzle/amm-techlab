@@ -70,7 +70,7 @@ items:
                 - name: mp.messaging.incoming.data.value.deserializer
                   value: >-
                     ch.puzzle.quarkustechlab.reactivetransformer.control.SensorMeasurementDeserializer
-                - name: quarkus.jaeger.enabled
+                - name: transformer.jaeger.enabled
                   value: 'false'
               ports:
               - containerPort: 8080

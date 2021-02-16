@@ -165,13 +165,13 @@ After you need to rollout the deployment. This is necessary for reloading the co
 oc rollout restart deployment data-consumer
 ```
 
-And also reconfigure the environment of the data-transformer (`<workspace>/data-transformer.yaml`) to enable Jaeger by changing the `quarkus.jaeger.enabled` env to `true`
+And also reconfigure the environment of the data-transformer (`<workspace>/data-transformer.yaml`) to enable Jaeger by changing the `transformer.jaeger.enabled` env to `true`
 
 ```yaml
 ...
 env:
 ...
-- name: quarkus.jaeger.enabled
+- name: transformer.jaeger.enabled
   value: 'true'
 ```
 

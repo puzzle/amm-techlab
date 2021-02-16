@@ -54,7 +54,7 @@ oc describe deploymentconfig data-producer
 
 </details><br/>
 
-The pod does not start because that the readiness probe fails. Now we have to change the application to use the port 8081 for serving it's endpoint.
+> The pod does not start because that the readiness probe fails. Now we have to change the application to use the port 8081 for serving it's endpoint.
 
 
 ## Task {{% param sectionnumber %}}.2: Configure application
