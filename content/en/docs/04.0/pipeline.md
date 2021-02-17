@@ -305,9 +305,9 @@ Check the logs of your data-transformer microservice. You will see that he will 
 Example log output:
 
 ```bash
-16:05:03 INFO  traceId=, spanId=, sampled= [ch.pu.qu.re.bo.ReactiveDataTransformer] (vert.x-eventloop-thread-1) Message received
+16:05:03 INFO  traceId=, spanId=, sampled= [ch.pu.qu.re.bo.ReactiveDataTransformer] (vert.x-eventloop-thread-1) Received reactive message
 16:05:03 INFO  traceId=, spanId=, sampled= [ch.pu.qu.re.bo.ReactiveDataTransformer] (vert.x-eventloop-thread-1) Current average: 0.5402286381615338
-16:05:05 INFO  traceId=, spanId=, sampled= [ch.pu.qu.re.bo.ReactiveDataTransformer] (vert.x-eventloop-thread-1) Message received
+16:05:05 INFO  traceId=, spanId=, sampled= [ch.pu.qu.re.bo.ReactiveDataTransformer] (vert.x-eventloop-thread-1) Received reactive message
 16:05:05 INFO  traceId=, spanId=, sampled= [ch.pu.qu.re.bo.ReactiveDataTransformer] (vert.x-eventloop-thread-1) Current average: 0.5443646390092566
 ```
 
