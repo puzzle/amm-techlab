@@ -2,8 +2,8 @@ apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
   labels:
-    app: spring-boot-s2i
-  name: spring-boot-s2i
+    app: quarkus-techlab-data-producer-s2i
+  name: quarkus-techlab-data-producer-s2i
 spec:
   lookupPolicy:
     local: false
@@ -12,7 +12,7 @@ apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
   labels:
-    app: spring-boot-s2i
+    app: quarkus-techlab-data-producer-s2i
   name: openjdk11
 spec:
   lookupPolicy:

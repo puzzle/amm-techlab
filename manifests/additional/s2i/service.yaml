@@ -2,8 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: spring-boot-s2i
-  name: spring-boot-s2i
+    app: quarkus-techlab-data-producer-s2i
+  name: quarkus-techlab-data-producer-s2i
 spec:
   ports:
   - name: 8080-tcp
@@ -19,6 +19,6 @@ spec:
     protocol: TCP
     targetPort: 8778
   selector:
-    deploymentconfig: spring-boot-s2i
+    deploymentconfig: quarkus-techlab-data-producer-s2i
   sessionAffinity: None
   type: ClusterIP

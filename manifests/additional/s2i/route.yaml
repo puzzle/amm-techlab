@@ -7,8 +7,8 @@ objects:
   kind: Route
   metadata:
     labels:
-      app: spring-boot-s2i
-    name: spring-boot-s2i
+      app: quarkus-techlab-data-producer-s2i
+    name: quarkus-techlab-data-producer-s2i
   spec:
     host: ${HOSTNAME}
     port:
@@ -17,10 +17,10 @@ objects:
       termination: edge
     to:
       kind: Service
-      name: spring-boot-s2i
+      name: quarkus-techlab-data-producer-s2i
       weight: 100
     wildcardPolicy: None
 parameters:
-- description: The public Hostname spring-boot-s2i-${HOSTNAME}.amm-techlab.openshift.ch
+- description: The public Hostname quarkus-techlab-data-producer-s2i-${HOSTNAME}.amm-techlab.openshift.ch
   name: HOSTNAME
   mandatory: true
