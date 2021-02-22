@@ -1,0 +1,30 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  labels:
+    app: quarkus-techlab-data-producer-bb
+  name: quarkus-techlab-data-producer-bb
+spec:
+  lookupPolicy:
+    local: false
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  labels:
+    app: quarkus-techlab-data-producer-bb
+  name: ubi-minimal
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+  - annotations:
+      openshift.io/imported-from: registry.access.redhat.com/ubi8/ubi-minimal
+    from:
+      kind: DockerImage
+      name: registry.access.redhat.com/ubi8/ubi-minimal
+    generation: 2
+    importPolicy: {}
+    name: latest
+    referencePolicy:
+      type: Source
