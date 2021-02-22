@@ -31,7 +31,39 @@ The source code of our Quarkus applications is available on Github:
 * [Producer](https://github.com/puzzle/quarkus-techlab-data-producer)
 
 
-## Task {{% param sectionnumber %}}.1: Inspect Dockerfile
+## Task {{% param sectionnumber %}}.1: Check project setup
+
+We first check that the project is ready for the lab.
+
+Ensure that the `LAB_USER` environment variable is set.
+
+```bash
+echo $LAB_USER
+```
+
+If the result is empty, set the `LAB_USER` environment variable.
+
+<details><summary>command hint</summary>
+
+```bash
+export LAB_USER=<username>
+```
+
+</details><br/>
+
+
+Change to your main Project.
+
+<details><summary>command hint</summary>
+
+```bash
+oc project $LAB_USER
+```
+
+</details><br/>
+
+
+## Task {{% param sectionnumber %}}.2: Inspect Dockerfile
 
 First, we need a Dockerfile that defines the application transformation from source code to a container image.
 
@@ -92,7 +124,7 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
 This Dockerfile will be used to build the image inside OpenShift.
 
 
-## Task {{% param sectionnumber %}}.2: Create ImageStream
+## Task {{% param sectionnumber %}}.3: Create ImageStream
 
 We configure an [ImageStream](https://docs.openshift.com/container-platform/4.5/openshift_images/image-streams-manage.html) for the image that we will build inside OpenShift. ImageStream is an abstraction for referencing images from within OpenShift Container Platform. Simplified the ImageStream tracks changes for the defined images and reacts by triggering a new Build. This image reference will also be used to deploy the application.
 
@@ -115,7 +147,7 @@ imagestream.image.openshift.io/data-producer created
 ```
 
 
-## Task {{% param sectionnumber %}}.3: Create BuildConfig
+## Task {{% param sectionnumber %}}.4: Create BuildConfig
 
 In this section, we create a OpenShift build that uses our Dockerfile to build the image for the producer.
 
@@ -153,7 +185,7 @@ oc logs -f data-producer-1-build
 {{% alert title="Note" color="primary" %}} The `-f` option streams the log output during the whole build. Exit stream before the build is done by pressing `Ctrl+C`. {{% /alert %}}
 
 
-## Task {{% param sectionnumber %}}.4: Deploy Application
+## Task {{% param sectionnumber %}}.5: Deploy Application
 
 After the ImageStream and BuildConfig definition, we can set up our DeploymentConfig. The DeploymentConfig defines how our image is run inside OpenShift. The image is referenced by our ImageStream `data-producer` with the `rest` tag.
 
@@ -183,7 +215,7 @@ When you check your project in the web console (Developer view) the example app 
 The pod will be deployed successfully when the build finishes and the application image is pushed to the image stream. Please note this might take several minutes.
 
 
-## Task {{% param sectionnumber %}}.5: Create Service
+## Task {{% param sectionnumber %}}.6: Create Service
 
 Services are used as bridges between the container and the OpenShift project. They enable access from an OpenShift project to the port of a container.
 
@@ -212,7 +244,7 @@ service/data-producer created
 ```
 
 
-## Task {{% param sectionnumber %}}.6: Create Route
+## Task {{% param sectionnumber %}}.7: Create Route
 
 Create a Route to expose the service at a hostname. This will make the application available outside of the cluster.
 
@@ -242,7 +274,7 @@ route.route.openshift.io/data-producer created
 ```
 
 
-## Task {{% param sectionnumber %}}.7: Verify deployed resources
+## Task {{% param sectionnumber %}}.8: Verify deployed resources
 
 Now we can list all resources in our project to double-check if everything is up and running.
 Use the following command to display all resources within our project.
