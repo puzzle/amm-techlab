@@ -6,18 +6,10 @@ metadata:
   name: quarkus-techlab-data-producer-s2i
 spec:
   ports:
-  - name: 8080-tcp
+  - name: http
     port: 8080
     protocol: TCP
     targetPort: 8080
-  - name: 8443-tcp
-    port: 8443
-    protocol: TCP
-    targetPort: 8443
-  - name: 8778-tcp
-    port: 8778
-    protocol: TCP
-    targetPort: 8778
   selector:
     deploymentconfig: quarkus-techlab-data-producer-s2i
   sessionAffinity: None

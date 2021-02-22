@@ -12,8 +12,7 @@ description: >
 
 
 <!-- ## TODO Lab
-
-* [ ] DeploymentConfig, Service, Route auch noch via oc apply erstellen und dann entsprechend die App aufrufen
+* [x] DeploymentConfig, Service, Route auch noch via oc apply erstellen und dann entsprechend die App aufrufen
 * [ ] Hinweis eigenes Build Image verwenden, falls in ext. privater Registry -> Proxy Einstellungen
  -->
 

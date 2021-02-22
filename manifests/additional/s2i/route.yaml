@@ -12,7 +12,7 @@ objects:
   spec:
     host: ${HOSTNAME}
     port:
-      targetPort: 8080-tcp
+      targetPort: http
     tls:
       termination: edge
     to:
