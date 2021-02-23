@@ -27,12 +27,6 @@ The main reasons to use this build strategy are.
 
 ## Setup
 
-Create a new project, replace \<username> with your username.
-
-```BASH
-oc new-project amm-<username>
-```
-
 
 First we define the username and project name as environment variables. We're going to use them later for the Template parameters.
 
@@ -40,6 +34,14 @@ First we define the username and project name as environment variables. We're go
 export USER_NAME=<username>
 export PROJECT_NAME=$(oc project -q)
 ```
+
+Create a new project.
+
+```BASH
+oc new-project $USER_NAME-build-types
+```
+
+
 
 >**Note:** If you already have a project called "quarkus-techlab-data-producer" under your Gitea user, you don't need to re-create it. Proceed with adding the  `.s2i/bin/assemble` file.
 
