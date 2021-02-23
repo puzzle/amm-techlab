@@ -26,6 +26,37 @@ description: >
 * Build images with artifacts from different sources
 
 
+We first check that the project is ready for the lab.
+
+Ensure that the `LAB_USER` environment variable is set.
+
+```bash
+echo $LAB_USER
+```
+
+If the result is empty, set the `LAB_USER` environment variable.
+
+<details><summary>command hint</summary>
+
+```bash
+export LAB_USER=<username>
+```
+
+</details><br/>
+
+
+Change to your main Project.
+
+<details><summary>command hint</summary>
+
+```bash
+oc project $LAB_USER-build-types
+```
+
+</details><br/>
+
+## Task {{% param sectionnumber %}}.2: Binary Build
+
 ### BuildConfig
 
 Let's create the resources for our binary deployment. We start with the ImageStreams. There are two definitions, the first one represents our builder image. The second ImageStream is used for our build binary deployment.

@@ -21,6 +21,36 @@ description: >
 
 In this section we cover how to deploy an existing Docker Image from an private image registry. Besides we show how to create a ImageStream to track changes on the deployed image and trigger an update on the deployment.
 
+We first check that the project is ready for the lab.
+
+Ensure that the `LAB_USER` environment variable is set.
+
+```bash
+echo $LAB_USER
+```
+
+If the result is empty, set the `LAB_USER` environment variable.
+
+<details><summary>command hint</summary>
+
+```bash
+export LAB_USER=<username>
+```
+
+</details><br/>
+
+
+Change to your main Project.
+
+<details><summary>command hint</summary>
+
+```bash
+oc project $LAB_USER-build-types
+```
+
+</details><br/>
+
+
 Let's start with the deployment configuration
 
 {{< highlight yaml >}}{{< readfile file="manifests/additional/image/deploymentConfig.yaml" >}}{{< /highlight >}}
