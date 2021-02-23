@@ -207,7 +207,8 @@ sum(application_ch_puzzle_quarkustechlab_reactivetransformer_boundary_ReactiveDa
 ```
 
 {{% alert title="Note" color="primary" %}}
-Make sure to replace `<username>` with your current namespace
+Make sure to replace `<username>` with your current namespace.
+You can ignore the warning about the rate/sum function after you execute the query.
 {{% /alert %}}
 
 
