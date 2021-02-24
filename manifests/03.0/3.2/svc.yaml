@@ -11,6 +11,6 @@ spec:
     protocol: TCP
     targetPort: http
   selector:
-    deployment: data-producer
+    app: data-producer
   sessionAffinity: None
   type: ClusterIP
