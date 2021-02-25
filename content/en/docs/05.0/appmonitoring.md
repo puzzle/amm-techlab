@@ -199,12 +199,26 @@ This means now: since all three Services `data-producer`, `data-consumer` and `d
 ## Task {{% param sectionnumber %}}.5: Query Application Metrics
 
 Since the Metrics are now collected from all three services, let's execute a query and visualise the data.
+For example, the total amount of Produced, Consumed and Transformed Messages.
 
-for example, the total amount of Transformed Messages
+```s
+sum(application_ch_puzzle_quarkustechlab_reactiveproducer_boundary_ReactiveDataProducer_producedMessages_total{namespace="<username>"})
+```
+
+Then click `Add Query` and enter the transformed messages query.
 
 ```s
 sum(application_ch_puzzle_quarkustechlab_reactivetransformer_boundary_ReactiveDataTransformer_messagesTransformed_total{namespace="<username>"})
 ```
+
+Add another query with `Add Query` and enter the consumed messages query.
+
+```s
+sum(application_ch_puzzle_quarkustechlab_reactiveconsumer_boundary_ReactiveDataConsumer_consumedMessages_total{namespace="<username>"})
+```
+
+Finally click `Run Query` to execute the queries.
+
 
 {{% alert title="Note" color="primary" %}}
 Make sure to replace `<username>` with your current namespace.
