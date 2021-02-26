@@ -93,6 +93,7 @@ You can also checkout other resources, for example the OpenShift routes
 oc get routes
 ```
 
+
 ### Task {{% param sectionnumber %}}.1.5: Lab Setup
 
 Most of the labs will be done inside the OpenShift project with your username. Verify that your oc tool is configured to point to the right project:
