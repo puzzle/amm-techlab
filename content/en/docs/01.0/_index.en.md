@@ -88,11 +88,10 @@ oc get project
 * Git Server `pitc-infra-gitea`, this will be used for lab 4 (You don't need to do anything yet.)
 
 You can also checkout other resources, for example the OpenShift routes
+
 ```bash
 oc get routes
 ```
-
-
 
 ### Task {{% param sectionnumber %}}.1.5: Lab Setup
 
