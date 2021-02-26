@@ -10,7 +10,7 @@ description: >
 In this example we will scale an automated application up and down, depending on how much load the application is under. For this we use our old Ruby example webapp.
 
 ```bash
-oc new-project autoscale-<username>
+oc new-project <username>-autoscale
 ```
 
 {{% alert  color="primary" %}}Replace **\<username>** with your username!{{% /alert %}}
@@ -29,7 +29,7 @@ Wait until the application is built and ready and the first metrics appear. You 
 To see the metrics, go with the web-console to your OpenShift project (Developer view) and select the *Monitoring* menu item. Then change to the Metcis tab and select *CPU Usage* from the dropdown. If the metric has no datapoints, click the *Show PromQL* button and add following query:
 
 ```s
-sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{namespace='autoscale-<username>'}) by (pod)
+sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{namespace='<username>-autoscale'}) by (pod)
 ```
 
 {{% alert  color="primary" %}}Replace **\<username>** with your username!{{% /alert %}}
