@@ -1,0 +1,30 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  labels:
+    app: quarkus-techlab-data-producer-s2i
+  name: quarkus-techlab-data-producer-s2i
+spec:
+  lookupPolicy:
+    local: false
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  labels:
+    app: quarkus-techlab-data-producer-s2i
+  name: openjdk11
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+  - annotations:
+      openshift.io/imported-from: registry.redhat.io/ubi8/openjdk-11
+    from:
+      kind: DockerImage
+      name: registry.redhat.io/ubi8/openjdk-11
+    generation: 2
+    importPolicy: {}
+    name: latest
+    referencePolicy:
+      type: Source

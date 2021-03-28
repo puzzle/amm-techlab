@@ -2,8 +2,8 @@ apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
   labels:
-    app: spring-boot-s2i
-  name: spring-boot-s2i
+    app: quarkus-techlab-data-producer-bb
+  name: quarkus-techlab-data-producer-bb
 spec:
   lookupPolicy:
     local: false
@@ -12,17 +12,17 @@ apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
   labels:
-    app: spring-boot-s2i
-  name: openjdk11
+    app: quarkus-techlab-data-producer-bb
+  name: ubi-minimal
 spec:
   lookupPolicy:
     local: false
   tags:
   - annotations:
-      openshift.io/imported-from: registry.redhat.io/ubi8/openjdk-11
+      openshift.io/imported-from: registry.access.redhat.com/ubi8/ubi-minimal
     from:
       kind: DockerImage
-      name: registry.redhat.io/ubi8/openjdk-11
+      name: registry.access.redhat.com/ubi8/ubi-minimal
     generation: 2
     importPolicy: {}
     name: latest

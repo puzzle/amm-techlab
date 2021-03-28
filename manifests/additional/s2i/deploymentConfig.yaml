@@ -7,22 +7,22 @@ objects:
   kind: DeploymentConfig
   metadata:
     labels:
-      app: spring-boot-s2i
-    name: spring-boot-s2i
+      app: quarkus-techlab-data-producer-s2i
+    name: quarkus-techlab-data-producer-s2i
   spec:
     replicas: 1
     selector:
-      deploymentconfig: spring-boot-s2i
+      deploymentconfig: quarkus-techlab-data-producer-s2i
     strategy:
       resources: {}
     template:
       metadata:
         labels:
-          deploymentconfig: spring-boot-s2i
+          deploymentconfig: quarkus-techlab-data-producer-s2i
       spec:
         containers:
-        - image: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAME}/spring-boot-s2i:latest
-          name: spring-boot-s2i
+        - image: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAME}/quarkus-techlab-data-producer-s2i:latest
+          name: quarkus-techlab-data-producer-s2i
           ports:
           - containerPort: 8080
             protocol: TCP
@@ -37,10 +37,10 @@ objects:
     - imageChangeParams:
         automatic: true
         containerNames:
-        - spring-boot-s2i
+        - quarkus-techlab-data-producer-s2i
         from:
           kind: ImageStreamTag
-          name: spring-boot-s2i:latest
+          name: quarkus-techlab-data-producer-s2i:latest
       type: ImageChange
 parameters:
 - description: OpenShift Project Name

@@ -1,0 +1,35 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: quarkus-techlab-data-producer-private
+  name: quarkus-techlab-data-producer-private
+spec:
+  replicas: 1
+  selector:
+    app: quarkus-techlab-data-producer-private
+    deploymentconfig: quarkus-techlab-data-producer-private
+  template:
+    metadata:
+      labels:
+        app: quarkus-techlab-data-producer-private
+        deploymentconfig: quarkus-techlab-data-producer-private
+    spec:
+      containers:
+      - image: 'quarkus-techlab-data-producer-private:latest'
+        imagePullPolicy: IfNotPresent
+        name: quarkus-techlab-data-producer-private
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+  triggers:
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - quarkus-techlab-data-producer-private
+      from:
+        kind: ImageStreamTag
+        name: quarkus-techlab-data-producer-private:latest
+    type: ImageChange
+  strategy:
+    type: Rolling

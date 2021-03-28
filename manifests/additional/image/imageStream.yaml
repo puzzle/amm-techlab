@@ -2,15 +2,15 @@ apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
   labels:
-    app: go-hello-world
-  name: go-hello-world
+    app: quarkus-techlab-data-producer-private
+  name: quarkus-techlab-data-producer-private
 spec:
   lookupPolicy:
     local: false
   tags:
   - from:
       kind: DockerImage
-      name: ammlab/private-go-hello-world
+      name: registry.puzzle.ch/puzzle/quarkus-techlab-data-producer-private
     name: latest
     importPolicy:
       scheduled: true

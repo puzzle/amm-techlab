@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: quarkus-techlab-data-producer-s2i
+  name: quarkus-techlab-data-producer-s2i
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    deploymentconfig: quarkus-techlab-data-producer-s2i
+  sessionAffinity: None
+  type: ClusterIP

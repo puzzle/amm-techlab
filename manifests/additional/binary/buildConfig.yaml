@@ -4,24 +4,20 @@ metadata:
   annotations:
     openshift.io/generated-by: OpenShiftNewBuild
   labels:
-    build: spring-boot-bb
-  name: spring-boot-bb
+    build: quarkus-techlab-data-producer-bb
+  name: quarkus-techlab-data-producer-bb
 spec:
   output:
     to:
       kind: ImageStreamTag
-      name: spring-boot-bb:latest
+      name: quarkus-techlab-data-producer-bb:latest
   postCommit: {}
   resources: {}
   source:
     binary: {}
     type: Binary
   strategy:
-    sourceStrategy:
-      from:
-        kind: ImageStreamTag
-        name: wildfly-160-centos7:latest
-    type: Source
+    type: Docker
   triggers:
   - github:
       secret: u7kQquuC1Hpap8pv82Xz
