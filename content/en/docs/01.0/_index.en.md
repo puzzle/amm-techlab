@@ -71,7 +71,7 @@ If you want to use your local `oc` tool, make sure to get the appropriate versio
 
 During the lab, you’ll be using local files (eg. YAML resources) which will be applied in your lab project.
 
-Create a new folder for your \<workspace> in your Web IDE  (for example ./amm-techlab/). Either you can create it with `right-mouse-click -> New Folder` or in the Web IDE terminal `mkdir amm-techlab`
+Create a new folder for your \<workspace> in your Web IDE  (for example ./amm-workspace/). Either you can create it with `right-mouse-click -> New Folder` or in the Web IDE terminal `mkdir amm-workspace`
 
 
 ### Task {{% param sectionnumber %}}.1.4: Explore other namespaces
