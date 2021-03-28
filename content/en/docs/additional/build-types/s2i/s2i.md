@@ -41,9 +41,7 @@ Create a new project.
 oc new-project $USER_NAME-build-types
 ```
 
-
-
->**Note:** If you already have a project called "quarkus-techlab-data-producer" under your Gitea user, you don't need to re-create it. Proceed with adding the  `.s2i/bin/assemble` file.
+> **Note:** If you already have a project called "quarkus-techlab-data-producer" under your Gitea user, you don't need to re-create it. Proceed with adding the  `.s2i/bin/assemble` file.
 
 Next we clone the sample repository into our private git repo. Navigate to your Gitea instance `https://{{% param techlabGiteaUrl %}}/<username>` and click on create in the top right menu and select "New Migration". Use following parameters to clone the sample repository as a private repository:
 

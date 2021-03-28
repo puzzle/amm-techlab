@@ -55,7 +55,9 @@ oc project $LAB_USER-build-types
 
 </details><br/>
 
+
 ## Task {{% param sectionnumber %}}.2: Binary Build
+
 
 ### BuildConfig
 
@@ -95,7 +97,6 @@ Next we need to configre a Dockerfile. This is necessary because there exists no
 [Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/binary/Dockerfile)
 
 
-
 Now we can start our build with following command:
 
 ```BASH
@@ -103,8 +104,6 @@ oc start-build quarkus-techlab-data-producer-bb --from-dir=. --follow
 ```
 
 This command triggers a build from the current directory which contains the binary and the Dockerfile.
-
-
 
 
 ## Create additional resources
