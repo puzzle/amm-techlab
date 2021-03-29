@@ -179,23 +179,25 @@ Target:
 Path:               .
 SyncWindow:         Sync Allowed
 Sync Policy:        <none>
-Sync Status:        OutOfSync from  (fe4e2b6)
-Health Status:      Healthy
+Sync Status:        OutOfSync from  (891cabc)
+Health Status:      Missing
 
-GROUP                  KIND         NAMESPACE    NAME                 STATUS     HEALTH   HOOK  MESSAGE
-                       Service      <username>  data-consumer         OutOfSync  Healthy
-                       Service      <username>  data-producer         OutOfSync  Healthy
-apps                   Deployment   <username>  data-consumer         OutOfSync  Healthy
-apps                   Deployment   <username>  data-producer         OutOfSync  Healthy
-build.openshift.io     BuildConfig  <username>  data-producer         OutOfSync
-image.openshift.io     ImageStream  <username>  data-producer         OutOfSync
-kafka.strimzi.io       Kafka        <username>  amm-techlab           OutOfSync
-kafka.strimzi.io       KafkaTopic   <username>  manual                OutOfSync
-route.openshift.io     Route        <username>  data-consumer         OutOfSync
-route.openshift.io     Route        <username>  data-producer         OutOfSync
-tekton.dev             Pipeline     <username>  build-and-deploy      OutOfSync
-tekton.dev             Task         <username>  apply-manifests       OutOfSync
-template.openshift.io  Template     <username>  pipeline-run-template OutOfSync Missing  
+GROUP                  KIND                   NAMESPACE   NAME                   STATUS     HEALTH   HOOK  MESSAGE
+                       ConfigMap              <username>  consumer-config        OutOfSync                 
+                       PersistentVolumeClaim  <username>  pipeline-workspace     OutOfSync  Healthy        
+                       Service                <username>  data-consumer          OutOfSync  Healthy        
+                       Service                <username>  data-producer          OutOfSync  Healthy        
+apps                   Deployment             <username>  data-consumer          OutOfSync  Healthy        
+apps                   Deployment             <username>  data-producer          OutOfSync  Healthy        
+build.openshift.io     BuildConfig            <username>  data-producer          OutOfSync                 
+image.openshift.io     ImageStream            <username>  data-producer          OutOfSync                 
+kafka.strimzi.io       Kafka                  <username>  amm-techlab            OutOfSync                 
+kafka.strimzi.io       KafkaTopic             <username>  manual                 OutOfSync                 
+route.openshift.io     Route                  <username>  data-consumer          OutOfSync                 
+route.openshift.io     Route                  <username>  data-producer          OutOfSync                 
+tekton.dev             Pipeline               <username>  build-and-deploy       OutOfSync                 
+tekton.dev             Task                   <username>  apply-manifests        OutOfSync                 
+template.openshift.io  Template               <username>  pipeline-run-template  OutOfSync  Missing
 ```
 
 The application status is initially in OutOfSync state. To sync (deploy) the resource manifests, run:
@@ -233,7 +235,7 @@ Target:
 Path:               .
 SyncWindow:         Sync Allowed
 Sync Policy:        <none>
-Sync Status:        Synced to  (4ec1e13)
+Sync Status:        Synced to  (891cabc)
 Health Status:      Healthy
 
 GROUP                  KIND                   NAMESPACE    NAME                   STATUS  HEALTH   HOOK  MESSAGE
@@ -246,9 +248,9 @@ apps                   Deployment             <username>  data-consumer         
 kafka.strimzi.io       Kafka                  <username>  amm-techlab            Synced                 kafka.kafka.strimzi.io/amm-techlab configured
 tekton.dev             Task                   <username>  apply-manifests        Synced                 task.tekton.dev/apply-manifests configured
 tekton.dev             Pipeline               <username>  build-and-deploy       Synced                 pipeline.tekton.dev/build-and-deploy configured
-route.openshift.io     Route                  <username>  data-producer          Synced                 route.route.openshift.io/data-producer configured
 route.openshift.io     Route                  <username>  data-consumer          Synced                 route.route.openshift.io/data-consumer configured
 build.openshift.io     BuildConfig            <username>  data-producer          Synced                 buildconfig.build.openshift.io/data-producer configured
+route.openshift.io     Route                  <username>  data-producer          Synced                 route.route.openshift.io/data-producer configured
 image.openshift.io     ImageStream            <username>  data-producer          Synced                 imagestream.image.openshift.io/data-producer configured
 kafka.strimzi.io       KafkaTopic             <username>  manual                 Synced                 kafkatopic.kafka.strimzi.io/manual configured
 template.openshift.io  Template               <username>  pipeline-run-template  Synced                 template.template.openshift.io/pipeline-run-template created
@@ -318,11 +320,13 @@ You will see that the data-producer is OutOfSync:
 
 ```
 ...
-GROUP               KIND         NAMESPACE    NAME           STATUS     HEALTH   HOOK  MESSAGE
-                    Service      <username>  data-producer  Synced     Healthy        service/data-producer unchanged
-                    Service      <username>  data-consumer  Synced     Healthy        service/data-consumer unchanged
-apps                Deployment   <username>  data-producer  OutOfSync  Healthy        deployment.apps/data-producer configured
-apps                Deployment   <username>  data-consumer  Synced     Healthy        deployment.apps/data-consumer unchanged
+GROUP               KIND         NAMESPACE    NAME        STATUS     HEALTH   HOOK  MESSAGE
+                       ConfigMap              <username>  consumer-config        Synced                    configmap/consumer-config configured
+                       PersistentVolumeClaim  <username>  pipeline-workspace     Synced     Healthy        persistentvolumeclaim/pipeline-workspace configured
+                       Service                <username>  data-consumer          Synced     Healthy        service/data-consumer configured
+                       Service                <username>  data-producer          Synced     Healthy        service/data-producer configured
+apps                   Deployment             <username>  data-producer          OutOfSync  Healthy        deployment.apps/data-producer configured
+apps                   Deployment             <username>  data-consumer          Synced     Healthy        deployment.apps/data-consumer configured
 ...
 ```
 
@@ -361,12 +365,14 @@ argocd app get argo-$LAB_USER
 
 ```
 ...
-GROUP               KIND         NAMESPACE    NAME           STATUS  HEALTH       HOOK  MESSAGE
-                    Service      <username>  data-consumer  Synced  Healthy            service/data-consumer unchanged
-                    Service      <username>  data-producer  Synced  Healthy            service/data-producer unchanged
-apps                Deployment   <username>  data-consumer  Synced  Healthy            deployment.apps/data-consumer unchanged
-apps                Deployment   <username>  data-producer  Synced  Progressing        deployment.apps/data-producer configured
-kafka.strimzi.io    Kafka        <username>  amm-techlab    Synced                     kafka.kafka.strimzi.io/amm-techlab unchanged
+GROUP                  KIND                   NAMESPACE   NAME                   STATUS  HEALTH       HOOK  MESSAGE
+                       ConfigMap              <username>  consumer-config        Synced                     configmap/consumer-config unchanged
+                       PersistentVolumeClaim  <username>  pipeline-workspace     Synced  Healthy            persistentvolumeclaim/pipeline-workspace unchanged
+                       Service                <username>  data-producer          Synced  Healthy            service/data-producer unchanged
+                       Service                <username>  data-consumer          Synced  Healthy            service/data-consumer unchanged
+apps                   Deployment             <username>  data-consumer          Synced  Healthy            deployment.apps/data-consumer unchanged
+apps                   Deployment             <username>  data-producer          Synced  Progressing        deployment.apps/data-producer configured
+kafka.strimzi.io       Kafka                  <username>  amm-techlab            Synced                     kafka.kafka.strimzi.io/amm-techlab unchanged
 ...
 ```
 
