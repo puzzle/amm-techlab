@@ -41,26 +41,17 @@ Ensure that the `LAB_USER` environment variable is set.
 echo $LAB_USER
 ```
 
-If the result is empty, set the `LAB_USER` environment variable.
-
-<details><summary>command hint</summary>
+If the result is empty, set the `LAB_USER` environment variable:
 
 ```bash
 export LAB_USER=<username>
 ```
 
-</details><br/>
-
-
-Change to your main Project.
-
-<details><summary>command hint</summary>
+Change to your main Project:
 
 ```bash
 oc project $LAB_USER
 ```
-
-</details><br/>
 
 
 ## Task {{% param sectionnumber %}}.2: Inspect Dockerfile

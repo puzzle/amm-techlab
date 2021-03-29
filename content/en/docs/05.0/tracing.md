@@ -120,7 +120,7 @@ Now let's make sure the traces that are collected within our microservices are a
 To achieve that, we need to configure the application by it's environment. Update the deployment config (`producer.yaml`) to use the jaeger feature:
 
 ```
-{{< highlight text "hl_lines=6-7" >}}
+{{< highlight text "hl_lines=5-7" >}}
     spec:
       containers:
         - image: quay.io/puzzle/quarkus-techlab-data-producer:jaegerkafka
@@ -178,7 +178,7 @@ env:
 <details><summary>command hint</summary>
 
 ```bash
-`git add . && git commit -m "Enable jaeger feature on transformer" && git push`
+git add . && git commit -m "Enable jaeger feature on transformer" && git push
 ```
 
 </details><br/>
