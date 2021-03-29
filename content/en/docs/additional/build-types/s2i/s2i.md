@@ -189,7 +189,7 @@ oc edit buildconfig quarkus-techlab-data-producer-s2i
 
 As soon the file is open, you can add the highlighted lines below.
 
-{{< highlight yaml "hl_lines=26 27" >}}{{< readfile file="manifests/additional/s2i/buildConfigSecret.yaml" >}}{{< /highlight >}}
+{{< highlight yaml "hl_lines=27 28" >}}{{< readfile file="manifests/additional/s2i/buildConfigSecret.yaml" >}}{{< /highlight >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/buildConfigSecret.yaml)
 
