@@ -486,3 +486,10 @@ Let's create the `<workspace>/data-transformer.yaml` resource within our workspa
 ```bash
 git add data-transformer.yaml && git commit -m 'Add Transformer Manifest' && git push
 ```
+
+
+## Advanced resource management
+
+In this lab we manage our OpenShift resources with plain yaml files. Doing it this way is limited.
+
+As mentioned in the GitOps introduction, ArgoCD supports several tools to define the resources. For more advanced use cases [kustomize](https://kustomize.io/) or [helm charts](https://helm.sh/) are the preferred tools. They use inheritance or external values files to adapt the yaml resources to the different environments.
