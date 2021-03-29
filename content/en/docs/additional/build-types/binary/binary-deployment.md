@@ -142,7 +142,7 @@ oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifes
 Then we can create the route
 
 ```bash
-oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/binary/route.yaml -p HOSTNAME=quarkus-techlab-data-producer-bb-$USER_NAME.{{% param techlabClusterDomainName %}} | oc apply -f -
+oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/binary/route.yaml -p HOSTNAME=quarkus-techlab-data-producer-bb-$LAB_USER.{{% param techlabClusterDomainName %}} | oc apply -f -
 ```
 
 Check if the route was created successfully
