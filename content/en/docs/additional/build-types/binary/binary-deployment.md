@@ -91,7 +91,8 @@ wget 'https://github.com/puzzle/quarkus-techlab-data-producer/releases/download/
 ```
 
 
-Next we need to configre a Dockerfile. This is necessary because there exists no prebuilt s2i image for binary applications.
+Next we need to create a Dockerfile. This is necessary because there exists no prebuilt s2i image for binary applications.
+Create a new file called `Dockerfile` and paste the following content.
 {{< highlight dockerfile >}}{{< readfile file="manifests/additional/binary/Dockerfile" >}}{{< /highlight >}}
 
 [Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/binary/Dockerfile)
@@ -148,14 +149,14 @@ oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manife
 Check if the route was created successfully
 
 ```BASH
-oc get route quarkus-techlab-data-producer-binary
+oc get route quarkus-techlab-data-producer-bb
 ```
 
 
 ```
 NAME              HOST/PORT                                          PATH   SERVICES          PORT       TERMINATION   WILDCARD
-quarkus-techlab-data-producer-binary   quarkus-techlab-data-producer-bb-<username>.{{% param techlabClusterDomainName %}}          quarkus-techlab-data-producer-binary   8080-tcp   edge          None
+quarkus-techlab-data-producer-bb   quarkus-techlab-data-producer-bb-<username>.{{% param techlabClusterDomainName %}}          quarkus-techlab-data-producer-bb   8080-tcp   edge          None
 ```
 
-And finally check if you can reach your application within a browser by accessing the public route. `https://quarkus-techlab-data-producer-bb-<username>.{{% param techlabClusterDomainName %}}`
+And finally check if you can reach your application within a browser by accessing the public route. `https://quarkus-techlab-data-producer-bb-<username>.{{% param techlabClusterDomainName %}}/data`
 

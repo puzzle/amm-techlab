@@ -79,7 +79,7 @@ In this section we create a docker secret to access the private registry and pul
 {{% alert title="Note" color="primary" %}} The password will provided by your teacher {{% /alert %}}
 
 ```BASH
-oc create secret docker-registry regcred --docker-server=registry.puzzle.ch --docker-username=amm_techlab --docker-password=<password> --docker-email=$LAB_USER@puzzle.ch
+oc create secret docker-registry regcred --docker-server=registry.puzzle.ch --docker-username=techlab+amm_techlab --docker-password=<password> --docker-email=$LAB_USER@puzzle.ch
 ```
 
 Next we link the secret with our default service account.
