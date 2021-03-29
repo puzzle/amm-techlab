@@ -134,7 +134,13 @@ oc apply -f deploy-task.yaml
 
 </details><br/>
 
-Verify that the two tasks have been created using the Tekton CLI:
+Expected output:
+
+```
+tkn task.tekton.dev/apply-manifests created
+```
+
+Using the Tekton CLI, verify that the task has been created:
 
 ```bash
 tkn task ls
@@ -174,7 +180,7 @@ oc apply -f deploy-pipeline.yaml
 
 which will result in: `pipeline.tekton.dev/build-and-deploy created`
 
-Verify that the Pipeline has been created using the Tekton CLI:
+Using the Tekton CLI, verify that the Pipeline has been created:
 
 ```bash
 tkn pipeline ls
