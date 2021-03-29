@@ -229,6 +229,7 @@ curl https://go-app-app-odo-$LAB_USER.{{% param techlabClusterDomainName %}}/wor
 Howdy, world!
 ```
 
+
 ## {{% param sectionnumber %}}.7 Links
 
 * [odo](https://github.com/openshift/odo)
