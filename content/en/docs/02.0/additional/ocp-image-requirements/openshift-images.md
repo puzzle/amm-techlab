@@ -250,7 +250,7 @@ oc get pods
 ```
 
 
-## Create route
+## Task {{% param sectionnumber %}}.6: Create route
 
 ```BASH
 oc create route edge --service=container-openshift-ifie
@@ -259,3 +259,10 @@ oc create route edge --service=container-openshift-ifie
 ```BASH
 oc get route
 ```
+
+
+## Further reading
+
+Red Hat blog post:
+
+* [Adapting Docker and Kubernetes containers to run on Red Hat OpenShift Container Platform](https://developers.redhat.com/blog/2020/10/26/adapting-docker-and-kubernetes-containers-to-run-on-red-hat-openshift-container-platform/)
