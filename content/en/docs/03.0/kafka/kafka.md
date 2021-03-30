@@ -292,7 +292,7 @@ This can be done with `oc apply` as *dry-run* (do not apply changes) in combinat
 oc apply -f producer.yaml --validate --dry-run=client
 ```
 
-The output must be `deploymentconfig.apps.openshift.io/data-producer configured (dry run)` before you can go on.
+The output must be `deployment.apps/data-producer created (dry run)` before you can go on.
 
 Apply the updated content of the YAML file to let OpenShift rollout your freshly created Deployment of the producer.
 
