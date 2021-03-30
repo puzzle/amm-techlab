@@ -10,7 +10,7 @@ spec:
   tags:
   - from:
       kind: DockerImage
-      name: registry.puzzle.ch/puzzle/quarkus-techlab-data-producer-private
+      name: registry.puzzle.ch/techlab/quarkus-techlab-data-producer
     name: latest
     importPolicy:
       scheduled: true

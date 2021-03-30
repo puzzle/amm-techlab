@@ -31,14 +31,14 @@ The main reasons to use this build strategy are.
 First we define the username and project name as environment variables. We're going to use them later for the Template parameters.
 
 ```BASH
-export USER_NAME=<username>
+export LAB_USER=<username>
 export PROJECT_NAME=$(oc project -q)
 ```
 
 Create a new project.
 
 ```BASH
-oc new-project $USER_NAME-build-types
+oc new-project $LAB_USER-build-types
 ```
 
 > **Note:** If you already have a project called "quarkus-techlab-data-producer" under your Gitea user, you don't need to re-create it. Proceed with adding the  `.s2i/bin/assemble` file.
@@ -81,7 +81,7 @@ First let's create a BuildConfig. The important part in this specification are t
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/buildConfig.yaml)
 
 ```BASH
-oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/buildConfig.yaml -p GITREPOSITORY=https://{{% param techlabGiteaUrl %}}/$USER_NAME/quarkus-techlab-data-producer | oc apply -f -
+oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/buildConfig.yaml -p GITREPOSITORY=https://{{% param techlabGiteaUrl %}}/$LAB_USER/quarkus-techlab-data-producer | oc apply -f -
 ```
 
 Next we need the definitions for our two ImageStreamTag references.
@@ -165,7 +165,7 @@ Then we can create the secret
 > Replace the token parameter with your newly generated Gitea application token!
 
 ```BASH
-oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/secret.yaml -p USERNAME=$USER_NAME -p TOKEN=yourToken | oc apply -f -
+oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/secret.yaml -p USERNAME=$LAB_USER -p TOKEN=yourToken | oc apply -f -
 ```
 
 Next we reference the freshly created secret in our BuildConfig. The following command will open the VIM editor ([VIM Cheat Sheet](https://devhints.io/vim)), where you can edit the YAML file directly. As soon you save the file and close the editor, the changes are applied to the resource.
@@ -184,12 +184,12 @@ export KUBE_EDITOR='code --wait' #vsc
 {{% /alert %}}
 
 ```BASH
-oc edit buildconfig quarkus-techlab-data-producer
+oc edit buildconfig quarkus-techlab-data-producer-s2i
 ```
 
 As soon the file is open, you can add the highlighted lines below.
 
-{{< highlight yaml "hl_lines=26 27" >}}{{< readfile file="manifests/additional/s2i/buildConfigSecret.yaml" >}}{{< /highlight >}}
+{{< highlight yaml "hl_lines=27 28" >}}{{< readfile file="manifests/additional/s2i/buildConfigSecret.yaml" >}}{{< /highlight >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/buildConfigSecret.yaml)
 
@@ -244,7 +244,7 @@ oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifes
 Then we can create the route
 
 ```bash
-oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/route.yaml -p HOSTNAME=quarkus-techlab-data-producer-s2i-$USER_NAME.{{% param techlabClusterDomainName %}} | oc apply -f -
+oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/route.yaml -p HOSTNAME=quarkus-techlab-data-producer-s2i-$LAB_USER.{{% param techlabClusterDomainName %}} | oc apply -f -
 ```
 
 Check if the route was created successfully
@@ -259,7 +259,7 @@ NAME              HOST/PORT                                          PATH   SERV
 quarkus-techlab-data-producer-s2i   quarkus-techlab-data-producer-s2i-<username>.{{% param techlabClusterDomainName %}}          quarkus-techlab-data-producer-s2i   8080-tcp   edge          None
 ```
 
-And finally check if you can reach your application within a browser by accessing the public route. `https://quarkus-techlab-data-producer-s2i-<username>.{{% param techlabClusterDomainName %}}`
+And finally check if you can reach your application within a browser by accessing the public route. `https://quarkus-techlab-data-producer-s2i-<username>.{{% param techlabClusterDomainName %}}/data`
 
 
 Do you not find a suitable S2I builder image for you application. [Create your own](https://www.openshift.com/blog/create-s2i-builder-image)

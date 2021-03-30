@@ -14,7 +14,10 @@ OpenShift Do ([odo](https://github.com/openshift/odo)) is a fast and easy-to-use
 Let's see, what components/languages are supported.
 
 ```bash
-$ odo catalog list components
+odo catalog list components
+```
+
+```
 Odo OpenShift Components:
 NAME              PROJECT       TAGS                   SUPPORTED
 java              openshift     11,8,latest            YES
@@ -33,12 +36,31 @@ ruby              openshift     2.4,2.5,latest         NO
 
 ## {{% param sectionnumber %}}.2 Initialize project
 
+
+We first check that the project is ready for the lab.
+
+Ensure that the `LAB_USER` environment variable is set.
+
+```bash
+echo $LAB_USER
+```
+
+If the result is empty, set the `LAB_USER` environment variable.
+
+<details><summary>command hint</summary>
+
+```bash
+export LAB_USER=<username>
+```
+
+</details><br/>
+
 Prepare a project and configure the development of a Go application.
 
 Create project:
 
 ```bash
-oc new-project odo-<username>
+oc new-project $LAB_USER-odo
 ```
 
 Use a new folder to store the odo configuration and the application files. Create the folder with name `odo-application` and go into it:
@@ -51,7 +73,7 @@ cd odo-application
 Prepare configuration locally:
 
 ```bash
-odo create golang --port 8080
+odo create --s2i golang --port 8080
 ```
 
 Display configuration:
@@ -83,10 +105,10 @@ MaxCPU
 
 ## {{% param sectionnumber %}}.3 Create Application
 
-Create the file `main.go` with the content of the go-hello-world application ([source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/demo/main.go)).
+Create the file `main.go` with the content of the go-hello-world application ([source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/odo/main.go)).
 
 ```bash
-cp ../content/en/docs/02.0/main.go main.go
+wget 'https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/odo/main.go' main.go
 ```
 
 This all happened locally. Use `odo push` to create the component in OpenShift.
@@ -140,7 +162,7 @@ Configuration changes
  ✓  Applying configuration [336ms]
 
 Applying URL changes
- ✓  URL go-app: https://go-app-app-odo-<username>.appuio.ch created
+ ✓  URL go-app: https://go-app-app-odo-<username>.{{% param techlabClusterDomainName %}} created
 
 Pushing to component golang-odo-applicat-asqd of type local
  ✓  Checking file changes for pushing [958674ns]
@@ -159,16 +181,12 @@ odo url list
 Browse to the URL from the previous chapter and add the path `/world`. This can also be done with curl:
 
 ```bash
-curl URL/world
+curl https://go-app-app-odo-$LAB_USER.{{% param techlabClusterDomainName %}}/world
 ```
 
 ```
 Hello, world!
 ```
-
-{{% alert title="Note" color="primary" %}}
-Replace `URL` with the URL from the previous chapter.
-{{% /alert %}}
 
 
 ## {{% param sectionnumber %}}.6 Change the Application
@@ -193,7 +211,7 @@ sed -i "s/Hello,/Howdy,/" main.go
 
 odo directly builds the application and deploys the changes to OpenShift.
 
-```bash
+```
 File odo/main.go changed
 Pushing files...
  ✓  Waiting for component to start [59ms]
@@ -204,16 +222,12 @@ Pushing files...
 Call the URL of the application again to test the changes.
 
 ```bash
-curl URL/world
+curl https://go-app-app-odo-$LAB_USER.{{% param techlabClusterDomainName %}}/world
 ```
 
 ```
 Howdy, world!
 ```
-
-{{% alert title="Note" color="primary" %}}
-Replace `URL` with the URL from the previous chapter.
-{{% /alert %}}
 
 
 ## {{% param sectionnumber %}}.7 Links

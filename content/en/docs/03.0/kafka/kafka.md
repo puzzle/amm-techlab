@@ -347,6 +347,8 @@ Then execute the following command to read events from the topic
 ./bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic manual
 ```
 
+{{% alert title="Note" color="primary" %}} This command can take some time until the first record is displayed (Two events per minute). {{% /alert %}}
+
 Expected result, something similar to:
 
 ```bash
