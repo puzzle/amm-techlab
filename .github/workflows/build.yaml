@@ -42,6 +42,17 @@ jobs:
           push: true
           tags: |
             quay.io/puzzle/amm-techlab:pr-${{ github.event.pull_request.number }}
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'quay.io/puzzle/amm-techlab:pr-${{ github.event.pull_request.number }}'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os'
+          severity: 'CRITICAL,HIGH'
+
       - 
         name: 'Deploy'
         uses: 'deliverybot/helm@v1'
