@@ -153,13 +153,13 @@ Prepare a file inside your workspace `<workspace>/buildConfig.yaml` and add the 
 
 Create the build config by applying the content of your `buildConfig.yaml` file.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```BASH
 oc apply -f buildConfig.yaml
 ```
 
-</details><br/>
+{{% /details %}}
 
 Expected output:
 
@@ -188,13 +188,13 @@ Prepare a file inside your workspace `<workspace>/producer.yaml` and add the fol
 
 Let's create the deployment
 
-<details><summary>command hint</summary>
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```BASH
 oc apply -f producer.yaml
 ```
 
-</details><br/>
+{{% /details %}}
 
 Expected output:
 
@@ -220,13 +220,13 @@ Prepare a file inside your workspace `<workspace>/svc.yaml` and add the followin
 
 Create the Service in OpenShift
 
-<details><summary>command hint</summary>
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```BASH
 oc apply -f svc.yaml
 ```
 
-</details><br/>
+{{% /details %}}
 
 Expected output:
 
@@ -250,13 +250,13 @@ Prepare a file inside your workspace `<workspace>/route.yaml` and add the follow
 
 Create the Route in OpenShift
 
-<details><summary>command hint</summary>
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```BASH
 oc apply -f route.yaml
 ```
 
-</details><br/>
+{{% /details %}}
 
 Expected output:
 
@@ -346,13 +346,13 @@ This should have created the file `<workspace>/consumer.yaml` containing all res
 
 Use the file `consumer.yaml` to create the consumer application inside OpenShift.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```BASH
 oc apply -f consumer.yaml
 ```
 
-</details><br/>
+{{% /details %}}
 
 Expected output:
 
@@ -364,13 +364,13 @@ route.route.openshift.io/data-consumer created
 
 Let's verify if everything was deployed and is up running. Show again all resources.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```BASH
 oc get all
 ```
 
-</details><br/>
+{{% /details %}}
 
 Expected resources in the output:
 

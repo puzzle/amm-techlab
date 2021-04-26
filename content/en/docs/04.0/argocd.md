@@ -87,13 +87,13 @@ echo $LAB_USER
 
 If the result is empty, set the `LAB_USER` environment variable.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```bash
 export LAB_USER=<username>
 ```
 
-</details><br/>
+{{% /details %}}
 
 Configure your **workspace** folder to be a Git repository
 
