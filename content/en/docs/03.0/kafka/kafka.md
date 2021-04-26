@@ -55,24 +55,24 @@ echo $LAB_USER
 
 If the result is empty, set the `LAB_USER` environment variable.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```bash
 export LAB_USER=<username>
 ```
 
-</details><br/>
+{{% /details %}}
 
 
 Change to your main Project.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```bash
 oc project $LAB_USER
 ```
 
-</details><br/>
+{{% /details %}}
 
 
 ## Task {{% param sectionnumber %}}.3: Deploy and configure Kafka on OpenShift
@@ -93,13 +93,13 @@ With the [Strimzi Operator](https://strimzi.io/) we can manage our Kafka cluster
 
 Create the cluster by creating the crd resource inside your project. To do so, apply the content of your `kafka-cluster.yaml` file.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```s
 oc apply -f kafka-cluster.yaml
 ```
 
-</details><br/>
+{{% /details %}}
 
 Expected output:
 
@@ -132,13 +132,13 @@ This file defines the 'manual' topic, which allows our microservices to communic
 
 Create the Kafka topic by applying this file.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```s
 oc apply -f manual-topic.yaml
 ```
 
-</details><br/>
+{{% /details %}}
 
 Expected output:
 
@@ -271,13 +271,13 @@ spec:
 
 First we have to delete the DeploymentConfig of the producer.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```s
 oc delete DeploymentConfig data-producer
 ```
 
-</details><br/>
+{{% /details %}}
 
 Expected output:
 
@@ -296,13 +296,13 @@ The output must be `deployment.apps/data-producer created (dry run)` before you 
 
 Apply the updated content of the YAML file to let OpenShift rollout your freshly created Deployment of the producer.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```s
 oc apply -f producer.yaml
 ```
 
-</details><br/>
+{{% /details %}}
 
 Expected output:
 
@@ -318,13 +318,13 @@ Do the following changes inside your file `<workspace>/svc.yaml`. Update the lab
 
 Apply the updated Service manifest.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```s
 oc apply -f svc.yaml
 ```
 
-</details><br/>
+{{% /details %}}
 
 Expected output:
 
@@ -376,13 +376,13 @@ Prepare a file inside your workspace `<workspace>/consumerConfigMap.yaml` and ad
 
 Let's create the ConfigMap
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```BASH
 oc apply -f consumerConfigMap.yaml
 ```
 
-</details><br/>
+{{% /details %}}
 
 Expected output:
 
@@ -431,13 +431,13 @@ spec:
 
 Also apply the updated resource definition and let OpenShift deploy the consumer.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```s
 oc apply -f consumer.yaml
 ```
 
-</details><br/>
+{{% /details %}}
 
 Expected output:
 

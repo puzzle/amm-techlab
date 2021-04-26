@@ -31,24 +31,24 @@ echo $LAB_USER
 
 If the result is empty, set the `LAB_USER` environment variable.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```bash
 export LAB_USER=<username>
 ```
 
-</details><br/>
+{{% /details %}}
 
 
 Change to your main Project.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```bash
 oc project $LAB_USER-build-types
 ```
 
-</details><br/>
+{{% /details %}}
 
 
 Let's start with the deployment configuration

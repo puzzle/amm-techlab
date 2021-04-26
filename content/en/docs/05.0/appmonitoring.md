@@ -74,24 +74,24 @@ echo $LAB_USER
 
 If the result is empty, set the `LAB_USER` environment variable.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```bash
 export LAB_USER=<username>
 ```
 
-</details><br/>
+{{% /details %}}
 
 
 Change to your main Project.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```bash
 oc project $LAB_USER
 ```
 
-</details><br/>
+{{% /details %}}
 
 > Don't forget to deploy/update your resources with the git instead of the oc command for this lab.
 
@@ -108,23 +108,23 @@ Create the following ServiceMonitor resource as local file `<workspace>/servicem
 
 Let ArgoCD create the ServiceMonitor by adding the file to git and push it.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```bash
 git add servicemonitor.yaml && git commit -m "Add ServiceMonitor Manifest" && git push
 ```
 
-</details><br/>
+{{% /details %}}
 
 In hurry and do not want to wait for ArgoCD to sync? Do it manually by applying the file.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```BASH
 oc apply -f servicemonitor.yaml
 ```
 
-</details><br/>
+{{% /details %}}
 
 Expected result: `servicemonitor.monitoring.coreos.com/amm-techlab-monitor created`
 

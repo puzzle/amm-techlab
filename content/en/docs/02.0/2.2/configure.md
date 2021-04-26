@@ -31,7 +31,7 @@ deploymentconfig.apps.openshift.io/data-producer patched
 
 Update also the ports of the liveness and readiness probes from 8080 to 8081 using `oc patch`:
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```BASH
 
@@ -40,19 +40,19 @@ oc patch dc/data-producer --type "json" -p '[{"op":"replace","path":"/spec/templ
 
 ```
 
-</details><br/>
+{{% /details %}}
 
 {{% alert title="Note" color="primary" %}} The changed DeploymentConfig should now represent the [solution](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.2/producer.yaml) {{% /alert %}}
 
 Verify the changed port of the pod by describing the DeploymentConfig using `oc describe`.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```BASH
 oc describe deploymentconfig data-producer
 ```
 
-</details><br/>
+{{% /details %}}
 
 > The pod does not start because that the readiness probe fails. Now we have to change the application to use the port 8081 for serving it's endpoint.
 
@@ -77,7 +77,7 @@ There are no environment variables configured.
 
 Add the environment variable `QUARKUS_HTTP_PORT` with the value 8081 with `oc set env`.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```BASH
 oc set env dc/data-producer QUARKUS_HTTP_PORT=8081
@@ -87,17 +87,17 @@ oc set env dc/data-producer QUARKUS_HTTP_PORT=8081
 deploymentconfig.apps.openshift.io/data-producer updated
 ```
 
-</details><br/>
+{{% /details %}}
 
 The variable should be configured now. Check it by listing the environment of the DeploymentConfig again.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```BASH
 oc set env dc/data-producer --list
 ```
 
-</details><br/>
+{{% /details %}}
 
 Expected output of the environment listing:
 

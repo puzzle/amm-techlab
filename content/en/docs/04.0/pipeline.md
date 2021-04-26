@@ -46,28 +46,28 @@ echo $LAB_USER
 
 If the result is empty, set the `LAB_USER` environment variable.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```bash
 export LAB_USER=<username>
 ```
 
-</details><br/>
+{{% /details %}}
 
 
 Change to your main Project.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```bash
 oc project $LAB_USER
 ```
 
-</details><br/>
+{{% /details %}}
 
 The OpenShift Pipeline operator automatically creates a pipeline ServiceAccount with all required permissions to build and push an image. This service account is used by PipelineRuns. List the service accounts of your project.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```bash
 oc get ServiceAccount
@@ -79,7 +79,7 @@ Or use the abbreviation:
 oc get sa
 ```
 
-</details><br/>
+{{% /details %}}
 
 Output listing the pipeline service account:
 
@@ -126,13 +126,13 @@ Let's examine the task that does a deployment. Create the local file `<workspace
 
 Let's create the task.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```bash
 oc apply -f deploy-task.yaml
 ```
 
-</details><br/>
+{{% /details %}}
 
 Expected output:
 
@@ -170,13 +170,13 @@ Create the following pipeline `<workspace>/deploy-pipeline.yaml`:
 
 Create the Pipeline.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```bash
 oc apply -f deploy-pipeline.yaml
 ```
 
-</details><br/>
+{{% /details %}}
 
 which will result in: `pipeline.tekton.dev/build-and-deploy created`
 
@@ -204,13 +204,13 @@ Create the following resource definition for a PVC inside `<workspace>/workspace
 
 Create the PVC.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```bash
 oc apply -f workspaces-pvc.yaml
 ```
 
-</details><br/>
+{{% /details %}}
 
 which will result in: `persistentvolumeclaim/pipeline-workspace created`
 

@@ -27,24 +27,24 @@ echo $LAB_USER
 
 If the result is empty, set the `LAB_USER` environment variable.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```bash
 export LAB_USER=<username>
 ```
 
-</details><br/>
+{{% /details %}}
 
 
 Change to your main Project.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```bash
 oc project $LAB_USER
 ```
 
-</details><br/>
+{{% /details %}}
 
 > Don't forget to deploy/update your resources with the git instead of the oc command for this lab.
 
@@ -67,17 +67,17 @@ Create the local file `<workspace>/jaeger.yaml` with the following content:
 
 Let ArgoCD manage the resources by adding the file to git and push it.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```bash
 git add jaeger.yaml && git commit -m "Add Jaeger Manifest" && git push
 ```
 
-</details><br/>
+{{% /details %}}
 
 Wait for ArgoCD to deploy the Jaeger instance or do it manually by applying the file.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```bash
 oc apply -f jaeger.yaml
@@ -89,7 +89,7 @@ Expected result:
 jaeger.jaegertracing.io/jaeger-all-in-one-inmemory created
 ```
 
-</details><br/>
+{{% /details %}}
 
 Verify the deployment
 
@@ -135,13 +135,13 @@ To achieve that, we need to configure the application by it's environment. Updat
 
 Update your resources and apply the changes.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```bash
 git add . && git commit -m "Enable jaeger feature on producer" && git push
 ```
 
-</details><br/>
+{{% /details %}}
 
 Next we configure the consumer to use the jaeger feature. To enable jaeger, open `<workspace>/consumerConfigMap.yaml` and change the `consumer.jaeger.enabled` property.
 
@@ -151,13 +151,13 @@ Next we configure the consumer to use the jaeger feature. To enable jaeger, open
 
 Update your resources and apply the changes.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```bash
 git add . && git commit -m "Enable jaeger feature on consumer" && git push
 ```
 
-</details><br/>
+{{% /details %}}
 
 After you need to rollout the deployment. This is necessary for reloading the config map.
 
@@ -175,13 +175,13 @@ env:
   value: 'true'
 ```
 
-<details><summary>command hint</summary>
+{{% details title="command hint" %}}
 
 ```bash
 git add . && git commit -m "Enable jaeger feature on transformer" && git push
 ```
 
-</details><br/>
+{{% /details %}}
 
 
 ## Task {{% param sectionnumber %}}.4: Explore the Traces
