@@ -30,7 +30,7 @@ As your lab environment, we use a so-called web IDE, directly deployed on the la
 
 Go and get the value out of the Environment Variable and log into the Web IDE.
 
-{{% alert title="Note" color="primary" %}}Use Chrome for the best experience. The Url to the Web IDE also can be found in your project. The deployment is exposed with a route. {{% /alert %}}
+{{% alert title="Note" color="primary" %}}Use Chrome for the best experience. The Url to the Web IDE also can be found in your project. The deployment is exposed with a route.{{% /alert %}}
 
 
 Once you're successfully logged into the web IDE open a new Terminal by hitting `CTRL + SHIFT + C` or clicking the Menu button --> Terminal --> new Terminal and check the installed oc version by executing the following command:
@@ -38,6 +38,8 @@ Once you're successfully logged into the web IDE open a new Terminal by hitting 
 ```bash
 oc version
 ```
+
+{{% alert title="Note" color="primary" %}}Type `bash` to get a Bash shell which has bash-completion and command history enabled.{{% /alert %}}
 
 The Web IDE Pod consists of the following tools:
 
