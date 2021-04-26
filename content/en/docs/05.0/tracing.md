@@ -27,7 +27,7 @@ echo $LAB_USER
 
 If the result is empty, set the `LAB_USER` environment variable.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```bash
 export LAB_USER=<username>
@@ -38,7 +38,7 @@ export LAB_USER=<username>
 
 Change to your main Project.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```bash
 oc project $LAB_USER
@@ -67,7 +67,7 @@ Create the local file `<workspace>/jaeger.yaml` with the following content:
 
 Let ArgoCD manage the resources by adding the file to git and push it.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```bash
 git add jaeger.yaml && git commit -m "Add Jaeger Manifest" && git push
@@ -77,7 +77,7 @@ git add jaeger.yaml && git commit -m "Add Jaeger Manifest" && git push
 
 Wait for ArgoCD to deploy the Jaeger instance or do it manually by applying the file.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```bash
 oc apply -f jaeger.yaml
@@ -135,7 +135,7 @@ To achieve that, we need to configure the application by it's environment. Updat
 
 Update your resources and apply the changes.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```bash
 git add . && git commit -m "Enable jaeger feature on producer" && git push
@@ -151,7 +151,7 @@ Next we configure the consumer to use the jaeger feature. To enable jaeger, open
 
 Update your resources and apply the changes.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```bash
 git add . && git commit -m "Enable jaeger feature on consumer" && git push
@@ -175,7 +175,7 @@ env:
   value: 'true'
 ```
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```bash
 git add . && git commit -m "Enable jaeger feature on transformer" && git push

@@ -68,6 +68,9 @@ techlabGiteaUrl = "gitea.techlab.openshift.ch"
 # Enable Lunr.js offline search
 offlineSearch = true
 
+# Enable expert mode switch
+modeSwitcher = "true"
+
 [params.ui]
 # Enable to show the side bar menu in its compact state.
 sidebar_menu_compact = false

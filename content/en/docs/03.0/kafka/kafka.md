@@ -55,7 +55,7 @@ echo $LAB_USER
 
 If the result is empty, set the `LAB_USER` environment variable.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```bash
 export LAB_USER=<username>
@@ -66,7 +66,7 @@ export LAB_USER=<username>
 
 Change to your main Project.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```bash
 oc project $LAB_USER
@@ -93,7 +93,7 @@ With the [Strimzi Operator](https://strimzi.io/) we can manage our Kafka cluster
 
 Create the cluster by creating the crd resource inside your project. To do so, apply the content of your `kafka-cluster.yaml` file.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```s
 oc apply -f kafka-cluster.yaml
@@ -132,7 +132,7 @@ This file defines the 'manual' topic, which allows our microservices to communic
 
 Create the Kafka topic by applying this file.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```s
 oc apply -f manual-topic.yaml
@@ -271,7 +271,7 @@ spec:
 
 First we have to delete the DeploymentConfig of the producer.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```s
 oc delete DeploymentConfig data-producer
@@ -296,7 +296,7 @@ The output must be `deployment.apps/data-producer created (dry run)` before you 
 
 Apply the updated content of the YAML file to let OpenShift rollout your freshly created Deployment of the producer.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```s
 oc apply -f producer.yaml
@@ -318,7 +318,7 @@ Do the following changes inside your file `<workspace>/svc.yaml`. Update the lab
 
 Apply the updated Service manifest.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```s
 oc apply -f svc.yaml
@@ -376,7 +376,7 @@ Prepare a file inside your workspace `<workspace>/consumerConfigMap.yaml` and ad
 
 Let's create the ConfigMap
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```BASH
 oc apply -f consumerConfigMap.yaml
@@ -431,7 +431,7 @@ spec:
 
 Also apply the updated resource definition and let OpenShift deploy the consumer.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```s
 oc apply -f consumer.yaml

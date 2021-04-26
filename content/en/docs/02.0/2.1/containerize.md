@@ -153,7 +153,7 @@ Prepare a file inside your workspace `<workspace>/buildConfig.yaml` and add the 
 
 Create the build config by applying the content of your `buildConfig.yaml` file.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```BASH
 oc apply -f buildConfig.yaml
@@ -188,7 +188,7 @@ Prepare a file inside your workspace `<workspace>/producer.yaml` and add the fol
 
 Let's create the deployment
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```BASH
 oc apply -f producer.yaml
@@ -220,7 +220,7 @@ Prepare a file inside your workspace `<workspace>/svc.yaml` and add the followin
 
 Create the Service in OpenShift
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```BASH
 oc apply -f svc.yaml
@@ -250,7 +250,7 @@ Prepare a file inside your workspace `<workspace>/route.yaml` and add the follow
 
 Create the Route in OpenShift
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```BASH
 oc apply -f route.yaml
@@ -346,7 +346,7 @@ This should have created the file `<workspace>/consumer.yaml` containing all res
 
 Use the file `consumer.yaml` to create the consumer application inside OpenShift.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```BASH
 oc apply -f consumer.yaml
@@ -364,7 +364,7 @@ route.route.openshift.io/data-consumer created
 
 Let's verify if everything was deployed and is up running. Show again all resources.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```BASH
 oc get all

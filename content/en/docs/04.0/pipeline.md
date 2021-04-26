@@ -46,7 +46,7 @@ echo $LAB_USER
 
 If the result is empty, set the `LAB_USER` environment variable.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```bash
 export LAB_USER=<username>
@@ -57,7 +57,7 @@ export LAB_USER=<username>
 
 Change to your main Project.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```bash
 oc project $LAB_USER
@@ -67,7 +67,7 @@ oc project $LAB_USER
 
 The OpenShift Pipeline operator automatically creates a pipeline ServiceAccount with all required permissions to build and push an image. This service account is used by PipelineRuns. List the service accounts of your project.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```bash
 oc get ServiceAccount
@@ -126,7 +126,7 @@ Let's examine the task that does a deployment. Create the local file `<workspace
 
 Let's create the task.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```bash
 oc apply -f deploy-task.yaml
@@ -170,7 +170,7 @@ Create the following pipeline `<workspace>/deploy-pipeline.yaml`:
 
 Create the Pipeline.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```bash
 oc apply -f deploy-pipeline.yaml
@@ -204,7 +204,7 @@ Create the following resource definition for a PVC inside `<workspace>/workspace
 
 Create the PVC.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```bash
 oc apply -f workspaces-pvc.yaml

@@ -64,7 +64,7 @@ echo $LAB_USER
 
 If the result is empty, set the `LAB_USER` environment variable.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```bash
 export LAB_USER=<username>

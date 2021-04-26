@@ -74,7 +74,7 @@ echo $LAB_USER
 
 If the result is empty, set the `LAB_USER` environment variable.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```bash
 export LAB_USER=<username>
@@ -85,7 +85,7 @@ export LAB_USER=<username>
 
 Change to your main Project.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```bash
 oc project $LAB_USER
@@ -108,7 +108,7 @@ Create the following ServiceMonitor resource as local file `<workspace>/servicem
 
 Let ArgoCD create the ServiceMonitor by adding the file to git and push it.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```bash
 git add servicemonitor.yaml && git commit -m "Add ServiceMonitor Manifest" && git push
@@ -118,7 +118,7 @@ git add servicemonitor.yaml && git commit -m "Add ServiceMonitor Manifest" && gi
 
 In hurry and do not want to wait for ArgoCD to sync? Do it manually by applying the file.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```BASH
 oc apply -f servicemonitor.yaml

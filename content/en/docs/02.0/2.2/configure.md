@@ -31,7 +31,7 @@ deploymentconfig.apps.openshift.io/data-producer patched
 
 Update also the ports of the liveness and readiness probes from 8080 to 8081 using `oc patch`:
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```BASH
 
@@ -46,7 +46,7 @@ oc patch dc/data-producer --type "json" -p '[{"op":"replace","path":"/spec/templ
 
 Verify the changed port of the pod by describing the DeploymentConfig using `oc describe`.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```BASH
 oc describe deploymentconfig data-producer
@@ -77,7 +77,7 @@ There are no environment variables configured.
 
 Add the environment variable `QUARKUS_HTTP_PORT` with the value 8081 with `oc set env`.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```BASH
 oc set env dc/data-producer QUARKUS_HTTP_PORT=8081
@@ -91,7 +91,7 @@ deploymentconfig.apps.openshift.io/data-producer updated
 
 The variable should be configured now. Check it by listing the environment of the DeploymentConfig again.
 
-{{% details title="command hint" %}}
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```BASH
 oc set env dc/data-producer --list
