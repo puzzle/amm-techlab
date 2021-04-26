@@ -22,7 +22,7 @@ Login to the web console of the Lab Cluster with the provided Username and Passw
 The project with the name corresponding to your username is going to be used for all the hands-on labs.
 
 
-### Task {{% param sectionnumber %}}.1.1: Web IDE
+### Task {{% param sectionnumber %}}.1.1: Access Web IDE
 
 {{% alert title="Note" color="primary" %}}ALPHA: you can also use your local installation of the cli tools.{{% /alert %}}
 
@@ -41,20 +41,6 @@ oc version
 
 {{% alert title="Note" color="primary" %}}Type `bash` to get a Bash shell which has bash-completion and command history enabled.{{% /alert %}}
 
-The Web IDE Pod consists of the following tools:
-
-* oc
-* kubectl
-* kustomize
-* helm
-* kubectx
-* kubens
-* tekton cli
-* odo
-* argocd
-
-The files in the home directory under `/home/coder` are stored in a persistence volume.
-
 
 ### Task {{% param sectionnumber %}}.1.2: Login with oc tool
 
@@ -69,16 +55,7 @@ Switch to your project with `oc project <username>`
 If you want to use your local `oc` tool, make sure to get the appropriate version.
 
 
-### Task {{% param sectionnumber %}}.1.3: Local Workspace Directory
-
-During the lab, you’ll be using local files (eg. YAML resources) which will be applied in your lab project.
-
-Create a new folder for your \<workspace> in your Web IDE  (for example ./amm-workspace/). Either you can create it with `right-mouse-click -> New Folder` or in the Web IDE terminal `mkdir amm-workspace`
-
-The oc commands of the labs have to be executed inside your workspace. Inside your terminal change to that directory: `cd amm-workspace`
-
-
-### Task {{% param sectionnumber %}}.1.4: Explore other namespaces
+## Task {{% param sectionnumber %}}.2: Explore other namespaces
 
 Alongside the Lab Cluster, we also deployed a couple of additional tools and services we're going to use during the lab.
 
@@ -98,7 +75,33 @@ oc get routes
 ```
 
 
-### Task {{% param sectionnumber %}}.1.5: Lab Setup
+## Task {{% param sectionnumber %}}.3: Web IDE
+
+The Web IDE Container consists of the following tools:
+
+* oc
+* kubectl
+* kustomize
+* helm
+* kubectx
+* kubens
+* tekton cli
+* odo
+* argocd
+
+The files in the home directory under `/home/coder` are stored in a persistence volume.
+
+
+### Task {{% param sectionnumber %}}.3.1: Local Workspace Directory
+
+During the lab, you’ll be using local files (eg. YAML resources) which will be applied in your lab project.
+
+Create a new folder for your \<workspace> in your Web IDE  (for example ./amm-workspace/). Either you can create it with `right-mouse-click -> New Folder` or in the Web IDE terminal `mkdir amm-workspace`
+
+The oc commands of the labs have to be executed inside your workspace. Inside your terminal change to that directory: `cd amm-workspace`
+
+
+## Task {{% param sectionnumber %}}.4: Lab Setup
 
 Most of the labs will be done inside the OpenShift project with your username. Verify that your oc tool is configured to point to the right project:
 
@@ -111,3 +114,18 @@ Using project "<username>" on server "https://<theClusterAPIURL>".
 ```
 
 The returned project name should correspond to your username.
+
+
+## Task {{% param sectionnumber %}}.5: Check Expert Mode
+
+The instructions for this lab has two modes: *normal* and *expert*
+
+The mode can be switched by the **Expert Mode** switch at the top of the page (inside the page header).
+
+With *normal* mode you should see the text `"Normal" mode instructions.` below. With *Expert Mode* selected, the text is hidden behind the `command hint` box. Clicking on that box will show the instructions.
+
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
+"Normal" mode instructions.
+{{% /details %}}
+
+Challenge yourself to do the labs in *expert* mode. The commands should have been introduced before they will be hidden behind `command hint`.
