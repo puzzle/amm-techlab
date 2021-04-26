@@ -26,14 +26,13 @@ echo $LAB_USER
 
 If the result is empty, set the `LAB_USER` environment variable.
 
-<details><summary>command hint</summary>
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
 
 ```bash
 export LAB_USER=<username>
 ```
 
-</details><br/>
-
+{{% /details %}}
 
 Change to your `<username>-resources` Project.
 
