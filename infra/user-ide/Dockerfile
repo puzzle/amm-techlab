@@ -12,8 +12,6 @@ ARG TEKTON_CLI=https://github.com/tektoncd/cli/releases/download/v0.10.0/tkn_0.1
 ARG ODO=https://mirror.openshift.com/pub/openshift-v4/clients/odo/latest/odo-linux-amd64
 ARG OPENSHIFT_CLIENT_TOOL=https://downloads.ocp.aws.puzzle.ch/amd64/linux/oc.tar
 
-COPY settings.json /home/coder/.local/share/code-server/User/settings.json
-
 USER root
 
 RUN apt-get update && apt-get install bash-completion wget
@@ -29,15 +27,21 @@ RUN mkdir -p ~/.local/bin \
     && curl -L ${TEKTON_CLI} -o ~/.local/bin/tkn.tar.gz && tar xvfz ~/.local/bin/tkn.tar.gz -C /usr/local/bin/ && rm -rf ~/.local/bin/tkn.tar.gz \
     && curl ${ODO} -o /usr/local/bin/odo \
     && curl ${OPENSHIFT_CLIENT_TOOL} -o ~/.local/bin/oc.tar &&  tar -xvf ~/.local/bin/oc.tar -C /usr/local/bin/ && rm -rf ~/.local/bin/oc.tar \
-    && chmod +x /usr/local/bin/* \
-    && chown -R coder:coder /home/coder/.local/ \
-    && chgrp -R 0 /home/coder/.local/ \
-    && chmod -R g=u /home/coder/.local/
+    && chmod +x /usr/local/bin/*
 
 USER coder
 
 RUN oc completion bash | sudo tee /etc/bash_completion.d/oc_bash_completion \
     && kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl_bash_completion
 
+# files copied back in entrypoint
+RUN mkdir -p /tmp/coder \
+    && cp -a ~/.bashrc /tmp/coder/ \
+    && cp -a ~/.bash_logout /tmp/coder/ \
+    && cp -a ~/.profile /tmp/coder/
 
-RUN mkdir -p /tmp/coder && cp -a ~/.bashrc /tmp/coder/ && cp -a ~/.bash_logout /tmp/coder/ && cp -a ~/.profile /tmp/coder/
+COPY settings.json /tmp/coder/
+COPY container-entrypoint.sh /
+
+ENTRYPOINT ["/container-entrypoint.sh"]
+CMD ["--host", "0.0.0.0", "."]
