@@ -1,4 +1,4 @@
-FROM codercom/code-server:3.9.0
+FROM codercom/code-server:3.10.1
 
 ARG ARGOCD_CLI=https://github.com/argoproj/argo-cd/releases/download/v1.7.3/argocd-linux-amd64
 ARG HELM_CLI=https://get.helm.sh/helm-v3.4.1-linux-amd64.tar.gz
@@ -34,5 +34,14 @@ USER coder
 RUN oc completion bash | sudo tee /etc/bash_completion.d/oc_bash_completion \
     && kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl_bash_completion
 
+# files copied back in entrypoint
+RUN mkdir -p /tmp/coder \
+    && cp -a ~/.bashrc /tmp/coder/ \
+    && cp -a ~/.bash_logout /tmp/coder/ \
+    && cp -a ~/.profile /tmp/coder/
 
-RUN mkdir -p /tmp/coder && cp -a ~/.bashrc /tmp/coder/ && cp -a ~/.bash_logout /tmp/coder/ && cp -a ~/.profile /tmp/coder/
+COPY settings.json /tmp/coder/
+COPY container-entrypoint.sh /
+
+ENTRYPOINT ["/container-entrypoint.sh"]
+CMD ["--host", "0.0.0.0", "."]
