@@ -55,12 +55,6 @@ The current OpenShift - Prometheus integration works differently and is way more
 oc explain ServiceMonitor
 ```
 
-Or
-
-```bash
-oc describe crd ServiceMonitor
-```
-
 
 ## Task {{% param sectionnumber %}}.1: Check project setup
 
@@ -149,7 +143,7 @@ Make sure to replace `<username>` with your current namespace
 prometheus_sd_discovered_targets{config="<username>/amm-techlab-monitor/0"}
 ```
 
-Expected result: two targets (Consumer and provider) similar to:
+Expected result on the bottom of the Graf: two targets (Consumer and provider) similar to:
 
 ```
 prometheus_sd_discovered_targets{cluster="cluster",config="<username>/amm-techlab-monitor/0",endpoint="metrics",instance="10.129.2.229:9091",job="prometheus-user-workload",name="scrape",namespace="openshift-user-workload-monitoring",pod="prometheus-user-workload-1",prometheus="openshift-monitoring/k8s",service="prometheus-user-workload"}
