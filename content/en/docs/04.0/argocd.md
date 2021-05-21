@@ -73,6 +73,8 @@ Visit `https://{{% param techlabGiteaUrl %}}/` with your browser and register a 
 
 Login with the new user and create a new Git repository with the Name `gitops-resources`.
 
+{{% alert title="Note" color="primary" %}} Verify that the repository is public. {{% /alert %}}
+
 The URL of the newly created Git repository will look like `https://{{% param techlabGiteaUrl %}}/<username>/gitops-resources.git`
 
 ![Git repository created](../gitea-repo-created.png)
