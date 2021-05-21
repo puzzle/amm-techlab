@@ -167,12 +167,15 @@ oc rollout restart deployment data-consumer
 
 And also reconfigure the environment of the data-transformer (`<workspace>/data-transformer.yaml`) to enable Jaeger by changing the `transformer.jaeger.enabled` env to `true`
 
-```yaml
+
+```
+{{< highlight YAML "hl_lines=5" >}}
 ...
 env:
 ...
 - name: transformer.jaeger.enabled
   value: 'true'
+{{< / highlight >}}
 ```
 
 {{% details title="command hint" mode-switcher="normalexpertmode" %}}

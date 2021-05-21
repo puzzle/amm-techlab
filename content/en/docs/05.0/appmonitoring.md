@@ -55,12 +55,6 @@ The current OpenShift - Prometheus integration works differently and is way more
 oc explain ServiceMonitor
 ```
 
-Or
-
-```bash
-oc describe crd ServiceMonitor
-```
-
 
 ## Task {{% param sectionnumber %}}.1: Check project setup
 
@@ -149,7 +143,7 @@ Make sure to replace `<username>` with your current namespace
 prometheus_sd_discovered_targets{config="<username>/amm-techlab-monitor/0"}
 ```
 
-Expected result: two targets (Consumer and provider) similar to:
+Expected result on the bottom of the Graph: two targets (Consumer and provider) similar to:
 
 ```
 prometheus_sd_discovered_targets{cluster="cluster",config="<username>/amm-techlab-monitor/0",endpoint="metrics",instance="10.129.2.229:9091",job="prometheus-user-workload",name="scrape",namespace="openshift-user-workload-monitoring",pod="prometheus-user-workload-1",prometheus="openshift-monitoring/k8s",service="prometheus-user-workload"}
@@ -198,8 +192,10 @@ This means now: since all three Services `data-producer`, `data-consumer` and `d
 
 ## Task {{% param sectionnumber %}}.5: Query Application Metrics
 
-Since the Metrics are now collected from all three services, let's execute a query and visualise the data.
+Since the Metrics are now collected from all three services, let's execute a query and visualize the data.
 For example, the total amount of Produced, Consumed and Transformed Messages.
+
+{{% alert title="Note" color="primary" %}} Make sure to replace `<username>` with your current namespace. {{% /alert %}}
 
 ```s
 sum(application_ch_puzzle_quarkustechlab_reactiveproducer_boundary_ReactiveDataProducer_producedMessages_total{namespace="<username>"})
@@ -219,10 +215,8 @@ sum(application_ch_puzzle_quarkustechlab_reactiveconsumer_boundary_ReactiveDataC
 
 Finally click `Run Query` to execute the queries.
 
-
 {{% alert title="Note" color="primary" %}}
-Make sure to replace `<username>` with your current namespace.
-You can ignore the warning about the rate/sum function after you execute the query.
+You can ignore the warning about the rate/sum function after you execute the query. For our small example it draws a nicer graph.
 {{% /alert %}}
 
 

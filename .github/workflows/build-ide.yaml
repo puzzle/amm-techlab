@@ -28,7 +28,7 @@ jobs:
               echo "IDE_IMAGE_TAG=${{ steps.prepare.outputs.tag }}" >> $GITHUB_ENV
           fi
       -
-        name: Test
+        name: Using image tag
         run: echo ${{ env.IDE_IMAGE_TAG }}
       -
         name: Login to Quay.io Container Registry
