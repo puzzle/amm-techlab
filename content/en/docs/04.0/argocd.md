@@ -208,8 +208,7 @@ argocd app sync argo-$LAB_USER
 
 This command retrieves the manifests from the git repository and performs a `kubectl apply` on them. Because all our manifests has been deployed manually before, no new rollout of them will be triggered on OpenShift. But form now on, all resources are managed by Argo CD. Congrats, the first step in direction GitOps! :)
 
-
-Check the Argo CD UI to browse the application and their components. The URL of the Argo CD webinterface will be provided by the teacher.
+Check the Argo CD UI to browse the application and their components: [https://{{% param techlabArgoCdUrl %}}](https://{{% param techlabArgoCdUrl %}})
 
 ![Argo CD App overview](../argo-app.png)
 
