@@ -47,9 +47,8 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: 'quay.io/puzzle/amm-techlab:pr-${{ github.event.pull_request.number }}'
-          format: 'template'
-          template: '@/contrib/sarif.tpl'
-          output: 'trivy-results.sarif'
+          format: 'table'
+          output: 'trivy-results.txt'
           exit-code: '0'
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
@@ -58,7 +57,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: trivy-results
-          path: trivy-results.sarif
+          path: trivy-results.txt
       -
         name: 'Deploy'
         uses: 'deliverybot/helm@v1'
