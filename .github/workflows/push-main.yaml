@@ -50,11 +50,15 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: 'quay.io/puzzle/amm-techlab:latest'
-          format: 'table'
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: 'os'
+          format: 'template'
+          template: '@/contrib/sarif.tpl'
+          output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'
+      -
+        name: Upload vulnerability scan results
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: 'trivy-results.sarif'
       -
         name: 'Deploy'
         uses: 'deliverybot/helm@v1'
