@@ -50,12 +50,15 @@ jobs:
           format: 'template'
           template: '@/contrib/sarif.tpl'
           output: 'trivy-results.sarif'
+          exit-code: '0'
+          ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
       -
-        name: Upload vulnerability scan results
-        uses: github/codeql-action/upload-sarif@v1
+        name: Archive vulnerability scan results
+        uses: actions/upload-artifact@v2
         with:
-          sarif_file: 'trivy-results.sarif'
+          name: trivy-results
+          path: trivy-results.sarif
       -
         name: 'Deploy'
         uses: 'deliverybot/helm@v1'
