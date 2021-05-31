@@ -51,6 +51,7 @@ jobs:
           output: 'trivy-results.txt'
           exit-code: '0'
           ignore-unfixed: true
+          vuln-type: 'os'
           severity: 'CRITICAL,HIGH'
       -
         name: Archive vulnerability scan results
