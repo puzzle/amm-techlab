@@ -63,7 +63,7 @@ jobs:
           name: trivy-results-main
           path: trivy-results.txt
       -
-        name: 'Deploy'
+        name: 'Deploy Helm Release'
         uses: 'deliverybot/helm@v1'
         with:
           release: 'latest'
@@ -80,7 +80,7 @@ jobs:
         env:
           KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
       -
-        name: redeploy puzzle deployment
+        name: Redeploy puzzle Deployment
         uses: actions-hub/kubectl@master
         env:
           KUBE_CONFIG: ${{ secrets.KUBECONFIG_BASE64 }}
