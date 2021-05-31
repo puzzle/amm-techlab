@@ -60,7 +60,7 @@ jobs:
           name: trivy-results-build
           path: trivy-results.txt
       -
-        name: 'Deploy'
+        name: 'Deploy Helm Release'
         uses: 'deliverybot/helm@v1'
         with:
           release: 'pr-${{ github.event.pull_request.number }}'
@@ -77,17 +77,17 @@ jobs:
         env:
           KUBECONFIG_FILE: '${{ secrets.KUBECONFIG_TEST }}'
       -
-        name: redeploy puzzle deployment
+        name: Redeploy puzzle Deployment
         uses: actions-hub/kubectl@master
         env:
           KUBE_CONFIG: ${{ secrets.KUBECONFIG_TEST_BASE64 }}
         with:
           args: rollout restart deployment/pr-${{ github.event.pull_request.number }}-amm-techlab-puzzle --namespace pitc-amm-techlab-test
       -
-        name: Comment on PR
+        name: Comment PR Environments in PR
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           message: |
-           PR Environements: 
+           PR Environments: 
            *  puzzle <https://amm-techlab-pr-${{ github.event.pull_request.number }}.k8s.puzzle.ch>

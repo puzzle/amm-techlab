@@ -22,7 +22,7 @@ for brand specific settings.
 After cloning the main repo, you need to initialize the submodule like this:
 
 ```bash
-git pull --recurse-submodules
+git submodule update --init --recursive
 ```
 
 The default configuration uses the puzzle setup from [config/_default](config/_default/config.toml).
@@ -103,6 +103,13 @@ For local checks, you can either use Visual Studio Code with the corresponding e
 ```shell script
 npm install
 npm run mdlint
+```
+
+Npm not installed? no problem
+
+```bash
+export HUGO_VERSION=$(grep "FROM klakegg/hugo" Dockerfile | sed 's/FROM klakegg\/hugo://g' | sed 's/ AS builder//g')
+docker run --rm --interactive -v $(pwd):/src klakegg/hugo:${HUGO_VERSION}-ci /bin/bash -c "set -euo pipefail;npm install; npm run mdlint;"
 ```
 
 
