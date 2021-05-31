@@ -56,7 +56,7 @@ jobs:
         name: Archive vulnerability scan results
         uses: actions/upload-artifact@v2
         with:
-          name: trivy-results
+          name: trivy-results-build
           path: trivy-results.txt
       -
         name: 'Deploy'
