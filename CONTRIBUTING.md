@@ -26,6 +26,6 @@
 
 ## Do you have questions about the techlab
 
-* Ask your question as an issue on GitHub
+* Ask your question as an issue on GitHub.
 
 Thanks!
