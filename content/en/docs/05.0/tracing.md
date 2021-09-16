@@ -161,6 +161,8 @@ git add . && git commit -m "Enable jaeger feature on consumer" && git push
 
 After you need to rollout the deployment. This is necessary for reloading the config map.
 
+{{% alert  color="primary" %}}Wait for ArgoCD to update the ConfigMap before restarting the consumer.{{% /alert %}}
+
 ```bash
 oc rollout restart deployment data-consumer
 ```
