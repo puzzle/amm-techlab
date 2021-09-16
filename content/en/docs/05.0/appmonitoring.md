@@ -140,14 +140,14 @@ Make sure to replace `<username>` with your current namespace
 
 
 ```s
-prometheus_sd_discovered_targets{config="<username>/amm-techlab-monitor/0"}
+prometheus_sd_discovered_targets{config="serviceMonitor/<username>/amm-techlab-monitor/0"}
 ```
 
 Expected result on the bottom of the Graph: two targets (Consumer and provider) similar to:
 
 ```
-prometheus_sd_discovered_targets{cluster="cluster",config="<username>/amm-techlab-monitor/0",endpoint="metrics",instance="10.129.2.229:9091",job="prometheus-user-workload",name="scrape",namespace="openshift-user-workload-monitoring",pod="prometheus-user-workload-1",prometheus="openshift-monitoring/k8s",service="prometheus-user-workload"}
-prometheus_sd_discovered_targets{cluster="cluster",config="<username>/amm-techlab-monitor/0",endpoint="metrics",instance="10.129.2.255:9091",job="prometheus-user-workload",name="scrape",namespace="openshift-user-workload-monitoring",pod="prometheus-user-workload-0",prometheus="openshift-monitoring/k8s",service="prometheus-user-workload"}
+prometheus_sd_discovered_targets{cluster="console.techlab.openshift.ch", config="serviceMonitor/<username>/amm-techlab-monitor/0", container="kube-rbac-proxy", endpoint="metrics", instance="10.128.2.18:9091", job="prometheus-user-workload", name="scrape", namespace="openshift-user-workload-monitoring", pod="prometheus-user-workload-1", prometheus="openshift-monitoring/k8s", service="prometheus-user-workload"}
+prometheus_sd_discovered_targets{cluster="console.techlab.openshift.ch", config="serviceMonitor/<username>/amm-techlab-monitor/0", container="kube-rbac-proxy", endpoint="metrics", instance="10.131.0.33:9091", job="prometheus-user-workload", name="scrape", namespace="openshift-user-workload-monitoring", pod="prometheus-user-workload-0", prometheus="openshift-monitoring/k8s", service="prometheus-user-workload"}
 ```
 
 
