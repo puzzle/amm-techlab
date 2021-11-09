@@ -132,7 +132,7 @@ Tell your trainer if you get a permission error while creating the ServiceMonito
 
 Prometheus is integrated into the OpenShift Console under the Menu Item Monitoring.
 But as part of this lab, we want to use Grafana to interact with prometheus.
-Open Grafana (URL provided by the trainer) and switch to the explore tab, then execute the following query to check whether your target is configured or not:
+Open Grafana (<https://{{% param techlabGrafanaUrl %}}/>) and switch to the explore tab, then execute the following query to check whether your target is configured or not:
 
 {{% alert title="Note" color="primary" %}}
 Make sure to replace `<username>` with your current namespace

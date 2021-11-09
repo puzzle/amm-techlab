@@ -77,6 +77,7 @@ techlabClusterWebConsolePrefix = "console"
 techlabClusterDomainName = "techlab.openshift.ch"
 techlabArgoCdUrl = "argocd.techlab.openshift.ch"
 techlabGiteaUrl = "gitea.techlab.openshift.ch"
+techlabGrafanaUrl = "grafana.techlab.openshift.ch"
 
 # Enable Lunr.js offline search
 offlineSearch = true
