@@ -224,8 +224,8 @@ You can ignore the warning about the rate/sum function after you execute the que
 
 The needed resource files are available inside the folder [manifests/05.0/5.1/](https://github.com/puzzle/amm-techlab/tree/master/manifests/05.0/5.1/) of the techlab [github repository](https://github.com/puzzle/amm-techlab).
 
-If you weren't successful, you can update your project with the solution by cloning the Techlab Repository `git clone https://github.com/puzzle/amm-techlab.git` and executing this command:
+If you weren't successful, you can update your project with the solution by cloning the Techlab Repository `git clone https://github.com/puzzle/amm-techlab.git`. You need to add the new file into your git repository. If not, ArgoCD will delete the resources again.
 
-```s
-oc apply -f manifests/05.0/5.1/
-```
+* go to your workspace: `cd ~/amm-workspace`
+* copy the solution: `cp <path-to-the-amm-techlab-repo>/manifests/05.0/5.1/* .`
+* let ArgoCD do it's work: `git add servicemonitor.yaml && git commit -m "Add ServiceMonitor Manifest" && git push`
