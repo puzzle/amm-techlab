@@ -33,7 +33,7 @@ Go and get the value out of the Environment Variable and log into the Web IDE.
 {{% alert title="Note" color="primary" %}}Use Chrome for the best experience. The Url to the Web IDE also can be found in your project. The deployment is exposed with a route.{{% /alert %}}
 
 
-Once you're successfully logged into the web IDE open a new Terminal by hitting `CTRL + SHIFT + C` or clicking the Menu button --> Terminal --> new Terminal and check the installed oc version by executing the following command:
+Once you're successfully logged into the web IDE open a new Terminal by hitting `CTRL + SHIFT + C`/`CTRL + SHIFT + ~` or clicking the Menu button --> Terminal --> new Terminal and check the installed oc version by executing the following command:
 
 ```bash
 oc version
