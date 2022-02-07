@@ -25,7 +25,7 @@ A controller consists of a loop, in which the desired state and the actual / obs
 
 The whole functionality of OpenShift/Kubernetes is based on this pattern. On the master (controller-manager) several controllers run, which create the desired state based on resources (ReplicaSets, Pods, Services, etc.). For example, if a ReplicaSet is created, the ReplicaSet controller sees this and thus creates the corresponding number of Pods.
 
-__Optional__: The article [The Mechanics of Kubernetes](https://medium.com/@dominik.tornow/the-mechanics-of-kubernetes-ac8112eaa302) provides a deeper insight into how Kubernetes works. The graphic in the Cascading Commands section illustrates, that four different controllers are involved from the time a deployment is created until the pods are effectively started.
+**Optional**: The article [The Mechanics of Kubernetes](https://medium.com/@dominik.tornow/the-mechanics-of-kubernetes-ac8112eaa302) provides a deeper insight into how Kubernetes works. The graphic in the Cascading Commands section illustrates, that four different controllers are involved from the time a deployment is created until the pods are effectively started.
 
 
 ### Operator
