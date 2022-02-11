@@ -4,6 +4,7 @@
 [submodule "themes/docsy-plus"]
 	path = themes/docsy-plus
 	url = https://github.com/acend/docsy-plus.git
+	branch = main
 [submodule "themes/docsy-puzzle"]
 	path = themes/docsy-puzzle
 	url = https://github.com/puzzle/docsy-puzzle.git
