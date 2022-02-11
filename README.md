@@ -32,7 +32,7 @@ Further, specialized environments can be added in the `config` directory.
 ### Docsy theme usage
 
 * [Official docsy documentation](https://www.docsy.dev/docs/)
-* [Docsy Plus](https://github.com/puzzle/docsy-plus/)
+* [Docsy Plus](https://github.com/acend/docsy-plus/)
 
 
 ### Update submodules for theme updates
@@ -82,15 +82,15 @@ We simply mount the working directory into a running container, where hugo is st
 
 ```bash
 export HUGO_VERSION=$(grep "FROM klakegg/hugo" Dockerfile | sed 's/FROM klakegg\/hugo://g' | sed 's/ AS builder//g')
-docker run \
-  --rm --interactive \
-  --publish 8080:8080 \
-  -v $(pwd):/src \
-  klakegg/hugo:${HUGO_VERSION} \
-  server -p 8080 --bind 0.0.0.0
+docker run --rm --interactive --publish 8080:8080 -v $(pwd):/src klakegg/hugo:${HUGO_VERSION} server -p 8080 --bind 0.0.0.0
 ```
 
-This is available as bash script: `start_hugo.sh`
+use the following command to set the hugo environment
+
+```bash
+export HUGO_VERSION=$(grep "FROM klakegg/hugo" Dockerfile | sed 's/FROM klakegg\/hugo://g' | sed 's/ AS builder//g')
+docker run --rm --interactive --publish 8080:8080 -v $(pwd):/src klakegg/hugo:${HUGO_VERSION} server --environment=<environment> -p 8080 --bind 0.0.0.0
+```
 
 
 ## Linting of Markdown content
@@ -98,7 +98,7 @@ This is available as bash script: `start_hugo.sh`
 Markdown files are linted with <https://github.com/DavidAnson/markdownlint>.
 Custom rules are in `.markdownlint.json`.
 There's a GitHub Action `.github/workflows/markdownlint.yaml` for CI.
-For local checks, you can either use Visual Studio Code with the corresponding extension (markdownlint), or the command line like this:
+For local checks, you can either use Visual Studio Code with the corresponding extension, or the command line like this:
 
 ```shell script
 npm install
