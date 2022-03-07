@@ -248,12 +248,12 @@ Create the PipelineRun by processing the template and creating the generated res
 ```bash
 oc process -f pipeline-run-template.yaml \
   --param=PROJECT_NAME=$(oc project -q) \
-| oc apply -f-
+| oc create -f-
 ```
 
-which will result in: `pipelinerun.tekton.dev/build-and-deploy-run-1 created`
+which will result in: `pipelinerun.tekton.dev/build-and-deploy-run-5wxbf created`
 
-This will create and execute a PipelineRun. Use the command `tkn pipelinerun logs build-and-deploy-run-1 -f -n $LAB_USER` to display the logs.
+This will create and execute a PipelineRun. Use the command `tkn pipelinerun logs build-and-deploy-run-5wxbf -f -n $LAB_USER` to display the logs.
 
 The PipelineRuns can be listed with:
 
@@ -262,8 +262,8 @@ tkn pipelinerun ls
 ```
 
 ```
-NAME                     STARTED          DURATION    STATUS
-build-and-deploy-run-1   3 minutes ago    1 minute    Succeeded
+NAME                         STARTED         DURATION   STATUS
+build-and-deploy-run-5wxbf   9 seconds ago   ---        Running
 ```
 
 Moreover, the logs can be viewed with the following command and selecting the appropriate Pipeline and PipelineRun:
