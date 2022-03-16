@@ -312,6 +312,12 @@ Finally, you can visit your application with the URL provided from the Route: `h
 
 {{% alert  color="primary" %}}Replace **\<username>** with your username or get the URL from your route.{{% /alert %}}
 
+Or you could access the `data` endpoint using curl:
+
+```BASH
+curl https://data-producer-$LAB_USER.{{% param techlabClusterDomainName %}}/data
+```
+
 When you open the URL you should see the producers data
 
 ```json
