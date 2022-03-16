@@ -429,7 +429,7 @@ When you open the URL you should see the consumers data that he received from th
 Or you could access the `data` endpoint using curl:
 
 ```BASH
-curl https://data-consumer-<username>.{{% param techlabClusterDomainName %}}/data
+curl https://data-consumer-$LAB_USER.{{% param techlabClusterDomainName %}}/data
 ```
 
 {{% alert  color="primary" %}}Replace **\<username>** with your username or get the URL from your route.{{% /alert %}}
