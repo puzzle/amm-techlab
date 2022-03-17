@@ -312,6 +312,12 @@ Finally, you can visit your application with the URL provided from the Route: `h
 
 {{% alert  color="primary" %}}Replace **\<username>** with your username or get the URL from your route.{{% /alert %}}
 
+Or you could access the `data` endpoint using curl:
+
+```BASH
+curl https://data-producer-$LAB_USER.{{% param techlabClusterDomainName %}}/data
+```
+
 When you open the URL you should see the producers data
 
 ```json
@@ -429,7 +435,7 @@ When you open the URL you should see the consumers data that he received from th
 Or you could access the `data` endpoint using curl:
 
 ```BASH
-curl https://data-consumer-<username>.{{% param techlabClusterDomainName %}}/data
+curl https://data-consumer-$LAB_USER.{{% param techlabClusterDomainName %}}/data
 ```
 
 {{% alert  color="primary" %}}Replace **\<username>** with your username or get the URL from your route.{{% /alert %}}

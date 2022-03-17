@@ -170,7 +170,7 @@ oc rsh amm-techlab-kafka-0
 The helper scripts within the bin directory allow you to query your kafka server. Execute the following command to list all topics, including the topic we've created before.
 
 ```bash
-./bin/kafka-topics.sh --bootstrap-server localhost:9092  --describe
+./bin/kafka-topics.sh --bootstrap-server localhost:9092  --describe | grep manual
 ```
 
 This listing should also show the `manual` topic.

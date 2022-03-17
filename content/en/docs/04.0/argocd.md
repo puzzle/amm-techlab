@@ -67,7 +67,7 @@ argocd login {{% param techlabArgoCdUrl %}} --sso --grpc-web
 As we are proceeding from now on according to the GitOps principle we need to push all existing resources located in `<workspace>/*.yaml`  into a new Git repository. All the cli commands in this chapter must be executed in the terminal of the provided Web IDE.
 
 Create an empty Git repository in Gitea.
-Visit `https://{{% param techlabGiteaUrl %}}/` with your browser and register a new account with your personal username and a password that you can remember ;)
+Visit [https://{{% param techlabGiteaUrl %}}/](https://{{% param techlabGiteaUrl %}}/) with your browser and register a new account with your personal username and a password that you can remember ;)
 
 ![Register new User in Gitea](../gitea-register.png)
 
@@ -109,6 +109,7 @@ Configure the Git Client and verify the output
 git config user.name "$LAB_USER"
 git config user.email "foo@bar.org"
 git config --local --list
+git config --global credential.helper store
 
 ```
 
