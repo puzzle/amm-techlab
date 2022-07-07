@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/go-toolset:1.17.7 AS build
+FROM registry.access.redhat.com/ubi8/go-toolset:1.17.10-4 AS build
 COPY main.go /opt/app-root/src
 RUN env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o go-hello-world-app .
 
