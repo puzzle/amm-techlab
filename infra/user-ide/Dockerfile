@@ -1,4 +1,4 @@
-FROM codercom/code-server:3.12.0
+FROM codercom/code-server:4.5.0
 
 ARG ARGOCD_CLI=https://github.com/argoproj/argo-cd/releases/download/v1.7.3/argocd-linux-amd64
 ARG HELM_CLI=https://get.helm.sh/helm-v3.4.1-linux-amd64.tar.gz
@@ -10,7 +10,7 @@ ARG KUBENS=https://raw.githubusercontent.com/ahmetb/kubectx/master/kubens
 ARG KUSTOMIZE_CLI=https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv3.8.0/kustomize_v3.8.0_linux_amd64.tar.gz
 ARG TEKTON_CLI=https://github.com/tektoncd/cli/releases/download/v0.10.0/tkn_0.10.0_Linux_x86_64.tar.gz
 ARG ODO=https://mirror.openshift.com/pub/openshift-v4/clients/odo/latest/odo-linux-amd64
-ARG OPENSHIFT_CLIENT_TOOL=https://downloads.ocp.aws.puzzle.ch/amd64/linux/oc.tar
+ARG OPENSHIFT_CLIENT_TOOL=https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz
 
 USER root
 
