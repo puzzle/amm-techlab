@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/go-toolset:1.17.10-4 AS build
+FROM registry.access.redhat.com/ubi8/go-toolset:1.17.12-3 AS build
 COPY main.go /opt/app-root/src
 ENV CGO_ENABLED=0\
     GOOS=linux\
