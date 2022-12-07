@@ -96,7 +96,7 @@ Let's now create our first ServiceMonitor.
 
 Create the following ServiceMonitor resource as local file `<workspace>/servicemonitor.yaml`.
 
-{{< highlight yaml >}}{{< readfile file="manifests/05.0/5.1/servicemonitor.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/05.0/5.1/servicemonitor.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/05.0/5.1/servicemonitor.yaml)
 

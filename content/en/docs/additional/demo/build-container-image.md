@@ -28,7 +28,7 @@ The following files are needed inside your application repository:
 
 This Go code defines an HTTP server listening on port 8080. It has to be placed in the `main.go` file.
 
-{{< highlight go >}}{{< readfile file="content/en/docs/additional/demo/main.go" >}}{{< /highlight >}}
+{{< readfile file="main.go" code="true" lang="go" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/demo/main.go)
 
@@ -47,7 +47,7 @@ Examples:
 
 The `Dockerfile` defines the image build ([Dockerfile reference](https://docs.docker.com/engine/reference/builder/)).
 
-{{< highlight Dockerfile >}}{{< readfile file="content/en/docs/additional/demo/Dockerfile" >}}{{< /highlight >}}
+{{< readfile file="Dockerfile" code="true" lang="dockerfile" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/demo/Dockerfile)
 

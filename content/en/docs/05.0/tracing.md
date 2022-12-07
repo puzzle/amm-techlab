@@ -60,7 +60,7 @@ This Jaeger deployment is not meant for production use! Data is only stored in m
 
 Create the local file `<workspace>/jaeger.yaml` with the following content:
 
-{{< highlight yaml >}}{{< readfile file="manifests/05.0/5.2/jaeger.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/05.0/5.2/jaeger.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/05.0/5.2/jaeger.yaml)
 
@@ -145,7 +145,8 @@ git add . && git commit -m "Enable jaeger feature on producer" && git push
 
 Next we configure the consumer to use the jaeger feature. To enable jaeger, open `<workspace>/consumerConfigMap.yaml` and change the `consumer.jaeger.enabled` property.
 
-{{< highlight yaml "hl_lines=10" >}}{{< readfile file="manifests/05.0/5.2/consumerConfigMap.yaml" >}}{{< /highlight >}}
+<!-- TODO fix and add highlight again: "hl_lines=10 -->
+{{< readfile file="/manifests/05.0/5.2/consumerConfigMap.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/05.0/5.2/consumerConfigMap.yaml)
 

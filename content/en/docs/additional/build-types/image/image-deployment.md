@@ -53,7 +53,7 @@ oc project $LAB_USER-build-types
 
 Let's start with the deployment configuration
 
-{{< highlight yaml >}}{{< readfile file="manifests/additional/image/deploymentConfig.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/additional/image/deploymentConfig.yaml" code="true" lang="yaml" >}}
 
 [Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/image/deploymentConfig.yaml)
 
@@ -63,7 +63,7 @@ oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifes
 
 Next we create the ImageStream definition. The important part is under the `tags` section. There we define a reference to an external Docker registry and define which image to track. Another important field is the import policy. If you query an image from an external registry, you can set scheduled import to true.
 
-{{< highlight yaml >}}{{< readfile file="manifests/additional/image/imageStream.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/additional/image/imageStream.yaml" code="true" lang="yaml" >}}
 
 [Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/image/imageStream.yaml)
 
