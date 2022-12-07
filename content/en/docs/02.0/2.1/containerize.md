@@ -121,7 +121,7 @@ We configure an [ImageStream](https://docs.openshift.com/container-platform/4.5/
 
 Prepare a file inside your workspace `<workspace>/imageStream.yaml` and add the following resource configuration:
 
-{{< highlight yaml >}}{{< readfile file="manifests/02.0/2.1/imageStream.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/02.0/2.1/imageStream.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/imageStream.yaml)
 
@@ -147,7 +147,7 @@ Beside we configure the source and the triggers as well. For the source, we can 
 
 Prepare a file inside your workspace `<workspace>/buildConfig.yaml` and add the following resource configuration:
 
-{{< highlight yaml >}}{{< readfile file="manifests/02.0/2.1/buildConfig.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/02.0/2.1/buildConfig.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/buildConfig.yaml)
 
@@ -182,7 +182,7 @@ After the ImageStream and BuildConfig definition, we can set up our DeploymentCo
 
 Prepare a file inside your workspace `<workspace>/producer.yaml` and add the following resource configuration:
 
-{{< highlight yaml >}}{{< readfile file="manifests/02.0/2.1/producer.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/02.0/2.1/producer.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/producer.yaml)
 
@@ -214,7 +214,7 @@ Expose the container ports to the cluster with a Service. For the Service, we co
 
 Prepare a file inside your workspace `<workspace>/svc.yaml` and add the following resource configuration:
 
-{{< highlight yaml >}}{{< readfile file="manifests/02.0/2.1/svc.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/02.0/2.1/svc.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/svc.yaml)
 
@@ -243,7 +243,7 @@ The TLS type is set to Edge. That will configure the router to terminate the SSL
 
 Prepare a file inside your workspace `<workspace>/route.yaml` and add the following resource configuration:
 
-{{< highlight yaml >}}{{< readfile file="manifests/02.0/2.1/route.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/02.0/2.1/route.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/route.yaml)
 

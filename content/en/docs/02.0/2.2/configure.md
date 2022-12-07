@@ -15,7 +15,8 @@ For this lab the application of the previous lab is used.
 
 We will change the port of the application. With this change we need to adapt the deployment first. There are three ports to change. The container port itself, and the ports for the liveness/readiness probes.
 
-{{< highlight yaml "hl_lines=29 38 45" >}}{{< readfile file="manifests/02.0/2.1/producer.yaml" >}}{{< /highlight >}}
+<!-- TODO fix and add highlight again: "hl_lines=29 38 45" -->
+{{< readfile file="/manifests/02.0/2.1/producer.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/producer.yaml)
 
