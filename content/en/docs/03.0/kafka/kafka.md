@@ -85,7 +85,7 @@ The following Kubernetes-native [custom resource definitions, short crd](https:/
 
 Create a file called `<workspace>/kafka-cluster.yaml` with the following content:
 
-{{< highlight yaml >}}{{< readfile file="manifests/03.0/3.2/kafka-cluster.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/03.0/3.2/kafka-cluster.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/kafka-cluster.yaml)
 
@@ -124,7 +124,7 @@ amm-techlab-zookeeper-0                        1/1     Running   0          2m56
 
 To create a new topic in our Kafka cluster we use another custom resource definition. Create a file called `<workspace>/manual-topic.yaml` with the following content:
 
-{{< highlight yaml >}}{{< readfile file="manifests/03.0/3.2/manual-topic.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/03.0/3.2/manual-topic.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/manual-topic.yaml)
 
@@ -312,7 +312,8 @@ deployment.apps/data-producer created
 
 Do the following changes inside your file `<workspace>/svc.yaml`. Update the label selector from `deploymentConfig: data-producer` to `deployment: data-producer`. Otherwise the Service will not find any Pods to route the traffic into.
 
-{{< highlight yaml "hl_lines=15" >}}{{< readfile file="manifests/03.0/3.2/svc.yaml" >}}{{< /highlight >}}
+<!-- TODO fix and add highlight again: "hl_lines=15" -->
+{{< readfile file="/manifests/03.0/3.2/svc.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/svc.yaml)
 
@@ -370,7 +371,7 @@ The custom container image has kafka capabilities.
 We need to configure the consumer by it's environment to use kafka. This we do with a [ConfigMap](https://kubernetes.io/docs/concepts/configuration/configmap/).
 Prepare a file inside your workspace `<workspace>/consumerConfigMap.yaml` and add the following resource configuration:
 
-{{< highlight yaml >}}{{< readfile file="manifests/03.0/3.2/consumerConfigMap.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/03.0/3.2/consumerConfigMap.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/consumerConfigMap.yaml)
 

@@ -18,7 +18,7 @@ Let's get our kafka instance, producer and consumers up and running on your loca
 
 With the following docker-compose file you can start your own local kafka cluster.
 
-{{< highlight Dockerfile >}}{{< readfile file="content/en/docs/03.0/additional/kafka-local/docker-compose.yml" >}}{{< /highlight >}}
+{{< readfile file="docker-compose.yml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/03.0/additional/kafka-local/docker-compose.yml)
 
