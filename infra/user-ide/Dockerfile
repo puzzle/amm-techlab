@@ -1,7 +1,7 @@
 FROM codercom/code-server:4.6.1
 
-ARG ARGOCD_CLI=https://github.com/argoproj/argo-cd/releases/download/v1.7.3/argocd-linux-amd64
-ARG HELM_CLI=https://get.helm.sh/helm-v3.4.1-linux-amd64.tar.gz
+ARG ARGOCD_CLI=https://github.com/argoproj/argo-cd/releases/download/v2.3.9/argocd-linux-amd64
+ARG HELM_CLI=https://get.helm.sh/helm-v3.10.2-linux-amd64.tar.gz
 ARG K8S_DEBUGBOX=https://github.com/puzzle/k8s-debugbox/releases/download/v1.0.5/k8s-debugbox-v1.0.5.tar.gz
 ARG KUBECTL=https://storage.googleapis.com/kubernetes-release/release/
 ARG KUBECTL_STABLE=https://storage.googleapis.com/kubernetes-release/release/stable.txt

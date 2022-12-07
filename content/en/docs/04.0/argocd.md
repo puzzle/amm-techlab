@@ -487,7 +487,8 @@ Since we don't want our manifests been managed via two different ways (tekton an
 
 Let's create the `<workspace>/data-transformer.yaml` resource within our workspace and push it to the git repository.
 
-{{< highlight yaml "hl_lines=40" >}}{{< readfile file="manifests/04.0/4.2/data-transformer.yaml" >}}{{< /highlight >}}
+<!-- TODO fix and add highlight again: "hl_lines=40" -->
+{{< readfile file="/manifests/04.0/4.2/data-transformer.yaml" code="true" lang="yaml" >}}
 
 {{% alert  color="primary" %}} Replace **\<username>** with your username! {{% /alert %}}
 
