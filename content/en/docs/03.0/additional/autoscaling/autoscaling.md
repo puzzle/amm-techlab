@@ -7,18 +7,36 @@ description: >
   Using the autoscaling feature of OpenShift.
 ---
 
-In this example we will scale an automated application up and down, depending on how much load the application is under. For this we use our old Ruby example webapp.
+In this example we will scale an automated application up and down, depending on how much load the application is under. For this we use an Ruby example webapp.
+
+We first check that the project is ready for the lab.
+
+Ensure that the `LAB_USER` environment variable is set.
 
 ```bash
-oc new-project <username>-autoscale
+echo $LAB_USER
 ```
 
-{{% alert  color="primary" %}}Replace **\<username>** with your username!{{% /alert %}}
+If the result is empty, set the `LAB_USER` environment variable.
+
+{{% details title="command hint" mode-switcher="normalexpertmode" %}}
+
+```bash
+export LAB_USER=<username>
+```
+
+{{% /details %}}
+
+Create a new project to for the autoscale lab.
+
+```bash
+oc new-project ${LAB_USER}-autoscale
+```
 
 On the branch load there is a CPU intensive endpoint which we will use for our tests. Therefore we start the app on this branch:
 
 ```bash
-oc new-app openshift/ruby:2.5~https://github.com/chrira/ruby-ex.git#load
+oc new-app openshift/ruby:2.7-ubi8~https://github.com/chrira/ruby-ex.git#load
 oc create route edge --insecure-policy=Allow --service=ruby-ex
 ```
 
@@ -26,7 +44,7 @@ oc create route edge --insecure-policy=Allow --service=ruby-ex
 
 Wait until the application is built and ready and the first metrics appear. You can follow the build as well as the existing pods. It will take a while until the first metrics appear, then the autoscaler will be able to work properly.
 
-To see the metrics, go with the web-console to your OpenShift project (Developer view) and select the *Monitoring* menu item. Then change to the Metcis tab and select *CPU Usage* from the dropdown. If the metric has no datapoints, click the *Show PromQL* button and add following query:
+To see the metrics, go with the web-console to your OpenShift project (Developer view) and select the *Observe* menu item. Then change to the Metcis tab and select *CPU Usage* from the dropdown. If the metric has no datapoints, click the *Show PromQL* button and add following query:
 
 ```s
 sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{namespace='<username>-autoscale'}) by (pod)
