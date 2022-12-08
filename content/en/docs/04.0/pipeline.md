@@ -296,7 +296,7 @@ This will create and execute a PipelineRun. Use the same commands as listed abov
 
 ## Task {{% param sectionnumber %}}.8: OpenShift WebUI
 
-Go tho the developer view of the WebUI of OpenShift and select your pipeline project.
+Go to the developer view of the WebUI of OpenShift and select your pipeline project.
 
 Do you remember that you did not create any Deployment for your application? That has been done by your Tekton pipeline.
 

@@ -55,7 +55,7 @@ oc describe deploymentconfig data-producer
 
 {{% /details %}}
 
-> The pod does not start because that the readiness probe fails. Now we have to change the application to use the port 8081 for serving it's endpoint.
+> The pod does not start because that the readiness probe fails. Now we have to change the application to use the port 8081 for serving its endpoint.
 
 
 ## Task {{% param sectionnumber %}}.2: Configure application
@@ -113,7 +113,7 @@ QUARKUS_HTTP_PORT=8081
 Changing the environment of a deployment triggers a rollout of the application pod.
 After the container has started successfully, the application should be reachable again.
 
-Check if the changes were applied correctly. Open your browser and navigate to your application:  
+Check if the changes were applied correctly. Open your browser and navigate to your application:
 `https://data-producer-<username>.{{% param techlabClusterDomainName %}}/data`
 
 {{% alert  color="primary" %}}Replace **\<username>** with your username!{{% /alert %}}

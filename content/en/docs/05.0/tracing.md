@@ -117,7 +117,7 @@ Use this URL with https protocol to open the Jaeger web console in a Browser win
 Now let's make sure the traces that are collected within our microservices are also been sent to the running Jaeger services.
 
 
-To achieve that, we need to configure the application by it's environment. Update the deployment config (`producer.yaml`) to use the jaeger feature:
+To achieve that, we need to configure the application by its environment. Update the deployment config (`producer.yaml`) to use the Jaeger feature:
 
 ```
 {{< highlight text "hl_lines=5-7" >}}
@@ -143,7 +143,7 @@ git add . && git commit -m "Enable jaeger feature on producer" && git push
 
 {{% /details %}}
 
-Next we configure the consumer to use the jaeger feature. To enable jaeger, open `<workspace>/consumerConfigMap.yaml` and change the `consumer.jaeger.enabled` property.
+Next we configure the consumer to use the Jaeger feature. To enable Jaeger, open `<workspace>/consumerConfigMap.yaml` and change the `consumer.jaeger.enabled` property.
 
 <!-- TODO fix and add highlight again: "hl_lines=10 -->
 {{< readfile file="/manifests/05.0/5.2/consumerConfigMap.yaml" code="true" lang="yaml" >}}
@@ -160,7 +160,7 @@ git add . && git commit -m "Enable jaeger feature on consumer" && git push
 
 {{% /details %}}
 
-After you need to rollout the deployment. This is necessary for reloading the config map.
+After you need to roll out the deployment. This is necessary for reloading the config map.
 
 {{% alert  color="primary" %}}Wait for ArgoCD to update the ConfigMap before restarting the consumer.{{% /alert %}}
 

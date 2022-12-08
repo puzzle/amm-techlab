@@ -12,7 +12,7 @@ description: >
 
 When designing applications or software systems we usually tend to follow a very imperative way of building our components. Especially in monolithic applications, the communication between two components will often come from function or method calls from one component to another. Even when we follow a microservice architecture the most intuitive way for most people would be to simply replace these calls with REST calls. In theory, this is a valid approach and will often be the first step when migrating a monolith towards a microservice approach. The downside, however, will be the same. Whenever two components talk directly to each other they rely on an often synchronous direct communication channel. What happens if the other component is not available?
 
-Let's take a look at an example to make our point. Imagine we have an application or software systems where you can order shoes. An example workflow would be a user selecting his desired shoes, starting an order, and finally paying it. Eventually, this is will trigger a shipment.
+Let's take a look at an example to make our point. Imagine we have an application or software systems where you can order shoes. An example workflow would be a user selecting their desired shoes, starting an order, and finally paying it. Eventually, this will trigger a shipment.
 
 * shop component: Which handles all the products available.
 * order component: Handles products which were ordered.
@@ -27,11 +27,11 @@ If we would implement this with synchronous communication the system would look 
 +------------+                     +------------+                     +--------------+
 ```
 
-If the order component breaks down or will not accept any communication, the shop component must handle the entire fault tolerance and the system's reliability will depend on it's error handling.
+If the order component breaks down or will not accept any communication, the shop component must handle the entire fault tolerance and the system's reliability will depend on its error handling.
 
-We can take a step back now and take a look at this workflow from another perspective. On a meta level all the workflows in this application do get triggered by events. We can think of the order or the payment request as events. The order component should not really care from whom the order comes nor should the shop component care from where this event was triggered. The entire workflow moves away from the pattern that we rely on any calls from one component to another. We just emit events whenever another workflow should be triggered. The components listen to a stream of such events and will start their connected workflow.
+We can take a step back now and take a look at this workflow from another perspective. On a meta level all the workflows in this application do get triggered by events. We can think of the order or the payment request as events. The order component should not really care from whom the order comes nor should the shop component care from where this event was triggered. The entire workflow abandons the pattern where we rely on any calls from one component to another. We just emit events whenever another workflow should be triggered. The components listen to a stream of such events and will start their connected workflow.
 
-For handling those streams of events, we need a message broker. Whenever an event gets triggered by a component, the component sends a message to the message broker. The broker then distributes these events between a set of subscriber components.
+For handling those streams of events, we need a message broker. Whenever an event gets triggered by a component, or the component sends a message to the message broker. The broker then distributes these events between a set of subscriber components.
 
 The architecture might look something like this:
 
