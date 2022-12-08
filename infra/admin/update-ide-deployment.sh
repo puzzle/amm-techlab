@@ -4,7 +4,7 @@
 
 script_dir=`dirname $0`
 
-for i in {1..20}
+for i in {1..10}
 do
    echo "update ide deployment for project hannelore$i"
    oc patch deploy/amm-techlab-ide --type "json" -p '[{"op":"remove","path":"/spec/template/spec/containers/0/command"}]' -n hannelore$i
