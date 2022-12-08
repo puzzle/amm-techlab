@@ -12,7 +12,7 @@ This lab gives you an introduction to event-driven architecture with Apache Kafk
 
 ## {{% param sectionnumber %}}.1: Apache Kafka
 
-In this section, we are going to deploy a [Apache Kafka](https://kafka.apache.org/) cluster with the [Strimzi Operator](https://strimzi.io/) and use it to distribute our events between the microservices. In modern large scale applications, messages must be processed, reprocessed, analyzed and handled - often in real-time. The key design principles of Kafka were formed based on the need for high-throughput architectures which are easily scalable and provide key features to store and process streamed data.
+In this section, we are going to deploy an [Apache Kafka](https://kafka.apache.org/) cluster with the [Strimzi Operator](https://strimzi.io/) and use it to distribute our events between the microservices. In modern large scale applications, messages must be processed, reprocessed, analyzed and handled - often in real-time. The key design principles of Kafka were formed based on the need for high-throughput architectures which are easily scalable and provide key features to store and process streamed data.
 
 
 ### {{% param sectionnumber %}}.1.1: Publish-subscribe durable messaging system

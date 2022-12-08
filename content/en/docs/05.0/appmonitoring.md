@@ -11,10 +11,10 @@ description: >
 
 When running applications in production, a fast feedback loop is a key factor. The following reasons show why it's essential to gather and combine all sorts of metrics when running an application in production:
 
-* To make sure that an application runs smoothly
-* To be able to see production issues and send alerts
+* to make sure that an application runs smoothly
+* to be able to see production issues and send alerts
 * to debug an application
-* to take business and architectural decisions
+* to make business and architectural decisions
 * metrics can also help to decide on how to scale applications
 
 Application Metrics provide insights into what is happening inside our Quarkus Applications using the [MicroProfile Metrics](https://github.com/eclipse/microprofile-metrics) specification.
@@ -39,7 +39,7 @@ On our lab cluster, a Prometheus / Grafana stack is already deployed. Using the 
 
 ## Annotation vs. Service Monitor
 
-In an early stage of Prometheus - Kubernetes integration, the configuration has been done by annotations. The Prometheus - Kubernetes integration worked by reading specific configured annotations from Kubernetes resources. The informations form those annotations helped the Prometheus Server to find the endpoints to collect Metrics from.
+In an early stage of Prometheus - Kubernetes integration, the configuration has been done by annotations. The Prometheus - Kubernetes integration worked by reading specific configured annotations from Kubernetes resources. The information form those annotations helped the Prometheus Server to find the endpoints to collect Metrics from.
 
 ```yaml
 metadata:
@@ -49,7 +49,7 @@ metadata:
     prometheus.io/port: "8080"
 ```
 
-The current OpenShift - Prometheus integration works differently and is way more flexible. It bases on the ServiceMonitor CustomResource.
+The current OpenShift - Prometheus integration works differently and is way more flexible. It is based on the ServiceMonitor CustomResource.
 
 ```bash
 oc explain ServiceMonitor

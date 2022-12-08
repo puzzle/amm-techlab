@@ -186,20 +186,20 @@ Sync Status:        OutOfSync from  (891cabc)
 Health Status:      Missing
 
 GROUP                  KIND                   NAMESPACE   NAME                   STATUS     HEALTH   HOOK  MESSAGE
-                       ConfigMap              <username>  consumer-config        OutOfSync                 
-                       PersistentVolumeClaim  <username>  pipeline-workspace     OutOfSync  Healthy        
-                       Service                <username>  data-consumer          OutOfSync  Healthy        
-                       Service                <username>  data-producer          OutOfSync  Healthy        
-apps                   Deployment             <username>  data-consumer          OutOfSync  Healthy        
-apps                   Deployment             <username>  data-producer          OutOfSync  Healthy        
-build.openshift.io     BuildConfig            <username>  data-producer          OutOfSync                 
-image.openshift.io     ImageStream            <username>  data-producer          OutOfSync                 
-kafka.strimzi.io       Kafka                  <username>  amm-techlab            OutOfSync                 
-kafka.strimzi.io       KafkaTopic             <username>  manual                 OutOfSync                 
-route.openshift.io     Route                  <username>  data-consumer          OutOfSync                 
-route.openshift.io     Route                  <username>  data-producer          OutOfSync                 
-tekton.dev             Pipeline               <username>  build-and-deploy       OutOfSync                 
-tekton.dev             Task                   <username>  apply-manifests        OutOfSync                 
+                       ConfigMap              <username>  consumer-config        OutOfSync
+                       PersistentVolumeClaim  <username>  pipeline-workspace     OutOfSync  Healthy
+                       Service                <username>  data-consumer          OutOfSync  Healthy
+                       Service                <username>  data-producer          OutOfSync  Healthy
+apps                   Deployment             <username>  data-consumer          OutOfSync  Healthy
+apps                   Deployment             <username>  data-producer          OutOfSync  Healthy
+build.openshift.io     BuildConfig            <username>  data-producer          OutOfSync
+image.openshift.io     ImageStream            <username>  data-producer          OutOfSync
+kafka.strimzi.io       Kafka                  <username>  amm-techlab            OutOfSync
+kafka.strimzi.io       KafkaTopic             <username>  manual                 OutOfSync
+route.openshift.io     Route                  <username>  data-consumer          OutOfSync
+route.openshift.io     Route                  <username>  data-producer          OutOfSync
+tekton.dev             Pipeline               <username>  build-and-deploy       OutOfSync
+tekton.dev             Task                   <username>  apply-manifests        OutOfSync
 template.openshift.io  Template               <username>  pipeline-run-template  OutOfSync  Missing
 ```
 
@@ -209,7 +209,7 @@ The application status is initially in OutOfSync state. To sync (deploy) the res
 argocd app sync argo-$LAB_USER
 ```
 
-This command retrieves the manifests from the git repository and performs a `kubectl apply` on them. Because all our manifests has been deployed manually before, no new rollout of them will be triggered on OpenShift. But form now on, all resources are managed by Argo CD. Congrats, the first step in direction GitOps! :)
+This command retrieves the manifests from the git repository and performs a `kubectl apply` on them. Because all our manifests have been deployed manually before, no new rollout of them will be triggered on OpenShift. But from now on, all resources are managed by Argo CD. Congrats, the first step in direction GitOps! :)
 
 Check the Argo CD UI to browse the application and their components: [https://{{% param techlabArgoCdUrl %}}](https://{{% param techlabArgoCdUrl %}})
 
@@ -483,7 +483,7 @@ apps                Deployment   <username>  data-producer  Synced     Healthy  
 ## Task {{% param sectionnumber %}}.8: Manage Tekton managed manifest with ArgoCD
 
 In the previous Lab we've created our first tekton pipeline. The `apply-manifests` task applies a set of [manifests](https://github.com/puzzle/quarkus-techlab-data-transformer/blob/master/src/main/openshift/templates/data-transformer.yml) to the namespace, within a pipeline run.
-Since we don't want our manifests been managed via two different ways (tekton and argocd) for simplicity reasons, we copy the tekton managed manifests to our workspace and push them to our git repository.
+Since we don't want our manifests to be managed in two different ways (tekton and argocd) for simplicity reasons, we copy the tekton managed manifests to our workspace and push them to our git repository.
 
 Let's create the `<workspace>/data-transformer.yaml` resource within our workspace and push it to the git repository.
 
