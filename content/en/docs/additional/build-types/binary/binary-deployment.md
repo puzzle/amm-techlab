@@ -63,7 +63,7 @@ oc project $LAB_USER-build-types
 
 Let's create the resources for our binary deployment. We start with the ImageStreams. There are two definitions, the first one represents our builder image. The second ImageStream is used for our build binary deployment.
 
-{{< highlight yaml >}}{{< readfile file="manifests/additional/binary/imageStreams.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/additional/binary/imageStreams.yaml" code="true" lang="yaml" >}}
 
 [Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/binary/imageStreams.yaml)
 
@@ -73,7 +73,7 @@ oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifes
 
 Afterwards we can create the Build Config for the binary deployment.
 
-{{< highlight yaml >}}{{< readfile file="manifests/additional/binary/buildConfig.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/additional/binary/buildConfig.yaml" code="true" lang="yaml" >}}
 
 [Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/binary/buildConfig.yaml)
 
@@ -93,7 +93,8 @@ wget 'https://github.com/puzzle/quarkus-techlab-data-producer/releases/download/
 
 Next we need to create a Dockerfile. This is necessary because there exists no prebuilt s2i image for binary applications.
 Create a new file called `Dockerfile` and paste the following content.
-{{< highlight dockerfile >}}{{< readfile file="manifests/additional/binary/Dockerfile" >}}{{< /highlight >}}
+
+{{< readfile file="/manifests/additional/binary/Dockerfile" code="true" lang="dockerfile" >}}
 
 [Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/binary/Dockerfile)
 
@@ -114,7 +115,7 @@ Until now we just created the build resources. Up next is the creation of the De
 
 ### DeploymentConfig
 
-{{< highlight yaml >}}{{< readfile file="manifests/additional/binary/deploymentConfig.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/additional/binary/deploymentConfig.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/binary/deploymentConfig.yaml)
 
@@ -125,7 +126,7 @@ oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manife
 
 ### Service
 
-{{< highlight yaml >}}{{< readfile file="manifests/additional/binary/service.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/additional/binary/service.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/binary/service.yaml)
 
@@ -136,7 +137,7 @@ oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifes
 
 ### Route
 
-{{< highlight yaml >}}{{< readfile file="manifests/additional/binary/route.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/additional/binary/route.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/binary/route.yaml)
 

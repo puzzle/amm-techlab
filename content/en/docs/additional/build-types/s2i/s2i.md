@@ -76,7 +76,7 @@ First let's create a BuildConfig. The important part in this specification are t
 * We already discussed the strategy section in the beginning of this chapter. For this example we set the strategy to sourceStrategy (know as Source-to-Image / S2I)
 * The last part is the output section. In our example we reference a ImageStreamTag as an output. This means the resulting image will be pushed into the internal registry and will be consumable as ImageStream.
 
-{{< highlight yaml >}}{{< readfile file="manifests/additional/s2i/buildConfig.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/additional/s2i/buildConfig.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/buildConfig.yaml)
 
@@ -88,13 +88,15 @@ Next we need the definitions for our two ImageStreamTag references.
 
 The first resource configuration contains the definitions for the output image.
 
-{{< highlight yaml "hl_lines=1-9" >}}{{< readfile file="manifests/additional/s2i/imageStreams.yaml" >}}{{< /highlight >}}
+<!-- TODO fix and add highlight again: "hl_lines=1-9" -->
+{{< readfile file="/manifests/additional/s2i/imageStreams.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/imageStreams.yaml)
 
 The second resource configuration references a S2I builder image. As builder Image we take the `ubi8/openjdk-11` image. This is already prepared for S2I builds.
 
-{{< highlight yaml "hl_lines=11-30" >}}{{< readfile file="manifests/additional/s2i/imageStreams.yaml" >}}{{< /highlight >}}
+<!-- TODO fix and add highlight again: "hl_lines=11-30" -->
+{{< readfile file="/manifests/additional/s2i/imageStreams.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/imageStreams.yaml)
 
@@ -156,7 +158,7 @@ Next we create a secret containing our Git credentials. Your username and passwo
 
 {{% alert title="Note" color="primary" %}} Be sure that you replace your \<username> and use your personal access token. {{% /alert %}}
 
-{{< highlight yaml >}}{{< readfile file="manifests/additional/s2i/secret.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/additional/s2i/secret.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/secret.yaml)
 
@@ -189,7 +191,8 @@ oc edit buildconfig quarkus-techlab-data-producer-s2i
 
 As soon the file is open, you can add the highlighted lines below.
 
-{{< highlight yaml "hl_lines=27 28" >}}{{< readfile file="manifests/additional/s2i/buildConfigSecret.yaml" >}}{{< /highlight >}}
+<!-- TODO fix and add highlight again: "hl_lines=27 28 -->
+{{< readfile file="/manifests/additional/s2i/buildConfigSecret.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/buildConfigSecret.yaml)
 
@@ -215,7 +218,7 @@ Until now we just created the build resources. Up next is the creation of the De
 
 ### DeploymentConfig
 
-{{< highlight yaml >}}{{< readfile file="manifests/additional/s2i/deploymentConfig.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/additional/s2i/deploymentConfig.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/deploymentConfig.yaml)
 
@@ -226,7 +229,7 @@ oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manife
 
 ### Service
 
-{{< highlight yaml >}}{{< readfile file="manifests/additional/s2i/service.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/additional/s2i/service.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/service.yaml)
 
@@ -237,7 +240,7 @@ oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifes
 
 ### Route
 
-{{< highlight yaml >}}{{< readfile file="manifests/additional/s2i/route.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/additional/s2i/route.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/route.yaml)
 

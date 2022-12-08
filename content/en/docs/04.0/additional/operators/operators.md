@@ -103,7 +103,7 @@ oc new-project ${LAB_USER}-operator
 
 Subscriptions to the etcd operator can be done by creating a subscription resource:
 
-{{< highlight yaml >}}{{< readfile file="manifests/04.0/4.3.1/etcd-subscription.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/04.0/4.3.1/etcd-subscription.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.3.1/etcd-subscription.yaml)
 
@@ -134,7 +134,7 @@ Once this is done, you are able to deploy a cluster, by using a crd.
 
 You can do this by creating a resource of the type `EtcdCluster`:
 
-{{< highlight yaml >}}{{< readfile file="manifests/04.0/4.3.1/etcd-cluster.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/04.0/4.3.1/etcd-cluster.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.3.1/etcd-cluster.yaml)
 
@@ -214,7 +214,7 @@ oc get EtcdCluster example-etcd-cluster --namespace ${LAB_USER}-operator -o yaml
 
 Now we can change the current deployment by supplying an update to the spec:
 
-{{< highlight yaml >}}{{< readfile file="manifests/04.0/4.3.1/etcd-cluster-update.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/04.0/4.3.1/etcd-cluster-update.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.3.1/etcd-cluster-update.yaml)
 
@@ -238,7 +238,7 @@ oc describe pod -l app=etcd --namespace ${LAB_USER}-operator | grep -E 'Image:.*
 
 Works exactly the same way:
 
-{{< highlight yaml >}}{{< readfile file="manifests/04.0/4.3.1/etcd-cluster-scaleup.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/04.0/4.3.1/etcd-cluster-scaleup.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.3.1/etcd-cluster-scaleup.yaml)
 

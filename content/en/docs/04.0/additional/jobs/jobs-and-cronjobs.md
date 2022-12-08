@@ -40,7 +40,7 @@ oc new-app mariadb-ephemeral \
 
 Let's first look at the Job resource that we want to create.
 
-{{< highlight yaml >}}{{< readfile file="manifests/04.0/4.3.3/job_mysql-dump.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/04.0/4.3.3/job_mysql-dump.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.3.3/job_mysql-dump.yaml)
 
@@ -77,7 +77,7 @@ A Kubernetes CronJob is nothing else than a resource which creates a Job at a de
 
 Further information can be found at the [OpenShift CronJob Documentation](https://docs.openshift.com/container-platform/4.5/nodes/jobs/nodes-nodes-jobs.html#nodes-nodes-jobs-creating-cron_nodes-nodes-jobs).
 
-{{< highlight yaml >}}{{< readfile file="manifests/04.0/4.3.3/cronjob_mysql-dump.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/04.0/4.3.3/cronjob_mysql-dump.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.3.3/cronjob_mysql-dump.yaml)
 

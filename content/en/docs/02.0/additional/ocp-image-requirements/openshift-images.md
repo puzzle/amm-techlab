@@ -109,7 +109,7 @@ The application is available on Docker Hub: [chrira/container-openshift-ifie](ht
 
 This is a list with all needed OpenShift resources.
 
-{{< highlight yaml >}}{{< readfile file="content/en/docs/02.0/additional/ocp-image-requirements/application-infrastructure.yaml" >}}{{< /highlight >}}
+{{< readfile file="application-infrastructure.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/additional/ocp-image-requirements/application-infrastructure.yaml)
 
@@ -178,7 +178,8 @@ So let us extend the image with a specified user.
 
 For that we add a BuildConfiguration with a new Dockerfile extending the used image.
 
-{{< highlight yaml "hl_lines=47-49" >}}{{< readfile file="content/en/docs/02.0/additional/ocp-image-requirements/buildconfig.yaml" >}}{{< /highlight >}}
+<!-- TODO fix and add highlight again: "hl_lines=47-49" -->
+{{< readfile file="buildconfig.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/02.0/additional/ocp-image-requirements/buildconfig.yaml)
 

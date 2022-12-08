@@ -120,7 +120,7 @@ You can find more examples of reusable tasks in the [Tekton Catalog](https://git
 
 Let's examine the task that does a deployment. Create the local file `<workspace>/deploy-task.yaml` with the following content:
 
-{{< highlight yaml >}}{{< readfile file="manifests/04.0/4.1/deploy-task.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/04.0/4.1/deploy-task.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.1/deploy-task.yaml)
 
@@ -164,7 +164,7 @@ The Pipeline should be reusable across multiple projects or environments, that's
 
 Create the following pipeline `<workspace>/deploy-pipeline.yaml`:
 
-{{< highlight yaml >}}{{< readfile file="manifests/04.0/4.1/deploy-pipeline.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/04.0/4.1/deploy-pipeline.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.1/deploy-pipeline.yaml)
 
@@ -198,7 +198,7 @@ The data for the tasks is shared by a common workspace. We use a [Persistent Vol
 
 Create the following resource definition for a PVC inside `<workspace>/workspaces-pvc.yaml`:
 
-{{< highlight yaml >}}{{< readfile file="manifests/04.0/4.1/workspaces-pvc.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/04.0/4.1/workspaces-pvc.yaml" code="true" lang="yaml" >}}
 
 [source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.1/workspaces-pvc.yaml)
 
@@ -241,7 +241,7 @@ We use a template to adapt the image registry URL to match to your project.
 
 Create the following openshift template `<workspace>/pipeline-run-template.yaml`:
 
-{{< highlight yaml >}}{{< readfile file="manifests/04.0/4.1/pipeline-run-template.yaml" >}}{{< /highlight >}}
+{{< readfile file="/manifests/04.0/4.1/pipeline-run-template.yaml" code="true" lang="yaml" >}}
 
 Create the PipelineRun by processing the template and creating the generated resources:
 
