@@ -289,7 +289,7 @@ Now we check, that our resource definition has been modified correctly.
 This can be done with `oc apply` as *dry-run* (do not apply changes) in combination with *validate*:
 
 ```s
-oc apply -f producer.yaml --validate --dry-run=client
+oc apply -f producer.yaml --validate=strict --dry-run=client
 ```
 
 The output must be `deployment.apps/data-producer created (dry run)` before you can go on.
