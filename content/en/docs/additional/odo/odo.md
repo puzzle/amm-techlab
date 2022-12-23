@@ -105,10 +105,10 @@ MaxCPU
 
 ## {{% param sectionnumber %}}.3 Create Application
 
-Create the file `main.go` with the content of the go-hello-world application ([source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/odo/main.go)).
+Create the file `main.go` with the content of the go-hello-world application ([source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/odo/main.go)).
 
 ```bash
-wget 'https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/odo/main.go' main.go
+wget 'https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/odo/main.go' main.go
 ```
 
 This all happened locally. Use `odo push` to create the component in OpenShift.

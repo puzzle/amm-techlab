@@ -123,7 +123,7 @@ Prepare a file inside your workspace `<workspace>/imageStream.yaml` and add the 
 
 {{< readfile file="/manifests/02.0/2.1/imageStream.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/imageStream.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/02.0/2.1/imageStream.yaml)
 
 Let's create the ImageStream
 
@@ -149,7 +149,7 @@ Prepare a file inside your workspace `<workspace>/buildConfig.yaml` and add the 
 
 {{< readfile file="/manifests/02.0/2.1/buildConfig.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/buildConfig.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/02.0/2.1/buildConfig.yaml)
 
 Create the build config by applying the content of your `buildConfig.yaml` file.
 
@@ -184,7 +184,7 @@ Prepare a file inside your workspace `<workspace>/producer.yaml` and add the fol
 
 {{< readfile file="/manifests/02.0/2.1/producer.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/producer.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/02.0/2.1/producer.yaml)
 
 Let's create the deployment
 
@@ -216,7 +216,7 @@ Prepare a file inside your workspace `<workspace>/svc.yaml` and add the followin
 
 {{< readfile file="/manifests/02.0/2.1/svc.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/svc.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/02.0/2.1/svc.yaml)
 
 Create the Service in OpenShift
 
@@ -245,7 +245,7 @@ Prepare a file inside your workspace `<workspace>/route.yaml` and add the follow
 
 {{< readfile file="/manifests/02.0/2.1/route.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/route.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/02.0/2.1/route.yaml)
 
 
 Create the Route in OpenShift
@@ -342,10 +342,10 @@ the route
 
 Consumer and producer are of different kind of deployment resources. The producer is a DeploymentConfig (OpenShift) and the consumer a Deployment (Kubernetes). The producer needs to be a DeploymentConfig to make full use of the build process with ImageStreams. Because the consumer uses an external image and doesn't need these features we can follow the best practices and use the Kubernetes-native Deployment.
 
-We get the needed [consumer.yaml](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/consumer.yaml) by curl. Execute the following command inside your workspace:
+We get the needed [consumer.yaml](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/02.0/2.1/consumer.yaml) by curl. Execute the following command inside your workspace:
 
 ```BASH
-curl https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/consumer.yaml --output consumer.yaml
+curl https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/02.0/2.1/consumer.yaml --output consumer.yaml
 ```
 
 This should have created the file `<workspace>/consumer.yaml` containing all resource definitions. Open it with your IDE to see the resource definitions.

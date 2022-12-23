@@ -65,20 +65,20 @@ Let's create the resources for our binary deployment. We start with the ImageStr
 
 {{< readfile file="/manifests/additional/binary/imageStreams.yaml" code="true" lang="yaml" >}}
 
-[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/binary/imageStreams.yaml)
+[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/binary/imageStreams.yaml)
 
 ```BASH
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/binary/imageStreams.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/binary/imageStreams.yaml
 ```
 
 Afterwards we can create the Build Config for the binary deployment.
 
 {{< readfile file="/manifests/additional/binary/buildConfig.yaml" code="true" lang="yaml" >}}
 
-[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/binary/buildConfig.yaml)
+[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/binary/buildConfig.yaml)
 
 ```BASH
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/binary/buildConfig.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/binary/buildConfig.yaml
 ```
 
 
@@ -96,7 +96,7 @@ Create a new file called `Dockerfile` and paste the following content.
 
 {{< readfile file="/manifests/additional/binary/Dockerfile" code="true" lang="dockerfile" >}}
 
-[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/binary/Dockerfile)
+[Source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/binary/Dockerfile)
 
 
 Now we can start our build with following command:
@@ -117,10 +117,10 @@ Until now we just created the build resources. Up next is the creation of the De
 
 {{< readfile file="/manifests/additional/binary/deploymentConfig.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/binary/deploymentConfig.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/binary/deploymentConfig.yaml)
 
 ```BASH
-oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/binary/deploymentConfig.yaml -p PROJECT_NAME=$PROJECT_NAME | oc apply -f -
+oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/binary/deploymentConfig.yaml -p PROJECT_NAME=$PROJECT_NAME | oc apply -f -
 ```
 
 
@@ -128,10 +128,10 @@ oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manife
 
 {{< readfile file="/manifests/additional/binary/service.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/binary/service.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/binary/service.yaml)
 
 ```BASH
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/binary/service.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/binary/service.yaml
 ```
 
 
@@ -139,12 +139,12 @@ oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifes
 
 {{< readfile file="/manifests/additional/binary/route.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/binary/route.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/binary/route.yaml)
 
 Then we can create the route
 
 ```bash
-oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/binary/route.yaml -p HOSTNAME=quarkus-techlab-data-producer-bb-$LAB_USER.{{% param techlabClusterDomainName %}} | oc apply -f -
+oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/binary/route.yaml -p HOSTNAME=quarkus-techlab-data-producer-bb-$LAB_USER.{{% param techlabClusterDomainName %}} | oc apply -f -
 ```
 
 Check if the route was created successfully

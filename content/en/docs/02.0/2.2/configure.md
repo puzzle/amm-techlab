@@ -18,7 +18,7 @@ We will change the port of the application. With this change we need to adapt th
 <!-- TODO fix and add highlight again: "hl_lines=29 38 45" -->
 {{< readfile file="/manifests/02.0/2.1/producer.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.1/producer.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/02.0/2.1/producer.yaml)
 
 Update the application port from 8080 to 8081 using `oc patch`:
 
@@ -43,7 +43,7 @@ oc patch dc/data-producer --type "json" -p '[{"op":"replace","path":"/spec/templ
 
 {{% /details %}}
 
-{{% alert title="Note" color="primary" %}} The changed DeploymentConfig should now represent the [solution](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/02.0/2.2/producer.yaml) {{% /alert %}}
+{{% alert title="Note" color="primary" %}} The changed DeploymentConfig should now represent the [solution](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/02.0/2.2/producer.yaml) {{% /alert %}}
 
 Verify the changed port of the pod by describing the DeploymentConfig using `oc describe`.
 

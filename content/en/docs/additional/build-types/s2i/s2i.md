@@ -78,10 +78,10 @@ First let's create a BuildConfig. The important part in this specification are t
 
 {{< readfile file="/manifests/additional/s2i/buildConfig.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/buildConfig.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/s2i/buildConfig.yaml)
 
 ```BASH
-oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/buildConfig.yaml -p GITREPOSITORY=https://{{% param techlabGiteaUrl %}}/$LAB_USER/quarkus-techlab-data-producer | oc apply -f -
+oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/s2i/buildConfig.yaml -p GITREPOSITORY=https://{{% param techlabGiteaUrl %}}/$LAB_USER/quarkus-techlab-data-producer | oc apply -f -
 ```
 
 Next we need the definitions for our two ImageStreamTag references.
@@ -91,17 +91,17 @@ The first resource configuration contains the definitions for the output image.
 <!-- TODO fix and add highlight again: "hl_lines=1-9" -->
 {{< readfile file="/manifests/additional/s2i/imageStreams.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/imageStreams.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/s2i/imageStreams.yaml)
 
 The second resource configuration references a S2I builder image. As builder Image we take the `ubi8/openjdk-11` image. This is already prepared for S2I builds.
 
 <!-- TODO fix and add highlight again: "hl_lines=11-30" -->
 {{< readfile file="/manifests/additional/s2i/imageStreams.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/imageStreams.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/s2i/imageStreams.yaml)
 
 ```BASH
-oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/imageStreams.yaml
+oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/s2i/imageStreams.yaml
 ```
 
 Let's check if the build is complete.
@@ -160,14 +160,14 @@ Next we create a secret containing our Git credentials. Your username and passwo
 
 {{< readfile file="/manifests/additional/s2i/secret.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/secret.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/s2i/secret.yaml)
 
 Then we can create the secret
 
 > Replace the token parameter with your newly generated Gitea application token!
 
 ```BASH
-oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/secret.yaml -p USERNAME=$LAB_USER -p TOKEN=yourToken | oc apply -f -
+oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/s2i/secret.yaml -p USERNAME=$LAB_USER -p TOKEN=yourToken | oc apply -f -
 ```
 
 Next we reference the freshly created secret in our BuildConfig. The following command will open the VIM editor ([VIM Cheat Sheet](https://devhints.io/vim)), where you can edit the YAML file directly. As soon you save the file and close the editor, the changes are applied to the resource.
@@ -194,7 +194,7 @@ As soon the file is open, you can add the highlighted lines below.
 <!-- TODO fix and add highlight again: "hl_lines=27 28 -->
 {{< readfile file="/manifests/additional/s2i/buildConfigSecret.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/buildConfigSecret.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/s2i/buildConfigSecret.yaml)
 
 You can save and close the file, the changes will applied automatically.
 
@@ -220,10 +220,10 @@ Until now we just created the build resources. Up next is the creation of the De
 
 {{< readfile file="/manifests/additional/s2i/deploymentConfig.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/deploymentConfig.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/s2i/deploymentConfig.yaml)
 
 ```BASH
-oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/deploymentConfig.yaml -p PROJECT_NAME=$PROJECT_NAME | oc apply -f -
+oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/s2i/deploymentConfig.yaml -p PROJECT_NAME=$PROJECT_NAME | oc apply -f -
 ```
 
 
@@ -231,10 +231,10 @@ oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manife
 
 {{< readfile file="/manifests/additional/s2i/service.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/service.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/s2i/service.yaml)
 
 ```BASH
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/service.yaml
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/s2i/service.yaml
 ```
 
 
@@ -242,12 +242,12 @@ oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifes
 
 {{< readfile file="/manifests/additional/s2i/route.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/route.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/s2i/route.yaml)
 
 Then we can create the route
 
 ```bash
-oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/additional/s2i/route.yaml -p HOSTNAME=quarkus-techlab-data-producer-s2i-$LAB_USER.{{% param techlabClusterDomainName %}} | oc apply -f -
+oc process -f https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/additional/s2i/route.yaml -p HOSTNAME=quarkus-techlab-data-producer-s2i-$LAB_USER.{{% param techlabClusterDomainName %}} | oc apply -f -
 ```
 
 Check if the route was created successfully

@@ -105,12 +105,12 @@ Subscriptions to the etcd operator can be done by creating a subscription resour
 
 {{< readfile file="/manifests/04.0/4.3.1/etcd-subscription.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.3.1/etcd-subscription.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/04.0/4.3.1/etcd-subscription.yaml)
 
 Now subscribe using the prepared file:
 
 ```bash
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.3.1/etcd-subscription.yaml --namespace ${LAB_USER}-operator
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/04.0/4.3.1/etcd-subscription.yaml --namespace ${LAB_USER}-operator
 ```
 
 You can also subscribe to the operator through the Console, though not all integration might be ready, due to being technical preview by default.
@@ -136,10 +136,10 @@ You can do this by creating a resource of the type `EtcdCluster`:
 
 {{< readfile file="/manifests/04.0/4.3.1/etcd-cluster.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.3.1/etcd-cluster.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/04.0/4.3.1/etcd-cluster.yaml)
 
 ```bash
-oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.3.1/etcd-cluster.yaml --namespace ${LAB_USER}-operator
+oc create -f https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/04.0/4.3.1/etcd-cluster.yaml --namespace ${LAB_USER}-operator
 ```
 
 Expected output:
@@ -216,10 +216,10 @@ Now we can change the current deployment by supplying an update to the spec:
 
 {{< readfile file="/manifests/04.0/4.3.1/etcd-cluster-update.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.3.1/etcd-cluster-update.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/04.0/4.3.1/etcd-cluster-update.yaml)
 
 ```bash
-oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.3.1/etcd-cluster-update.yaml --namespace ${LAB_USER}-operator
+oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/04.0/4.3.1/etcd-cluster-update.yaml --namespace ${LAB_USER}-operator
 ```
 
 Now watch how each member is being updated to 3.2.13 until all of them are updated:
@@ -240,10 +240,10 @@ Works exactly the same way:
 
 {{< readfile file="/manifests/04.0/4.3.1/etcd-cluster-scaleup.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.3.1/etcd-cluster-scaleup.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/04.0/4.3.1/etcd-cluster-scaleup.yaml)
 
 ```bash
-oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.3.1/etcd-cluster-scaleup.yaml --namespace ${LAB_USER}-operator
+oc apply -f https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/04.0/4.3.1/etcd-cluster-scaleup.yaml --namespace ${LAB_USER}-operator
 oc get events --namespace ${LAB_USER}-operator -w
 # until all are up
 oc get pods -l app=etcd --namespace ${LAB_USER}-operator

@@ -17,7 +17,7 @@ jobs:
         id: prepare
         uses: Surgo/docker-smart-tag-action@v1
         with:
-          default_branch: master
+          default_branch: main
           docker_image: quay.io/puzzle/amm-techlab-ide
       -
         name: Define image tag

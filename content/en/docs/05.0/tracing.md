@@ -62,7 +62,7 @@ Create the local file `<workspace>/jaeger.yaml` with the following content:
 
 {{< readfile file="/manifests/05.0/5.2/jaeger.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/05.0/5.2/jaeger.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/05.0/5.2/jaeger.yaml)
 
 
 Let ArgoCD manage the resources by adding the file to git and push it.
@@ -148,7 +148,7 @@ Next we configure the consumer to use the Jaeger feature. To enable Jaeger, open
 <!-- TODO fix and add highlight again: "hl_lines=10 -->
 {{< readfile file="/manifests/05.0/5.2/consumerConfigMap.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/05.0/5.2/consumerConfigMap.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/05.0/5.2/consumerConfigMap.yaml)
 
 Update your resources and apply the changes.
 

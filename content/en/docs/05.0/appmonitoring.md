@@ -98,7 +98,7 @@ Create the following ServiceMonitor resource as local file `<workspace>/servicem
 
 {{< readfile file="/manifests/05.0/5.1/servicemonitor.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/05.0/5.1/servicemonitor.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/05.0/5.1/servicemonitor.yaml)
 
 Let ArgoCD create the ServiceMonitor by adding the file to git and push it.
 
