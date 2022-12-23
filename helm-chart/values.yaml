@@ -15,8 +15,7 @@ acendTraining:
         useDefaultSecret: true
         appname: amm-techlab
         domainmain: puzzle.ch
-        domain: k8s.puzzle.ch
-
+        domain: ocp-internal.cloudscale.puzzle.ch
 
 
 nameOverride: "amm-techlab"
