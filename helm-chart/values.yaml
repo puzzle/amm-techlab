@@ -10,6 +10,7 @@ acendTraining:
         tag: ""
         tagsuffix: ""
       ingress:
+        emptyTLS: true
         useDefaultSecret: true
         appname: amm-techlab
         domainmain: puzzle.ch
