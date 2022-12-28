@@ -10,8 +10,6 @@ acendTraining:
         tag: ""
         tagsuffix: ""
       ingress:
-        annotations: 
-          kubernetes.io/ingress.class: nginx-public
         useDefaultSecret: true
         appname: amm-techlab
         domainmain: puzzle.ch
