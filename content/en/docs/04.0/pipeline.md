@@ -122,7 +122,7 @@ Let's examine the task that does a deployment. Create the local file `<workspace
 
 {{< readfile file="/manifests/04.0/4.1/deploy-task.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.1/deploy-task.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/04.0/4.1/deploy-task.yaml)
 
 Let's create the task.
 
@@ -166,7 +166,7 @@ Create the following pipeline `<workspace>/deploy-pipeline.yaml`:
 
 {{< readfile file="/manifests/04.0/4.1/deploy-pipeline.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.1/deploy-pipeline.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/04.0/4.1/deploy-pipeline.yaml)
 
 Create the Pipeline.
 
@@ -200,7 +200,7 @@ Create the following resource definition for a PVC inside `<workspace>/workspace
 
 {{< readfile file="/manifests/04.0/4.1/workspaces-pvc.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.1/workspaces-pvc.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/04.0/4.1/workspaces-pvc.yaml)
 
 Create the PVC.
 

@@ -30,7 +30,7 @@ This Go code defines an HTTP server listening on port 8080. It has to be placed 
 
 {{< readfile file="main.go" code="true" lang="go" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/demo/main.go)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/content/en/docs/additional/demo/main.go)
 
 Calling this app will return "Hello," followed by the given path.
 
@@ -49,7 +49,7 @@ The `Dockerfile` defines the image build ([Dockerfile reference](https://docs.do
 
 {{< readfile file="Dockerfile" code="true" lang="dockerfile" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/content/en/docs/additional/demo/Dockerfile)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/content/en/docs/additional/demo/Dockerfile)
 
 It is a [multi-stage build](https://docs.docker.com/develop/develop-images/multistage-build/). The build is done in several stages using different containers.
 

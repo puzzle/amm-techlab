@@ -87,7 +87,7 @@ Create a file called `<workspace>/kafka-cluster.yaml` with the following content
 
 {{< readfile file="/manifests/03.0/3.2/kafka-cluster.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/kafka-cluster.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/03.0/3.2/kafka-cluster.yaml)
 
 With the [Strimzi Operator](https://strimzi.io/) we can manage our Kafka cluster with custom resource definitions. The operator is already installed in our techlab cluster. It will set up your broker tailored to your needs and configuration. We will also manage our topics with the Strimzi operator.
 
@@ -126,7 +126,7 @@ To create a new topic in our Kafka cluster we use another custom resource defini
 
 {{< readfile file="/manifests/03.0/3.2/manual-topic.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/manual-topic.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/03.0/3.2/manual-topic.yaml)
 
 This file defines the 'manual' topic, which allows our microservices to communicate.
 
@@ -267,7 +267,7 @@ spec:
 {{< / highlight >}}
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/producer.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/03.0/3.2/producer.yaml)
 
 First we have to delete the DeploymentConfig of the producer.
 
@@ -315,7 +315,7 @@ Do the following changes inside your file `<workspace>/svc.yaml`. Update the lab
 <!-- TODO fix and add highlight again: "hl_lines=15" -->
 {{< readfile file="/manifests/03.0/3.2/svc.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/svc.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/03.0/3.2/svc.yaml)
 
 Apply the updated Service manifest.
 
@@ -373,7 +373,7 @@ Prepare a file inside your workspace `<workspace>/consumerConfigMap.yaml` and ad
 
 {{< readfile file="/manifests/03.0/3.2/consumerConfigMap.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/consumerConfigMap.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/03.0/3.2/consumerConfigMap.yaml)
 
 Let's create the ConfigMap
 
@@ -427,7 +427,7 @@ spec:
 {{< / highlight >}}
 ```
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/03.0/3.2/consumer.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/03.0/3.2/consumer.yaml)
 
 
 Also apply the updated resource definition and let OpenShift deploy the consumer.

@@ -42,7 +42,7 @@ Let's first look at the Job resource that we want to create.
 
 {{< readfile file="/manifests/04.0/4.3.3/job_mysql-dump.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.3.3/job_mysql-dump.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/04.0/4.3.3/job_mysql-dump.yaml)
 
 The parameter `.spec.template.spec.containers[0].image` shows that we use the same image as the running database. In contrast to the database Pod, we don't start a database afterwards, but run a `mysqldump` command, specified with `.spec.template.spec.containers[0].command`. To perform the dump, we use the environment variables of the database deployment to set the hostname, user and password parameters of the `mysqldump` command. The `MYSQL_PASSWORD` variable refers to the value of the secret, which is already used for the database Pod. Like this we ensure that the dump is performed with the same credentials.
 
@@ -79,7 +79,7 @@ Further information can be found at the [OpenShift CronJob Documentation](https:
 
 {{< readfile file="/manifests/04.0/4.3.3/cronjob_mysql-dump.yaml" code="true" lang="yaml" >}}
 
-[source](https://raw.githubusercontent.com/puzzle/amm-techlab/master/manifests/04.0/4.3.3/cronjob_mysql-dump.yaml)
+[source](https://raw.githubusercontent.com/puzzle/amm-techlab/main/manifests/04.0/4.3.3/cronjob_mysql-dump.yaml)
 
 Let's now create a CronJob that executes our Backup every day at the same time. Create a file `cronjob_mysql-dump.yaml` with the content above:
 
