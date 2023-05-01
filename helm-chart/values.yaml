@@ -11,10 +11,13 @@ acendTraining:
         tagsuffix: ""
       ingress:
         emptyTLS: true
+        ingressClassName: openshift-public
         useDefaultSecret: true
+        labels:
+          public: "true"
         appname: amm-techlab
         domainmain: puzzle.ch
-        domain: ocp-internal.cloudscale.puzzle.ch
+        domain: ocp.cloudscale.puzzle.ch
 
 
 nameOverride: "amm-techlab"
