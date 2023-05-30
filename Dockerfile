@@ -19,7 +19,7 @@ COPY --from=builder /src/public /
 
 RUN wkhtmltopdf --outline-depth 4 --enable-internal-links --enable-local-file-access  ./pdf/index.html /pdf.pdf
 
-FROM docker.io/nginxinc/nginx-unprivileged:1.24-alpine
+FROM docker.io/nginxinc/nginx-unprivileged:1.25-alpine
 
 LABEL maintainer puzzle.ch
 LABEL org.opencontainers.image.title "puzzle.ch's Application Migration and Modernization Techlab"
