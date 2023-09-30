@@ -1,4 +1,4 @@
-FROM codercom/code-server:4.17.0
+FROM codercom/code-server:4.17.1
 
 ARG ARGOCD_CLI=https://github.com/argoproj/argo-cd/releases/download/v2.3.9/argocd-linux-amd64
 ARG HELM_CLI=https://get.helm.sh/helm-v3.10.2-linux-amd64.tar.gz
