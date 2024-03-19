@@ -1,4 +1,4 @@
-# Application Migration and Modernization
+# Application Migration and Modernization fmt-av2
 
 In this guided hands-on training, we show the participants how to migrate and modernize applications when running a container platform.
 
