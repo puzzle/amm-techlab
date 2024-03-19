@@ -80,7 +80,7 @@ jobs:
         name: Deploy Helm Release
         env:
           TRAINING_HELM_RELEASE: 'pr-${{ github.event.pull_request.number }}'
-          TRAINING_NAMESPACE: 'pitc-amm-techlab-test'
+          TRAINING_NAMESPACE: 'pitc-cicd-amm-techlab-test'
           TRAINING_VERSION: '${{ github.sha }}'
         run: |
           helm upgrade $TRAINING_HELM_RELEASE acend-training-chart --install --wait \
@@ -96,7 +96,7 @@ jobs:
         env:
           TRAINING_HELM_RELEASE: 'pr-${{ github.event.pull_request.number }}'
           TRAINING_HELM_NAME: 'amm-techlab-puzzle'
-          TRAINING_NAMESPACE: 'pitc-amm-techlab-test'
+          TRAINING_NAMESPACE: 'pitc-cicd-amm-techlab-test'
         run: |
           kubectl rollout restart deployment/${TRAINING_HELM_RELEASE}-${TRAINING_HELM_NAME} \
             --kubeconfig $HOME/.kube/config \
