@@ -18,8 +18,14 @@ jobs:
         with:
           node-version: '18.x'
       -
+        name: npm install (ci)
+        run: npm ci
+      -
+        name: npm login
+        run: npm login
+      -
         name: Lint Markdown
-        run: npm ci && npm run mdlint
+        run: npm run mdlint
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v3
