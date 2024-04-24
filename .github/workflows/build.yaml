@@ -18,9 +18,6 @@ jobs:
         with:
           node-version: '18.x'
       -
-        name: npm login
-        run: npm login
-      -
         name: npm install (ci)
         run: npm ci
       -
