@@ -23,7 +23,7 @@ RUN wkhtmltopdf --enable-internal-links --enable-local-file-access \
     --header-html /pdf/header/index.html --footer-html /pdf/footer/index.html \
     /pdf/index.html /pdf.pdf
 
-FROM docker.io/nginxinc/nginx-unprivileged:1.25-alpine
+FROM docker.io/nginxinc/nginx-unprivileged:1.26-alpine
 
 LABEL maintainer puzzle.ch
 LABEL org.opencontainers.image.title "puzzle.ch's Application Migration and Modernization Techlab"
