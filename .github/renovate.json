@@ -12,7 +12,7 @@
         },
         {
             "description": "Automerge GitHub Action updates",
-            "matchPackageNames": ["/actions/*/"],
+            "matchPackageNames": ["/actions/*/", "/docker/*-action/"],
             "matchUpdateTypes": ["patch", "minor"],
             "automerge": true
         },
