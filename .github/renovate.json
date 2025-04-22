@@ -7,7 +7,7 @@
         {
             "description": "Automerge UBI example Dockerfiles",
             "matchPackageNames": ["/registry.access.redhat.com/ubi8/*/"],
-            "matchUpdateTypes": ["minor", "patch"],
+            "matchUpdateTypes": ["patch", "minor"],
             "automerge": true
         },
         {
