@@ -1,8 +1,7 @@
 acendTraining:
   servicePort: 8080
   deployments:
-    - 
-      name: puzzle
+    - name: puzzle
       replicaCount: 1
       image:
         repository: quay.io/puzzle/amm-techlab
