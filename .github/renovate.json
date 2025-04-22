@@ -9,6 +9,18 @@
             "matchPackageNames": ["/registry.access.redhat.com/ubi8/*/"],
             "matchUpdateTypes": ["minor", "patch"],
             "automerge": true
-        }
+        },
+        {
+            "description": "Automerge GitHub Action updates",
+            "matchPackageNames": ["/actions/*/"],
+            "matchUpdateTypes": ["patch", "minor"],
+            "automerge": true
+        },
+        {
+            "description": "Automerge dev-dependencies",
+            "matchDepTypes": ["devDependencies"],
+            "matchUpdateTypes": ["patch", "minor"],
+            "automerge": true
+          }
     ]
 }
