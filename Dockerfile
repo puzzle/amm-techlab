@@ -23,6 +23,9 @@ RUN wkhtmltopdf --outline-depth 4 \
     /pdf/index.html /pdf.pdf
 
 FROM docker.io/nginxinc/nginx-unprivileged:1.27-alpine
+USER root
+COPY nginx.conf /etc/nginx/nginx.conf
+USER 101
 
 LABEL maintainer=puzzle.ch
 LABEL org.opencontainers.image.title="puzzle.ch's Application Migration and Modernization Techlab"
