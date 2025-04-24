@@ -2,6 +2,8 @@ name: Build user IDE
 
 on:
   push:
+    paths:
+      - infra/user-ide/**
 
 jobs:
 
@@ -18,12 +20,12 @@ jobs:
         uses: Surgo/docker-smart-tag-action@v1
         with:
           default_branch: main
-          docker_image: quay.io/puzzle/amm-techlab-ide
+          docker_image: harbor.puzzle.ch/puzzle/amm-techlab-ide
       -
         name: Define image tag
         run: |
           if [[ "${{ steps.prepare.outputs.tag }}" == *:edge ]]; then
-              echo "IDE_IMAGE_TAG=quay.io/puzzle/amm-techlab-ide:latest" >> $GITHUB_ENV
+              echo "IDE_IMAGE_TAG=harbor.puzzle.ch/puzzle/amm-techlab-ide:latest" >> $GITHUB_ENV
           else
               echo "IDE_IMAGE_TAG=${{ steps.prepare.outputs.tag }}" >> $GITHUB_ENV
           fi
@@ -31,12 +33,12 @@ jobs:
         name: Using image tag
         run: echo ${{ env.IDE_IMAGE_TAG }}
       -
-        name: Login to Quay.io Container Registry
+        name: Login to harbor.puzzle.ch Container Registry
         uses: docker/login-action@v3 
         with:
-          registry: quay.io
-          username: ${{ secrets.QUAYIO_USERNAME }}
-          password: ${{ secrets.QUAYIO_TOKEN }}
+          registry: harbor.puzzle.ch
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_AUTH }}
       -
         name: Build Latest Version
         uses: docker/build-push-action@v6
