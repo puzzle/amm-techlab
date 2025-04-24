@@ -53,10 +53,11 @@ jobs:
         name: Delete IDE Tags on Image Registry
         id: delete_ide_tags
         env:
+          PR_BASE_REF: '${{ github.event.pull_request.base.ref }}'
           REGISTRY_API_AUTH: '${{ secrets.REGISTRY_USERNAME }}:${{ secrets.REGISTRY_AUTH }}'
           PROJECT: 'pitc-techlabs-public'
           REPOSITORY: 'amm-techlab-ide'
         run: |
           curl -X DELETE \
             -u ${REGISTRY_API_AUTH} \
-            https://harbor.puzzle.ch/api/v2.0/projects/${PROJECT}/repositories/${REPOSITORY}/artifacts/${GITHUB_REF#refs/heads/}
+            https://harbor.puzzle.ch/api/v2.0/projects/${PROJECT}/repositories/${REPOSITORY}/artifacts/${PR_BASE_REF#refs/heads/}
