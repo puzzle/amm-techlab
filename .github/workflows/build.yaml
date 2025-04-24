@@ -41,12 +41,12 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            harbor.puzzle.ch/puzzle/amm-techlab:pr-${{ github.event.pull_request.number }}
+            harbor.puzzle.ch/pitc-techlabs-public/amm-techlab:pr-${{ github.event.pull_request.number }}
       -
         name: Run vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'harbor.puzzle.ch/puzzle/amm-techlab:pr-${{ github.event.pull_request.number }}'
+          image-ref: 'harbor.puzzle.ch/pitc-techlabs-public/amm-techlab:pr-${{ github.event.pull_request.number }}'
           format: 'table'
           output: 'trivy-results.txt'
           exit-code: '0'

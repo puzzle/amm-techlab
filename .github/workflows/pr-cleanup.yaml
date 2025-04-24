@@ -43,7 +43,7 @@ jobs:
         env:
           PR_NUMBER: '${{ github.event.pull_request.number }}'
           REGISTRY_API_AUTH: '${{ secrets.REGISTRY_API_AUTH }}'
-          PROJECT: 'puzzle'
+          PROJECT: 'pitc-techlabs-public'
           REPOSITORY: 'amm-techlab'
         run: |
           curl -X DELETE \

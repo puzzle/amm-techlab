@@ -12,6 +12,12 @@ ARG TEKTON_CLI=https://github.com/tektoncd/cli/releases/download/v0.10.0/tkn_0.1
 ARG ODO=https://mirror.openshift.com/pub/openshift-v4/clients/odo/latest/odo-linux-amd64
 ARG OPENSHIFT_CLIENT_TOOL=https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz
 
+LABEL org.opencontainers.image.title="IDE container for the Application Migration and Modernization Techlab" \
+      org.opencontainers.image.description="puzzle.ch's IDE container with all needed tools to do the Application Migration and Modernization Techlab: https://amm-techlab.puzzle.ch/" \
+      org.opencontainers.image.authors="Puzzle ITC <https://www.puzzle.ch/>" \
+      org.opencontainers.image.source="https://github.com/puzzle/amm-techlab/infra/user-ide" \
+      org.opencontainers.image.licenses="CC-BY-SA-4.0"
+
 USER root
 
 RUN apt-get update && apt-get install bash-completion wget

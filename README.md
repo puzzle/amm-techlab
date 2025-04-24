@@ -125,6 +125,29 @@ npm run mdlint-fix
 
 ## Github Actions
 
+Needed GitHub Repository Actions secrets:
+
+* `REGISTRY_USERNAME`: Image Registry push user name (robot account)
+* `REGISTRY_AUTH`: Image Registry push user passwort / authentication (robot account)
+* `REGISTRY_API_AUTH`: Image Registry API delete user
+  * e.g. `'username:password'` for your Harbor robot account
+* `KUBECONFIG_TEST_AV2`: K8S cluster configuration incl. auth. for the test namespace
+* `KUBECONFIG_PROD_AV2`: K8S cluster configuration incl. auth. for the prod namespace
+
+Create the cluster configuration:
+
+Copy the login token of the ServiceAccount in the namespace where the GitHub Action should have access to and export it as `SA_TOKEN`.
+Use then this token to create the kubeconfig. Follow these commands.
+
+```bash
+export SA_TOKEN=<ServiceAccount Token>
+export KUBECONFIG=tmp/.kube/dev_cluster_config
+oc login --token=${SA_TOKEN} --server=<K8S-cluster-api-url>
+cat tmp/.kube/dev_cluster_config
+```
+
+The output of the `cat` command has to be used for the GitHub Action secret.
+
 
 ### Build
 
