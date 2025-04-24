@@ -49,3 +49,25 @@ jobs:
           curl -X DELETE \
             -u ${REGISTRY_API_AUTH} \
             https://harbor.puzzle.ch/api/v2.0/projects/${PROJECT}/repositories/${REPOSITORY}/artifacts/pr-${PR_NUMBER}
+      -
+        name: Get smart tag
+        id: prepare
+        uses: Surgo/docker-smart-tag-action@v1
+        env:
+          PROJECT: 'pitc-techlabs-public'
+          REPOSITORY: 'amm-techlab-ide'
+        with:
+          default_branch: main
+          docker_image: harbor.puzzle.ch/${PROJECT}/${REPOSITORY}
+      -
+        name: Delete IDE Tags on Image Registry
+        id: delete_ide_tags
+        env:
+          IDE_TAG: '${{ steps.prepare.outputs.tag }}'
+          REGISTRY_API_AUTH: '${{ secrets.REGISTRY_API_AUTH }}'
+          PROJECT: 'pitc-techlabs-public'
+          REPOSITORY: 'amm-techlab-ide'
+        run: |
+          curl -X DELETE \
+            -u ${REGISTRY_API_AUTH} \
+            https://harbor.puzzle.ch/api/v2.0/projects/${PROJECT}/repositories/${REPOSITORY}/artifacts/${IDE_TAG}
