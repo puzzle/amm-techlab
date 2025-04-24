@@ -129,8 +129,6 @@ Needed GitHub Repository Actions secrets:
 
 * `REGISTRY_USERNAME`: Image Registry push user name (robot account)
 * `REGISTRY_AUTH`: Image Registry push user passwort / authentication (robot account)
-* `REGISTRY_API_AUTH`: Image Registry API delete user
-  * e.g. `'username:password'` for your Harbor robot account
 * `KUBECONFIG_TEST_AV2`: K8S cluster configuration incl. auth. for the test namespace
 * `KUBECONFIG_PROD_AV2`: K8S cluster configuration incl. auth. for the prod namespace
 
