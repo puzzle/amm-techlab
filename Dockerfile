@@ -33,6 +33,7 @@ LABEL org.opencontainers.image.title="puzzle.ch's Application Migration and Mode
 USER root
 COPY nginx.conf /etc/nginx/nginx.conf
 USER 101
+
 EXPOSE 8080
 
 COPY --from=builder /src/public /usr/share/nginx/html
