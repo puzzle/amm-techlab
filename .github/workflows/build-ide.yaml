@@ -20,12 +20,12 @@ jobs:
         uses: Surgo/docker-smart-tag-action@v1
         with:
           default_branch: main
-          docker_image: harbor.puzzle.ch/puzzle/amm-techlab-ide
+          docker_image: harbor.puzzle.ch/pitc-techlabs-public/amm-techlab-ide
       -
         name: Define image tag
         run: |
           if [[ "${{ steps.prepare.outputs.tag }}" == *:edge ]]; then
-              echo "IDE_IMAGE_TAG=harbor.puzzle.ch/puzzle/amm-techlab-ide:latest" >> $GITHUB_ENV
+              echo "IDE_IMAGE_TAG=harbor.puzzle.ch/pitc-techlabs-public/amm-techlab-ide:latest" >> $GITHUB_ENV
           else
               echo "IDE_IMAGE_TAG=${{ steps.prepare.outputs.tag }}" >> $GITHUB_ENV
           fi
