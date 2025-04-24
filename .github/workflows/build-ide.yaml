@@ -2,6 +2,8 @@ name: Build user IDE
 
 on:
   push:
+    paths:
+      - infra/user-ide/**
 
 jobs:
 
