@@ -44,7 +44,7 @@ jobs:
           PR_NUMBER: '${{ github.event.pull_request.number }}'
           REGISTRY_API_AUTH: '${{ secrets.REGISTRY_API_AUTH }}'
           PROJECT: 'puzzle'
-          REPOSITORY: '${{ github.repository }}'
+          REPOSITORY: 'amm-techlab'
         run: |
           curl -X DELETE \
             -u ${REGISTRY_API_AUTH} \
