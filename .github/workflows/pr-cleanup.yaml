@@ -53,7 +53,7 @@ jobs:
         name: Delete IDE Tags on Image Registry
         id: delete_ide_tags
         env:
-          PR_BASE_REF: '${{ github.event.pull_request.base.ref }}'
+          PR_BASE_REF: '${{ github.event.pull_request.head.ref }}'
           REGISTRY_API_AUTH: '${{ secrets.REGISTRY_USERNAME }}:${{ secrets.REGISTRY_AUTH }}'
           PROJECT: 'pitc-techlabs-public'
           REPOSITORY: 'amm-techlab-ide'
