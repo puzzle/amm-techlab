@@ -22,7 +22,7 @@ RUN wkhtmltopdf --outline-depth 4 \
     --enable-internal-links --enable-local-file-access \
     /pdf/index.html /pdf.pdf
 
-FROM docker.io/nginxinc/nginx-unprivileged:1.28-alpine
+FROM docker.io/nginxinc/nginx-unprivileged:1.29-alpine
 
 LABEL org.opencontainers.image.title="puzzle.ch's Application Migration and Modernization Techlab" \
       org.opencontainers.image.description="Container with puzzle.ch's Application Migration and Modernization Techlab content for https://amm-techlab.puzzle.ch/" \
