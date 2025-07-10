@@ -24,11 +24,12 @@ RUN wkhtmltopdf --outline-depth 4 \
 
 FROM docker.io/nginxinc/nginx-unprivileged:1.29-alpine
 
-LABEL org.opencontainers.image.title="puzzle.ch's Application Migration and Modernization Techlab" \
-      org.opencontainers.image.description="Container with puzzle.ch's Application Migration and Modernization Techlab content for https://amm-techlab.puzzle.ch/" \
-      org.opencontainers.image.authors="Puzzle ITC <https://www.puzzle.ch/>" \
-      org.opencontainers.image.source="https://github.com/puzzle/amm-techlab" \
-      org.opencontainers.image.licenses="CC-BY-SA-4.0"
+LABEL maintainer="Puzzle ITC <https://www.puzzle.ch/>"
+LABEL org.opencontainers.image.authors="Puzzle ITC <https://www.puzzle.ch/>"
+LABEL org.opencontainers.image.title="puzzle.ch's Application Migration and Modernization Techlab"
+LABEL org.opencontainers.image.description="Container with puzzle.ch's AMM Techlab content for https://amm-techlab.puzzle.ch/"
+LABEL org.opencontainers.image.source="https://github.com/puzzle/amm-techlab/"
+LABEL org.opencontainers.image.licenses="CC-BY-SA-4.0"     
 
 USER root
 COPY nginx.conf /etc/nginx/nginx.conf
