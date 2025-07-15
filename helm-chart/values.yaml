@@ -4,7 +4,7 @@ acendTraining:
     - name: puzzle
       replicaCount: 1
       image:
-        repository: harbor.puzzle.ch/pitc-techlabs-public/amm-techlab
+        repository: ghcr.io/puzzle/amm-techlab
         pullPolicy: Always
         tag: ""
         tagsuffix: ""
