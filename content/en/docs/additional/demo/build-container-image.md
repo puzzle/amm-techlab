@@ -65,7 +65,7 @@ Multi-stage builds have two major advantages; smaller image size and higher secu
 
 The image build is shown using [Buildah](https://github.com/containers/buildah). [Buildah](https://github.com/containers/buildah) - a tool that facilitates building [OCI](https://opencontainers.org/) container images.
 
-Find [Docker](https://www.docker.com/) instructions hint at the bottom of this page or [here](docker-instructions/).
+Find [Docker](https://www.docker.com/) instructions hint at the bottom of this page or under [Docker Instructions](docker-instructions/).
 
 Buildah build command:
 
