@@ -2,9 +2,11 @@
 
 In this guided hands-on training, we show the participants how to migrate and modernize applications when running a container platform.
 
+
 ## Techlab last given
 
 08.12.2022
+
 
 ## Content Sections
 
