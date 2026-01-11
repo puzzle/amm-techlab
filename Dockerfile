@@ -1,4 +1,4 @@
-FROM docker.io/floryn90/hugo:0.154.3-ext-ubuntu AS builder
+FROM docker.io/floryn90/hugo:0.154.4-ext-ubuntu AS builder
 
 ARG TRAINING_HUGO_ENV=default
 
